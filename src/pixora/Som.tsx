@@ -1,30 +1,35 @@
 import React from "react";
 import { Sequence, staticFile } from "remotion";
 import { Audio } from "@remotion/media";
-import { HALF, NARRACAO, START } from "./timeline";
+import { NARRACAO, START, sceneFrom } from "./timeline";
 import { SELECT_AT } from "./scenes/Cena05Estilos";
 import { C08 } from "./scenes/Cena08ProvaSocial";
 import { C09 } from "./scenes/Cena09Beneficios";
+import { ZOOM_AT } from "./scenes/Cena10Chamada";
 
 type Sfx = "whoosh" | "tap" | "pop" | "ding" | "impact";
 
-/** Início absoluto das cenas que entram com desfoque cruzado. */
-const abs = (scene: number) => START[scene] - HALF;
+/** Frame absoluto de um evento local da cena n (1-based). */
+const at = (n: number, local: number) => sceneFrom(n - 1) + local;
 
 const CUES: { at: number; sfx: Sfx; volume: number }[] = [
   { at: 0, sfx: "whoosh", volume: 0.35 }, // iPhone sobe
-  { at: 94, sfx: "whoosh", volume: 0.6 }, // zoom pela tela
-  { at: START[2], sfx: "impact", volume: 0.9 }, // corte seco para preto
-  ...[3, 4, 5, 6, 7, 8, 9].map((s) => ({ at: START[s] - 10, sfx: "whoosh" as Sfx, volume: 0.4 })),
-  { at: abs(3) + 14, sfx: "pop", volume: 0.45 }, // P revelado
-  ...SELECT_AT.map((f) => ({ at: abs(4) + f, sfx: "tap" as Sfx, volume: 0.6 })),
-  { at: abs(6) + 10, sfx: "pop", volume: 0.55 }, // 🎙️
-  { at: abs(7) + C08.notif, sfx: "tap", volume: 0.5 },
-  { at: abs(7) + C08.msg1, sfx: "pop", volume: 0.45 },
-  { at: abs(7) + C08.msg2, sfx: "pop", volume: 0.45 },
-  { at: abs(8) + C09.check, sfx: "ding", volume: 0.6 }, // Pix
-  ...C09.items.map((f) => ({ at: abs(8) + f, sfx: "pop" as Sfx, volume: 0.5 })),
-  { at: START[10], sfx: "impact", volume: 0.9 }, // flash para o logo
+  { at: 90, sfx: "whoosh", volume: 0.6 }, // zoom pela tela
+  { at: at(2, 122), sfx: "whoosh", volume: 0.45 }, // ponto cresce
+  { at: START[2], sfx: "impact", volume: 0.85 }, // preto
+  { at: at(3, 16), sfx: "tap", volume: 0.5 }, // risco em "parado"
+  { at: at(3, 68), sfx: "whoosh", volume: 0.5 }, // círculo branco
+  { at: at(4, 6), sfx: "pop", volume: 0.45 }, // P revelado
+  ...[4, 5, 6, 7, 8].map((k) => ({ at: START[k] - 8, sfx: "whoosh" as Sfx, volume: 0.4 })),
+  ...SELECT_AT.map((f) => ({ at: at(5, f), sfx: "tap" as Sfx, volume: 0.6 })),
+  { at: at(7, 12), sfx: "pop", volume: 0.55 }, // 🎙️
+  { at: at(8, C08.notif), sfx: "tap", volume: 0.5 },
+  { at: at(8, C08.msg1), sfx: "pop", volume: 0.45 },
+  { at: at(8, C08.msg2), sfx: "pop", volume: 0.45 },
+  { at: at(9, C09.check), sfx: "ding", volume: 0.6 }, // Pix
+  ...C09.items.map((f) => ({ at: at(9, f), sfx: "pop" as Sfx, volume: 0.5 })),
+  { at: at(10, ZOOM_AT + 4), sfx: "whoosh", volume: 0.6 }, // entra no celular
+  { at: START[10], sfx: "impact", volume: 0.85 }, // logo
 ];
 
 export const Som: React.FC<{ readonly narracao: boolean }> = ({ narracao }) => (

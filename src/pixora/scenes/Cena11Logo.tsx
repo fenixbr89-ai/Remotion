@@ -1,14 +1,15 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { BlurIn, C, CLAMP, FONT, PixoraP, prog, useSpring } from "../ui";
+import { C, CLAMP, EASE, Kinetic, PixoraP, prog, useSpring } from "../ui";
 
-// 55–60s · Flash para preto, P surge (0.8→1) com brilho diagonal. Parado nos 2s finais.
+// 55–60s · Vindo da tela escura do celular: o P surge (0.8→1) com brilho diagonal.
+// "PIXORA" entra letra por letra fechando o espaçamento. Parado nos 2s finais.
 export const Cena11Logo: React.FC = () => {
   const frame = useCurrentFrame();
-  const flash = interpolate(frame, [0, 4], [0.9, 0], CLAMP);
-  const mask = prog(frame, 4, 20);
-  const s = useSpring(4, 22);
-  const shine = interpolate(frame, [30, 62], [0, 1], CLAMP);
+  const mask = prog(frame, 2, 22);
+  const s = useSpring(2, 22);
+  const shine = interpolate(frame, [28, 60], [0, 1], CLAMP);
+  const tracking = interpolate(frame, [30, 70], [0.7, 0.42], { ...CLAMP, easing: EASE });
 
   return (
     <AbsoluteFill style={{ background: C.black }}>
@@ -28,40 +29,28 @@ export const Cena11Logo: React.FC = () => {
         <PixoraP size={380} color="#F2F2F2" shine={shine} id="c11" />
       </div>
 
-      <div style={{ position: "absolute", top: 1120, width: "100%" }}>
-        <BlurIn delay={34}>
-          <div
-            style={{
-              fontFamily: FONT,
-              fontWeight: 600,
-              fontSize: 72,
-              letterSpacing: "0.42em",
-              paddingLeft: "0.42em",
+      <div style={{ position: "absolute", top: 1110, left: 0, right: 0 }}>
+        <Kinetic
+          delay={30}
+          stagger={4}
+          lines={[
+            {
+              text: "PIXORA",
+              size: 72,
               color: C.white,
-              textAlign: "center",
-            }}
-          >
-            PIXORA
-          </div>
-        </BlurIn>
+              chars: true,
+              tracking: `${tracking}em`,
+            },
+          ]}
+          style={{ paddingLeft: tracking * 72 }}
+        />
       </div>
-      <div style={{ position: "absolute", top: 1230, width: "100%" }}>
-        <BlurIn delay={44}>
-          <div
-            style={{
-              fontFamily: FONT,
-              fontWeight: 500,
-              fontSize: 44,
-              color: C.sub,
-              textAlign: "center",
-            }}
-          >
-            @pixora
-          </div>
-        </BlurIn>
+      <div style={{ position: "absolute", top: 1230, left: 0, right: 0 }}>
+        <Kinetic
+          delay={48}
+          lines={[{ text: "@pixora", size: 44, color: C.sub, weight: 500, tracking: "0em" }]}
+        />
       </div>
-
-      <AbsoluteFill style={{ background: C.white, opacity: flash }} />
     </AbsoluteFill>
   );
 };

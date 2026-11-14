@@ -1,8 +1,9 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
-import { blurCross } from "./blurCross";
-import { BLUR_T, DUR } from "./timeline";
+import { dissolve, push } from "./transicoes";
+import { DUR, TRANS } from "./timeline";
+import { EASE_IN_OUT } from "./ui";
 import { Legendas } from "./Legendas";
 import { Som } from "./Som";
 import { Cena01Gancho } from "./scenes/Cena01Gancho";
@@ -23,56 +24,51 @@ export type PixoraVideoProps = {
   readonly legendas: boolean;
 };
 
-const blur = (
-  <TransitionSeries.Transition
-    presentation={blurCross()}
-    timing={linearTiming({ durationInFrames: BLUR_T })}
-  />
-);
+const timing = (k: number) =>
+  linearTiming({ durationInFrames: TRANS[k], easing: EASE_IN_OUT });
 
+// Passagens 1→2 (zoom pela tela), 2→3 (ponto que cresce), 3→4 (círculo branco)
+// e 10→11 (zoom no celular) acontecem dentro das próprias cenas.
 export const PixoraVideo: React.FC<PixoraVideoProps> = ({ narracao, legendas }) => (
   <AbsoluteFill style={{ background: "#FFFFFF" }}>
     <TransitionSeries>
-      {/* corte com zoom pela tela (feito dentro da cena 1) */}
       <TransitionSeries.Sequence name="1 · Gancho" durationInFrames={DUR.c01}>
         <Cena01Gancho />
       </TransitionSeries.Sequence>
-      {/* corte seco com flash para preto */}
       <TransitionSeries.Sequence name="2 · Problema" durationInFrames={DUR.c02}>
         <Cena02Problema />
       </TransitionSeries.Sequence>
       <TransitionSeries.Sequence name="3 · Virada" durationInFrames={DUR.c03}>
         <Cena03Virada />
       </TransitionSeries.Sequence>
-      {blur}
       <TransitionSeries.Sequence name="4 · Apresentação" durationInFrames={DUR.c04}>
         <Cena04Apresentacao />
       </TransitionSeries.Sequence>
-      {blur}
+      <TransitionSeries.Transition presentation={push("left")} timing={timing(3)} />
       <TransitionSeries.Sequence name="5 · Estilos" durationInFrames={DUR.c05}>
         <Cena05Estilos />
       </TransitionSeries.Sequence>
-      {blur}
+      {/* o card "Impacto" já está na posição da tela da cena 6: dissolve puro */}
+      <TransitionSeries.Transition presentation={dissolve(1, 1)} timing={timing(4)} />
       <TransitionSeries.Sequence name="6 · Diferencial 1" durationInFrames={DUR.c06}>
         <Cena06Diferencial1 />
       </TransitionSeries.Sequence>
-      {blur}
+      <TransitionSeries.Transition presentation={dissolve()} timing={timing(5)} />
       <TransitionSeries.Sequence name="7 · Diferencial 2" durationInFrames={DUR.c07}>
         <Cena07Diferencial2 />
       </TransitionSeries.Sequence>
-      {blur}
+      <TransitionSeries.Transition presentation={push("up")} timing={timing(6)} />
       <TransitionSeries.Sequence name="8 · Prova social" durationInFrames={DUR.c08}>
         <Cena08ProvaSocial />
       </TransitionSeries.Sequence>
-      {blur}
+      <TransitionSeries.Transition presentation={dissolve()} timing={timing(7)} />
       <TransitionSeries.Sequence name="9 · Benefícios" durationInFrames={DUR.c09}>
         <Cena09Beneficios />
       </TransitionSeries.Sequence>
-      {blur}
+      <TransitionSeries.Transition presentation={push("up")} timing={timing(8)} />
       <TransitionSeries.Sequence name="10 · Chamada" durationInFrames={DUR.c10}>
         <Cena10Chamada />
       </TransitionSeries.Sequence>
-      {/* corte seco com flash para preto */}
       <TransitionSeries.Sequence name="11 · Logo" durationInFrames={DUR.c11}>
         <Cena11Logo />
       </TransitionSeries.Sequence>

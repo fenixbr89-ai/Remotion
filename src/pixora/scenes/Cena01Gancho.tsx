@@ -1,17 +1,19 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { BlurIn, C, CLAMP, EASE_IN_OUT, FONT, IPhone, Title, useSpring } from "../ui";
+import { C, CLAMP, EASE_IN_OUT, FONT, IPhone, Kinetic, useSpring } from "../ui";
 
-// 0–4s · iPhone sobe com vídeo travado; no fim a câmera entra pela tela.
+// 0–4s · iPhone sobe com vídeo travado; no fim a câmera entra pela tela (→ cena 2).
 export const Cena01Gancho: React.FC = () => {
   const frame = useCurrentFrame();
   const rise = useSpring(2, 20);
-  const zoom = interpolate(frame, [92, 120], [1, 3.4], {
+  const zoom = interpolate(frame, [88, 120], [1, 3.4], {
     ...CLAMP,
     easing: EASE_IN_OUT,
   });
-  const screenToGray = interpolate(frame, [100, 114], [0, 1], CLAMP);
+  const screenToGray = interpolate(frame, [98, 114], [0, 1], CLAMP);
   const stutter = frame % 40 < 4 ? 0.6 : 1; // buffering "travado"
+  // "parado?" dá um tranco e trava
+  const jolt = interpolate(frame, [40, 43, 46, 49], [0, -10, 6, 0], CLAMP);
 
   return (
     <AbsoluteFill style={{ background: C.white }}>
@@ -19,13 +21,20 @@ export const Cena01Gancho: React.FC = () => {
         style={{
           transformOrigin: "540px 1000px",
           scale: String(zoom),
-          filter: `blur(${interpolate(frame, [112, 120], [0, 6], CLAMP)}px)`,
+          filter: `blur(${interpolate(frame, [110, 120], [0, 6], CLAMP)}px)`,
         }}
       >
-        <div style={{ position: "absolute", top: 250, width: "100%" }}>
-          <BlurIn delay={18} outAt={90}>
-            <Title>Seu vídeo tá parado?</Title>
-          </BlurIn>
+        <div style={{ position: "absolute", top: 170, left: 60, right: 60 }}>
+          <Kinetic
+            delay={14}
+            stagger={4}
+            outAt={84}
+            lines={[
+              { text: "Seu vídeo", size: 96, color: C.sub },
+              { text: "tá parado?", size: 112 },
+            ]}
+            style={{ translate: `${jolt}px 0px` }}
+          />
         </div>
 
         <div
@@ -37,7 +46,6 @@ export const Cena01Gancho: React.FC = () => {
           }}
         >
           <IPhone width={470} height={960} screen="#E5E5EA">
-            {/* frame de vídeo parado */}
             <div
               style={{
                 position: "absolute",
@@ -66,7 +74,6 @@ export const Cena01Gancho: React.FC = () => {
                 <path d="M6 4L52 32L6 60Z" fill={C.ink} />
               </svg>
             </div>
-            {/* barra de progresso travada */}
             <div
               style={{
                 position: "absolute",
@@ -114,7 +121,6 @@ export const Cena01Gancho: React.FC = () => {
             >
               0:04 / 0:12
             </div>
-            {/* a tela vira a próxima cena */}
             <div
               style={{
                 position: "absolute",

@@ -349,5 +349,132 @@ export const DrawPath: React.FC<{
     strokeLinejoin="round"
     strokeDasharray={length}
     strokeDashoffset={length * (1 - progress)}
+    opacity={progress <= 0.001 ? 0 : 1}
   />
 );
+
+export type KLine = {
+  readonly text: string;
+  readonly size?: number;
+  readonly color?: string;
+  readonly weight?: number;
+  /** Anima letra por letra em vez de palavra por palavra. */
+  readonly chars?: boolean;
+  readonly tracking?: string;
+};
+
+/**
+ * Tipografia cinética: cada palavra (ou letra) sobe por uma máscara com leve rotação
+ * e sai para cima no mesmo estilo. O stagger corre por todas as linhas.
+ */
+export const Kinetic: React.FC<{
+  readonly lines: KLine[];
+  readonly delay?: number;
+  readonly stagger?: number;
+  readonly outAt?: number;
+  readonly align?: "center" | "flex-start";
+  readonly lineHeight?: number;
+  /** Elemento extra colado ao fim da última linha (ex.: o ponto que cresce). */
+  readonly trailing?: React.ReactNode;
+  readonly style?: React.CSSProperties;
+}> = ({
+  lines,
+  delay = 0,
+  stagger = 3,
+  outAt,
+  align = "center",
+  lineHeight = 1.06,
+  trailing,
+  style,
+}) => {
+  const frame = useCurrentFrame();
+  let idx = 0;
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: align,
+        fontFamily: FONT,
+        ...style,
+      }}
+    >
+      {lines.map((line, li) => {
+        const units = line.chars ? Array.from(line.text) : line.text.split(" ");
+        const isLast = li === lines.length - 1;
+        return (
+          <div
+            key={li}
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: align,
+              alignItems: "baseline",
+              columnGap: line.chars ? 0 : "0.24em",
+              fontSize: line.size ?? 88,
+              fontWeight: line.weight ?? 600,
+              color: line.color ?? C.ink,
+              letterSpacing: line.tracking ?? "-0.03em",
+              lineHeight,
+            }}
+          >
+            {units.map((u, ui) => {
+              const myIdx = idx++;
+              const step = line.chars ? stagger * 0.45 : stagger;
+              const t = prog(frame, delay + myIdx * step, 18);
+              const o =
+                outAt === undefined ? 0 : prog(frame, outAt + myIdx * (step * 0.6), 12, EASE_IN);
+              return (
+                <span
+                  key={ui}
+                  style={{
+                    display: "inline-block",
+                    overflow: "hidden",
+                    padding: "0.2em 0.05em 0.16em",
+                    margin: "-0.2em -0.05em -0.16em",
+                    whiteSpace: "pre",
+                  }}
+                >
+                  <span
+                    style={{
+                      display: "inline-block",
+                      translate: `0% ${(1 - t) * 115 - o * 135}%`,
+                      rotate: `${(1 - t) * 7}deg`,
+                      transformOrigin: "0% 100%",
+                      filter: `blur(${(1 - t) * 5 + o * 5}px)`,
+                    }}
+                  >
+                    {u}
+                  </span>
+                </span>
+              );
+            })}
+            {isLast ? trailing : null}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+/** Câmera que nunca para: leve aproximação contínua durante toda a cena. */
+export const Drift: React.FC<{
+  readonly dur: number;
+  readonly amount?: number;
+  readonly origin?: string;
+  readonly children: React.ReactNode;
+}> = ({ dur, amount = 0.035, origin = "50% 45%", children }) => {
+  const frame = useCurrentFrame();
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        transformOrigin: origin,
+        scale: String(interpolate(frame, [0, dur], [1, 1 + amount], CLAMP)),
+      }}
+    >
+      {children}
+    </div>
+  );
+};

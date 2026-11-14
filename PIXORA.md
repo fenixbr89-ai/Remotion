@@ -15,8 +15,8 @@ node scripts/gerar-audio.mjs                  # regenera trilha e SFX em public/
 
 - `src/pixora/timeline.ts` — tempos das cenas, durações e falas da narração (fonte das legendas).
 - `src/pixora/scenes/` — uma cena por arquivo (Cena01Gancho … Cena11Logo).
-- `src/pixora/ui.tsx` — tema, BlurIn / palavra-por-palavra, iPhone, logo P em vetor, emojis.
-- `src/pixora/blurCross.tsx` — transição de desfoque cruzado (8f out + 8f in).
+- `src/pixora/ui.tsx` — tema, tipografia cinética (`Kinetic`), câmera contínua (`Drift`), iPhone, logo P em vetor, emojis.
+- `src/pixora/transicoes.tsx` — empurrão de câmera e dissolve com profundidade. As passagens 1→2, 2→3, 3→4 e 10→11 acontecem dentro das cenas (zoom, ponto que cresce, círculo, zoom no celular).
 - `src/pixora/Legendas.tsx` — legendas palavra por palavra no terço inferior.
 - `src/pixora/Som.tsx` — trilha, efeitos sonoros e narração.
 

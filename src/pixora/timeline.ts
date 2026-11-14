@@ -7,23 +7,30 @@ export const TOTAL = 1800;
 /** Início de cada cena no roteiro (frames). Índice 11 = fim. */
 export const START = [0, 120, 270, 360, 540, 780, 960, 1110, 1290, 1470, 1650, 1800];
 
-/** Duração do desfoque cruzado (8 frames out + 8 frames in). */
-export const BLUR_T = 16;
-export const HALF = BLUR_T / 2;
+/**
+ * Transição entre a cena k+1 e k+2 (frames de sobreposição).
+ * 0 = a passagem acontece dentro da própria cena (zoom, ponto que cresce, círculo).
+ */
+export const TRANS = [0, 0, 0, 20, 20, 20, 20, 20, 20, 0];
 
-/** Durações das sequências no TransitionSeries (inclui as sobreposições). */
+/** Frame absoluto em que a sequência da cena i (0-based) começa. */
+export const sceneFrom = (i: number) => START[i] - (i > 0 ? TRANS[i - 1] / 2 : 0);
+
+const sceneDur = (i: number) =>
+  START[i + 1] - START[i] + (i > 0 ? TRANS[i - 1] / 2 : 0) + (i < 10 ? TRANS[i] / 2 : 0);
+
 export const DUR = {
-  c01: 120, // corte com zoom → c02
-  c02: 150, // corte seco com flash → c03
-  c03: 90 + HALF,
-  c04: 180 + BLUR_T,
-  c05: 240 + BLUR_T,
-  c06: 180 + BLUR_T,
-  c07: 150 + BLUR_T,
-  c08: 180 + BLUR_T,
-  c09: 180 + BLUR_T,
-  c10: 180 + HALF, // corte seco com flash → c11
-  c11: 150,
+  c01: sceneDur(0),
+  c02: sceneDur(1),
+  c03: sceneDur(2),
+  c04: sceneDur(3),
+  c05: sceneDur(4),
+  c06: sceneDur(5),
+  c07: sceneDur(6),
+  c08: sceneDur(7),
+  c09: sceneDur(8),
+  c10: sceneDur(9),
+  c11: sceneDur(10),
 } as const;
 
 /** Narração (PT-BR) com a janela em que cada fala acontece. */
