@@ -9,5 +9,3 @@ Config.setRspack(true);
 Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
 
-// Necessário para os produtos 3D (WebGL) renderizarem sem placa de vídeo
-Config.setChromiumOpenGlRenderer("swangle");
