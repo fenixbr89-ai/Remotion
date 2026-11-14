@@ -93,6 +93,7 @@ const C0: React.FC = () => (
       tá precisando
     </Adesivo>
     <Adesivo
+      rot={-2}
       at={24}
       out={74}
       fundo={K.laranja}
@@ -111,6 +112,7 @@ const C1: React.FC = () => {
   return (
     <Escuro>
       <Adesivo
+        rot={-1.8}
         at={L(i, 84)}
         out={L(i, 184)}
         fundo={K.laranja}
@@ -131,6 +133,7 @@ const C1: React.FC = () => {
         Infiltração
       </Adesivo>
       <Adesivo
+        rot={1.5}
         at={L(i, 140)}
         out={L(i, 188)}
         fundo={K.laranja}
@@ -495,18 +498,6 @@ const C6: React.FC = () => {
         size={96}
       >
         renovado.
-      </Adesivo>
-      <Adesivo
-        classico
-        at={L(i, 826)}
-        fundo={K.zap}
-        cor={K.branco}
-        rot={-1.5}
-        y={1230}
-        de="left"
-        size={58}
-      >
-        WhatsApp (62) 99113-2531
       </Adesivo>
     </Claro>
   );
