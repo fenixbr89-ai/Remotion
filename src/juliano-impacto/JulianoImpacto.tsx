@@ -10,7 +10,7 @@ import {
 import { Audio } from "@remotion/media";
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import type { TransitionPresentation } from "@remotion/transitions";
-import { CLAMP, EASE, EASE_IN_OUT, FONT } from "../pixora/ui";
+import { CLAMP, EASE_IN_OUT, FONT } from "../pixora/ui";
 import { dissolve, whip } from "../pixora/transicoes";
 import { Adesivo, Big, Estrela, K, Obj3D, pop, Risco } from "./kit";
 
@@ -22,7 +22,7 @@ import { Adesivo, Big, Estrela, K, Obj3D, pop, Risco } from "./kit";
  *  8,8–13,0 "Pintura residencial. Pintura automotiva. Elétrica. Reformas." → 4 quadrados de vidro
  *  13,0–17,0 "E ainda: pós-obra, manutenção e muito mais." → etiquetas simples
  *  17,0–19,8 "Tudo com capricho, do início ao acabamento."
- *  19,8–25,4 "Chama no WhatsApp e pede seu orçamento: (62) 99113-2531."
+ *  19,8–25,4 "Chama no WhatsApp e faça seu orçamento sem compromisso: (62) 99113-2531."
  *  25,4–29,7 "Juliano Pinturas. Seu espaço, renovado."
  */
 export const START = [0, 78, 192, 264, 510, 594, 762, 891];
@@ -83,28 +83,27 @@ const vidro: React.CSSProperties = {
     "0 24px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12)",
 };
 
-// ===== 1 · "Sua casa tá precisando de um cuidado?" =====
-const C0: React.FC = () => {
-  const f = useCurrentFrame();
-  return (
-    <Claro>
-      <Obj3D
-        src="3d/casa"
-        size={300}
-        style={{ position: "absolute", left: 390, top: 380, ...pop(f, 4) }}
-      />
-      <Big at={8} y={760} size={110} weight={800} color={K.preto}>
-        Sua casa
-      </Big>
-      <Big at={14} y={880} size={92} weight={800} color={K.preto}>
-        tá precisando
-      </Big>
-      <Big at={22} y={990} size={130} color={K.laranja}>
-        de um cuidado?
-      </Big>
-    </Claro>
-  );
-};
+// ===== 1 · "Sua casa tá precisando de um cuidado?" (mesmo estilo de faixas da cena seguinte) =====
+const C0: React.FC = () => (
+  <Claro>
+    <Adesivo at={6} out={70} fundo={K.preto} cor={K.branco} y={680} size={104}>
+      Sua casa
+    </Adesivo>
+    <Adesivo at={14} out={72} fundo={K.preto} cor={K.branco} y={830} size={86}>
+      tá precisando
+    </Adesivo>
+    <Adesivo
+      at={24}
+      out={74}
+      fundo={K.laranja}
+      cor={K.branco}
+      y={960}
+      size={104}
+    >
+      de um cuidado?
+    </Adesivo>
+  </Claro>
+);
 
 // ===== 2 · "Parede manchada, infiltração, aquele reparo que você vive adiando…" =====
 const C1: React.FC = () => {
@@ -113,42 +112,40 @@ const C1: React.FC = () => {
     <Escuro>
       <Adesivo
         at={L(i, 84)}
+        out={L(i, 184)}
         fundo={K.laranja}
         cor={K.branco}
-        rot={-4}
         y={620}
-        de="left"
         size={86}
       >
         Parede manchada
       </Adesivo>
       <Adesivo
         at={L(i, 112)}
+        out={L(i, 186)}
         fundo={K.branco}
         cor={K.preto}
-        rot={3}
         y={780}
-        de="right"
         size={86}
       >
         Infiltração
       </Adesivo>
       <Adesivo
         at={L(i, 140)}
+        out={L(i, 188)}
         fundo={K.laranja}
         cor={K.branco}
-        rot={-2}
         y={940}
-        de="left"
         size={70}
       >
         Aquele reparo adiado…
       </Adesivo>
       <Risco
-        d="M200 1010C420 990 700 995 900 1004"
+        d="M200 1010C420 1006 700 1006 900 1008"
         at={L(i, 166)}
         cor={K.branco}
         width={9}
+        out={L(i, 184)}
       />
     </Escuro>
   );
@@ -201,8 +198,20 @@ const C2: React.FC = () => {
 };
 
 // ===== 4 · 4 serviços principais em quadrados de vidro → "E ainda: …" em etiquetas simples =====
-const PRINCIPAIS = [
-  { src: "3d/rolo", nome: "Pintura", sub: "residencial", at: 270 },
+const PRINCIPAIS: {
+  src: string;
+  nome: string;
+  sub: string;
+  at: number;
+  extra?: string;
+}[] = [
+  {
+    src: "3d/casa",
+    nome: "Pintura",
+    sub: "residencial",
+    at: 270,
+    extra: "3d/rolo",
+  },
   { src: "3d/carro", nome: "Pintura", sub: "automotiva", at: 303 },
   { src: "3d/lampada", nome: "Elétrica", sub: "instalações", at: 336 },
   { src: "3d/tijolos", nome: "Reformas", sub: "e acabamento", at: 363 },
@@ -281,11 +290,28 @@ const C3: React.FC = () => {
                 fontFamily: FONT,
               }}
             >
-              <Obj3D
-                src={p.src}
-                size={190}
-                style={{ rotate: `${(1 - s) * -20}deg` }}
-              />
+              <div style={{ position: "relative" }}>
+                <Obj3D
+                  src={p.src}
+                  size={190}
+                  style={{ rotate: `${(1 - s) * -20}deg` }}
+                />
+                {p.extra ? (
+                  <Obj3D
+                    src={p.extra}
+                    size={96}
+                    style={{
+                      position: "absolute",
+                      right: -34,
+                      bottom: -6,
+                      rotate: `${-14 + Math.sin(Math.max(0, f - L(i, p.at)) * 0.4) * 10 * Math.exp(-Math.max(0, f - L(i, p.at)) / 12)}deg`,
+                      scale: String(
+                        interpolate(f - L(i, p.at), [6, 14], [0, 1], CLAMP),
+                      ),
+                    }}
+                  />
+                ) : null}
+              </div>
               <div style={{ textAlign: "center", lineHeight: 1.05 }}>
                 <div
                   style={{
@@ -383,15 +409,12 @@ const C4: React.FC = () => {
   );
 };
 
-// ===== 6 · "Chama no WhatsApp e pede seu orçamento: (62) 99113-2531." =====
-const GRUPOS = [
-  { txt: "(62)", at: 666 },
-  { txt: "99113", at: 702 },
-  { txt: "-2531", at: 736 },
-];
+// ===== 6 · "Chama no WhatsApp e faça seu orçamento sem compromisso: (62) 99113-2531." =====
+const NUMERO = 676;
 const C5: React.FC = () => {
   const f = useCurrentFrame();
   const i = 5;
+  const brilho = interpolate(f - L(i, NUMERO), [8, 14, 30], [0, 1, 0], CLAMP);
   return (
     <Escuro>
       <Obj3D
@@ -410,46 +433,30 @@ const C5: React.FC = () => {
       <Big at={L(i, 608)} y={690} size={150} color={K.zap}>
         WhatsApp
       </Big>
-      <Big at={L(i, 628)} y={870} size={64} weight={700} color={K.branco}>
-        e pede seu orçamento
+      <Big at={L(i, 628)} y={880} size={64} weight={700} color={K.branco}>
+        e faça seu orçamento
       </Big>
-      <div
+      <Adesivo
+        at={L(i, 640)}
+        fundo={K.laranja}
+        cor={K.branco}
+        y={970}
+        size={66}
+      >
+        sem compromisso
+      </Adesivo>
+      {/* o número entra inteiro, de uma vez */}
+      <Big
+        at={L(i, NUMERO)}
+        y={1160}
+        size={112}
+        color={K.branco}
         style={{
-          position: "absolute",
-          top: 1060,
-          left: 0,
-          right: 0,
-          display: "flex",
-          justifyContent: "center",
-          gap: 18,
-          fontFamily: FONT,
-          fontWeight: 900,
-          fontSize: 120,
-          letterSpacing: "-0.04em",
+          textShadow: `0 0 ${40 * brilho}px rgba(37,211,102,${0.8 * brilho})`,
         }}
       >
-        {GRUPOS.map((g, n) => {
-          const t = interpolate(f, [L(i, g.at), L(i, g.at) + 10], [0, 1], {
-            ...CLAMP,
-            easing: EASE,
-          });
-          const atual = n === GRUPOS.length - 1 || f < L(i, GRUPOS[n + 1].at);
-          return (
-            <div key={g.txt} style={{ overflow: "hidden", padding: "0 4px" }}>
-              <div
-                style={{
-                  translate: `0px ${(1 - t) * 120}%`,
-                  filter: `blur(${(1 - t) * 14}px)`,
-                  opacity: t,
-                  color: atual ? K.laranja : K.branco,
-                }}
-              >
-                {g.txt}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+        (62) 99113-2531
+      </Big>
     </Escuro>
   );
 };
@@ -466,6 +473,7 @@ const C6: React.FC = () => {
         Pinturas
       </Big>
       <Adesivo
+        classico
         at={L(i, 796)}
         fundo={K.preto}
         cor={K.branco}
@@ -477,6 +485,7 @@ const C6: React.FC = () => {
         Seu espaço,
       </Adesivo>
       <Adesivo
+        classico
         at={L(i, 806)}
         fundo={K.laranja}
         cor={K.branco}
@@ -488,6 +497,7 @@ const C6: React.FC = () => {
         renovado.
       </Adesivo>
       <Adesivo
+        classico
         at={L(i, 826)}
         fundo={K.zap}
         cor={K.branco}

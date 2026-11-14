@@ -49,6 +49,6 @@ Juliano Pinturas resolve para você.
 Pintura residencial. Pintura automotiva. Elétrica. Reformas.
 E ainda: pós-obra, manutenção e muito mais.
 Tudo com capricho, do início ao acabamento.
-Chama no WhatsApp e pede seu orçamento: (62) 99113-2531.
+Chama no WhatsApp e faça seu orçamento sem compromisso: (62) 99113-2531.
 Juliano Pinturas. Seu espaço, renovado.
 ```

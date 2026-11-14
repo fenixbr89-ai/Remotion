@@ -31,7 +31,10 @@ export const pop = (
   };
 };
 
-/** Palavra gigante. */
+/**
+ * Palavra gigante animada letra por letra: cada letra sobe por uma máscara, girando e saindo
+ * do desfoque; na saída as letras sobem e somem em sequência.
+ */
 export const Big: React.FC<{
   readonly at: number;
   readonly out?: number;
@@ -43,26 +46,68 @@ export const Big: React.FC<{
   readonly style?: React.CSSProperties;
 }> = ({ at, out, size, color, weight = 900, y, children, style }) => {
   const f = useCurrentFrame();
+  const texto = typeof children === "string" ? children : null;
+  const base: React.CSSProperties = {
+    position: "absolute",
+    top: y,
+    left: 40,
+    right: 40,
+    textAlign: "center",
+    fontFamily: FONT,
+    fontWeight: weight,
+    fontSize: size,
+    lineHeight: 1,
+    letterSpacing: "-0.045em",
+    color,
+    whiteSpace: "nowrap",
+    ...style,
+  };
+  if (!texto)
+    return <div style={{ ...base, ...pop(f, at, out) }}>{children}</div>;
+  const letras = Array.from(texto);
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: y,
-        left: 40,
-        right: 40,
-        textAlign: "center",
-        fontFamily: FONT,
-        fontWeight: weight,
-        fontSize: size,
-        lineHeight: 1,
-        letterSpacing: "-0.045em",
-        color,
-        whiteSpace: "nowrap",
-        ...pop(f, at, out),
-        ...style,
-      }}
-    >
-      {children}
+    <div style={base}>
+      {letras.map((ch, n) => {
+        const t0 = at + n * 1.1;
+        const i = interpolate(f, [t0, t0 + 10], [0, 1], {
+          ...CLAMP,
+          easing: EASE,
+        });
+        const o =
+          out === undefined
+            ? 0
+            : interpolate(f, [out + n * 0.7, out + n * 0.7 + 8], [0, 1], {
+                ...CLAMP,
+                easing: EASE_IN,
+              });
+        return (
+          <span
+            key={n}
+            style={{
+              display: "inline-block",
+              overflow: "hidden",
+              verticalAlign: "top",
+              padding: "0.12em 0.02em 0.14em",
+              margin: "-0.12em -0.02em -0.14em",
+            }}
+          >
+            <span
+              style={{
+                display: "inline-block",
+                whiteSpace: "pre",
+                translate: `0px ${(1 - i) * 110 - o * 110}%`,
+                rotate: `${(1 - i) * 18 - o * 10}deg`,
+                scale: String(0.6 + 0.4 * i),
+                transformOrigin: "50% 100%",
+                filter: `blur(${(1 - i) * 8 + o * 8}px)`,
+                opacity: Math.min(1, i * 2) * (1 - o),
+              }}
+            >
+              {ch}
+            </span>
+          </span>
+        );
+      })}
     </div>
   );
 };
@@ -111,25 +156,91 @@ export const Pessoa: React.FC<{
   </svg>
 );
 
-/** Etiqueta torta, como um adesivo. */
+/**
+ * Faixa com fundo (estilo "Parede manchada"). Entrada: a tarja desenrola da esquerda e o texto
+ * sobe por dentro; saída: o texto sobe e a tarja recolhe para a direita.
+ * `classico` mantém a entrada antiga (voando de lado, com rotação) — usada no final.
+ */
 export const Adesivo: React.FC<{
   readonly at: number;
   readonly out?: number;
   readonly fundo: string;
   readonly cor: string;
-  readonly rot: number;
+  readonly rot?: number;
   readonly y: number;
-  readonly de: "left" | "right";
+  readonly de?: "left" | "right";
   readonly size?: number;
+  readonly classico?: boolean;
   readonly children: React.ReactNode;
-}> = ({ at, out, fundo, cor, rot, y, de, size = 78, children }) => {
+}> = ({
+  at,
+  out,
+  fundo,
+  cor,
+  rot = 0,
+  y,
+  de = "left",
+  size = 78,
+  classico = false,
+  children,
+}) => {
   const f = useCurrentFrame();
-  const i = interpolate(f, [at, at + 10], [0, 1], { ...CLAMP, easing: EASE });
-  const o =
+  if (classico) {
+    const i = interpolate(f, [at, at + 10], [0, 1], { ...CLAMP, easing: EASE });
+    const o =
+      out === undefined
+        ? 0
+        : interpolate(f, [out, out + 8], [0, 1], { ...CLAMP, easing: EASE_IN });
+    const vel = Math.sin(i * Math.PI);
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: y,
+          left: 0,
+          right: 0,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <div
+          style={{
+            padding: `${size * 0.12}px ${size * 0.4}px`,
+            background: fundo,
+            color: cor,
+            fontFamily: FONT,
+            fontWeight: 800,
+            fontSize: size,
+            letterSpacing: "-0.03em",
+            rotate: `${rot}deg`,
+            translate: `${(1 - i) * (de === "left" ? -900 : 900)}px 0px`,
+            filter: `blur(${vel * 12 + o * 16}px)`,
+            opacity: (1 - o) * Math.min(1, i * 2),
+            boxShadow: "0 18px 40px rgba(0,0,0,0.18)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {children}
+        </div>
+      </div>
+    );
+  }
+  const abre = interpolate(f, [at, at + 9], [0, 1], { ...CLAMP, easing: EASE });
+  const texto = interpolate(f, [at + 5, at + 15], [0, 1], {
+    ...CLAMP,
+    easing: EASE,
+  });
+  const sai =
     out === undefined
       ? 0
       : interpolate(f, [out, out + 8], [0, 1], { ...CLAMP, easing: EASE_IN });
-  const vel = Math.sin(i * Math.PI);
+  const fecha =
+    out === undefined
+      ? 0
+      : interpolate(f, [out + 4, out + 12], [0, 1], {
+          ...CLAMP,
+          easing: EASE_IN,
+        });
   return (
     <div
       style={{
@@ -143,22 +254,37 @@ export const Adesivo: React.FC<{
     >
       <div
         style={{
+          position: "relative",
           padding: `${size * 0.12}px ${size * 0.4}px`,
-          background: fundo,
-          color: cor,
-          fontFamily: FONT,
-          fontWeight: 800,
-          fontSize: size,
-          letterSpacing: "-0.03em",
           rotate: `${rot}deg`,
-          translate: `${(1 - i) * (de === "left" ? -900 : 900)}px 0px`,
-          filter: `blur(${vel * 12 + o * 16}px)`,
-          opacity: (1 - o) * Math.min(1, i * 2),
-          boxShadow: "0 18px 40px rgba(0,0,0,0.18)",
-          whiteSpace: "nowrap",
         }}
       >
-        {children}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: fundo,
+            transformOrigin: fecha > 0 ? "100% 50%" : "0% 50%",
+            scale: `${abre * (1 - fecha)} 1`,
+            boxShadow: "0 18px 40px rgba(0,0,0,0.18)",
+          }}
+        />
+        <div style={{ position: "relative", overflow: "hidden" }}>
+          <div
+            style={{
+              color: cor,
+              fontFamily: FONT,
+              fontWeight: 800,
+              fontSize: size,
+              letterSpacing: "-0.03em",
+              whiteSpace: "nowrap",
+              translate: `0px ${(1 - texto) * 105 - sai * 105}%`,
+              filter: `blur(${(1 - texto) * 6 + sai * 6}px)`,
+            }}
+          >
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   );
