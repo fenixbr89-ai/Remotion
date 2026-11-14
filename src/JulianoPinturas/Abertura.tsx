@@ -15,17 +15,42 @@ const LINE = 170;
 
 /** Kinetic typography: "Precisando de" + roleta vertical de palavras. */
 const Hook = () => {
-  const s1 = useSpring(15, 16, 220);
-  const s2 = useSpring(30, 16, 220);
-  const line = useEase(42, 18);
+  // 2s de respiro no início: a cena acende devagar antes da roleta começar
+  const glow = useEase(0, 60);
+  const words = useEase(30, 24);
+  const s1 = useSpring(75, 16, 220);
+  const s2 = useSpring(90, 16, 220);
+  const line = useEase(102, 18);
   const idx = s1 + s2;
   return (
-    <Shot dur={75} bg={C.black}>
+    <Shot dur={135} bg={C.black}>
+      <div
+        style={{
+          position: "absolute",
+          left: 540 - 600,
+          top: 860 - 600,
+          width: 1200,
+          height: 1200,
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(255,107,0,0.16) 0%, rgba(255,107,0,0) 60%)",
+          opacity: glow,
+          scale: String(0.8 + 0.2 * glow),
+        }}
+      />
       <div style={{ position: "absolute", top: 700, width: "100%" }}>
-        <T size={64} weight={600} color={C.grey}>
+        <T size={64} weight={600} color={C.grey} delay={12} dur={28}>
           Precisando de
         </T>
-        <div style={{ height: LINE, overflow: "hidden", marginTop: 16 }}>
+        <div
+          style={{
+            height: LINE,
+            overflow: "hidden",
+            marginTop: 16,
+            opacity: words,
+            filter: words < 0.99 ? `blur(${(1 - words) * 14}px)` : undefined,
+          }}
+        >
           <div style={{ translate: `0 ${-idx * LINE}px` }}>
             {WORDS.map((w, i) => {
               const dist = Math.abs(idx - i);
@@ -287,24 +312,24 @@ const Apresentacao = () => {
 
 export const Abertura: React.FC = () => (
   <AbsoluteFill style={{ backgroundColor: C.black }}>
-    <Sequence name="Hook (tipografia)" durationInFrames={75}>
+    <Sequence name="Hook (tipografia)" durationInFrames={135}>
       <Hook />
     </Sequence>
     <Sequence
       name="Tela de bloqueio + notificações"
-      from={75}
+      from={135}
       durationInFrames={90}
     >
       <LockScreen />
     </Sequence>
-    <Sequence name="Apresentação (sem logo)" from={165} durationInFrames={90}>
+    <Sequence name="Apresentação (sem logo)" from={225} durationInFrames={90}>
       <Apresentacao />
     </Sequence>
 
-    <Sfx at={15} src="click.wav" volume={0.25} />
-    <Sfx at={30} src="click.wav" volume={0.25} />
-    <Sfx at={89} src="ding.wav" volume={0.35} />
-    <Sfx at={109} src="ding.wav" volume={0.25} />
-    <Sfx at={140} src="whoosh.wav" volume={0.3} />
+    <Sfx at={75} src="click.wav" volume={0.25} />
+    <Sfx at={90} src="click.wav" volume={0.25} />
+    <Sfx at={149} src="ding.wav" volume={0.35} />
+    <Sfx at={169} src="ding.wav" volume={0.25} />
+    <Sfx at={200} src="whoosh.wav" volume={0.3} />
   </AbsoluteFill>
 );

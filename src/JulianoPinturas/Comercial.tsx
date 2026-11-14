@@ -17,7 +17,7 @@ export type ComercialProps = z.infer<typeof comercialSchema>;
 
 // 30 fps, 120 BPM => cortes no grid de 15 frames
 export const SCENES = {
-  abertura: 255, // 0–8.5s
+  abertura: 315, // 0–10.5s (2s de respiro no início)
   servicos: 480, // 8.5–24.5s
   encerramento: 225, // 24.5–32s
 };
@@ -32,7 +32,7 @@ export const Comercial: React.FC<ComercialProps> = ({
   return (
     <AbsoluteFill style={{ backgroundColor: C.black }}>
       <Series>
-        <Series.Sequence name="Abertura" durationInFrames={255}>
+        <Series.Sequence name="Abertura" durationInFrames={315}>
           <Abertura />
         </Series.Sequence>
         <Series.Sequence name="Serviços" durationInFrames={480}>

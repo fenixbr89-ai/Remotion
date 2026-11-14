@@ -9,7 +9,7 @@ SR = 44100
 BPM = 120
 BEAT = 60 / BPM
 BAR = BEAT * 4
-DUR = 32.0
+DUR = 34.0
 rng = np.random.default_rng(7)
 OUT = "public/audio/"
 
@@ -106,7 +106,7 @@ def both(x, at, g=1.0, pan=0.0):
 
 
 nbars = int(DUR / BAR)
-FULL = lambda b: 1 <= b <= 14
+FULL = lambda b: 2 <= b <= 15
 BREAK = lambda b: False
 
 # sidechain envelope
@@ -131,28 +131,28 @@ for b in range(nbars):
         tb = t0 + beat * BEAT
         if last and beat >= 1:
             continue
-        if not BREAK(b):
+        if not BREAK(b) and b >= 1:  # bar 0: intro calma, sem bumbo
             both(KICK, tb, 1.0)
         if FULL(b) and beat in (1, 3):
             both(CLAP, tb, 0.35)
-        if not BREAK(b):
+        if not BREAK(b) and b >= 1:
             both(OHAT, tb + BEAT / 2, 0.18, 0.2)
         for s in range(4):
             if FULL(b):
                 both(HAT, tb + s * BEAT / 4, 0.12 if s % 2 else 0.07, -0.3)
             # bass 8ths
-            if s % 2 == 0 and not BREAK(b):
+            if s % 2 == 0 and not BREAK(b) and b >= 1:
                 f = mtof(root + (12 if s == 2 else 0))
                 bt = t_(BEAT / 2 * 0.9)
                 bx = fft_band(saw(f, bt, 6), 30, 700) * np.exp(-bt * 3)
                 add(bass, bx, tb + s * BEAT / 4)
             # arp 16ths
-            if FULL(b) and b >= 3:
+            if FULL(b) and b >= 4:
                 n = ch[(beat * 4 + s) % 3] + 12 * (1 + (s % 2))
                 add(arp, pluck(mtof(n)), tb + s * BEAT / 4, 0.6)
 
 # riser leading into the closing card (22-24s)
-rt0 = 11 * BAR
+rt0 = 12 * BAR
 rt = t_(BAR)
 noise = rng.standard_normal(len(rt))
 riser = onepole_lp(noise, 300 + 9000 * (rt / BAR) ** 2) * (rt / BAR) ** 1.5
@@ -163,7 +163,7 @@ for k in range(16):
     both(CLAP, rt0 + BAR / 2 + k * BEAT / 8, 0.15 + 0.35 * k / 16)
 
 # final impact at 28s (bar 14 beat 0)
-fin_t = 15 * BAR
+fin_t = 16 * BAR
 ft = t_(2.0)
 boom = np.sin(2 * np.pi * np.cumsum(40 + 60 * np.exp(-ft * 10)) / SR) * np.exp(-ft * 2.2)
 both(boom, fin_t, 1.4)
