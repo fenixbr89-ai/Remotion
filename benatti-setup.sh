@@ -115,34 +115,54 @@ const rev = (t: number, at: number, dur = 0.7) => interpolate(t, [at, at + dur],
 const Surge: React.FC<{
   t: number;
   at: number;
-  children: React.ReactNode;
+  children: string;
   size?: number;
   weight?: number;
   cor?: string;
   degrade?: boolean;
   style?: React.CSSProperties;
 }> = ({ t, at, children, size = 64, weight = 600, cor = C.texto, degrade, style }) => {
-  const k = rev(t, at);
+  // texto entra letra por letra: cada letra sobe de dentro de uma "máscara" e perde o desfoque
+  const letras = Array.from(children);
+  const n = letras.length;
+  const passo = Math.min(0.03, 0.55 / n);
   return (
     <div
       style={{
+        display: "flex",
         fontFamily: FONT,
         fontSize: size,
         fontWeight: weight,
         letterSpacing: size > 90 ? -size * 0.035 : -size * 0.015,
-        lineHeight: 1.05,
-        color: degrade ? "transparent" : cor,
-        background: degrade ? DEGRADE : undefined,
-        WebkitBackgroundClip: degrade ? "text" : undefined,
-        backgroundClip: degrade ? "text" : undefined,
-        opacity: k,
-        filter: `blur(${(1 - k) * 12}px)`,
-        transform: `translateY(${(1 - k) * 40}px)`,
-        whiteSpace: "nowrap",
+        lineHeight: 1.12,
+        whiteSpace: "pre",
+        overflow: "hidden",
+        paddingBottom: size * 0.08,
         ...style,
       }}
     >
-      {children}
+      {letras.map((ch, i) => {
+        const k = rev(t, at + i * passo, 0.65);
+        return (
+          <span
+            key={i}
+            style={{
+              display: "inline-block",
+              color: degrade ? "transparent" : cor,
+              background: degrade ? DEGRADE : undefined,
+              backgroundSize: degrade ? `${n * 100}% 100%` : undefined,
+              backgroundPosition: degrade ? `${n > 1 ? (i / (n - 1)) * 100 : 0}% 0` : undefined,
+              WebkitBackgroundClip: degrade ? "text" : undefined,
+              backgroundClip: degrade ? "text" : undefined,
+              opacity: k,
+              filter: `blur(${(1 - k) * 8}px)`,
+              transform: `translateY(${(1 - k) * size * 0.7}px)`,
+            }}
+          >
+            {ch}
+          </span>
+        );
+      })}
     </div>
   );
 };
@@ -175,20 +195,59 @@ const Logo: React.FC<{ size: number }> = ({ size }) => (
 // ============================================================
 //  CENA: cada uma tem o próprio fundo; troca com fade + leve zoom
 // ============================================================
-const TR = 12;
-const Cena: React.FC<{ dur: number; last?: boolean; fundo: string; children: React.ReactNode }> = ({
-  dur,
-  last,
-  fundo,
-  children,
-}) => {
+const TR = 14; // frames de sobreposição entre cenas
+type Trans = "sobe" | "lado" | "zoom";
+
+// Movimento de câmera contínuo: a cena que sai e a que entra se movem juntas
+const Cena: React.FC<{
+  dur: number;
+  last?: boolean;
+  fundo: string;
+  entra?: Trans;
+  sai?: Trans;
+  children: React.ReactNode;
+}> = ({ dur, last, fundo, entra = "sobe", sai = "sobe", children }) => {
   const f = useCurrentFrame();
-  const e = interpolate(f, [0, TR], [0, 1], { ...CLAMP, easing: SUAVE });
-  const x = last ? 0 : interpolate(f, [dur, dur + TR], [0, 1], { ...CLAMP, easing: Easing.in(Easing.quad) });
+  const MEIO = Easing.bezier(0.65, 0, 0.35, 1);
+  const e = interpolate(f, [0, TR], [0, 1], { ...CLAMP, easing: MEIO }); // entrada 0→1
+  const x = last ? 0 : interpolate(f, [dur, dur + TR], [0, 1], { ...CLAMP, easing: MEIO }); // saída 0→1
   const cam = interpolate(f, [0, dur], [1, 1.025], CLAMP);
+  // velocidade (para o desfoque de movimento)
+  const vel = Math.sin(Math.PI * (f < TR ? e : x));
+  let tf = "";
+  let op = 1;
+  if (f < TR) {
+    if (entra === "sobe") tf = `translateY(${(1 - e) * 1920}px)`;
+    else if (entra === "lado") tf = `translateX(${(1 - e) * 1080}px)`;
+    else {
+      tf = `scale(${0.88 + 0.12 * e})`;
+      op = e;
+    }
+  } else if (x > 0) {
+    if (sai === "sobe") tf = `translateY(${-x * 1920}px)`;
+    else if (sai === "lado") tf = `translateX(${-x * 1080}px)`;
+    else {
+      tf = `scale(${1 + x * 0.6})`;
+      op = 1 - x;
+    }
+  }
+  const borrao = (f < TR ? entra : sai) === "zoom" ? vel * 14 : vel * 10;
+  const estica = (f < TR ? entra : sai) === "sobe" ? `scaleY(${1 + vel * 0.04})` : (f < TR ? entra : sai) === "lado" ? `scaleX(${1 + vel * 0.04})` : "";
+  const tipo = f < TR ? entra : sai;
+  const emZoom = tipo === "zoom" && (f < TR || x > 0);
+  // no zoom o fundo fica parado (cobre a tela toda) e só o conteúdo aproxima
   return (
-    <AbsoluteFill style={{ backgroundColor: fundo, opacity: e * (1 - x) }}>
-      <AbsoluteFill style={{ transform: `scale(${(1.03 - 0.03 * e) * cam})`, filter: `blur(${x * 10}px)` }}>{children}</AbsoluteFill>
+    <AbsoluteFill
+      style={{
+        backgroundColor: fundo,
+        opacity: op,
+        transform: emZoom ? undefined : `${tf} ${estica}`,
+        filter: emZoom ? undefined : `blur(${borrao}px)`,
+      }}
+    >
+      <AbsoluteFill style={{ transform: `${emZoom ? tf : ""} scale(${cam})`, filter: emZoom ? `blur(${borrao}px)` : undefined }}>
+        {children}
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };
@@ -320,7 +379,7 @@ const Embalagens: React.FC = () => {
   return (
     <AbsoluteFill>
       <Centro top={640}>
-        <Surge t={t} at={quando("Embalagens", B.embalagens - 0.3)} size={160} weight={700}>
+        <Surge t={t} at={quando("Embalagens", B.embalagens - 0.3)} size={136} weight={700}>
           Embalagens.
         </Surge>
       </Centro>
@@ -426,7 +485,7 @@ const Endereco: React.FC = () => {
   return (
     <AbsoluteFill>
       <Centro top={230}>
-        <Surge t={t} at={quando("visitar", B.endereco - 1)} size={120} weight={700}>
+        <Surge t={t} at={quando("visitar", B.endereco - 1)} size={100} weight={700}>
           Venha nos visitar.
         </Surge>
       </Centro>
@@ -554,27 +613,27 @@ const Marca: React.FC = () => {
 // 12) Final
 const Fim: React.FC = () => {
   const t = useT(B.fim);
-  const fade = interpolate(t, [DURACAO - 0.5, DURACAO], [1, 0], CLAMP);
-  const logo = rev(t, B.fim + 0.2, 1.0);
+  const fade = interpolate(t, [DURACAO - 0.6, DURACAO], [1, 0], CLAMP);
+  const logo = rev(t, B.fim + 0.15, 1.1);
   return (
     <AbsoluteFill style={{ opacity: fade }}>
-      <Centro top={620}>
-        <div style={{ opacity: logo, transform: `scale(${0.9 + 0.1 * logo})` }}>
+      <Centro top={700}>
+        <div style={{ opacity: logo, transform: `scale(${0.85 + 0.15 * logo})`, filter: `blur(${(1 - logo) * 10}px)` }}>
           <Logo size={220} />
         </div>
       </Centro>
-      <Centro top={900}>
-        <Surge t={t} at={B.fim + 0.5} size={110} cor={C.red} style={{ fontFamily: SERIF, fontWeight: 700, letterSpacing: 0 }}>
-          Benatti
+      <Centro top={990}>
+        <Surge t={t} at={B.fim + 0.6} size={62} weight={600} cor="#F5F5F7" style={{ letterSpacing: 26 }}>
+          BENATTI
         </Surge>
       </Centro>
-      <Centro top={1040}>
-        <Surge t={t} at={B.fim + 0.8} size={44} weight={500} cor={C.sub}>
+      <Centro top={1090}>
+        <Surge t={t} at={B.fim + 1.0} size={34} weight={500} cor="#86868B" style={{ letterSpacing: 2 }}>
           Frios e Embalagens
         </Surge>
       </Centro>
-      <Centro top={1180}>
-        <Surge t={t} at={B.fim + 1.3} size={40} weight={600}>
+      <Centro top={1170}>
+        <Surge t={t} at={B.fim + 1.4} size={34} weight={500} cor="#86868B" style={{ letterSpacing: 1 }}>
           @benattifrios · (62) 99376-2140
         </Surge>
       </Centro>
@@ -585,19 +644,20 @@ const Fim: React.FC = () => {
 // ============================================================
 //  COMPOSIÇÃO
 // ============================================================
-const ORDEM: { k: keyof typeof B; C: React.FC; fundo: string }[] = [
-  { k: "logo", C: Abertura, fundo: C.branco },
-  { k: "atacado", C: Atacado, fundo: C.branco },
-  { k: "produtos", C: Produtos, fundo: C.branco },
-  { k: "tudo", C: Tudo, fundo: C.preto },
-  { k: "embalagens", C: Embalagens, fundo: C.branco },
-  { k: "qualidade", C: Qualidade, fundo: C.preto },
-  { k: "ofertas", C: Ofertas, fundo: C.branco },
-  { k: "horario", C: Horario, fundo: C.branco },
-  { k: "endereco", C: Endereco, fundo: C.cinza },
-  { k: "whatsapp", C: Whatsapp, fundo: C.preto },
-  { k: "marca", C: Marca, fundo: C.branco },
-  { k: "fim", C: Fim, fundo: C.branco },
+// `entra` = como a cena chega (a anterior sai do mesmo jeito)
+const ORDEM: { k: keyof typeof B; C: React.FC; fundo: string; entra: Trans }[] = [
+  { k: "logo", C: Abertura, fundo: C.branco, entra: "zoom" },
+  { k: "atacado", C: Atacado, fundo: C.branco, entra: "sobe" },
+  { k: "produtos", C: Produtos, fundo: C.branco, entra: "sobe" },
+  { k: "tudo", C: Tudo, fundo: C.preto, entra: "zoom" },
+  { k: "embalagens", C: Embalagens, fundo: C.branco, entra: "zoom" },
+  { k: "qualidade", C: Qualidade, fundo: C.preto, entra: "lado" },
+  { k: "ofertas", C: Ofertas, fundo: C.branco, entra: "zoom" },
+  { k: "horario", C: Horario, fundo: C.branco, entra: "sobe" },
+  { k: "endereco", C: Endereco, fundo: C.cinza, entra: "sobe" },
+  { k: "whatsapp", C: Whatsapp, fundo: C.preto, entra: "zoom" },
+  { k: "marca", C: Marca, fundo: C.branco, entra: "lado" },
+  { k: "fim", C: Fim, fundo: C.preto, entra: "zoom" },
 ];
 
 // Espera a fonte Inter carregar antes de renderizar
@@ -614,14 +674,14 @@ export const Benatti: React.FC = () => {
   useFontes();
   return (
     <AbsoluteFill style={{ backgroundColor: C.branco }}>
-      {ORDEM.map(({ k, C: Scene, fundo }, i) => {
+      {ORDEM.map(({ k, C: Scene, fundo, entra }, i) => {
         const ini = B[k];
         const fim = i < ORDEM.length - 1 ? B[ORDEM[i + 1].k] : DURACAO;
         const last = i === ORDEM.length - 1;
         const dur = sec(fim) - sec(ini);
         return (
           <Sequence key={k} from={sec(ini)} durationInFrames={last ? dur : dur + TR} name={k}>
-            <Cena dur={dur} last={last} fundo={fundo}>
+            <Cena dur={dur} last={last} fundo={fundo} entra={entra} sai={ORDEM[i + 1]?.entra}>
               <Scene />
             </Cena>
           </Sequence>
