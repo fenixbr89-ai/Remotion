@@ -156,7 +156,7 @@ export const NotifHeader: React.FC<{ readonly iconOpacity?: number }> = ({
   <div
     style={{ display: "flex", alignItems: "center", gap: 14, fontFamily: FONT }}
   >
-    <AppIcon size={38} style={{ opacity: iconOpacity, boxShadow: "none" }} />
+    <LogoTile size={42} style={{ opacity: iconOpacity }} />
     <span
       style={{
         fontSize: 25,
@@ -235,3 +235,38 @@ export const Aurora: React.FC<{ readonly opacity: number }> = ({ opacity }) => {
     </div>
   );
 };
+
+/** Logo 3D em placa (arquivo do cliente, fundo recortado). */
+export const LogoTile: React.FC<{
+  readonly size: number;
+  readonly style?: React.CSSProperties;
+}> = ({ size, style }) => (
+  <Img
+    src={staticFile("juliano/3d/logo.png")}
+    style={{
+      width: size,
+      height: size,
+      flexShrink: 0,
+      filter: `drop-shadow(0 ${size * 0.06}px ${size * 0.12}px rgba(0,0,0,0.18))`,
+      ...style,
+    }}
+  />
+);
+
+/** Objeto 3D: "emoji/x" (Fluent) ou "3d/x" (arquivos do cliente). */
+export const Obj: React.FC<{
+  readonly src: string;
+  readonly size: number;
+  readonly style?: React.CSSProperties;
+}> = ({ src, size, style }) => (
+  <Img
+    src={staticFile(`juliano/${src}.png`)}
+    style={{
+      width: size,
+      height: size,
+      objectFit: "contain",
+      flexShrink: 0,
+      ...style,
+    }}
+  />
+);

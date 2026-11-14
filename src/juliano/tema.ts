@@ -12,29 +12,43 @@ export const J = {
 
 export const GRADIENTE = `linear-gradient(90deg, #E2560B 0%, ${J.laranja} 40%, ${J.ambar} 100%)`;
 
-/** Início de cada momento do filme (frames). */
+/** Início de cada momento do plano-sequência (frames). */
 export const T = {
   intro: 0,
   servicos: 150,
-  widget: 420,
-  pintura: 570,
-  valores: 750,
-  reforma: 900,
+  grade: 450,
+  pintura: 560,
+  valores: 740,
+  reforma: 896,
   passos: 1020,
-  whatsapp: 1170,
-  final: 1260,
+  whatsapp: 1150,
+  final: 1262,
   fim: 1350,
 };
 
 export const J_TOTAL = T.fim;
 
-export const SERVICOS: { icon: string; titulo: string; sub: string }[] = [
-  { icon: "pincel", titulo: "Pintura", sub: "Paredes, fachadas e acabamento" },
-  { icon: "casa", titulo: "Telhados", sub: "Telhados e calhas" },
-  { icon: "tijolo", titulo: "Reformas", sub: "Pequenas reformas" },
-  { icon: "vassoura", titulo: "Pós-obra", sub: "Limpeza e acabamento final" },
-  { icon: "lampada", titulo: "Elétrica", sub: "Instalações elétricas" },
-  { icon: "chuveiro", titulo: "Hidráulica", sub: "Instalações hidráulicas" },
-  { icon: "gota", titulo: "Caixa d'água", sub: "Instalação e manutenção" },
-  { icon: "carro", titulo: "Automotiva", sub: "Pintura automotiva" },
+/** Os serviços entram um atrás do outro e preenchem a grade 3×3. */
+export const SERVICOS: { src: string; titulo: string; sub: string }[] = [
+  { src: "3d/rolo", titulo: "Pintura", sub: "Paredes, fachadas e acabamento" },
+  { src: "emoji/carro", titulo: "Automotiva", sub: "Pintura automotiva" },
+  { src: "emoji/lampada", titulo: "Elétrica", sub: "Instalações elétricas" },
+  {
+    src: "emoji/chuveiro",
+    titulo: "Hidráulica",
+    sub: "Instalações hidráulicas",
+  },
+  { src: "emoji/gota", titulo: "Caixa d'água", sub: "Instalação e manutenção" },
+  { src: "emoji/casa", titulo: "Telhados", sub: "Telhados e calhas" },
+  { src: "emoji/tijolo", titulo: "Reformas", sub: "Pequenas reformas" },
+  {
+    src: "emoji/vassoura",
+    titulo: "Pós-obra",
+    sub: "Limpeza e acabamento final",
+  },
+  {
+    src: "emoji/caixa-ferramentas",
+    titulo: "Manutenção",
+    sub: "Reparos do dia a dia",
+  },
 ];

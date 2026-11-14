@@ -6,12 +6,14 @@ Composição `JulianoPinturas` · 1080×1920 · 30 fps · 45 s (1350 frames). Se
 npx remotion render JulianoPinturas out/juliano.mp4 --pixel-format=yuv420p --crf=18
 ```
 
-- `src/juliano/JulianoVideo.tsx` — o filme inteiro numa linha do tempo contínua (`T` em `tema.ts`),
-  para os elementos passarem de uma cena para a outra: ponto → ícone do app → cabeçalho do card;
-  card de notificação → widget com a grade; pincel da grade → destaque "Pintura."; ícone de
-  ligação → ícone da marca no final.
+- `src/juliano/JulianoVideo.tsx` — plano-sequência numa linha do tempo contínua (`T` em `tema.ts`),
+  sem cortes secos: ponto → logo → cabeçalho; cada serviço aparece grande e encolhe para o seu
+  quadradinho até preencher a grade 3×3; o rolo vira o destaque "Pintura."; o preto se espalha a
+  partir do rolo, o branco a partir de "Confiança."; o ícone do WhatsApp sai da lista e vira a cena,
+  e depois vira a logo.
 - `src/juliano/kit.tsx` — vidro iOS, card de notificação, ícone do app, texto em gradiente, fundo aurora.
 - `public/juliano/emoji/` — objetos 3D (Microsoft Fluent Emoji 3D, licença MIT).
+- `public/juliano/3d/` — logo em placa, rolo e WhatsApp enviados pelo cliente (fundos recortados).
 
 ## Narração (por último)
 
