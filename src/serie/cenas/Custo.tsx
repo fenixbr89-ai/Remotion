@@ -6,7 +6,7 @@ import { CopoAcai, Raios } from "../ui/Ilustracoes";
 import { Odometro } from "../ui/Odometro";
 import { G, naPosicao } from "../geo";
 import { cor, degrade, entra, estica, fontFamily, sombra, suave } from "../tema";
-import type { CenaProps } from "./props";
+import { marca, type CenaProps } from "./props";
 import { Topo } from "./Topo";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -16,16 +16,19 @@ const COPO = { x: 290, y: 900 };
  * A conta do copo, rápida: cada ingrediente cai dentro do copo, solta um "+R$" e
  * imprime uma linha no cupom; o total gira como contador mecânico.
  */
-export const Custo: React.FC<CenaProps> = ({ n, k, ponte }) => {
+export const Custo: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const inicio = 24;
   const passo = 13;
   const cai = 9;
-  const pousa = (i: number) => inicio + i * passo + cai;
+  const sinc = Array.isArray(marcas.itens) ? marcas.itens : null;
+  // cada ingrediente pousa no copo quando é dito na narração
+  const pousa = (i: number) => (sinc && sinc[i] !== undefined ? sinc[i] : inicio + i * passo + cai);
   const ultimo = pousa(n.itens.length - 1);
-  const total = n.itens.reduce((s, it, i) => s + it.custo * suave(f, pousa(i), pousa(i) + 8), 0);
-  const fechou = entra(f, fps, ultimo + 12, 8);
+  const tTotal = marca(marcas, "total", ultimo + 12);
+  const total = f >= tTotal ? k.custoTotal : n.itens.reduce((s, it, i) => s + it.custo * suave(f, pousa(i), pousa(i) + 8), 0);
+  const fechou = entra(f, fps, tTotal, 8);
   const squash = n.itens.reduce((s, _, i) => {
     const d = f - pousa(i);
     return s + (d >= 0 && d < 8 ? Math.sin((d / 8) * Math.PI) * 0.08 : 0);
@@ -44,7 +47,7 @@ export const Custo: React.FC<CenaProps> = ({ n, k, ponte }) => {
       </div>
       {/* ingredientes caindo + "+R$" subindo */}
       {n.itens.map((it, i) => {
-        const t = inicio + i * passo;
+        const t = pousa(i) - cai;
         if (f < t || f > pousa(i) + 20) return null;
         const queda = interpolate(f, [t, pousa(i)], [0, 1], { ...clamp, easing: Easing.in(Easing.quad) });
         const some = suave(f, pousa(i), pousa(i) + 4);
@@ -83,7 +86,7 @@ export const Custo: React.FC<CenaProps> = ({ n, k, ponte }) => {
         <Odometro valor={total} final={k.custoTotal} tamanho={92} cor={cor.branco} />
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1440 }}>
-        <Batida linhas={[{ texto: "Esse é o *piso*. Abaixo disso, *prejuízo.*", em: ultimo + 22, tamanho: 50, tom: "azul" }]} />
+        <Batida linhas={[{ texto: "Esse é o *piso*. Abaixo disso, *prejuízo.*", em: marca(marcas, "piso", ultimo + 22), tamanho: 50, tom: "azul" }]} />
       </div>
     </AbsoluteFill>
   );

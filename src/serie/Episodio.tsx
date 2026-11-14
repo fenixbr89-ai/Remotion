@@ -1,4 +1,6 @@
-import { AbsoluteFill, Easing, interpolate, Sequence, useCurrentFrame } from "remotion";
+import { Audio } from "@remotion/media";
+import { AbsoluteFill, Easing, interpolate, Sequence, staticFile, useCurrentFrame } from "remotion";
+import { EP01 } from "./sincronia";
 import { calcular } from "./calc";
 import { pontes } from "./pontes";
 import type { Negocio } from "./tipos";
@@ -33,8 +35,13 @@ export const CENAS: { nome: string; dur: number; C: React.FC<CenaProps>; etapa?:
   { nome: "Outro", dur: 130, C: Outro },
 ];
 
-const INICIOS = CENAS.map((_, i) => CENAS.slice(0, i).reduce((s, c) => s + c.dur, 0));
-export const DURACAO = INICIOS[INICIOS.length - 1] + CENAS[CENAS.length - 1].dur;
+// cortes nos tempos da narração: cada cena começa quando a fala dela começa
+const FPS = 30;
+const INICIOS = CENAS.map((c) => Math.round(EP01.cenas[c.nome].inicio * FPS));
+export const DURACAO = Math.round(EP01.fim * FPS);
+CENAS.forEach((c, i) => {
+  c.dur = (INICIOS[i + 1] ?? DURACAO) - INICIOS[i];
+});
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
@@ -59,6 +66,7 @@ export const Episodio: React.FC<Negocio> = (n) => {
   return (
     <AbsoluteFill>
       <Fundo />
+      <Audio src={staticFile(EP01.audio)} />
       {CENAS.map(({ nome, dur, C }, i) => {
         const ch = defs[nome]?.chaves;
         const entrada = ch ? ch[ch.length - 1].t : 0;
@@ -67,9 +75,9 @@ export const Episodio: React.FC<Negocio> = (n) => {
         return (
           <Sequence key={nome} name={nome} from={INICIOS[i]} durationInFrames={dur}>
             {nome !== "Outro" && <Formas semente={i + 1} dur={dur} />}
-            {nome === "Outro" ? <C n={n} k={k} dur={dur} ponte={{ entra: entrada, sai }} /> : (
+            {nome === "Outro" ? <C n={n} k={k} dur={dur} ponte={{ entra: entrada, sai }} marcas={EP01.cenas[nome].marcas} /> : (
               <Palco dur={dur}>
-                <C n={n} k={k} dur={dur} ponte={{ entra: entrada, sai }} />
+                <C n={n} k={k} dur={dur} ponte={{ entra: entrada, sai }} marcas={EP01.cenas[nome].marcas} />
               </Palco>
             )}
           </Sequence>

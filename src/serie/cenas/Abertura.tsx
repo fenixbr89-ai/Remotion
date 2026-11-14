@@ -4,7 +4,7 @@ import { Batida } from "../ui/Batida";
 import { Letras } from "../ui/Cinetico";
 import { CopoAcai, Loja as Fachada, MaisUm, Pessoa, Raios } from "../ui/Ilustracoes";
 import { cor, degrade, entra, estica, flutua, fontFamily, suave } from "../tema";
-import { destaca, type CenaProps } from "./props";
+import { destaca, marca, type CenaProps } from "./props";
 import { Topo } from "./Topo";
 
 export const Gancho: React.FC<CenaProps> = ({ n, ponte }) => {
@@ -34,7 +34,7 @@ const CLIENTES = [
   { lado: 1, x: 140, roupa: cor.azulProfundo, pele: 1, t: 26 },
 ];
 
-export const Loja: React.FC<CenaProps> = ({ n, ponte }) => {
+export const Loja: React.FC<CenaProps> = ({ n, ponte, marcas }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   return (
@@ -56,14 +56,15 @@ export const Loja: React.FC<CenaProps> = ({ n, ponte }) => {
         })}
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1420 }}>
-        <Batida linhas={[{ texto: "acertar o *preço.*", em: 40, tamanho: 96 }]} />
+        <Batida linhas={[{ texto: "acertar o *preço.*", em: marca(marcas, "preco", 40), tamanho: 96 }]} />
       </div>
     </AbsoluteFill>
   );
 };
 
-export const Chute: React.FC<CenaProps> = ({ ponte }) => {
+export const Chute: React.FC<CenaProps> = ({ ponte, marcas }) => {
   const f = useCurrentFrame();
+  const conta = marca(marcas, "conta", 30);
   return (
     <AbsoluteFill style={{ fontFamily }}>
       <div style={{ position: "absolute", top: 690, left: 0, right: 0 }}>
@@ -74,9 +75,9 @@ export const Chute: React.FC<CenaProps> = ({ ponte }) => {
       </div>
       {f >= ponte.entra && <div style={{ ...naPosicao(G.chuteRisco), background: cor.vermelho }} />}
       <div style={{ position: "absolute", top: 1010, left: 0, right: 0 }}>
-        <Batida linhas={[{ texto: "É CONTA.", em: 30, tamanho: 150, efeito: "slam", degrade: true }]} />
+        <Batida linhas={[{ texto: "É CONTA.", em: conta, tamanho: 150, efeito: "slam", degrade: true }]} />
       </div>
-      {f < ponte.sai && <div style={{ ...naPosicao(G.contaBarra), background: degrade, scale: `${suave(f, 44, 54)} 1`, transformOrigin: "left center" }} />}
+      {f < ponte.sai && <div style={{ ...naPosicao(G.contaBarra), background: degrade, scale: `${suave(f, conta + 14, conta + 24)} 1`, transformOrigin: "left center" }} />}
     </AbsoluteFill>
   );
 };
@@ -84,10 +85,11 @@ export const Chute: React.FC<CenaProps> = ({ ponte }) => {
 const COLUNAS = [250, 540, 830];
 const BASE = 1150;
 
-export const Cardapio: React.FC<CenaProps> = ({ n, ponte }) => {
+export const Cardapio: React.FC<CenaProps> = ({ n, ponte, marcas }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const foco = suave(f, 22, 36);
+  const t = marca(marcas, "foco", 22);
+  const foco = suave(f, t, t + 14);
   return (
     <AbsoluteFill style={{ fontFamily }}>
       <Topo texto={`${n.cardapio.length} tamanhos. Foco no ${destaca(n.cardapio[n.carroChefe].nome + ".")}`} />
@@ -115,7 +117,7 @@ export const Cardapio: React.FC<CenaProps> = ({ n, ponte }) => {
               </div>
             )}
             {chefe && (
-              <div style={{ position: "absolute", left: 540 - 110, top: BASE - tam * 1.15 - 70, width: 220, textAlign: "center", padding: "10px 0", borderRadius: 999, background: cor.preto, color: cor.branco, fontSize: 24, fontWeight: 800, letterSpacing: 1, scale: estica(f, fps, 30), opacity: 1 - suave(f, ponte.sai - 8, ponte.sai - 2) }}>
+              <div style={{ position: "absolute", left: 540 - 110, top: BASE - tam * 1.15 - 70, width: 220, textAlign: "center", padding: "10px 0", borderRadius: 999, background: cor.preto, color: cor.branco, fontSize: 24, fontWeight: 800, letterSpacing: 1, scale: estica(f, fps, t + 8), opacity: 1 - suave(f, ponte.sai - 8, ponte.sai - 2) }}>
                 MAIS VENDIDO
               </div>
             )}

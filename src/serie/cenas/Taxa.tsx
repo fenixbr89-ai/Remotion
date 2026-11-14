@@ -6,10 +6,10 @@ import { Celular } from "../ui/Ilustracoes";
 import { Odometro } from "../ui/Odometro";
 import { G, naPosicao } from "../geo";
 import { cor, degrade, entra, estica, flutua, fontFamily, suave } from "../tema";
-import type { CenaProps } from "./props";
+import { marca, type CenaProps } from "./props";
 import { Topo } from "./Topo";
 
-export const Erro: React.FC<CenaProps> = ({ k, ponte }) => {
+export const Erro: React.FC<CenaProps> = ({ k, ponte, marcas }) => {
   const f = useCurrentFrame();
   return (
     <AbsoluteFill>
@@ -18,25 +18,25 @@ export const Erro: React.FC<CenaProps> = ({ k, ponte }) => {
       </div>
       {f < ponte.sai && (
         <div style={{ ...naPosicao(G.erroValor), display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <Batida linhas={[{ texto: brl(k.erro.precoErrado), em: 8, tamanho: 230, efeito: "slam", corTexto: cor.preto }]} />
+          <Batida linhas={[{ texto: brl(k.erro.precoErrado), em: marca(marcas, "valor", 8), tamanho: 230, efeito: "slam", corTexto: cor.preto }]} />
         </div>
       )}
       <div style={{ position: "absolute", top: 1100, left: 0, right: 0 }}>
-        <Batida linhas={[{ texto: "porque o vizinho cobra.", em: 22, tamanho: 50, peso: 700, corTexto: cor.textoSuave }]} />
+        <Batida linhas={[{ texto: "porque o vizinho cobra.", em: marca(marcas, "vizinho", 22), tamanho: 50, peso: 700, corTexto: cor.textoSuave }]} />
       </div>
     </AbsoluteFill>
   );
 };
 
 /** O pedido no app: a taxa e o custo comem o valor e sobra quase nada. */
-export const App: React.FC<CenaProps> = ({ n, k, ponte }) => {
+export const App: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const { precoErrado, taxaValor, sobra } = k.erro;
   const notif = estica(f, fps, 2);
-  const tT = 34;
-  const tC = 56;
-  const tF = 80;
+  const tT = marca(marcas, "taxa", 34);
+  const tC = marca(marcas, "custo", 56);
+  const tF = marca(marcas, "final", 80);
   const restante = precoErrado - taxaValor * suave(f, tT, tT + 12) - k.custoTotal * suave(f, tC, tC + 12);
   const final = entra(f, fps, tF, 8);
   const tremor = f > tF && f < tF + 16 ? Math.sin(f * 2.6) * 14 * (1 - (f - tF) / 16) : 0;
@@ -92,7 +92,7 @@ export const App: React.FC<CenaProps> = ({ n, k, ponte }) => {
   );
 };
 
-export const Sobra: React.FC<CenaProps> = ({ k, ponte }) => {
+export const Sobra: React.FC<CenaProps> = ({ k, ponte, marcas }) => {
   const f = useCurrentFrame();
   return (
     <AbsoluteFill>
@@ -100,11 +100,11 @@ export const Sobra: React.FC<CenaProps> = ({ k, ponte }) => {
         <Batida linhas={[{ texto: "Sobra", em: 0, tamanho: 60, corTexto: cor.textoSuave, peso: 700 }]} />
       </div>
       <div style={{ position: "absolute", top: 690, left: 0, right: 0 }}>
-        <Batida linhas={[{ texto: brl(k.erro.sobra), em: 4, tamanho: 230, efeito: "slam", corTexto: cor.vermelho }]} />
+        <Batida linhas={[{ texto: brl(k.erro.sobra), em: marca(marcas, "valor", 4), tamanho: 230, efeito: "slam", corTexto: cor.vermelho }]} />
       </div>
       {f >= ponte.entra && f < ponte.sai && <div style={{ ...naPosicao(G.sobraBarra), background: cor.vermelho }} />}
       <div style={{ position: "absolute", top: 1010, left: 70, right: 70 }}>
-        <Batida linhas={[{ texto: "Um cupom de desconto e vira *prejuízo.*", em: 22, tamanho: 50, tom: "vermelho" }]} />
+        <Batida linhas={[{ texto: "Um cupom de desconto e vira *prejuízo.*", em: marca(marcas, "cupom", 22), tamanho: 50, tom: "vermelho" }]} />
       </div>
     </AbsoluteFill>
   );

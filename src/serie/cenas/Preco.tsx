@@ -5,7 +5,7 @@ import { CopoAcai, Raios } from "../ui/Ilustracoes";
 import { Odometro } from "../ui/Odometro";
 import { G, naPosicao } from "../geo";
 import { cor, degrade, entra, estica, fontFamily, sombra, suave, textoDegrade } from "../tema";
-import { destaca, type CenaProps } from "./props";
+import { destaca, marca, type CenaProps } from "./props";
 import { Topo } from "./Topo";
 
 const dec = (v: number) => v.toFixed(2).replace(".", ",");
@@ -22,10 +22,15 @@ const Termo: React.FC<{ t: string; em: number; tam?: number; destaque?: boolean;
   );
 };
 
-export const Formula: React.FC<CenaProps> = ({ n, k, ponte }) => {
+export const Formula: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const etq = entra(f, fps, 92, 8);
+  const l1 = marca(marcas, "l1", 8);
+  const p1 = marca(marcas, "passo1", 5);
+  const l2 = marca(marcas, "l2", 46);
+  const l3 = marca(marcas, "l3", 70);
+  const tp = marca(marcas, "preco", 92);
+  const etq = entra(f, fps, tp, 8);
   const linha = (children: React.ReactNode, top: number) => (
     <div style={{ position: "absolute", top, left: 40, right: 40, display: "flex", justifyContent: "center", alignItems: "baseline", gap: 18 }}>{children}</div>
   );
@@ -35,34 +40,34 @@ export const Formula: React.FC<CenaProps> = ({ n, k, ponte }) => {
       {f >= ponte.entra && <div style={{ ...naPosicao(G.formulaLinha), background: cor.azulFundo }} />}
       {linha(
         <>
-          <Termo t="preço" em={8} destaque />
-          <Termo t="=" em={14} />
-          <Termo t="custo" em={18} />
-          <Termo t="÷" em={24} />
-          <Termo t="(1 − taxa − lucro)" em={28} tam={56} />
+          <Termo t="preço" em={l1} destaque />
+          <Termo t="=" em={l1 + p1} />
+          <Termo t="custo" em={l1 + p1 * 2} />
+          <Termo t="÷" em={l1 + p1 * 3} />
+          <Termo t="(1 − taxa − lucro)" em={l1 + p1 * 4} tam={56} />
         </>,
         470,
       )}
       {linha(
         <>
-          <Termo t={dec(k.custoTotal)} em={46} cor={cor.preto} />
-          <Termo t="÷" em={50} />
-          <Termo t={`(1 − ${dec(n.taxa)} − ${dec(n.lucro)})`} em={54} tam={56} cor={cor.preto} />
+          <Termo t={dec(k.custoTotal)} em={l2} cor={cor.preto} />
+          <Termo t="÷" em={l2 + 4} />
+          <Termo t={`(1 − ${dec(n.taxa)} − ${dec(n.lucro)})`} em={l2 + 8} tam={56} cor={cor.preto} />
         </>,
         580,
       )}
       {linha(
         <>
-          <Termo t="=" em={70} />
-          <Termo t={dec(k.custoTotal)} em={72} cor={cor.textoSuave} />
-          <Termo t="÷" em={76} cor={cor.textoSuave} />
-          <Termo t={dec(1 - n.taxa - n.lucro)} em={80} destaque />
+          <Termo t="=" em={l3} />
+          <Termo t={dec(k.custoTotal)} em={l3 + 2} cor={cor.textoSuave} />
+          <Termo t="÷" em={l3 + 6} cor={cor.textoSuave} />
+          <Termo t={dec(1 - n.taxa - n.lucro)} em={l3 + 10} destaque />
         </>,
         690,
       )}
       <div style={{ position: "absolute", left: 0, right: 0, top: 860, height: 560, display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Raios tamanho={860} style={{ opacity: etq }} />
-        <div style={{ translate: "-170px 30px", scale: estica(f, fps, 84), transformOrigin: "center bottom" }}>
+        <div style={{ translate: "-170px 30px", scale: estica(f, fps, tp - 8), transformOrigin: "center bottom" }}>
           <CopoAcai tamanho={300} />
         </div>
       </div>
@@ -70,7 +75,7 @@ export const Formula: React.FC<CenaProps> = ({ n, k, ponte }) => {
         <div style={{ ...naPosicao(G.formulaEtiqueta), scale: `${interpolate(etq, [0, 1], [2, 1])}`, opacity: Math.min(1, etq * 3) }}>
           <div style={{ boxSizing: "border-box", width: "100%", height: "100%", borderRadius: G.formulaEtiqueta.r, padding: "22px 34px", background: degrade, boxShadow: "0 24px 50px rgba(29,78,216,0.35)" }}>
             <div style={{ color: "rgba(255,255,255,0.85)", fontSize: 28, fontWeight: 800, letterSpacing: 3 }}>VENDER A</div>
-            <Odometro valor={k.preco * suave(f, 92, 118)} final={k.preco} tamanho={90} cor={cor.branco} />
+            <Odometro valor={k.preco * suave(f, tp, tp + 26)} final={k.preco} tamanho={90} cor={cor.branco} />
           </div>
         </div>
       )}
@@ -78,13 +83,13 @@ export const Formula: React.FC<CenaProps> = ({ n, k, ponte }) => {
   );
 };
 
-export const Divisao: React.FC<CenaProps> = ({ n, k, ponte }) => {
+export const Divisao: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const partes = [
-    { r: "Custo", v: k.custoTotal, c: "#94A3B8", t: 10 },
-    { r: `Taxa ${pct(n.taxa)}`, v: k.taxaValor, c: cor.vermelho, t: 22 },
-    { r: `Lucro ${pct(n.lucro)}`, v: k.lucroValor, c: cor.verde, t: 34 },
+    { r: "Custo", v: k.custoTotal, c: "#94A3B8", t: marca(marcas, "custo", 10) },
+    { r: `Taxa ${pct(n.taxa)}`, v: k.taxaValor, c: cor.vermelho, t: marca(marcas, "taxa", 22) },
+    { r: `Lucro ${pct(n.lucro)}`, v: k.lucroValor, c: cor.verde, t: marca(marcas, "lucro", 34) },
   ];
   return (
     <AbsoluteFill style={{ fontFamily }}>
@@ -109,8 +114,8 @@ export const Divisao: React.FC<CenaProps> = ({ n, k, ponte }) => {
         <Batida
           gap={6}
           linhas={[
-            { texto: `+${brl(k.lucroValor)}`, em: 56, tamanho: 200, efeito: "slam", corTexto: cor.verde },
-            { texto: "de lucro em *cada* copo.", em: 70, tamanho: 54 },
+            { texto: `+${brl(k.lucroValor)}`, em: marca(marcas, "slam", 56), tamanho: 200, efeito: "slam", corTexto: cor.verde },
+            { texto: "de lucro em *cada* copo.", em: marca(marcas, "slam", 56) + 14, tamanho: 54 },
           ]}
         />
       </div>

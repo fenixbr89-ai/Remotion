@@ -6,26 +6,28 @@ import { Logo } from "../ui/Logo";
 import { Odometro } from "../ui/Odometro";
 import { G, naPosicao } from "../geo";
 import { cor, degrade, entra, estica, flutua, fontFamily, sombra, suave } from "../tema";
-import type { CenaProps } from "./props";
+import { marca, type CenaProps } from "./props";
 import { Topo } from "./Topo";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 /** O app em ação: campos se preenchem, cursor clica em Calcular, loading → ✓ → preço. */
-export const Produto: React.FC<CenaProps> = ({ n, k, ponte }) => {
+export const Produto: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
+  const c = marca(marcas, "clique", 54);
+  const b = marca(marcas, "botao", 100);
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const campos = [
-    { r: "Custo do copo", v: brl(k.custoTotal), t: 12 },
-    { r: "Taxa do app", v: pct(n.taxa), t: 20 },
-    { r: "Lucro desejado", v: pct(n.lucro), t: 28 },
+    { r: "Custo do copo", v: brl(k.custoTotal), t: Math.max(2, c - 42) },
+    { r: "Taxa do app", v: pct(n.taxa), t: Math.max(8, c - 34) },
+    { r: "Lucro desejado", v: pct(n.lucro), t: Math.max(14, c - 26) },
   ];
-  const cx = interpolate(f, [36, 52], [900, 560], clamp);
-  const cy = interpolate(f, [36, 52], [1750, 1255], clamp);
-  const clique = f >= 54 && f < 60;
-  const carregando = f >= 58 && f < 74;
-  const pronto = f >= 74;
-  const res = entra(f, fps, 76, 9);
+  const cx = interpolate(f, [c - 18, c - 2], [900, 560], clamp);
+  const cy = interpolate(f, [c - 18, c - 2], [1750, 1255], clamp);
+  const clique = f >= c && f < c + 6;
+  const carregando = f >= c + 4 && f < c + 20;
+  const pronto = f >= c + 20;
+  const res = entra(f, fps, c + 22, 9);
   return (
     <AbsoluteFill style={{ fontFamily }}>
       <Topo texto="Eu faço essa conta no *Preço Certo.*" />
@@ -47,9 +49,9 @@ export const Produto: React.FC<CenaProps> = ({ n, k, ponte }) => {
               })}
               <div style={{ marginTop: 20, height: 84, borderRadius: 999, background: pronto ? cor.verde : degrade, display: "flex", alignItems: "center", justifyContent: "center", color: cor.branco, fontSize: 32, fontWeight: 800, scale: `${clique ? 0.94 : 1}` }}>
                 {carregando ? (
-                  <div style={{ width: 44, height: 44, borderRadius: 22, border: "6px solid rgba(255,255,255,0.35)", borderTopColor: cor.branco, rotate: `${(f - 58) * 30}deg` }} />
+                  <div style={{ width: 44, height: 44, borderRadius: 22, border: "6px solid rgba(255,255,255,0.35)", borderTopColor: cor.branco, rotate: `${(f - c - 4) * 30}deg` }} />
                 ) : pronto ? (
-                  <svg width={46} height={46} viewBox="0 0 24 24" fill="none" stroke={cor.branco} strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round" style={{ scale: `${entra(f, fps, 74, 7)}` }}>
+                  <svg width={46} height={46} viewBox="0 0 24 24" fill="none" stroke={cor.branco} strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round" style={{ scale: `${entra(f, fps, c + 20, 7)}` }}>
                     <path d="M20 6 9 17l-5-5" />
                   </svg>
                 ) : (
@@ -58,21 +60,21 @@ export const Produto: React.FC<CenaProps> = ({ n, k, ponte }) => {
               </div>
               <div style={{ marginTop: 20, borderRadius: 26, padding: "18px 22px", background: cor.branco, boxShadow: sombra, opacity: res, scale: `${interpolate(res, [0, 1], [0.6, 1])}` }}>
                 <div style={{ color: cor.textoSuave, fontSize: 22, fontWeight: 800, letterSpacing: 3 }}>VENDER A</div>
-                <Odometro valor={k.preco * suave(f, 76, 100)} final={k.preco} tamanho={72} cor={cor.preto} />
+                <Odometro valor={k.preco * suave(f, c + 22, c + 46)} final={k.preco} tamanho={72} cor={cor.preto} />
               </div>
             </div>
           </Celular>
         </div>
       </AbsoluteFill>
-      <div style={{ position: "absolute", left: cx, top: cy, opacity: suave(f, 32, 38) * (1 - suave(f, 80, 86)), scale: `${clique ? 0.85 : 1}` }}>
+      <div style={{ position: "absolute", left: cx, top: cy, opacity: suave(f, c - 22, c - 16) * (1 - suave(f, c + 26, c + 32)), scale: `${clique ? 0.85 : 1}` }}>
         <Cursor tamanho={80} />
       </div>
       {f < ponte.sai && (
-        <div style={{ ...naPosicao(G.produtoBotao), display: "flex", alignItems: "center", justifyContent: "center", background: degrade, color: cor.branco, fontSize: 46, fontWeight: 800, boxShadow: "0 20px 50px rgba(29,78,216,0.4)", scale: f < 115 ? estica(f, fps, 100) : `${1 + Math.sin((f - 115) / 5) * 0.03}` }}>
+        <div style={{ ...naPosicao(G.produtoBotao), display: "flex", alignItems: "center", justifyContent: "center", background: degrade, color: cor.branco, fontSize: 46, fontWeight: 800, boxShadow: "0 20px 50px rgba(29,78,216,0.4)", scale: f < b + 15 ? estica(f, fps, b) : `${1 + Math.sin((f - b - 15) / 5) * 0.03}` }}>
           Teste grátis
         </div>
       )}
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1580, textAlign: "center", color: cor.azulProfundo, fontSize: 34, fontWeight: 700, opacity: entra(f, fps, 108) * (1 - suave(f, ponte.sai - 6, ponte.sai)) }}>siteprecocerto.vercel.app</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1580, textAlign: "center", color: cor.azulProfundo, fontSize: 34, fontWeight: 700, opacity: entra(f, fps, b + 8) * (1 - suave(f, ponte.sai - 6, ponte.sai)) }}>siteprecocerto.vercel.app</div>
     </AbsoluteFill>
   );
 };
@@ -127,18 +129,20 @@ const MOEDAS = [
   { x: 520, y: 1700, s: 44 },
 ];
 
-export const Outro: React.FC<CenaProps> = () => {
+export const Outro: React.FC<CenaProps> = ({ marcas }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const logo = entra(f, fps, 0, 10);
-  const ida1 = suave(f, 22, 34);
-  const ida2 = suave(f, 46, 58);
+  const c1 = marca(marcas, "curtir", 35);
+  const c2 = marca(marcas, "seguir", 59);
+  const ida1 = suave(f, c1 - 13, c1 - 1);
+  const ida2 = suave(f, c2 - 13, c2 - 1);
   const cx = interpolate(ida1, [0, 1], [900, 380]) + ida2 * 270;
   const cy = interpolate(ida1, [0, 1], [1600, 1180]);
-  const clique1 = f >= 35 && f < 41;
-  const clique2 = f >= 59 && f < 65;
-  const curtiu = f >= 38;
-  const seguiu = f >= 62;
+  const clique1 = f >= c1 && f < c1 + 6;
+  const clique2 = f >= c2 && f < c2 + 6;
+  const curtiu = f >= c1 + 3;
+  const seguiu = f >= c2 + 3;
   return (
     <AbsoluteFill style={{ fontFamily, background: degrade }}>
       {MOEDAS.map((m, i) => (
@@ -152,7 +156,7 @@ export const Outro: React.FC<CenaProps> = () => {
         </div>
         <Batida linhas={[{ texto: "Aproveita pra curtir e seguir", em: 6, tamanho: 62, corTexto: cor.branco }]} style={{ marginTop: 90, width: 820 }} />
         <div style={{ display: "flex", alignItems: "center", gap: 26, marginTop: 70, scale: `${entra(f, fps, 14, 10)}` }}>
-          <div style={{ width: 110, height: 110, borderRadius: 55, background: curtiu ? cor.branco : "transparent", border: `5px solid ${cor.branco}`, display: "flex", alignItems: "center", justifyContent: "center", scale: `${clique1 ? 0.88 : curtiu ? 1 + Math.max(0, 1 - (f - 38) / 8) * 0.18 : 1}` }}>
+          <div style={{ width: 110, height: 110, borderRadius: 55, background: curtiu ? cor.branco : "transparent", border: `5px solid ${cor.branco}`, display: "flex", alignItems: "center", justifyContent: "center", scale: `${clique1 ? 0.88 : curtiu ? 1 + Math.max(0, 1 - (f - c1 - 3) / 8) * 0.18 : 1}` }}>
             <svg width={56} height={56} viewBox="0 0 24 24" fill={curtiu ? cor.vermelho : "none"} stroke={curtiu ? cor.vermelho : cor.branco} strokeWidth={2.4}>
               <path d="M12 21s-7.5-4.6-10-9.3C.4 8.5 2.3 4.5 6 4.5c2.2 0 3.6 1.3 6 3.6 2.4-2.3 3.8-3.6 6-3.6 3.7 0 5.6 4 4 7.2C19.5 16.4 12 21 12 21z" />
             </svg>
