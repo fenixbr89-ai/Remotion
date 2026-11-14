@@ -6,12 +6,17 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "render": "remotion render JulianoPinturas out/juliano-pinturas-9x16.mp4 --crf=18",
+    "audio": "python3 scripts/synth_audio.py && ffmpeg -loglevel error -y -i public/audio/trilha.wav -b:a 192k public/audio/trilha.mp3 && rm public/audio/trilha.wav"
   },
   "repository": {},
   "license": "UNLICENSED",
   "dependencies": {
     "@remotion/cli": "^4.0.0",
+    "@remotion/fonts": "4.0.543",
+    "@remotion/media": "4.0.543",
+    "@remotion/transitions": "4.0.543",
     "@remotion/zod-types": "^4.0.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
