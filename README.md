@@ -53,18 +53,17 @@ Found an issue with Remotion? [File an issue here](https://github.com/remotion-d
 
 Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
 
-## Comercial — O Juliano Pinturas (9:16, 32s, tipografia cinética)
+## Comercial — O Juliano Pinturas (9:16, 32s)
 
 Composição `JulianoPinturas` (1080×1920, 30 fps, 960 frames), em `src/JulianoPinturas/`.
-Estilo: fundo claro, Poppins, frases palavra por palavra, pílulas inclinadas, cursor clicando,
-anéis, eco de texto, sublinhado à mão, toggles e laranja da marca como destaque.
+Mistura: 40% Apple UI Motion · 30% Apple Product Showcase · 20% Minimalist Motion · 10% Kinetic Typography.
 
 | Cena | Tempo | Arquivo |
 | --- | --- | --- |
-| Abertura (pergunta → "Conheça o Juliano Pinturas") | 0–10,5s | `Abertura.tsx` |
-| Logo, 5 serviços e "e muito mais" | 10,5–24s | `Servicos.tsx` |
-| Valores, "Entre em contato" e assinatura | 24–32s | `Encerramento.tsx` |
+| Roleta de palavras → tela de bloqueio com notificações → vitrine da logo | 0–8,5s | `Abertura.tsx` |
+| Tela de apps → 5 vitrines de serviço → widgets "E muito mais" | 8,5–24,5s | `Servicos.tsx` |
+| Valores → cartão de contato (sheet) e frase final | 24,5–32s | `Encerramento.tsx` |
 
-Efeitos reutilizáveis em `fx.tsx`. Trilha/SFX originais: `npm run audio`.
+Componentes de interface em `kit.tsx`. Trilha/SFX originais: `npm run audio`.
 Narração: coloque em `public/audio/narracao.mp3` e defina a prop `narracao`.
 Prévia: `npm run dev` · Render: `npm run render`.

@@ -17,9 +17,9 @@ export type ComercialProps = z.infer<typeof comercialSchema>;
 
 // 30 fps, 120 BPM => cortes no grid de 15 frames
 export const SCENES = {
-  abertura: 315, // 0–10.5s
-  servicos: 405, // 10.5–24s
-  encerramento: 240, // 24–32s
+  abertura: 255, // 0–8.5s
+  servicos: 480, // 8.5–24.5s
+  encerramento: 225, // 24.5–32s
 };
 export const TOTAL = Object.values(SCENES).reduce((a, b) => a + b, 0);
 
@@ -30,15 +30,15 @@ export const Comercial: React.FC<ComercialProps> = ({
   // Com narração, a trilha abaixa para manter a voz em primeiro plano
   const musica = narracao ? volumeTrilha * 0.35 : volumeTrilha;
   return (
-    <AbsoluteFill style={{ backgroundColor: C.bg }}>
+    <AbsoluteFill style={{ backgroundColor: C.black }}>
       <Series>
-        <Series.Sequence name="Abertura" durationInFrames={315}>
+        <Series.Sequence name="Abertura" durationInFrames={255}>
           <Abertura />
         </Series.Sequence>
-        <Series.Sequence name="Serviços" durationInFrames={405}>
+        <Series.Sequence name="Serviços" durationInFrames={480}>
           <Servicos />
         </Series.Sequence>
-        <Series.Sequence name="Encerramento" durationInFrames={240}>
+        <Series.Sequence name="Encerramento" durationInFrames={225}>
           <Encerramento />
         </Series.Sequence>
       </Series>
