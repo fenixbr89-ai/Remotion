@@ -1,6 +1,6 @@
 # PIXORA — vídeo vertical 9:16
 
-Composição `Pixora` · 1080×1920 · 30 fps · 54 s (1620 frames).
+Composição `Pixora` · 1080×1920 · 30 fps · 34,5 s (1035 frames), guiada pela narração gravada.
 
 ## Comandos
 
@@ -22,10 +22,13 @@ node scripts/gerar-audio.mjs                  # regenera trilha e SFX em public/
 
 ## Narração
 
-A narração gravada está em `public/narracao/pixora_narracao.wav` e é dividida em trechos por
-`NARRACAO_CLIPS` em `src/pixora/timeline.ts` (`de`/`ate` = trecho do arquivo, `em` = momento no vídeo).
-A trilha abaixa automaticamente enquanto a voz fala. Para trocar a gravação, substitua o arquivo e
-ajuste os tempos dos trechos. Para exportar sem voz: `--props='{"narracao":false,"legendas":false}'`.
+A gravação `public/narracao/pixora_narracao.wav` toca inteira desde o frame 0 e o vídeo segue ela:
+as cenas começam nas pausas da fala (`START` em `src/pixora/timeline.ts`) e cada toque, punch de
+câmera e efeito sonoro está no frame da palavra correspondente. `FALA` lista os trechos com voz
+(a trilha abaixa neles). Sem voz: `--props='{"narracao":false,"legendas":false}'`.
+
+Ferramentas em `ui.tsx`: `Camera` (keyframes, tremor de mão e punches), `Finger` (toque com onda e
+som), `Sfx`, `BgDots`, `Sparkles`. Transições em chicote (`whip`) em `transicoes.tsx`.
 
 Para o arquivo final, normalize o áudio para redes sociais:
 

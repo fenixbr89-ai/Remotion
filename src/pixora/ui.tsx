@@ -3,11 +3,13 @@ import {
   Easing,
   Img,
   interpolate,
+  Sequence,
   spring,
   staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
+import { Audio } from "@remotion/media";
 import { loadFont } from "@remotion/fonts";
 
 // Inter Display local (public/fonts) — SF Pro Display é usada se estiver instalada.
@@ -476,5 +478,208 @@ export const Drift: React.FC<{
     >
       {children}
     </div>
+  );
+};
+
+
+// ---------- Som dentro das cenas ----------
+export type SfxName = "whoosh" | "tap" | "pop" | "ding" | "impact";
+
+/** Efeito sonoro no frame local da cena. */
+export const Sfx: React.FC<{ readonly at: number; readonly name: SfxName; readonly volume?: number }> = ({
+  at,
+  name,
+  volume = 0.5,
+}) => (
+  <Sequence from={Math.round(at)} layout="none" name={`SFX ${name}`}>
+    <Audio src={staticFile(`audio/${name}.wav`)} volume={volume} />
+  </Sequence>
+);
+
+// ---------- Câmera ----------
+export type CamKey = { f: number; z?: number; x?: number; y?: number; r?: number };
+
+const track = (frame: number, keys: CamKey[], prop: "z" | "x" | "y" | "r", base: number) => {
+  const pts: [number, number][] = [];
+  let last = base;
+  for (const k of keys) {
+    const v = k[prop];
+    if (v !== undefined) last = v;
+    pts.push([k.f, last]);
+  }
+  if (pts.length < 2) return pts.length ? pts[0][1] : base;
+  return interpolate(
+    frame,
+    pts.map((p) => p[0]),
+    pts.map((p) => p[1]),
+    { ...CLAMP, easing: EASE_IN_OUT },
+  );
+};
+
+/**
+ * Câmera da cena: keyframes de zoom/posição/rotação, tremor de mão contínuo e
+ * "punches" (zoom rápido + tremida) nos momentos de impacto.
+ */
+export const Camera: React.FC<{
+  readonly keys?: CamKey[];
+  readonly handheld?: number;
+  readonly punches?: { f: number; amt?: number }[];
+  readonly origin?: string;
+  readonly children: React.ReactNode;
+}> = ({ keys = [{ f: 0 }], handheld = 1, punches = [], origin = "50% 50%", children }) => {
+  const frame = useCurrentFrame();
+  const z = track(frame, keys, "z", 1);
+  const x = track(frame, keys, "x", 0);
+  const y = track(frame, keys, "y", 0);
+  const r = track(frame, keys, "r", 0);
+  let pz = 0;
+  let shake = 0;
+  for (const p of punches) {
+    const amt = p.amt ?? 0.05;
+    pz += interpolate(frame, [p.f, p.f + 3, p.f + 16], [0, amt, 0], CLAMP);
+    shake += interpolate(frame, [p.f, p.f + 2, p.f + 14], [0, amt * 260, 0], CLAMP);
+  }
+  const hx = handheld * (Math.sin(frame * 0.13) * 5 + Math.sin(frame * 0.071 + 1) * 4);
+  const hy = handheld * (Math.cos(frame * 0.11) * 5 + Math.sin(frame * 0.053 + 2) * 3);
+  const hr = handheld * Math.sin(frame * 0.09) * 0.25;
+  const sx = shake * Math.sin(frame * 2.7);
+  const sy = shake * Math.cos(frame * 3.1);
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        transformOrigin: origin,
+        translate: `${x + hx + sx}px ${y + hy + sy}px`,
+        scale: String(z + pz),
+        rotate: `${r + hr + sx * 0.02}deg`,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+// ---------- Dedo (toque estilo iOS) ----------
+export type FingerKey = { f: number; x: number; y: number };
+
+/** Toque na tela: move entre pontos, encolhe no clique, solta uma onda e toca o "tap". */
+export const Finger: React.FC<{
+  readonly path: FingerKey[];
+  readonly taps: number[];
+  readonly dark?: boolean;
+  readonly volume?: number;
+}> = ({ path, taps, dark = false, volume = 0.6 }) => {
+  const frame = useCurrentFrame();
+  const fs = path.map((p) => p.f);
+  const x = interpolate(frame, fs, path.map((p) => p.x), { ...CLAMP, easing: EASE_IN_OUT });
+  const y = interpolate(frame, fs, path.map((p) => p.y), { ...CLAMP, easing: EASE_IN_OUT });
+  const first = fs[0];
+  const lastF = fs[fs.length - 1];
+  const visible =
+    interpolate(frame, [first, first + 6], [0, 1], CLAMP) *
+    interpolate(frame, [lastF - 6, lastF], [1, 0], CLAMP);
+  let press = 0;
+  for (const t of taps) press = Math.max(press, interpolate(frame, [t - 3, t, t + 7], [0, 1, 0], CLAMP));
+  return (
+    <>
+      {taps.map((t) => (
+        <Sfx key={t} at={t} name="tap" volume={volume} />
+      ))}
+      {taps.map((t) => {
+        const r = prog(frame, t, 16);
+        if (frame < t || r >= 1) return null;
+        const tx = interpolate(t, fs, path.map((p) => p.x), CLAMP);
+        const ty = interpolate(t, fs, path.map((p) => p.y), CLAMP);
+        return (
+          <div
+            key={`r${t}`}
+            style={{
+              position: "absolute",
+              left: tx - 60,
+              top: ty - 60,
+              width: 120,
+              height: 120,
+              borderRadius: "50%",
+              border: `4px solid ${dark ? "rgba(255,255,255,0.8)" : "rgba(10,132,255,0.6)"}`,
+              scale: String(0.6 + r * 1.6),
+              opacity: 1 - r,
+            }}
+          />
+        );
+      })}
+      <div
+        style={{
+          position: "absolute",
+          left: x - 44,
+          top: y - 44,
+          width: 88,
+          height: 88,
+          borderRadius: "50%",
+          background: dark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.22)",
+          border: "4px solid rgba(255,255,255,0.95)",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
+          opacity: visible,
+          scale: String(1 - press * 0.22),
+        }}
+      />
+    </>
+  );
+};
+
+// ---------- Fundo com pontos em movimento ----------
+export const BgDots: React.FC<{ readonly color?: string; readonly speed?: number }> = ({
+  color = "rgba(0,0,0,0.07)",
+  speed = 0.6,
+}) => {
+  const frame = useCurrentFrame();
+  const off = (frame * speed) % 60;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: -60,
+        backgroundImage: `radial-gradient(${color} 3px, transparent 3.5px)`,
+        backgroundSize: "60px 60px",
+        backgroundPosition: `${off}px ${off * 0.5}px`,
+      }}
+    />
+  );
+};
+
+/** Faíscas que explodem de um ponto (momentos de impacto). */
+export const Sparkles: React.FC<{
+  readonly at: number;
+  readonly x: number;
+  readonly y: number;
+  readonly color?: string;
+  readonly count?: number;
+}> = ({ at, x, y, color = C.green, count = 12 }) => {
+  const frame = useCurrentFrame();
+  const p = prog(frame, at, 22);
+  if (frame < at || p >= 1) return null;
+  return (
+    <>
+      {new Array(count).fill(0).map((_, i) => {
+        const a = (i / count) * Math.PI * 2 + 0.3;
+        const d = 60 + p * (160 + (i % 3) * 50);
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: x + Math.cos(a) * d - 7,
+              top: y + Math.sin(a) * d - 7,
+              width: 14,
+              height: 14,
+              borderRadius: i % 2 ? "50%" : 3,
+              background: color,
+              opacity: 1 - p,
+              scale: String(1 - p * 0.6),
+            }}
+          />
+        );
+      })}
+    </>
   );
 };

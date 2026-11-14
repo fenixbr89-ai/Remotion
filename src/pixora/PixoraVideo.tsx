@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
-import { dissolve, push } from "./transicoes";
+import { dissolve, whip } from "./transicoes";
 import { DUR, TRANS } from "./timeline";
 import { EASE_IN_OUT } from "./ui";
 import { Legendas } from "./Legendas";
@@ -49,19 +49,19 @@ export const PixoraVideo: React.FC<PixoraVideoProps> = ({ narracao, legendas }) 
       <TransitionSeries.Sequence name="5 · Diferencial 1" durationInFrames={DUR.c06}>
         <Cena06Diferencial1 />
       </TransitionSeries.Sequence>
-      <TransitionSeries.Transition presentation={dissolve()} timing={timing(4)} />
+      <TransitionSeries.Transition presentation={whip("left")} timing={timing(4)} />
       <TransitionSeries.Sequence name="6 · Diferencial 2" durationInFrames={DUR.c07}>
         <Cena07Diferencial2 />
       </TransitionSeries.Sequence>
-      <TransitionSeries.Transition presentation={push("up")} timing={timing(5)} />
+      <TransitionSeries.Transition presentation={whip("up")} timing={timing(5)} />
       <TransitionSeries.Sequence name="7 · Prova social" durationInFrames={DUR.c08}>
         <Cena08ProvaSocial />
       </TransitionSeries.Sequence>
-      <TransitionSeries.Transition presentation={dissolve()} timing={timing(6)} />
+      <TransitionSeries.Transition presentation={whip("left")} timing={timing(6)} />
       <TransitionSeries.Sequence name="8 · Benefícios" durationInFrames={DUR.c09}>
         <Cena09Beneficios />
       </TransitionSeries.Sequence>
-      <TransitionSeries.Transition presentation={push("up")} timing={timing(7)} />
+      <TransitionSeries.Transition presentation={whip("up")} timing={timing(7)} />
       <TransitionSeries.Sequence name="9 · Chamada" durationInFrames={DUR.c10}>
         <Cena10Chamada />
       </TransitionSeries.Sequence>

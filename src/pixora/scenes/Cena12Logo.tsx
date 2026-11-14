@@ -1,8 +1,8 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { C, CLAMP, EASE, Kinetic, PixoraP, prog, useSpring } from "../ui";
+import { C, Camera, CLAMP, EASE, Kinetic, PixoraP, prog, Sfx, Sparkles, useSpring } from "../ui";
 
-// 56–60s · Vindo da tela escura do celular: o P surge (0.8→1) com brilho diagonal.
+// 30,6–34,5s · Vindo da tela escura do celular: o P surge (0.8→1) com brilho diagonal.
 // "PIXORA" entra letra por letra fechando o espaçamento. Parado nos 2s finais.
 export const Cena12Logo: React.FC = () => {
   const frame = useCurrentFrame();
@@ -13,6 +13,9 @@ export const Cena12Logo: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ background: C.black }}>
+      <Sfx at={0} name="impact" volume={0.8} />
+      <Sparkles at={6} x={540} y={830} color="rgba(255,255,255,0.8)" count={16} />
+      <Camera keys={[{ f: 0, z: 1.12 }, { f: 40, z: 1.0 }]} punches={[{ f: 2, amt: 0.06 }]} handheld={0.4}>
       <div
         style={{
           position: "absolute",
@@ -51,6 +54,7 @@ export const Cena12Logo: React.FC = () => {
           lines={[{ text: "@pixora", size: 44, color: C.sub, weight: 500, tracking: "0em" }]}
         />
       </div>
+      </Camera>
     </AbsoluteFill>
   );
 };

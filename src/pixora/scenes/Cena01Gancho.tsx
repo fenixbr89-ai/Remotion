@@ -1,9 +1,23 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { C, CLAMP, EASE_IN_OUT, FONT, IPhone, Kinetic, prog, useSpring } from "../ui";
+import {
+  BgDots,
+  C,
+  Camera,
+  CLAMP,
+  EASE_IN_OUT,
+  Emoji,
+  Finger,
+  FONT,
+  IPhone,
+  Kinetic,
+  prog,
+  Sfx,
+  useSpring,
+} from "../ui";
 
 /** Frames (locais) dos eventos de som. */
-export const C01 = { tap: 26, freeze: 66 };
+export const C01 = { tap: 16, freeze: 38, views: 58 };
 
 /** O "vídeo ruim": arte cafona, poucos quadros por segundo, travando. */
 const VideoRuim: React.FC = () => {
@@ -99,163 +113,162 @@ const VideoRuim: React.FC = () => {
   );
 };
 
-// 0–4s · O play inicia um vídeo ruim que trava. No fim a câmera entra pela tela (→ cena 2).
+// 0–3,4s · O dedo dá play num vídeo ruim que trava. "Ninguém para pra ver": 0 views.
+// No fim a câmera entra pela tela (→ cena 2).
 export const Cena01Gancho: React.FC = () => {
   const frame = useCurrentFrame();
-  const rise = useSpring(2, 20);
+  const rise = useSpring(0, 18);
   const tap = prog(frame, C01.tap, 10);
-  const playing = frame >= C01.tap + 4;
+  const playing = frame >= C01.tap + 2;
   const progress = interpolate(frame, [C01.tap, C01.freeze], [0.05, 0.32], CLAMP);
   const frozen = frame >= C01.freeze;
-  const zoom = interpolate(frame, [92, 120], [1, 3.4], { ...CLAMP, easing: EASE_IN_OUT });
-  const screenToGray = interpolate(frame, [104, 119], [0, 1], CLAMP);
-  const jolt = interpolate(frame, [70, 73, 76, 79], [0, -10, 6, 0], CLAMP);
+  const zoom = interpolate(frame, [80, 102], [1, 3.4], { ...CLAMP, easing: EASE_IN_OUT });
+  const screenToGray = interpolate(frame, [88, 101], [0, 1], CLAMP);
+  const views = useSpring(C01.views, 13);
 
   return (
     <AbsoluteFill style={{ background: C.white }}>
+      <BgDots />
+      <Sfx at={0} name="whoosh" volume={0.35} />
+      <Sfx at={C01.freeze} name="pop" volume={0.4} />
+      <Sfx at={C01.views} name="pop" volume={0.5} />
+      <Sfx at={80} name="whoosh" volume={0.6} />
       <AbsoluteFill
         style={{
           transformOrigin: "540px 1000px",
           scale: String(zoom),
-          filter: `blur(${interpolate(frame, [110, 120], [0, 6], CLAMP)}px)`,
+          filter: `blur(${interpolate(frame, [94, 102], [0, 6], CLAMP)}px)`,
         }}
       >
-        <div style={{ position: "absolute", top: 170, left: 60, right: 60 }}>
-          <Kinetic
-            delay={48}
-            stagger={4}
-            outAt={88}
-            lines={[
-              { text: "Seu vídeo", size: 96, color: C.sub },
-              { text: "tá parado?", size: 112 },
-            ]}
-            style={{ translate: `${jolt}px 0px` }}
-          />
-        </div>
-
-        <div
-          style={{
-            position: "absolute",
-            left: 305,
-            top: 520,
-            translate: `0px ${(1 - rise) * 1500}px`,
-          }}
+        <Camera
+          keys={[{ f: 0, z: 0.96 }, { f: 40, z: 1.04 }, { f: 80, z: 1.08 }]}
+          punches={[{ f: C01.freeze, amt: 0.05 }]}
+          origin="50% 52%"
         >
-          <IPhone width={470} height={960} screen="#E5E5EA">
-            {playing ? (
-              <VideoRuim />
-            ) : (
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "linear-gradient(160deg, #D1D1D6 0%, #E5E5EA 55%, #F2F2F7 100%)",
-                }}
-              />
-            )}
-
-            {/* botão de play: toque e some */}
-            <div
-              style={{
-                position: "absolute",
-                left: "50%",
-                top: "46%",
-                translate: "-50% -50%",
-                width: 150,
-                height: 150,
-                borderRadius: "50%",
-                background: "rgba(255,255,255,0.85)",
-                boxShadow: "0 16px 40px rgba(0,0,0,0.12)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                scale: String(interpolate(tap, [0, 0.3, 1], [1, 0.86, 1.3])),
-                opacity: 1 - tap,
-              }}
-            >
-              <svg width="56" height="64" viewBox="0 0 56 64">
-                <path d="M6 4L52 32L6 60Z" fill={C.ink} />
-              </svg>
-            </div>
-            {/* onda do toque */}
-            <div
-              style={{
-                position: "absolute",
-                left: "50%",
-                top: "46%",
-                translate: "-50% -50%",
-                width: 150,
-                height: 150,
-                borderRadius: "50%",
-                border: "4px solid rgba(255,255,255,0.9)",
-                scale: String(1 + tap * 1.2),
-                opacity: frame >= C01.tap ? 1 - tap : 0,
-              }}
+          <div style={{ position: "absolute", top: 170, left: 60, right: 60 }}>
+            <Kinetic
+              delay={24}
+              stagger={4}
+              outAt={76}
+              lines={[
+                { text: "Seu vídeo", size: 96, color: C.sub },
+                { text: "tá parado?", size: 112 },
+              ]}
             />
+          </div>
 
-            {/* buffering quando trava */}
-            {frozen ? (
-              <svg
-                width="90"
-                height="90"
-                viewBox="0 0 90 90"
+          <div
+            style={{
+              position: "absolute",
+              left: 305,
+              top: 520,
+              translate: `0px ${(1 - rise) * 1500}px`,
+              rotate: `${(1 - rise) * 8}deg`,
+            }}
+          >
+            <IPhone width={470} height={960} screen="#E5E5EA">
+              {playing ? (
+                <VideoRuim />
+              ) : (
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "linear-gradient(160deg, #D1D1D6 0%, #E5E5EA 55%, #F2F2F7 100%)",
+                  }}
+                />
+              )}
+              <div
                 style={{
                   position: "absolute",
                   left: "50%",
                   top: "46%",
                   translate: "-50% -50%",
-                  rotate: `${(frame - C01.freeze) * 14}deg`,
+                  width: 150,
+                  height: 150,
+                  borderRadius: "50%",
+                  background: "rgba(255,255,255,0.85)",
+                  boxShadow: "0 16px 40px rgba(0,0,0,0.12)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  scale: String(interpolate(tap, [0, 0.3, 1], [1, 0.86, 1.3])),
+                  opacity: 1 - tap,
                 }}
               >
-                <circle cx="45" cy="45" r="36" fill="none" stroke="rgba(0,0,0,0.25)" strokeWidth="9" />
-                <path d="M45 9A36 36 0 0 1 81 45" fill="none" stroke="#fff" strokeWidth="9" strokeLinecap="round" />
-              </svg>
-            ) : null}
-
-            {/* barra de progresso */}
-            <div
-              style={{
-                position: "absolute",
-                left: 36,
-                right: 36,
-                bottom: 70,
-                height: 8,
-                borderRadius: 4,
-                background: "rgba(0,0,0,0.18)",
-              }}
-            >
-              <div
-                style={{
-                  width: `${progress * 100}%`,
-                  height: "100%",
-                  borderRadius: 4,
-                  background: C.ink,
-                }}
-              />
+                <svg width="56" height="64" viewBox="0 0 56 64">
+                  <path d="M6 4L52 32L6 60Z" fill={C.ink} />
+                </svg>
+              </div>
+              {frozen ? (
+                <svg
+                  width="90"
+                  height="90"
+                  viewBox="0 0 90 90"
+                  style={{
+                    position: "absolute",
+                    left: "50%",
+                    top: "46%",
+                    translate: "-50% -50%",
+                    rotate: `${(frame - C01.freeze) * 14}deg`,
+                  }}
+                >
+                  <circle cx="45" cy="45" r="36" fill="none" stroke="rgba(0,0,0,0.25)" strokeWidth="9" />
+                  <path d="M45 9A36 36 0 0 1 81 45" fill="none" stroke="#fff" strokeWidth="9" strokeLinecap="round" />
+                </svg>
+              ) : null}
               <div
                 style={{
                   position: "absolute",
-                  left: `${progress * 100}%`,
-                  top: "50%",
-                  translate: "-50% -50%",
-                  width: 22,
-                  height: 22,
-                  borderRadius: "50%",
-                  background: C.white,
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
+                  left: 36,
+                  right: 36,
+                  bottom: 70,
+                  height: 8,
+                  borderRadius: 4,
+                  background: "rgba(0,0,0,0.18)",
                 }}
-              />
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background: C.gray,
-                opacity: screenToGray,
-              }}
-            />
-          </IPhone>
-        </div>
+              >
+                <div style={{ width: `${progress * 100}%`, height: "100%", borderRadius: 4, background: C.ink }} />
+              </div>
+              <div style={{ position: "absolute", inset: 0, background: C.gray, opacity: screenToGray }} />
+            </IPhone>
+          </div>
+
+          {/* "ninguém para pra ver": 0 visualizações */}
+          <div
+            style={{
+              position: "absolute",
+              left: 640,
+              top: 600,
+              padding: "18px 28px",
+              borderRadius: 40,
+              background: C.white,
+              boxShadow: "0 20px 50px rgba(0,0,0,0.14)",
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              fontFamily: FONT,
+              fontSize: 40,
+              fontWeight: 600,
+              color: C.ink,
+              scale: String(views),
+              rotate: `${(1 - views) * -12 + 4}deg`,
+              transformOrigin: "0% 100%",
+            }}
+          >
+            <Emoji char="👀" size={44} /> 0 views
+          </div>
+
+          <Finger
+            path={[
+              { f: 4, x: 900, y: 1700 },
+              { f: 14, x: 540, y: 970 },
+              { f: 22, x: 560, y: 990 },
+              { f: 34, x: 860, y: 1500 },
+            ]}
+            taps={[C01.tap]}
+          />
+        </Camera>
       </AbsoluteFill>
     </AbsoluteFill>
   );

@@ -77,3 +77,36 @@ export const dissolve = (
   component: Dissolve,
   props: { exitScale, enterScale },
 });
+
+// ---------- Chicote (whip pan) com motion blur forte ----------
+type WhipProps = { direction: "left" | "up" };
+
+const Whip: React.FC<TransitionPresentationComponentProps<WhipProps>> = ({
+  children,
+  presentationDirection,
+  presentationProgress: p,
+  passedProps: { direction },
+}) => {
+  const entering = presentationDirection === "entering";
+  const off = entering ? (1 - p) * 70 : -p * 70;
+  const blur = Math.sin(Math.PI * p) * 26;
+  return (
+    <AbsoluteFill
+      style={{
+        translate: direction === "left" ? `${off}% 0%` : `0% ${off}%`,
+        filter: `blur(${blur}px)`,
+        scale: String(1 + Math.sin(Math.PI * p) * 0.08),
+        opacity: entering
+          ? interpolate(p, [0.35, 0.6], [0, 1], CLAMP)
+          : interpolate(p, [0.4, 0.65], [1, 0], CLAMP),
+      }}
+    >
+      {children}
+    </AbsoluteFill>
+  );
+};
+
+export const whip = (direction: WhipProps["direction"]): TransitionPresentation<WhipProps> => ({
+  component: Whip,
+  props: { direction },
+});

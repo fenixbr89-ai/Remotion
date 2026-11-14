@@ -1,18 +1,22 @@
-// Linha do tempo absoluta do vídeo (30 fps, 1620 frames = 54 s).
+// Linha do tempo guiada pela narração gravada (30 fps, 1035 frames = 34,5 s).
+// A voz (public/narracao/pixora_narracao.wav) toca inteira a partir do frame 0;
+// cada cena começa e termina nas pausas da fala.
 export const FPS = 30;
 export const WIDTH = 1080;
 export const HEIGHT = 1920;
 
+/** Segundos → frames. */
+export const S = (sec: number) => Math.round(sec * FPS);
+
 /**
- * Início de cada cena no roteiro (frames); o último índice é o fim.
+ * Início de cada cena (frames); o último índice é o fim.
  * Ordem: gancho, problema, virada, estilos, diferencial 1, diferencial 2,
  * prova social, benefícios, chamada, espera, logo.
  */
-export const START = [0, 120, 270, 360, 600, 780, 930, 1110, 1290, 1425, 1500, 1620];
+export const START = [0, 102, 165, 228, 360, 459, 525, 618, 795, 846, 918, 1035];
 export const SCENES = START.length - 1;
 export const TOTAL = START[SCENES];
 
-/** Índice de cada cena em START. */
 export const IDX = {
   c01: 0,
   c02: 1,
@@ -31,10 +35,13 @@ export const IDX = {
  * Transição entre a cena k e k+1 (frames de sobreposição).
  * 0 = a passagem acontece dentro da própria cena (zoom, ponto que cresce, círculo).
  */
-export const TRANS = [0, 0, 0, 20, 20, 20, 20, 20, 0, 0];
+export const TRANS = [0, 0, 0, 10, 10, 10, 10, 10, 0, 0];
 
 /** Frame absoluto em que a sequência da cena i começa. */
 export const sceneFrom = (i: number) => START[i] - (i > 0 ? TRANS[i - 1] / 2 : 0);
+
+/** Momento da narração (segundos) → frame local da cena i. */
+export const loc = (i: number, sec: number) => S(sec) - sceneFrom(i);
 
 const sceneDur = (i: number) =>
   START[i + 1] - START[i] + (i > 0 ? TRANS[i - 1] / 2 : 0) + (i < SCENES - 1 ? TRANS[i] / 2 : 0);
@@ -53,27 +60,37 @@ export const DUR = {
   c12: sceneDur(IDX.c12),
 } as const;
 
-/**
- * Narração gravada (public/narracao/pixora_narracao.wav, 30,5 s).
- * Cada trecho do arquivo [de, ate] (segundos) toca a partir de `em` (segundos no vídeo).
- */
 export const NARRACAO_ARQUIVO = "narracao/pixora_narracao.wav";
-export const NARRACAO_CLIPS: { de: number; ate: number; em: number; text: string }[] = [
-  { de: 0.0, ate: 3.05, em: 0.3, text: "Seu conteúdo tá parado… e ninguém para pra ver?" },
-  { de: 3.5, ate: 5.35, em: 5.0, text: "Imagem parada não prende ninguém." },
-  { de: 5.68, ate: 7.4, em: 9.4, text: "Movimento é o que prende." },
-  { de: 7.84, ate: 11.82, em: 12.6, text: "Do estilo clean ao mais impactante, do jeito da sua marca." },
-  { de: 12.06, ate: 15.08, em: 20.4, text: "Visual premium, limpo, profissional." },
-  { de: 15.52, ate: 17.36, em: 26.4, text: "Narração e trilha já vêm inclusas." },
-  { de: 17.64, ate: 20.36, em: 31.7, text: "E a entrega? Mais rápida do que você imagina." },
-  { de: 20.72, ate: 26.32, em: 37.4, text: "E o melhor: tudo isso por apenas cinquenta reais. Seguro e sem complicação." },
-  { de: 26.68, ate: 28.1, em: 44.2, text: "Bora tirar o seu vídeo do papel?" },
-  { de: 28.3, ate: 30.48, em: 46.6, text: "Chama a Pixora. Tô te esperando!" },
+
+/** Trechos com voz na gravação (segundos) — usados para abaixar a trilha. */
+export const FALA: [number, number][] = [
+  [0, 2.9],
+  [3.59, 5.23],
+  [5.76, 7.28],
+  [7.92, 9.9],
+  [10.3, 11.7],
+  [12.14, 13.93],
+  [14.49, 14.95],
+  [15.6, 17.24],
+  [17.72, 18.3],
+  [18.7, 20.24],
+  [20.8, 21.27],
+  [21.7, 24.09],
+  [24.53, 26.2],
+  [26.76, 27.98],
+  [28.38, 30.48],
 ];
 
-/** Janelas de fala em frames (usadas pelas legendas e para abaixar a trilha). */
-export const NARRACAO: { from: number; to: number; text: string }[] = NARRACAO_CLIPS.map((c) => ({
-  from: Math.round(c.em * FPS),
-  to: Math.round((c.em + c.ate - c.de) * FPS),
-  text: c.text,
-}));
+/** Falas (para legendas opcionais). */
+export const NARRACAO: { from: number; to: number; text: string }[] = [
+  { from: S(0), to: S(2.9), text: "Seu conteúdo tá parado… e ninguém para pra ver?" },
+  { from: S(3.59), to: S(5.23), text: "Imagem parada não prende ninguém." },
+  { from: S(5.76), to: S(7.28), text: "Movimento é o que prende." },
+  { from: S(7.92), to: S(11.7), text: "Do estilo clean ao mais impactante, do jeito da sua marca." },
+  { from: S(12.14), to: S(14.95), text: "Visual premium, limpo, profissional." },
+  { from: S(15.6), to: S(17.24), text: "Narração e trilha já vêm inclusas." },
+  { from: S(17.72), to: S(20.24), text: "E a entrega? Mais rápida do que você imagina." },
+  { from: S(20.8), to: S(26.2), text: "E o melhor: tudo isso por apenas cinquenta reais. Seguro e sem complicação." },
+  { from: S(26.76), to: S(27.98), text: "Bora tirar o seu vídeo do papel?" },
+  { from: S(28.38), to: S(30.48), text: "Chama a Pixora. Tô te esperando!" },
+];

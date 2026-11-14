@@ -1,25 +1,25 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { C, CLAMP, Drift, FONT, prog, useSpring } from "../ui";
-import { DUR } from "../timeline";
+import { C, Camera, CLAMP, Finger, FONT, prog, Sfx, useSpring } from "../ui";
 
-/** Frames (locais) dos eventos desta cena. */
-export const C08 = { msg1: 16, typing: 40, msg2: 82, msg3: 128 };
+/** Frames locais: digita e envia, cliente digita e responde, envia de novo. */
+export const C08 = { type1: 0, send1: 16, typing: 26, msg2: 50, type3: 56, send3: 72 };
+const SEND = { x: 950, y: 1560 };
 
-const Bubble: React.FC<{
-  readonly at: number;
-  readonly mine: boolean;
-  readonly children: React.ReactNode;
-}> = ({ at, mine, children }) => {
+const Bubble: React.FC<{ readonly at: number; readonly mine: boolean; readonly children: React.ReactNode }> = ({
+  at,
+  mine,
+  children,
+}) => {
   const frame = useCurrentFrame();
-  const s = useSpring(at, 16);
-  const p = prog(frame, at, 10);
+  const s = useSpring(at, 14);
+  const p = prog(frame, at, 8);
   if (frame < at) return null;
   return (
     <div
       style={{
         alignSelf: mine ? "flex-end" : "flex-start",
-        maxWidth: 680,
+        maxWidth: 700,
         padding: "26px 38px",
         borderRadius: 44,
         borderBottomRightRadius: mine ? 12 : 44,
@@ -27,14 +27,13 @@ const Bubble: React.FC<{
         background: mine ? C.blue : C.bubble,
         color: mine ? C.white : C.ink,
         fontFamily: FONT,
-        fontSize: 54,
+        fontSize: 56,
         fontWeight: 500,
         letterSpacing: "-0.01em",
         opacity: p,
-        scale: String(interpolate(s, [0, 1], [0.7, 1])),
+        scale: String(interpolate(s, [0, 1], [0.6, 1])),
         transformOrigin: mine ? "100% 100%" : "0% 100%",
-        filter: `blur(${(1 - p) * 10}px)`,
-        translate: `0px ${(1 - s) * 30}px`,
+        translate: `0px ${(1 - s) * (mine ? 260 : 40)}px`,
       }}
     >
       {children}
@@ -42,16 +41,29 @@ const Bubble: React.FC<{
   );
 };
 
-// 37–43s · Conversa no iMessage do lado da Pixora (azul).
+const typed = (frame: number, start: number, end: number, text: string) =>
+  text.slice(0, Math.round(interpolate(frame, [start, end], [0, text.length], CLAMP)));
+
+// 17,5–20,6s · "E a entrega? Mais rápida do que você imagina."
+// A Pixora digita e envia; o cliente digita "Oxi, mas já???"; a Pixora responde.
 export const Cena08ProvaSocial: React.FC = () => {
   const frame = useCurrentFrame();
-  const header = prog(frame, 0, 14);
   const typingOn = frame >= C08.typing && frame < C08.msg2;
-  const typing = typingOn ? prog(frame, C08.typing, 8) : 0;
+  const typing = typingOn ? prog(frame, C08.typing, 6) : 0;
+  const field =
+    frame < C08.send1
+      ? typed(frame, C08.type1, C08.send1 - 4, "Terminei seu vídeo")
+      : frame >= C08.type3 && frame < C08.send3
+        ? typed(frame, C08.type3, C08.send3 - 4, "E ficou insano")
+        : "";
 
   return (
     <AbsoluteFill style={{ background: C.white }}>
-      <Drift dur={DUR.c08} amount={0.025} origin="50% 60%">
+      <Sfx at={C08.msg2} name="pop" volume={0.5} />
+      <Camera
+        keys={[{ f: 0, z: 1.0 }, { f: C08.msg2, z: 1.06, y: 40 }, { f: 103, z: 1.1, y: 60 }]}
+        punches={[{ f: C08.msg2, amt: 0.07 }, { f: C08.send3 + 2, amt: 0.04 }]}
+      >
         {/* cabeçalho do contato */}
         <div
           style={{
@@ -65,7 +77,6 @@ export const Cena08ProvaSocial: React.FC = () => {
             flexDirection: "column",
             alignItems: "center",
             gap: 14,
-            opacity: header,
           }}
         >
           <div
@@ -85,15 +96,13 @@ export const Cena08ProvaSocial: React.FC = () => {
               <path d="M4 86C6 62 22 54 40 54S74 62 76 86Z" fill="#fff" />
             </svg>
           </div>
-          <div style={{ fontFamily: FONT, fontSize: 36, fontWeight: 600, color: C.ink }}>
-            Cliente
-          </div>
+          <div style={{ fontFamily: FONT, fontSize: 36, fontWeight: 600, color: C.ink }}>Cliente</div>
         </div>
 
         <div
           style={{
             position: "absolute",
-            top: 520,
+            top: 500,
             left: 70,
             right: 70,
             display: "flex",
@@ -101,22 +110,9 @@ export const Cena08ProvaSocial: React.FC = () => {
             gap: 26,
           }}
         >
-          <Bubble at={C08.msg1} mine>
+          <Bubble at={C08.send1 + 1} mine>
             Terminei seu vídeo
           </Bubble>
-          <div
-            style={{
-              alignSelf: "flex-end",
-              fontFamily: FONT,
-              fontSize: 26,
-              color: C.sub,
-              marginTop: -12,
-              opacity: prog(frame, C08.msg1 + 12, 10),
-            }}
-          >
-            Lido
-          </div>
-
           {typingOn ? (
             <div
               style={{
@@ -133,7 +129,7 @@ export const Cena08ProvaSocial: React.FC = () => {
               }}
             >
               {[0, 1, 2].map((i) => {
-                const b = Math.sin((frame - C08.typing) / 4 - i * 0.9);
+                const b = Math.sin((frame - C08.typing) / 3 - i * 0.9);
                 return (
                   <div
                     key={i}
@@ -150,15 +146,66 @@ export const Cena08ProvaSocial: React.FC = () => {
               })}
             </div>
           ) : null}
-
           <Bubble at={C08.msg2} mine={false}>
             Oxi, mas já???
           </Bubble>
-          <Bubble at={C08.msg3} mine>
+          <Bubble at={C08.send3 + 1} mine>
             E ficou insano
           </Bubble>
         </div>
-      </Drift>
+
+        {/* campo de mensagem com botão de enviar */}
+        <div
+          style={{
+            position: "absolute",
+            left: 60,
+            right: 60,
+            top: SEND.y - 50,
+            height: 100,
+            borderRadius: 50,
+            border: "2px solid #E5E5EA",
+            background: C.white,
+            display: "flex",
+            alignItems: "center",
+            paddingLeft: 40,
+            fontFamily: FONT,
+            fontSize: 44,
+            color: field ? C.ink : "#C7C7CC",
+          }}
+        >
+          {field || "iMessage"}
+          {field ? <span style={{ width: 4, height: 50, background: C.blue, marginLeft: 4 }} /> : null}
+          <div
+            style={{
+              position: "absolute",
+              right: 12,
+              width: 76,
+              height: 76,
+              borderRadius: "50%",
+              background: field ? C.blue : "#C7C7CC",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <svg width="34" height="38" viewBox="0 0 34 38">
+              <path d="M17 34V5M5 16L17 4L29 16" fill="none" stroke="white" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+        </div>
+
+        <Finger
+          path={[
+            { f: 4, x: 820, y: 1780 },
+            { f: C08.send1 - 2, x: SEND.x, y: SEND.y },
+            { f: C08.send1 + 10, x: SEND.x - 30, y: SEND.y + 140 },
+            { f: C08.send3 - 8, x: SEND.x - 30, y: SEND.y + 140 },
+            { f: C08.send3 - 2, x: SEND.x, y: SEND.y },
+            { f: 96, x: 900, y: 1800 },
+          ]}
+          taps={[C08.send1, C08.send3]}
+        />
+      </Camera>
     </AbsoluteFill>
   );
 };
