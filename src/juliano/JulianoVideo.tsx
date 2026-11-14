@@ -41,37 +41,82 @@ const At: React.FC<{
 );
 
 /**
- * Linha do tempo (frames) — cada momento nasce de um elemento do anterior:
- *  0–156   gancho: três ícones caem e se juntam → viram a logo ("Chama o Juliano.")
- *  140–400 a logo sobe e as notificações caem dela, uma por serviço falado
- *  392–510 "Um só contato. Muitas soluções."
- *  506–664 casa e carro se soltam da lista → "Pra sua casa / Pro seu carro";
- *          o ponto final de "carro." cresce e vira o fundo preto
- *  664–800 Qualidade, Capricho, Confiança; "Confiança." fica enquanto o fundo clareia
- *  800–990 WhatsApp aparece, número é digitado, e o ícone pousa na barra final
+ * Roteiro e linha do tempo (frames). Cada momento nasce de um elemento do anterior.
+ *  0–102    "Parede descascando? Infiltração? Chuveiro que não esquenta?"  → 3 alertas chegam
+ *  104–180  "Para de procurar um profissional pra cada coisa."             → alertas recuam
+ *  168–240  "O Juliano resolve tudo."                                      → alertas se juntam e viram a logo
+ *  236–500  "Pintura de casa e de carro. Elétrica, hidráulica e caixa d'água.
+ *            Telhado, reforma e pós-obra."                                 → a logo sobe; serviços caem dela
+ *  500–626  "Um só profissional, do pequeno reparo ao acabamento final."   → o ponto final vira o preto
+ *  626–724  "Feito com capricho, do jeito que a sua casa merece."          → fundo preto; depois clareia
+ *  726–840  "Chama no WhatsApp e pede seu orçamento agora: (62) 99113-2531."
+ *  840–930  "Juliano Pinturas. Seu espaço, renovado."                      → WhatsApp pousa na barra final
  */
 const M = {
-  logoSobe: 140,
-  chega: (k: number) => 166 + k * 30,
-  recua: 392,
-  solta: 506,
-  ponto: 636,
-  preto: 664,
-  valor: (i: number) => 676 + i * 30,
-  clareia: 780,
-  zap: 812,
-  vira: 900,
+  alerta: [6, 32, 58],
+  recuaAlerta: 104,
+  junta: 168,
+  logo: 184,
+  logoSobe: 236,
+  chega: (k: number) => 262 + k * 30,
+  recua: 498,
+  ponto: 598,
+  preto: 626,
+  clareia: 712,
+  zap: 726,
+  vira: 840,
 };
 const TOP = 250;
 const PASSO = 168;
-const CASA = SERVICOS.findIndex((s) => s.src === "3d/casa");
-const CARRO = SERVICOS.findIndex((s) => s.src === "3d/carro");
+
+const ALERTAS = [
+  {
+    src: "3d/tijolos",
+    titulo: "Parede descascando?",
+    sub: "Tinta soltando, reboco gasto",
+  },
+  { src: "3d/gota", titulo: "Infiltração?", sub: "Mancha e umidade na parede" },
+  {
+    src: "3d/chuveiro",
+    titulo: "Chuveiro que não esquenta?",
+    sub: "Problema elétrico ou hidráulico",
+  },
+];
+const ALERTA_TOP = [620, 800, 980];
+
+/** Bolinha vermelha de alerta no lugar do "agora". */
+const Alerta: React.FC<{ readonly t: number }> = ({ t }) => {
+  const s = interpolate(t, [6, 12], [0, 1], { ...CLAMP, easing: EASE });
+  return (
+    <div
+      style={{
+        position: "absolute",
+        right: 30,
+        top: 50,
+        width: 50,
+        height: 50,
+        borderRadius: "50%",
+        background: "#FF3B30",
+        color: "#fff",
+        fontFamily: FONT,
+        fontWeight: 800,
+        fontSize: 32,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        scale: String(s * (1 + Math.sin(s * Math.PI) * 0.3)),
+        boxShadow: "0 6px 14px rgba(255,59,48,0.35)",
+      }}
+    >
+      !
+    </div>
+  );
+};
 
 export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // fundo preto: nasce do ponto (já cobre a tela em M.preto) e volta a clarear em M.clareia
   const preto = interpolate(
     f,
     [M.preto - 2, M.preto, M.clareia, M.clareia + 12],
@@ -79,20 +124,11 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
     CLAMP,
   );
 
-  // ---------- gancho → logo ----------
-  const GANCHO = [
-    {
-      src: "emoji/pincel",
-      filtro: "hue-rotate(28deg) saturate(1.3)",
-      x: 250,
-      at: 14,
-    },
-    { src: "3d/tijolos", x: 540, at: 24 },
-    { src: "3d/lampada", x: 830, at: 34 },
-  ];
-  const junta = ease(f, 88, 106);
+  // ---------- alertas → logo ----------
+  const recuaAlerta = ease(f, M.recuaAlerta, M.recuaAlerta + 16);
+  const junta = ease(f, M.junta, M.logo + 2);
   const logoPop = spring({
-    frame: f - 100,
+    frame: f - M.logo,
     fps,
     config: { damping: 15, stiffness: 120 },
   });
@@ -101,19 +137,17 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
   const logoY = 820 * (1 - logoSobe) + 125 * logoSobe;
   const logoSai = blur(f, 0, M.chega(2), 12, 14);
 
-  // ---------- lista → casa e carro ----------
-  const recua =
-    ease(f, M.recua, M.recua + 18) * (1 - ease(f, M.solta, M.solta + 16));
-  const solta = ease(f, M.solta, M.solta + 26);
-  const outrasSaem = blur(f, 0, M.solta, 12, 12);
+  // ---------- lista ----------
+  const recua = ease(f, M.recua, M.recua + 18);
+  const listaSai = blur(f, 0, M.ponto - 4, 12, 12);
 
   // ---------- ponto que vira o preto ----------
-  const dotIn = interpolate(f, [M.solta + 50, M.solta + 58], [0, 1], CLAMP);
+  const dotIn = interpolate(f, [M.recua + 56, M.recua + 64], [0, 1], CLAMP);
   const dotGrow = interpolate(f, [M.ponto, M.preto], [1, 180], {
     ...CLAMP,
     easing: Easing.in(Easing.quad),
   });
-  const dotCor = interpolate(f, [M.ponto, M.ponto + 10], [0, 1], CLAMP);
+  const dotEscuro = interpolate(f, [M.ponto, M.ponto + 10], [0, 1], CLAMP);
 
   // ---------- WhatsApp ----------
   const zapPop = spring({
@@ -140,56 +174,76 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
     <AbsoluteFill style={{ background: J.fundo, overflow: "hidden" }}>
       <Aurora opacity={1} />
 
-      {/* ===== gancho ===== */}
-      {f < 160 ? (
+      {/* ===== problemas: alertas que se juntam e viram a logo ===== */}
+      {f < M.logo + 8
+        ? ALERTAS.map((a, i) => {
+            const t0 = M.alerta[i];
+            if (f < t0 - 1) return null;
+            const inn = interpolate(f, [t0, t0 + 12], [0, 1], {
+              ...CLAMP,
+              easing: EASE,
+            });
+            const top = ALERTA_TOP[i] + (820 - 75 - ALERTA_TOP[i]) * junta;
+            return (
+              <Barra
+                key={a.titulo}
+                {...a}
+                hora=""
+                t={f - t0}
+                style={{
+                  top,
+                  translate: `0px ${(1 - inn) * -60}px`,
+                  opacity:
+                    inn *
+                    (1 - recuaAlerta * 0.35) *
+                    (1 -
+                      interpolate(f, [M.logo - 6, M.logo + 6], [0, 1], CLAMP)),
+                  filter: `blur(${(1 - inn) * 16 + recuaAlerta * 3 + junta * 10}px)`,
+                  scale: String(
+                    (0.94 + 0.06 * inn) *
+                      (1 - recuaAlerta * 0.05) *
+                      (1 - junta * 0.55),
+                  ),
+                }}
+              >
+                <Alerta t={f - t0} />
+              </Barra>
+            );
+          })
+        : null}
+      {f < M.logo + 60 ? (
         <>
           <At y={330}>
             <Kinetic
-              delay={2}
+              delay={M.recuaAlerta + 4}
               stagger={3}
-              outAt={86}
+              outAt={M.junta - 4}
               lines={[
-                { text: "Precisa pintar,", size: 96 },
-                { text: "reformar ou consertar?", size: 70, color: J.laranja },
+                { text: "Para de procurar", size: 92 },
+                {
+                  text: "um profissional pra cada coisa.",
+                  size: 56,
+                  color: J.laranja,
+                },
               ]}
-              lineHeight={1.12}
+              lineHeight={1.15}
             />
           </At>
-          {f < 110
-            ? GANCHO.map((ic) => {
-                const x = interpolate(junta, [0, 1], [ic.x, 540]);
-                const size = 210 * (1 - junta * 0.55);
-                return (
-                  <IconAnim
-                    key={ic.src}
-                    src={ic.src}
-                    size={size}
-                    t={f - ic.at}
-                    filtro={ic.filtro}
-                    style={{
-                      position: "absolute",
-                      left: x - size / 2,
-                      top: 820 - size / 2,
-                      opacity:
-                        (f >= ic.at ? 1 : 0) *
-                        (1 - interpolate(f, [100, 108], [0, 1], CLAMP)),
-                      filter: `blur(${junta * 6}px)`,
-                    }}
-                  />
-                );
-              })
-            : null}
           <At y={1080}>
             <Kinetic
-              delay={106}
+              delay={M.logo + 6}
               stagger={4}
               outAt={M.logoSobe - 4}
-              lines={[{ text: "Chama o Juliano.", size: 92 }]}
+              lines={[
+                { text: "O Juliano", size: 96 },
+                { text: "resolve tudo.", size: 96, color: J.laranja },
+              ]}
+              lineHeight={1.1}
             />
           </At>
         </>
       ) : null}
-      {f >= 98 && f < M.chega(2) + 16 ? (
+      {f >= M.logo - 2 && f < M.chega(2) + 16 ? (
         <LogoTile
           size={logoSize}
           style={{
@@ -203,11 +257,10 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
         />
       ) : null}
 
-      {/* ===== notificações (caem da logo) → casa e carro ===== */}
-      {f >= M.chega(0) - 1 && f < M.preto + 4
+      {/* ===== serviços caem da logo ===== */}
+      {f >= M.chega(0) - 1 && f < M.ponto + 12
         ? SERVICOS.map((s, k) => {
             if (f < M.chega(k) - 1) return null;
-            const fica = k === CASA || k === CARRO;
             let slot = 0;
             for (let j = k + 1; j < SERVICOS.length; j++)
               slot += ease(f, M.chega(j), M.chega(j) + 12);
@@ -215,41 +268,17 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
               ...CLAMP,
               easing: EASE,
             });
-            const topLista = TOP + slot * PASSO;
-            const destino = k === CASA ? 800 : 980;
-            const top = fica
-              ? topLista + (destino - topLista) * solta
-              : topLista;
-            const troca = fica
-              ? interpolate(f, [M.solta + 8, M.solta + 20], [0, 1], CLAMP)
-              : 0;
-            const sai = fica ? blur(f, 0, M.ponto - 6, 12, 10) : outrasSaem;
-            const titulo =
-              troca < 0.5
-                ? s.titulo
-                : k === CASA
-                  ? "Pra sua casa."
-                  : "Pro seu carro.";
-            const sub =
-              troca < 0.5
-                ? s.sub
-                : k === CASA
-                  ? "Paredes, fachadas e muros"
-                  : "Pintura automotiva";
             return (
               <Barra
                 key={s.titulo}
-                src={s.src}
-                filtro={s.filtro}
-                titulo={titulo}
-                sub={sub}
+                {...s}
                 t={f - M.chega(k)}
                 style={{
-                  top,
-                  // começa um pouco acima, como se caísse da logo
+                  top: TOP + slot * PASSO,
                   translate: `0px ${(1 - inn) * -80}px`,
-                  opacity: inn * (1 - recua * 0.75) * (sai.opacity as number),
-                  filter: `blur(${(1 - inn) * 16 + recua * 6 + Math.abs(Math.sin(troca * Math.PI)) * 4}px) ${sai.filter}`,
+                  opacity:
+                    inn * (1 - recua * 0.75) * (listaSai.opacity as number),
+                  filter: `blur(${(1 - inn) * 16 + recua * 6}px) ${listaSai.filter}`,
                   scale: String((0.94 + 0.06 * inn) * (1 - recua * 0.06)),
                 }}
               />
@@ -257,45 +286,30 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
           })
         : null}
 
-      <At y={760}>
-        <Kinetic
-          delay={M.recua + 6}
-          stagger={4}
-          outAt={M.solta - 6}
-          lines={[
-            { text: "Um só contato.", size: 104 },
-            { text: "Muitas soluções.", size: 104, color: J.laranja },
-          ]}
-          lineHeight={1.1}
-        />
-      </At>
-
-      {f >= M.solta && f < M.preto + 4 ? (
-        <At y={420}>
+      {f >= M.recua && f < M.preto + 4 ? (
+        <At y={720}>
           <Kinetic
-            delay={M.solta + 14}
+            delay={M.recua + 6}
             stagger={4}
             lines={[
-              { text: "Da sua casa", size: 104 },
-              { text: "ao seu carro", size: 104, color: J.laranja },
+              { text: "Um só profissional.", size: 96 },
+              { text: "Do reparo ao acabamento", size: 72, color: J.laranja },
             ]}
-            lineHeight={1.1}
+            lineHeight={1.15}
             trailing={
               <span
                 style={{
                   display: "inline-block",
-                  width: "0.2em",
-                  height: "0.2em",
-                  marginLeft: "0.03em",
+                  width: "0.22em",
+                  height: "0.22em",
+                  marginLeft: "0.04em",
                   borderRadius: "50%",
-                  background: dotCor < 1 ? J.laranja : "#000",
+                  background: J.laranja,
                   opacity: dotIn,
                   scale: String(dotGrow * (0.4 + 0.6 * dotIn)),
+                  filter: `brightness(${1 - dotEscuro})`,
                   position: "relative",
                   zIndex: 30,
-                  boxShadow:
-                    dotCor > 0 ? `0 0 0 999px rgba(0,0,0,0)` : undefined,
-                  filter: `brightness(${1 - dotCor})`,
                 }}
               />
             }
@@ -303,47 +317,23 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
         </At>
       ) : null}
 
-      {/* ===== fundo preto ===== */}
+      {/* ===== preto: "Feito com capricho" ===== */}
       <AbsoluteFill style={{ background: "#000", opacity: preto }} />
-
-      {/* ===== valores (Confiança fica enquanto clareia) ===== */}
-      {f >= M.preto && f < M.zap + 30
-        ? ["Qualidade.", "Capricho.", "Confiança."].map((w, i) => {
-            const nextAt = i < 2 ? M.valor(i + 1) : 99999;
-            const gray = interpolate(f, [nextAt, nextAt + 10], [0, 1], CLAMP);
-            const ultimo = i === 2;
-            const out = ultimo ? M.zap - 6 : M.clareia - 8;
-            // "Confiança." sobe ao centro enquanto as outras saem
-            const y =
-              680 +
-              i * 150 -
-              (ultimo ? ease(f, M.clareia - 6, M.clareia + 16) * 150 : 0);
-            return (
-              <At key={w} y={y}>
-                <div style={{ position: "relative" }}>
-                  <div style={{ opacity: 1 - gray }}>
-                    <Kinetic
-                      delay={M.valor(i)}
-                      stagger={3}
-                      outAt={out}
-                      lines={[{ text: w, size: 124, color: J.laranja }]}
-                    />
-                  </div>
-                  <div
-                    style={{ position: "absolute", inset: 0, opacity: gray }}
-                  >
-                    <Kinetic
-                      delay={M.valor(i)}
-                      stagger={3}
-                      outAt={out}
-                      lines={[{ text: w, size: 124, color: "#6E6E73" }]}
-                    />
-                  </div>
-                </div>
-              </At>
-            );
-          })
-        : null}
+      {f >= M.preto && f < M.zap + 20 ? (
+        <At y={700}>
+          <Kinetic
+            delay={M.preto + 8}
+            stagger={4}
+            outAt={M.clareia - 14}
+            lines={[
+              { text: "Feito com capricho,", size: 100, color: J.laranja },
+              { text: "do jeito que a sua", size: 80, color: "#FFFFFF" },
+              { text: "casa merece.", size: 80, color: "#FFFFFF" },
+            ]}
+            lineHeight={1.15}
+          />
+        </At>
+      ) : null}
 
       {/* ===== WhatsApp → barra final ===== */}
       {f >= M.zap - 2 ? (
@@ -354,10 +344,10 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
               stagger={4}
               outAt={M.vira - 6}
               lines={[
-                { text: "Peça seu orçamento", size: 80 },
-                { text: "pelo WhatsApp.", size: 96, color: J.verdeEscuro },
+                { text: "Chama no WhatsApp", size: 84, color: J.verdeEscuro },
+                { text: "e pede seu orçamento.", size: 70 },
               ]}
-              lineHeight={1.12}
+              lineHeight={1.15}
             />
           </At>
           <At y={940} style={blur(f, M.zap + 36, M.vira - 6)}>
@@ -377,8 +367,8 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
               delay={M.vira + 10}
               stagger={4}
               lines={[
-                { text: "Transformando", size: 100 },
-                { text: "seus espaços.", size: 100, color: J.laranja },
+                { text: "Seu espaço,", size: 104 },
+                { text: "renovado.", size: 104, color: J.laranja },
               ]}
               lineHeight={1.1}
             />

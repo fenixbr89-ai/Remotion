@@ -1,6 +1,6 @@
 # Juliano Pinturas — comercial vertical 9:16 (estilo iPhone)
 
-Composição `JulianoPinturas` · 1080×1920 · 30 fps · 33 s (990 frames). Sem narração por enquanto.
+Composição `JulianoPinturas` · 1080×1920 · 30 fps · 31 s (930 frames). Sem narração por enquanto.
 
 ```bash
 npx remotion render JulianoPinturas out/juliano.mp4 --pixel-format=yuv420p --crf=18
@@ -9,19 +9,19 @@ npx remotion render JulianoPinturas out/juliano.mp4 --pixel-format=yuv420p --crf
 ## Roteiro de narração
 
 ```
-Precisa pintar, reformar ou consertar alguma coisa?
-Chama o Juliano.
-Pintura, pintura automotiva, elétrica, hidráulica, caixa d'água, telhado, reformas e pós-obra.
-Tudo com um só contato.
-Da parede da sua casa à pintura do seu carro.
-Com qualidade, capricho e confiança.
-Peça seu orçamento pelo WhatsApp.
-Juliano Pinturas. Transformando seus espaços.
+Parede descascando? Infiltração? Chuveiro que não esquenta?
+Para de procurar um profissional pra cada coisa.
+O Juliano resolve tudo.
+Pintura de casa e de carro. Elétrica, hidráulica e caixa d'água. Telhado, reforma e pós-obra.
+Um só profissional, do pequeno reparo ao acabamento final.
+Feito com capricho, do jeito que a sua casa merece.
+Chama no WhatsApp e pede seu orçamento agora: (62) 99113-2531.
+Juliano Pinturas. Seu espaço, renovado.
 ```
 
-As cenas (A–E) e as falas que cada uma cobre estão em `src/juliano/tema.ts` (`START`).
-Quando a narração chegar: `public/juliano/narracao.wav`, ajustar `START` e os tempos de entrada
-(ex.: `CHEGA` dos serviços) às pausas da gravação, e renderizar com `--props='{"narracao":true}'`.
+Os tempos de cada fala estão no comentário de `M` em `src/juliano/JulianoVideo.tsx`.
+Quando a narração chegar: `public/juliano/narracao.wav`, ajustar `M` às pausas da gravação e
+renderizar com `--props='{"narracao":true}'`.
 
 ## Arquivos
 

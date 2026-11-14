@@ -295,8 +295,18 @@ export const Barra: React.FC<{
   readonly hora?: string;
   /** Frames desde que a barra apareceu (anima o ícone). */
   readonly t?: number;
+  readonly children?: React.ReactNode;
   readonly style?: React.CSSProperties;
-}> = ({ src, titulo, sub, filtro, hora = "agora", style, t = 999 }) => (
+}> = ({
+  src,
+  titulo,
+  sub,
+  filtro,
+  hora = "agora",
+  style,
+  t = 999,
+  children,
+}) => (
   <div
     style={{
       position: "absolute",
@@ -347,6 +357,7 @@ export const Barra: React.FC<{
     >
       {hora}
     </div>
+    {children}
   </div>
 );
 
@@ -441,6 +452,11 @@ export const IconAnim: React.FC<{
   } else if (nome === "bomba") {
     sx = 1 + Math.sin(k * 0.9) * 0.02 * decai;
     extra = <Jato t={k - 4} size={size} />;
+  } else if (nome === "rolo") {
+    // rola de um lado para o outro, como se estivesse pintando
+    tx = Math.sin(k * 0.42) * size * 0.12 * decai;
+    rot = -6 + Math.sin(k * 0.42) * 8 * decai;
+    ty = (1 - entra) * -size * 0.3;
   } else if (nome === "pincel") {
     rot = interpolate(k, [0, 8, 16, 24], [-40, 18, -8, 0], {
       ...CLAMP,
