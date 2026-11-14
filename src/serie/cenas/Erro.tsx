@@ -1,54 +1,58 @@
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { brl, pct } from "../calc";
-import { Titulo } from "../ui/Cartao";
-import { cor, entra, fontFamily, sai, suave } from "../tema";
+import { Cinetico } from "../ui/Cinetico";
+import { Icone, IconeChip, type NomeIcone } from "../ui/Icones";
+import { cor, entra, fontFamily, sombra, suave } from "../tema";
 import type { CenaProps } from "./props";
 
-export const Erro: React.FC<CenaProps> = ({ n, k, dur }) => {
+export const Erro: React.FC<CenaProps> = ({ n, k }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const { precoErrado, taxaValor, sobra } = k.erro;
-  const linhas = [
-    { rotulo: "Vendeu por", valor: brl(precoErrado), c: cor.branco, t: 40 },
-    { rotulo: `Taxa do app (${pct(n.taxa)})`, valor: `− ${brl(taxaValor)}`, c: "#FCA5A5", t: 80 },
-    { rotulo: "Custo do produto", valor: `− ${brl(k.custoTotal)}`, c: "#FCA5A5", t: 120 },
+  const linhas: { rotulo: string; valor: string; c: string; t: number; icone: NomeIcone }[] = [
+    { rotulo: "Vendeu por", valor: brl(precoErrado), c: cor.preto, t: 50, icone: "dinheiro" },
+    { rotulo: `Taxa do app (${pct(n.taxa)})`, valor: `− ${brl(taxaValor)}`, c: cor.vermelho, t: 85, icone: "app" },
+    { rotulo: "Custo do produto", valor: `− ${brl(k.custoTotal)}`, c: cor.vermelho, t: 120, icone: "copo" },
   ];
-  const barraT = suave(f, 80, 110);
-  const barraC = suave(f, 120, 150);
+  const barraT = suave(f, 90, 118);
+  const barraC = suave(f, 125, 155);
+  // o valor que sobra vai encolhendo conforme taxa e custo são descontados
+  const restante = precoErrado - taxaValor * barraT - k.custoTotal * barraC;
   const fim = entra(f, fps, 165, 9);
-  const tremor = f > 165 && f < 180 ? Math.sin(f * 2.2) * 8 * (1 - (f - 165) / 15) : 0;
-  const w = 920;
+  const tremor = f > 165 && f < 185 ? Math.sin(f * 2.4) * 10 * (1 - (f - 165) / 20) : 0;
+  const larg = 836;
   return (
-    <AbsoluteFill style={{ fontFamily, justifyContent: "center", padding: "180px 80px 300px", opacity: sai(f, dur) }}>
-      <Titulo style={{ fontSize: 70, opacity: entra(f, fps, 0) }}>
-        O erro que eu <span style={{ color: "#FCA5A5" }}>não</span> faria:
-      </Titulo>
-      <div style={{ color: cor.cinza, fontSize: 44, fontWeight: 600, marginTop: 18, opacity: entra(f, fps, 10) }}>
-        Cobrar {brl(precoErrado)} "porque todo mundo cobra".
-      </div>
+    <AbsoluteFill style={{ fontFamily, justifyContent: "center", padding: "180px 80px 300px" }}>
+      <Cinetico texto="O erro que eu *não* faria:" inicio={8} tamanho={76} tom="vermelho" />
+      <Cinetico texto={`Cobrar ${brl(precoErrado)} "porque todo mundo cobra".`} inicio={22} intervalo={2} tamanho={42} peso={600} corTexto={cor.textoSuave} style={{ marginTop: 14 }} />
 
-      <div style={{ marginTop: 60, borderRadius: 40, background: "rgba(255,255,255,0.06)", border: "1.5px solid rgba(255,255,255,0.14)", padding: "16px 46px" }}>
+      <div style={{ marginTop: 50, borderRadius: 40, background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, padding: "14px 40px 30px" }}>
         {linhas.map((l) => {
           const e = entra(f, fps, l.t);
           return (
-            <div key={l.rotulo} style={{ height: 104, display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1.5px solid rgba(255,255,255,0.08)", opacity: e, translate: `0 ${(1 - e) * 30}px` }}>
-              <span style={{ color: cor.branco, fontSize: 46, fontWeight: 600 }}>{l.rotulo}</span>
-              <span style={{ color: l.c, fontSize: 50, fontWeight: 800 }}>{l.valor}</span>
+            <div key={l.rotulo} style={{ height: 104, display: "flex", alignItems: "center", gap: 22, borderBottom: `2px solid ${cor.gelo}`, opacity: Math.min(1, e * 1.4), translate: `0 ${(1 - e) * 40}px` }}>
+              <IconeChip nome={l.icone} tamanho={72} style={{ scale: `${e}` }} />
+              <span style={{ flex: 1, color: cor.texto, fontSize: 42, fontWeight: 600 }}>{l.rotulo}</span>
+              <span style={{ color: l.c, fontSize: 46, fontWeight: 800 }}>{l.valor}</span>
             </div>
           );
         })}
-        {/* barra: o preço inteiro sendo comido pela taxa e pelo custo */}
-        <div style={{ margin: "34px 0 24px", height: 54, width: w - 92, borderRadius: 27, background: cor.verde, position: "relative", overflow: "hidden", opacity: entra(f, fps, 40) }}>
-          <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: ((taxaValor / precoErrado) * (w - 92)) * barraT, background: cor.vermelho }} />
-          <div style={{ position: "absolute", left: (taxaValor / precoErrado) * (w - 92), top: 0, bottom: 0, width: ((k.custoTotal / precoErrado) * (w - 92)) * barraC, background: "#9CA3AF" }} />
+        <div style={{ marginTop: 30, height: 50, width: larg, borderRadius: 25, background: cor.verde, position: "relative", overflow: "hidden", opacity: entra(f, fps, 50) }}>
+          <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: (taxaValor / precoErrado) * larg * barraT, background: cor.vermelho }} />
+          <div style={{ position: "absolute", left: (taxaValor / precoErrado) * larg, top: 0, bottom: 0, width: (k.custoTotal / precoErrado) * larg * barraC, background: "#CBD5E1" }} />
         </div>
       </div>
 
-      <div style={{ marginTop: 60, textAlign: "center", opacity: Math.min(1, fim * 2), scale: interpolate(fim, [0, 1], [0.6, 1]), translate: `${tremor}px 0` }}>
-        <div style={{ color: cor.branco, fontSize: 52, fontWeight: 700 }}>Sobrava só</div>
-        <div style={{ color: cor.vermelho, fontSize: 190, fontWeight: 800, letterSpacing: -6, lineHeight: 1.05 }}>{brl(sobra)}</div>
-        <div style={{ color: cor.cinza, fontSize: 42, fontWeight: 600, marginTop: 10, opacity: suave(f, 200, 225) }}>Um cupom de desconto e já é prejuízo.</div>
+      <div style={{ marginTop: 50, display: "flex", alignItems: "center", justifyContent: "center", gap: 30, opacity: Math.min(1, entra(f, fps, 90) * 2) }}>
+        <Icone nome="alerta" tamanho={130} style={{ scale: `${fim}`, translate: `${tremor}px 0` }} />
+        <div>
+          <div style={{ color: cor.texto, fontSize: 46, fontWeight: 700 }}>{f < 160 ? "Sobra…" : "Sobrava só"}</div>
+          <div style={{ color: cor.vermelho, fontSize: 150, fontWeight: 800, letterSpacing: -5, lineHeight: 1.05, scale: `${interpolate(fim, [0, 1], [1, 1.06])}`, transformOrigin: "left center" }}>
+            {brl(f >= 160 ? sobra : restante)}
+          </div>
+        </div>
       </div>
+      <Cinetico texto="Um *cupom* de desconto e já é *prejuízo.*" inicio={200} intervalo={3} tamanho={42} peso={700} tom="vermelho" alinhar="center" style={{ marginTop: 26 }} />
     </AbsoluteFill>
   );
 };

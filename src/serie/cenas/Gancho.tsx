@@ -1,47 +1,41 @@
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { cor, entra, fontFamily, sai } from "../tema";
+import { Cinetico, Letras } from "../ui/Cinetico";
+import { Icone } from "../ui/Icones";
+import { cor, degrade, entra, flutua, fontFamily, suave } from "../tema";
 import type { CenaProps } from "./props";
 
-const PALAVRAS = ["O", "que", "eu", "faria", "se", "abrisse"];
+const POSICOES = [
+  { left: 70, top: 330 },
+  { right: 80, top: 380 },
+  { left: 110, bottom: 380 },
+  { right: 110, bottom: 340 },
+];
 
 export const Gancho: React.FC<CenaProps> = ({ n, dur }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const nome = entra(f, fps, 34, 9);
+  const nome = n.nome.toUpperCase();
+  const tamanhoNome = Math.min(150, Math.floor(1500 / nome.length));
+  const inicioNome = 30;
+  const fimNome = inicioNome + nome.length * 2 + 10;
   return (
-    <AbsoluteFill style={{ fontFamily, justifyContent: "center", alignItems: "center", opacity: sai(f, dur) }}>
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0 26px", width: 900, color: cor.branco, fontSize: 104, fontWeight: 800, letterSpacing: -3, lineHeight: 1.05 }}>
-        {PALAVRAS.map((p, i) => {
-          const e = entra(f, fps, 4 + i * 4, 12);
-          return (
-            <span key={p} style={{ opacity: e, translate: `0 ${(1 - e) * 60}px`, display: "inline-block" }}>
-              {p}
-            </span>
-          );
-        })}
-      </div>
-      <div style={{ marginTop: 40, color: "rgba(255,255,255,0.7)", fontSize: 64, fontWeight: 700, opacity: entra(f, fps, 30) }}>{n.artigo}</div>
-      <div
-        style={{
-          marginTop: 4,
-          padding: "18px 50px 26px",
-          borderRadius: 36,
-          background: n.corDestaque,
-          color: cor.branco,
-          fontSize: n.nome.length > 10 ? 120 : 140,
-          fontWeight: 800,
-          letterSpacing: -4,
-          textTransform: "uppercase",
-          scale: interpolate(nome, [0, 1], [0.3, 1]),
-          rotate: `${interpolate(nome, [0, 1], [-12, -3])}deg`,
-          opacity: Math.min(1, nome * 2),
-          boxShadow: `0 30px 80px ${n.corDestaque}88`,
-        }}
-      >
-        {n.nome}?
-      </div>
-      <div style={{ marginTop: 90, color: cor.azulClaro, fontSize: 44, fontWeight: 700, opacity: entra(f, fps, 70) }}>
-        Começando pelo preço.
+    <AbsoluteFill style={{ fontFamily, justifyContent: "center", alignItems: "center", scale: `${interpolate(f, [0, dur], [1, 1.05])}` }}>
+      {n.iconesGancho.map((ic, i) => {
+        const e = entra(f, fps, fimNome + i * 6, 9);
+        return (
+          <div key={ic} style={{ position: "absolute", ...POSICOES[i], scale: `${e}`, translate: `0 ${flutua(f, i * 1.7)}px`, opacity: e }}>
+            <div style={{ width: 150, height: 150, borderRadius: 44, background: cor.branco, boxShadow: "0 20px 50px rgba(29,78,216,0.16)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Icone nome={ic} tamanho={100} />
+            </div>
+          </div>
+        );
+      })}
+      <Cinetico texto="O que eu faria se abrisse" inicio={4} intervalo={4} tamanho={100} alinhar="center" style={{ width: 900 }} />
+      <div style={{ marginTop: 30, color: cor.textoSuave, fontSize: 60, fontWeight: 700, opacity: suave(f, 24, 34), translate: `0 ${(1 - suave(f, 24, 34)) * 20}px` }}>{n.artigo}</div>
+      <Letras texto={nome} inicio={inicioNome} tamanho={tamanhoNome} />
+      <div style={{ height: 16, width: 620, borderRadius: 99, backgroundImage: degrade, marginTop: 6, scale: `${suave(f, fimNome - 6, fimNome + 14)} 1` }} />
+      <div style={{ marginTop: 70 }}>
+        <Cinetico texto="Começando pelo *preço*." inicio={fimNome + 20} intervalo={4} tamanho={52} peso={700} corTexto={cor.textoSuave} alinhar="center" />
       </div>
     </AbsoluteFill>
   );
