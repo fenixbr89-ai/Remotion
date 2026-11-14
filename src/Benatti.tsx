@@ -315,50 +315,168 @@ const Atacado: React.FC = () => {
   );
 };
 
-// 3) Produtos: só tipografia — cada categoria entra quando é falada
+// Ícone 3D (PNG sem fundo, em public/icones)
+const Icone3D: React.FC<{ nome: string; size: number; style?: React.CSSProperties }> = ({ nome, size, style }) => (
+  <Img
+    src={staticFile(`icones/${nome}.png`)}
+    style={{ width: size, height: size, objectFit: "contain", filter: "drop-shadow(0 18px 24px rgba(0,0,0,0.18))", ...style }}
+  />
+);
+
+// Fundo "papel de parede" com manchas suaves para o vidro ter o que desfocar
+const Parede: React.FC<{ t: number }> = ({ t }) => (
+  <AbsoluteFill style={{ overflow: "hidden" }}>
+    {[
+      { x: 180, y: 520, r: 520, c: "rgba(215,25,31,0.55)", f: 0 },
+      { x: 860, y: 820, r: 560, c: "rgba(245,166,35,0.55)", f: 1.7 },
+      { x: 420, y: 1300, r: 600, c: "rgba(240,78,35,0.45)", f: 3.1 },
+      { x: 900, y: 300, r: 380, c: "rgba(255,214,120,0.6)", f: 4.2 },
+    ].map((m, i) => (
+      <div
+        key={i}
+        style={{
+          position: "absolute",
+          left: m.x - m.r + Math.sin(t * 0.6 + m.f) * 60,
+          top: m.y - m.r + Math.cos(t * 0.5 + m.f) * 60,
+          width: m.r * 2,
+          height: m.r * 2,
+          borderRadius: "50%",
+          background: `radial-gradient(circle, ${m.c} 0%, transparent 65%)`,
+          filter: "blur(30px)",
+        }}
+      />
+    ))}
+  </AbsoluteFill>
+);
+
+// Cartão de vidro no estilo notificação do iPhone
+const Notificacao: React.FC<{ icone: string; titulo: string; texto: string; largura?: number; conteudo?: number }> = ({
+  icone,
+  titulo,
+  texto,
+  largura = 940,
+  conteudo = 1,
+}) => (
+  <div
+    style={{
+      width: largura,
+      borderRadius: 58,
+      padding: "30px 36px 36px",
+      boxSizing: "border-box",
+      background: "rgba(255,255,255,0.42)",
+      backdropFilter: "blur(40px) saturate(180%)",
+      WebkitBackdropFilter: "blur(40px) saturate(180%)",
+      border: "1.5px solid rgba(255,255,255,0.7)",
+      boxShadow: "0 30px 70px rgba(120,20,0,0.18), inset 0 1px 0 rgba(255,255,255,0.8)",
+      fontFamily: FONT,
+    }}
+  >
+    <div style={{ opacity: conteudo }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 18 }}>
+      <Logo size={52} />
+      <div style={{ flex: 1, fontSize: 30, fontWeight: 600, color: "rgba(29,29,31,0.65)", letterSpacing: 1 }}>BENATTI</div>
+      <div style={{ fontSize: 28, fontWeight: 500, color: "rgba(29,29,31,0.5)" }}>agora</div>
+    </div>
+    <div style={{ display: "flex", alignItems: "center", gap: 30 }}>
+      <div style={{ width: 230, height: 230, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+        <Icone3D nome={icone} size={230} />
+      </div>
+      <div>
+        <div style={{ fontSize: titulo.length > 12 ? 62 : 76, fontWeight: 700, letterSpacing: -2, color: C.texto, lineHeight: 1.05 }}>{titulo}</div>
+        <div style={{ fontSize: 34, fontWeight: 500, color: "rgba(29,29,31,0.6)", marginTop: 10 }}>{texto}</div>
+      </div>
+    </div>
+    </div>
+  </div>
+);
+
+// 3) Produtos: uma notificação de vidro por categoria, no momento em que é falada
 const CATS = [
-  { k: "carnes", nome: "Carnes." },
-  { k: "frios", nome: "Frios." },
-  { k: "frango", nome: "Frango." },
-  { k: "mercearia", nome: "Mercearia." },
-  { k: "limpeza", nome: "Limpeza." },
-  { k: "festa", nome: "Artigos de festa." },
-  { k: "embalagens", nome: "Embalagens." },
+  { k: "carnes", nome: "Carnes", texto: "Cortes fresquinhos" },
+  { k: "frios", nome: "Frios", texto: "Queijos e embutidos" },
+  { k: "frango", nome: "Frango", texto: "Inteiro e em pedaços" },
+  { k: "mercearia", nome: "Mercearia", texto: "O básico do dia a dia" },
+  { k: "limpeza", nome: "Limpeza", texto: "Casa sempre limpa" },
+  { k: "festa", nome: "Artigos de festa", texto: "Pra sua comemoração" },
+  { k: "embalagens", nome: "Embalagens", texto: "Pra casa e negócio" },
 ];
 
 const Produtos: React.FC = () => {
   const t = useT(B.produtos);
-  const vezes = CATS.map((c) => quando(c.k === "festa" ? "artigos" : c.k, B.produtos - 0.3) - 0.1);
-  const atual = vezes.reduce((acc, v, i) => (t >= v ? i : acc), 0);
+  const vezes = CATS.map((c) => quando(c.k === "festa" ? "artigos" : c.k, B.produtos - 0.3) - 0.15);
   return (
     <AbsoluteFill>
+      <Parede t={t} />
       <Centro top={330}>
         <Surge t={t} at={B.produtos + 0.05} size={52} weight={500} cor={C.sub}>
           Aqui você encontra
         </Surge>
       </Centro>
-      <div style={{ position: "absolute", top: 470, left: 0, right: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-        {CATS.map((c, i) => (
-          <Surge key={c.k} t={t} at={vezes[i]} size={112} weight={700} cor={i === atual ? undefined : "#C7C7CC"} degrade={i === atual}>
-            {c.nome}
-          </Surge>
-        ))}
-      </div>
+      {CATS.map((c, i) => {
+        if (t < vezes[i] - 0.05) return null;
+        const chega = interpolate(t, [vezes[i], vezes[i] + 0.55], [0, 1], { ...CLAMP, easing: SUAVE });
+        // quantas notificações chegaram depois desta (ela vai para trás da pilha)
+        const atras = vezes.slice(i + 1).reduce((acc, v) => acc + interpolate(t, [v, v + 0.5], [0, 1], { ...CLAMP, easing: SUAVE }), 0);
+        if (atras > 2.95) return null;
+        const y = 780 + (1 - chega) * -260 - atras * 46;
+        return (
+          <div
+            key={c.k}
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              top: y,
+              display: "flex",
+              justifyContent: "center",
+              zIndex: 100 - Math.round(atras * 10),
+              opacity: chega * Math.max(0, 1 - atras * 0.3),
+              filter: `blur(${(1 - chega) * 14}px)`,
+              transform: `scale(${(0.9 + 0.1 * chega) * (1 - atras * 0.06)})`,
+            }}
+          >
+            <Notificacao icone={c.k} titulo={c.nome} texto={c.texto} conteudo={Math.max(0, 1 - atras * 2.5)} />
+          </div>
+        );
+      })}
     </AbsoluteFill>
   );
 };
 
-// 4) Tudo num só lugar. (fundo preto)
+// 4) Tudo num só lugar. (fundo preto, os 7 ícones juntos)
 const Tudo: React.FC = () => {
   const t = useT(B.tudo);
+  const pos = [
+    [150, 360], [400, 300], [660, 320], [900, 380],
+    [270, 560], [540, 520], [800, 570],
+  ];
   return (
     <AbsoluteFill>
-      <Centro top={760}>
+      {CATS.map((c, i) => {
+        const k = rev(t, B.tudo + 0.05 + i * 0.06, 0.7);
+        const flutua = Math.sin(t * 1.6 + i) * 10;
+        return (
+          <div
+            key={c.k}
+            style={{
+              position: "absolute",
+              left: pos[i][0] - 105,
+              top: pos[i][1] - 105 + flutua,
+              opacity: k,
+              transform: `scale(${0.6 + 0.4 * k})`,
+              filter: `blur(${(1 - k) * 10}px)`,
+            }}
+          >
+            <Icone3D nome={c.k} size={210} />
+          </div>
+        );
+      })}
+      <Centro top={900}>
         <Surge t={t} at={quando("Tudo", B.tudo - 0.5)} size={120} weight={700} cor="#F5F5F7">
           Tudo num só
         </Surge>
       </Centro>
-      <Centro top={900}>
+      <Centro top={1030}>
         <Surge t={t} at={quando("lugar", B.tudo - 0.5)} size={220} weight={800} degrade>
           lugar.
         </Surge>
@@ -367,29 +485,36 @@ const Tudo: React.FC = () => {
   );
 };
 
-// 5) Embalagens. pra sua casa e pro seu negócio.
+// 5) Embalagens. pra sua casa / pro seu negócio (notificações de vidro)
 const Embalagens: React.FC = () => {
   const t = useT(B.embalagens);
-  const tCasa = quando("casa", B.embalagens) - 0.25;
-  const tNeg = quando("negócio", B.embalagens) - 0.25;
-  const casaAtiva = t < tNeg;
+  const caixa = rev(t, B.embalagens + 0.1, 0.9);
+  const opcoes = [
+    { icone: "casa", titulo: "Pra sua casa.", texto: "No varejo", at: quando("casa", B.embalagens) - 0.3, top: 980 },
+    { icone: "embalagens", titulo: "Pro seu negócio.", texto: "No atacado", at: quando("negócio", B.embalagens) - 0.3, top: 1360 },
+  ];
   return (
     <AbsoluteFill>
+      <Parede t={t} />
+      <Centro top={250}>
+        <div style={{ opacity: caixa, transform: `translateY(${(1 - caixa) * 60}px) scale(${0.85 + 0.15 * caixa})` }}>
+          <Icone3D nome="embalagens" size={330} />
+        </div>
+      </Centro>
       <Centro top={640}>
         <Surge t={t} at={quando("Embalagens", B.embalagens - 0.3)} size={136} weight={700}>
           Embalagens.
         </Surge>
       </Centro>
-      <Centro top={880}>
-        <Surge t={t} at={tCasa} size={96} weight={700} cor={casaAtiva ? undefined : "#C7C7CC"} degrade={casaAtiva}>
-          Pra sua casa.
-        </Surge>
-      </Centro>
-      <Centro top={1010}>
-        <Surge t={t} at={tNeg} size={96} weight={700} degrade>
-          Pro seu negócio.
-        </Surge>
-      </Centro>
+      {opcoes.map((o) => {
+        const k = interpolate(t, [o.at, o.at + 0.6], [0, 1], { ...CLAMP, easing: SUAVE });
+        if (t < o.at) return null;
+        return (
+          <div key={o.icone} style={{ position: "absolute", top: o.top + (1 - k) * -120, left: 0, right: 0, display: "flex", justifyContent: "center", opacity: k, filter: `blur(${(1 - k) * 12}px)`, transform: `scale(${0.92 + 0.08 * k})` }}>
+            <Notificacao icone={o.icone} titulo={o.titulo} texto={o.texto} />
+          </div>
+        );
+      })}
     </AbsoluteFill>
   );
 };
