@@ -34,3 +34,10 @@ renderizar com `--props='{"narracao":true}'`.
 - `src/juliano/kit.tsx` — barra de notificação de vidro (`Barra`), fundo aurora, logo.
 - `public/juliano/3d/` — logo, carro, lâmpada, bomba, gota, casa, tijolos, vassoura e WhatsApp
   enviados pelo cliente (fundos recortados). `public/juliano/emoji/` — pincel (Fluent Emoji 3D, MIT).
+
+## Versão "Impacto" (estilo tipografia gigante)
+
+Composição `JulianoImpacto` (35,5 s) em `src/juliano-impacto/`: laranja/preto/off-white, títulos
+gigantes com entrada de impacto, estrelas laranja desfocadas, multidão → o Juliano em destaque com
+órbitas, serviços trocando no ritmo da fala, órbita "Um só profissional", etiquetas tortas, riscos de
+caneta e o número do WhatsApp rolando grupo por grupo. Usa a mesma narração (`public/juliano/narracao.wav`).

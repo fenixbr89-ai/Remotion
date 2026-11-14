@@ -5,6 +5,10 @@ import { Title } from "./HelloWorld/Title";
 import { PixoraVideo } from "./pixora/PixoraVideo";
 import { JulianoVideo } from "./juliano/JulianoVideo";
 import { J_TOTAL } from "./juliano/tema";
+import {
+  JulianoImpacto,
+  IMPACTO_TOTAL,
+} from "./juliano-impacto/JulianoImpacto";
 import { DUR, FPS, HEIGHT, TOTAL, WIDTH } from "./pixora/timeline";
 import { Cena01Gancho } from "./pixora/scenes/Cena01Gancho";
 import { Cena02Problema } from "./pixora/scenes/Cena02Problema";
@@ -36,6 +40,13 @@ export const RemotionRoot: React.FC = () => {
         id="JulianoPinturas"
         component={JulianoVideo}
         durationInFrames={J_TOTAL}
+        {...V}
+        defaultProps={{ narracao: true }}
+      />
+      <Composition
+        id="JulianoImpacto"
+        component={JulianoImpacto}
+        durationInFrames={IMPACTO_TOTAL}
         {...V}
         defaultProps={{ narracao: true }}
       />
