@@ -54,7 +54,7 @@ export const Frase: React.FC<CenaProps> = ({ ponte, marcas }) => {
       <div style={{ position: "absolute", top: 700, left: 0, right: 0 }}>
         <Batida linhas={[{ texto: "PREÇO", em: tp, tamanho: 220, efeito: "slam", degrade: true }]} />
       </div>
-      <div style={{ position: "absolute", top: 920, left: 0, right: 0 }}>
+      <div style={{ position: "absolute", top: 960, left: 0, right: 0 }}>
         <Batida linhas={[{ texto: "CERTO.", em: tc, tamanho: 220, efeito: "slam", degrade: true }]} />
       </div>
       {f >= ponte.entra && f < ponte.sai && <div style={{ ...naPosicao(G.fraseBarra), background: degrade }} />}

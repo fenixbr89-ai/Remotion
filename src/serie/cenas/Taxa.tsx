@@ -22,7 +22,7 @@ export const Erro: React.FC<CenaProps> = ({ k, ponte, marcas }) => {
         </div>
       )}
       {f >= ponte.entra && f < ponte.sai && <div style={{ ...naPosicao(G.erroBarra), background: degrade }} />}
-      <div style={{ position: "absolute", top: 1140, left: 0, right: 0 }}>
+      <div style={{ position: "absolute", top: 1150, left: 0, right: 0 }}>
         <Batida linhas={[{ texto: "porque o vizinho cobra.", em: marca(marcas, "vizinho", 22), tamanho: 50, peso: 700, corTexto: cor.textoSuave }]} />
       </div>
     </AbsoluteFill>
@@ -82,7 +82,7 @@ export const App: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
               </div>
             </div>
           </Celular>
-          <div style={{ position: "absolute", right: -70, top: 330, scale: `${entra(f, fps, tT, 8)}`, padding: "12px 22px", borderRadius: 20, background: cor.vermelho, color: cor.branco, fontSize: 40, fontWeight: 800 }}>−{pct(n.taxa)}</div>
+          <div style={{ position: "absolute", right: -120, top: 60, scale: `${entra(f, fps, tT, 8)}`, padding: "12px 22px", borderRadius: 20, background: cor.vermelho, color: cor.branco, fontSize: 40, fontWeight: 800 }}>−{pct(n.taxa)}</div>
           <div style={{ position: "absolute", left: -80, top: 700, scale: `${final}` }}>
             <Icone nome="alerta" tamanho={130} />
           </div>

@@ -16,7 +16,7 @@ const Termo: React.FC<{ t: string; em: number; tam?: number; destaque?: boolean;
   const { fps } = useVideoConfig();
   const e = entra(f, fps, em, 9);
   return (
-    <span style={{ display: "inline-block", fontSize: tam, fontWeight: 800, letterSpacing: -1.5, color: c ?? cor.texto, ...(destaque ? textoDegrade : {}), opacity: f >= em ? Math.min(1, e * 3) : 0, scale: `${interpolate(e, [0, 1], [1.9, 1])}` }}>
+    <span style={{ display: "inline-block", lineHeight: 1, fontSize: tam, fontWeight: 800, letterSpacing: -1.5, color: c ?? cor.texto, ...(destaque ? textoDegrade : {}), opacity: f >= em ? Math.min(1, e * 3) : 0, scale: `${interpolate(e, [0, 1], [1.9, 1])}` }}>
       {t}
     </span>
   );
@@ -31,8 +31,9 @@ export const Formula: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
   const l3 = marca(marcas, "l3", 70);
   const tp = marca(marcas, "preco", 92);
   const etq = entra(f, fps, tp, 8);
+  // cada linha da fórmula fica centralizada (na horizontal e na vertical) numa faixa de 110 px
   const linha = (children: React.ReactNode, top: number) => (
-    <div style={{ position: "absolute", top, left: 40, right: 40, display: "flex", justifyContent: "center", alignItems: "baseline", gap: 18 }}>{children}</div>
+    <div style={{ position: "absolute", top, left: G.formulaLinha.x, width: G.formulaLinha.w, height: G.formulaLinha.h, display: "flex", justifyContent: "center", alignItems: "center", gap: 18 }}>{children}</div>
   );
   return (
     <AbsoluteFill style={{ fontFamily }}>
@@ -46,7 +47,7 @@ export const Formula: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
           <Termo t="÷" em={l1 + p1 * 3} />
           <Termo t="(1 − taxa − lucro)" em={l1 + p1 * 4} tam={56} />
         </>,
-        470,
+        G.formulaLinha.y,
       )}
       {linha(
         <>
@@ -54,7 +55,7 @@ export const Formula: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
           <Termo t="÷" em={l2 + 4} />
           <Termo t={`(1 − ${dec(n.taxa)} − ${dec(n.lucro)})`} em={l2 + 8} tam={56} cor={cor.preto} />
         </>,
-        580,
+        G.formulaLinha.y + 120,
       )}
       {linha(
         <>
@@ -63,7 +64,7 @@ export const Formula: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
           <Termo t="÷" em={l3 + 6} cor={cor.textoSuave} />
           <Termo t={dec(1 - n.taxa - n.lucro)} em={l3 + 10} destaque />
         </>,
-        690,
+        G.formulaLinha.y + 230,
       )}
       <div style={{ position: "absolute", left: 0, right: 0, top: 860, height: 560, display: "flex", justifyContent: "center", alignItems: "center" }}>
         <div style={{ translate: "-170px 30px", scale: estica(f, fps, tp - 8), transformOrigin: "center bottom" }}>
@@ -72,7 +73,7 @@ export const Formula: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
       </div>
       {f < ponte.sai && (
         <div style={{ ...naPosicao(G.formulaEtiqueta), scale: `${interpolate(etq, [0, 1], [2, 1])}`, opacity: Math.min(1, etq * 3) }}>
-          <div style={{ boxSizing: "border-box", width: "100%", height: "100%", borderRadius: G.formulaEtiqueta.r, padding: "22px 34px", background: degrade, boxShadow: "0 24px 50px rgba(29,78,216,0.35)" }}>
+          <div style={{ boxSizing: "border-box", width: "100%", height: "100%", borderRadius: G.formulaEtiqueta.r, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: degrade, boxShadow: "0 24px 50px rgba(29,78,216,0.35)" }}>
             <div style={{ color: "rgba(255,255,255,0.85)", fontSize: 28, fontWeight: 800, letterSpacing: 3 }}>VENDER A</div>
             <Odometro valor={k.preco * suave(f, tp, tp + 26)} final={k.preco} tamanho={90} cor={cor.branco} />
           </div>
@@ -102,7 +103,7 @@ export const Divisao: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
         {partes.map((p) => {
           const e = entra(f, fps, p.t + 4, 9);
           return (
-            <div key={p.r} style={{ flex: 1, borderRadius: 30, padding: "22px 20px", background: cor.branco, border: `3px solid ${p.c}66`, boxShadow: sombra, opacity: f >= p.t ? Math.min(1, e * 2) : 0, scale: estica(f, fps, p.t + 4) }}>
+            <div key={p.r} style={{ flex: 1, borderRadius: 30, padding: "22px 12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", background: cor.branco, border: `3px solid ${p.c}66`, boxShadow: sombra, opacity: f >= p.t ? Math.min(1, e * 2) : 0, scale: estica(f, fps, p.t + 4) }}>
               <div style={{ color: p.c, fontSize: 30, fontWeight: 800 }}>{p.r}</div>
               <Odometro valor={p.v * suave(f, p.t + 4, p.t + 20)} final={p.v} tamanho={48} cor={cor.preto} />
             </div>

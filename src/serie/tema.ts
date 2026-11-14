@@ -31,6 +31,9 @@ export const degrade = `linear-gradient(120deg, ${cor.azulProfundo} 0%, ${cor.az
 /** Texto preenchido com o degradê da marca. */
 export const textoDegrade: React.CSSProperties = {
   backgroundImage: degrade,
+  // espaço extra em cima/embaixo para o degradê pintar acentos e a cedilha (sem mudar o layout)
+  padding: "0.12em 0 0.22em",
+  margin: "-0.12em 0 -0.22em",
   WebkitBackgroundClip: "text",
   backgroundClip: "text",
   color: "transparent",

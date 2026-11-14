@@ -10,7 +10,7 @@ import { marca, type CenaProps } from "./props";
 import { Topo } from "./Topo";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
-const COPO = { x: 290, y: 900 };
+const COPO = { x: 270, y: 900 };
 
 /**
  * A conta do copo, rápida: cada ingrediente cai dentro do copo, solta um "+R$" e
@@ -64,7 +64,7 @@ export const Custo: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
         );
       })}
       {/* cupom */}
-      <div style={{ position: "absolute", left: 560, top: 470, width: 460, borderRadius: 28, scale: estica(f, fps, 8), background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, padding: "22px 26px", opacity: recibo, translate: `${(1 - recibo) * 300}px 0` }}>
+      <div style={{ position: "absolute", left: 500, top: 470, width: 460, borderRadius: 28, scale: estica(f, fps, 8), background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, padding: "22px 26px", opacity: recibo, translate: `${(1 - recibo) * 300}px 0` }}>
         <div style={{ color: cor.textoSuave, fontSize: 22, fontWeight: 800, letterSpacing: 2 }}>CUPOM · 1 COPO {n.cardapio[n.carroChefe].nome.toUpperCase()}</div>
         <div style={{ borderTop: `3px dashed ${cor.azulBorda}`, margin: "14px 0 6px" }} />
         {n.itens.map((it, i) => {
@@ -79,9 +79,9 @@ export const Custo: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
         <div style={{ borderTop: `3px dashed ${cor.azulBorda}`, margin: "8px 0 0" }} />
       </div>
       {/* total girando */}
-      <div style={{ ...naPosicao(G.custoTotal), boxSizing: "border-box", padding: "0 40px", display: f < ponte.sai ? "flex" : "none", alignItems: "center", justifyContent: "space-between", background: degrade, boxShadow: `0 24px 60px rgba(29,78,216,${0.3 + fechou * 0.25})`, scale: f < 30 ? estica(f, fps, 14) : `${1 + Math.sin(Math.min(1, fechou) * Math.PI) * 0.08}` }}>
-        <span style={{ color: cor.branco, fontSize: 44, fontWeight: 700 }}>Custo do copo</span>
-        <Odometro valor={total} final={k.custoTotal} tamanho={92} cor={cor.branco} />
+      <div style={{ ...naPosicao(G.custoTotal), boxSizing: "border-box", display: f < ponte.sai ? "flex" : "none", flexDirection: "column", alignItems: "center", justifyContent: "center", background: degrade, boxShadow: `0 24px 60px rgba(29,78,216,${0.3 + fechou * 0.25})`, scale: f < 30 ? estica(f, fps, 14) : `${1 + Math.sin(Math.min(1, fechou) * Math.PI) * 0.08}` }}>
+        <span style={{ color: "rgba(255,255,255,0.9)", fontSize: 32, fontWeight: 700, lineHeight: 1 }}>Custo do copo</span>
+        <Odometro valor={total} final={k.custoTotal} tamanho={84} cor={cor.branco} />
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1440 }}>
         <Batida linhas={[{ texto: "Esse é o *piso*. Abaixo disso, *prejuízo.*", em: marca(marcas, "piso", ultimo + 22), tamanho: 50, tom: "azul" }]} />

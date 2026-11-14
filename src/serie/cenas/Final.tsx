@@ -23,7 +23,7 @@ export const Produto: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
     { r: "Lucro desejado", v: pct(n.lucro), t: Math.max(14, c - 26) },
   ];
   const cx = interpolate(f, [c - 18, c - 2], [900, 560], clamp);
-  const cy = interpolate(f, [c - 18, c - 2], [1750, 1255], clamp);
+  const cy = interpolate(f, [c - 18, c - 2], [1750, 1325], clamp);
   const clique = f >= c && f < c + 6;
   const carregando = f >= c + 4 && f < c + 20;
   const pronto = f >= c + 20;
@@ -31,7 +31,7 @@ export const Produto: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
   return (
     <AbsoluteFill style={{ fontFamily }}>
       <Topo texto="Eu faço essa conta no *Preço Certo.*" />
-      <AbsoluteFill style={{ alignItems: "center", paddingTop: 440 }}>
+      <AbsoluteFill style={{ alignItems: "center", paddingTop: 510 }}>
         <div>
           <Celular largura={500}>
             <div style={{ height: "100%", padding: "86px 30px 0", background: cor.gelo }}>
@@ -58,7 +58,7 @@ export const Produto: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
                   "Calcular preço"
                 )}
               </div>
-              <div style={{ marginTop: 20, borderRadius: 26, padding: "18px 22px", background: cor.branco, boxShadow: sombra, opacity: res, scale: `${interpolate(res, [0, 1], [0.6, 1])}` }}>
+              <div style={{ marginTop: 20, borderRadius: 26, padding: "18px 22px", display: "flex", flexDirection: "column", alignItems: "center", background: cor.branco, boxShadow: sombra, opacity: res, scale: `${interpolate(res, [0, 1], [0.6, 1])}` }}>
                 <div style={{ color: cor.textoSuave, fontSize: 22, fontWeight: 800, letterSpacing: 3 }}>VENDER A</div>
                 <Odometro valor={k.preco * suave(f, c + 22, c + 46)} final={k.preco} tamanho={72} cor={cor.preto} />
               </div>
@@ -74,17 +74,11 @@ export const Produto: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
           Teste grátis
         </div>
       )}
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1580, textAlign: "center", color: cor.azulProfundo, fontSize: 34, fontWeight: 700, opacity: entra(f, fps, b + 8) * (1 - suave(f, ponte.sai - 6, ponte.sai)) }}>siteprecocerto.vercel.app</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1676, textAlign: "center", color: cor.azulProfundo, fontSize: 34, fontWeight: 700, opacity: entra(f, fps, b + 8) * (1 - suave(f, ponte.sai - 6, ponte.sai)) }}>siteprecocerto.vercel.app</div>
     </AbsoluteFill>
   );
 };
 
-const POS = [
-  { left: 60, top: 1000 },
-  { right: 60, top: 1110 },
-  { left: 90, top: 1250 },
-  { right: 80, top: 1370 },
-];
 
 export const Comenta: React.FC<CenaProps> = ({ n, ponte }) => {
   const f = useCurrentFrame();
@@ -95,9 +89,9 @@ export const Comenta: React.FC<CenaProps> = ({ n, ponte }) => {
       {f >= ponte.entra && <div style={{ ...naPosicao(G.comentaFaixa), background: cor.azulFundo }} />}
       <div style={{ position: "absolute", left: 0, right: 0, top: 420 }}>
         <Batida
-          gap={8}
+          gap={20}
           linhas={[
-            { texto: "COMENTE", em: 0, tamanho: 200, efeito: "slam", degrade: true },
+            { texto: "COMENTE", em: 0, tamanho: 170, efeito: "slam", degrade: true },
             { texto: "qual o *próximo negócio*", em: 12, tamanho: 64 },
             { texto: "que você quer ver aqui.", em: 22, tamanho: 64 },
           ]}
@@ -108,9 +102,9 @@ export const Comenta: React.FC<CenaProps> = ({ n, ponte }) => {
         const e = entra(f, fps, t, 9);
         const letras = Math.max(0, Math.min(p.length, f - t - 2));
         return (
-          <div key={p} style={{ position: "absolute", ...POS[i], scale: estica(f, fps, t), opacity: Math.min(1, e * 2), display: "flex", alignItems: "center", gap: 14, padding: "16px 26px 16px 16px", borderRadius: 999, background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra }}>
+          <div key={p} style={{ position: "absolute", left: 280, width: 520, top: 830 + i * 104, height: 84, boxSizing: "border-box", scale: estica(f, fps, t), opacity: Math.min(1, e * 2), display: "flex", alignItems: "center", gap: 14, padding: "0 26px 0 16px", borderRadius: 999, background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra }}>
             <div style={{ width: 52, height: 52, borderRadius: 26, background: i % 2 ? cor.azulCeu : degrade }} />
-            <span style={{ color: cor.preto, fontSize: 40, fontWeight: 800 }}>{p.slice(0, letras)}</span>
+            <span style={{ flex: 1, textAlign: "center", color: cor.preto, fontSize: 40, fontWeight: 800 }}>{p.slice(0, letras)}</span>
             <svg width={30} height={30} viewBox="0 0 24 24" fill={cor.vermelho} style={{ scale: `${entra(f, fps, t + 14, 7)}`, visibility: i === 0 && f >= ponte.sai ? "hidden" : "visible" }}>
               <path d="M12 21s-7.5-4.6-10-9.3C.4 8.5 2.3 4.5 6 4.5c2.2 0 3.6 1.3 6 3.6 2.4-2.3 3.8-3.6 6-3.6 3.7 0 5.6 4 4 7.2C19.5 16.4 12 21 12 21z" />
             </svg>

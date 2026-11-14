@@ -29,9 +29,10 @@ export const Gancho: React.FC<CenaProps> = ({ n, ponte }) => {
 };
 
 const CLIENTES = [
-  { lado: -1, x: 110, roupa: cor.azul, pele: 0, t: 14 },
-  { lado: -1, x: 210, roupa: cor.azulCeu, pele: 2, t: 20 },
-  { lado: 1, x: 140, roupa: cor.azulProfundo, pele: 1, t: 26 },
+  { lado: -1, x: 60, roupa: cor.azul, pele: 0, t: 14 },
+  { lado: -1, x: 160, roupa: cor.azulCeu, pele: 2, t: 20 },
+  { lado: 1, x: 60, roupa: cor.azulProfundo, pele: 1, t: 17 },
+  { lado: 1, x: 160, roupa: cor.azul, pele: 3, t: 26 },
 ];
 
 export const Loja: React.FC<CenaProps> = ({ n, ponte, marcas }) => {
@@ -55,7 +56,7 @@ export const Loja: React.FC<CenaProps> = ({ n, ponte, marcas }) => {
           );
         })}
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1420 }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1460 }}>
         <Batida linhas={[{ texto: "acertar o *preço.*", em: marca(marcas, "preco", 40), tamanho: 96 }]} />
       </div>
     </AbsoluteFill>

@@ -29,6 +29,12 @@ Série de Reels "O que eu faria se abrisse uma…" para o Preço Certo (siteprec
 - Transições que cobrem a tela inteira (círculo azul, inundação) ou que fecham num ponto.
 - Final em tela cheia azul: o final é em fundo branco.
 
+## Revisão obrigatória antes de entregar
+Renderize um quadro de cada cena (com uma linha guia no centro) e confira:
+- Texto e números **centralizados dentro das caixas** (horizontal e vertical) e grupos centralizados na tela.
+- Nada cortado: acentos e **cedilha** (texto em degradê precisa de folga embaixo), bordas da tela, caixas.
+- Nada sobreposto: selos, sublinhados e frases não podem cobrir números ou encostar em outros elementos.
+
 ## Estrutura do episódio
 Gancho → Loja → "Preço não é chute, é conta" → Cardápio → Custo item a item (ingredientes caem no copo, cupom imprime, total gira) → Erro comum (preço "do vizinho") → App de delivery (taxa come o lucro) → Sobra → Fórmula `preço = custo ÷ (1 − taxa − lucro)` → Divisão custo/taxa/lucro → Lucro do mês → "Isso é PREÇO CERTO." → Demo do app (cursor, loading, ✓) + Teste grátis → "Comente qual o próximo negócio" → Curtir e seguir.
 
