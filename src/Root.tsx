@@ -3,6 +3,8 @@ import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
 import { PixoraVideo } from "./pixora/PixoraVideo";
+import { JulianoVideo } from "./juliano/JulianoVideo";
+import { J_TOTAL } from "./juliano/tema";
 import { DUR, FPS, HEIGHT, TOTAL, WIDTH } from "./pixora/timeline";
 import { Cena01Gancho } from "./pixora/scenes/Cena01Gancho";
 import { Cena02Problema } from "./pixora/scenes/Cena02Problema";
@@ -30,18 +32,80 @@ export const RemotionRoot: React.FC = () => {
         {...V}
         defaultProps={{ narracao: true, legendas: false }}
       />
+      <Composition
+        id="JulianoPinturas"
+        component={JulianoVideo}
+        durationInFrames={J_TOTAL}
+        {...V}
+        defaultProps={{ narracao: false }}
+      />
       <Folder name="Pixora-Cenas">
-        <Composition id="Cena01-Gancho" component={Cena01Gancho} durationInFrames={DUR.c01} {...V} />
-        <Composition id="Cena02-Problema" component={Cena02Problema} durationInFrames={DUR.c02} {...V} />
-        <Composition id="Cena03-Virada" component={Cena03Virada} durationInFrames={DUR.c03} {...V} />
-        <Composition id="Cena05-Estilos" component={Cena05Estilos} durationInFrames={DUR.c05} {...V} />
-        <Composition id="Cena06-Diferencial1" component={Cena06Diferencial1} durationInFrames={DUR.c06} {...V} />
-        <Composition id="Cena07-Diferencial2" component={Cena07Diferencial2} durationInFrames={DUR.c07} {...V} />
-        <Composition id="Cena08-ProvaSocial" component={Cena08ProvaSocial} durationInFrames={DUR.c08} {...V} />
-        <Composition id="Cena09-Beneficios" component={Cena09Beneficios} durationInFrames={DUR.c09} {...V} />
-        <Composition id="Cena10-Chamada" component={Cena10Chamada} durationInFrames={DUR.c10} {...V} />
-        <Composition id="Cena11-Espera" component={Cena11Espera} durationInFrames={DUR.c11} {...V} />
-        <Composition id="Cena12-Logo" component={Cena12Logo} durationInFrames={DUR.c12} {...V} />
+        <Composition
+          id="Cena01-Gancho"
+          component={Cena01Gancho}
+          durationInFrames={DUR.c01}
+          {...V}
+        />
+        <Composition
+          id="Cena02-Problema"
+          component={Cena02Problema}
+          durationInFrames={DUR.c02}
+          {...V}
+        />
+        <Composition
+          id="Cena03-Virada"
+          component={Cena03Virada}
+          durationInFrames={DUR.c03}
+          {...V}
+        />
+        <Composition
+          id="Cena05-Estilos"
+          component={Cena05Estilos}
+          durationInFrames={DUR.c05}
+          {...V}
+        />
+        <Composition
+          id="Cena06-Diferencial1"
+          component={Cena06Diferencial1}
+          durationInFrames={DUR.c06}
+          {...V}
+        />
+        <Composition
+          id="Cena07-Diferencial2"
+          component={Cena07Diferencial2}
+          durationInFrames={DUR.c07}
+          {...V}
+        />
+        <Composition
+          id="Cena08-ProvaSocial"
+          component={Cena08ProvaSocial}
+          durationInFrames={DUR.c08}
+          {...V}
+        />
+        <Composition
+          id="Cena09-Beneficios"
+          component={Cena09Beneficios}
+          durationInFrames={DUR.c09}
+          {...V}
+        />
+        <Composition
+          id="Cena10-Chamada"
+          component={Cena10Chamada}
+          durationInFrames={DUR.c10}
+          {...V}
+        />
+        <Composition
+          id="Cena11-Espera"
+          component={Cena11Espera}
+          durationInFrames={DUR.c11}
+          {...V}
+        />
+        <Composition
+          id="Cena12-Logo"
+          component={Cena12Logo}
+          durationInFrames={DUR.c12}
+          {...V}
+        />
       </Folder>
       <Folder name="Elements">
         <Composition

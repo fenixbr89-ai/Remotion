@@ -15,6 +15,7 @@ import { loadFont } from "@remotion/fonts";
 // Inter Display local (public/fonts) — SF Pro Display é usada se estiver instalada.
 const FAMILY = "Inter Display";
 for (const [file, weight] of [
+  ["Light", "300"],
   ["Regular", "400"],
   ["Medium", "500"],
   ["SemiBold", "600"],
@@ -483,16 +484,18 @@ export const Drift: React.FC<{
 };
 
 // ---------- Som dentro das cenas ----------
-export type SfxName = "whoosh" | "tap" | "pop" | "ding" | "impact";
+export type SfxName = "whoosh" | "tap" | "pop" | "ding" | "impact" | "brush";
 
 /** Efeito sonoro no frame local da cena. */
 export const Sfx: React.FC<{
   readonly at: number;
   readonly name: SfxName;
   readonly volume?: number;
-}> = ({ at, name, volume = 0.5 }) => (
+  /** Pasta em public/ com os efeitos (padrão: audio). */
+  readonly dir?: string;
+}> = ({ at, name, volume = 0.5, dir = "audio" }) => (
   <Sequence from={Math.round(at)} layout="none" name={`SFX ${name}`}>
-    <Audio src={staticFile(`audio/${name}.wav`)} volume={volume} />
+    <Audio src={staticFile(`${dir}/${name}.wav`)} volume={volume} />
   </Sequence>
 );
 

@@ -10,7 +10,7 @@ import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 
 const SR = 44100;
-const OUT = join(process.cwd(), "public", "audio");
+const OUT = join(process.cwd(), "public", process.env.OUT_DIR ?? "audio");
 mkdirSync(OUT, { recursive: true });
 
 // ---------- utilidades ----------
@@ -122,6 +122,17 @@ const sfx = {
     }
     return normalize(d, 0.5);
   },
+  brush() {
+    const n = Math.floor(SR * 0.7);
+    const d = new Float32Array(n);
+    const f = svf();
+    for (let i = 0; i < n; i++) {
+      const t = i / n;
+      const env = Math.sin(Math.PI * t) ** 1.5 * (0.8 + 0.2 * Math.sin(t * 60));
+      d[i] = f(noise(), 1400 + 500 * Math.sin(Math.PI * t), 0.9).band * env;
+    }
+    return normalize(d, 0.35);
+  },
   impact() {
     const n = Math.floor(SR * 1.8);
     const d = new Float32Array(n);
@@ -144,14 +155,14 @@ for (const [name, fn] of Object.entries(sfx)) {
 }
 
 // ---------- trilha ----------
-const BPM = 120;
+const BPM = Number(process.env.BPM ?? 120);
 const BEAT = 60 / BPM;
-const DUR = 34.5;
+const DUR = Number(process.env.DUR ?? 34.5);
 const N = Math.round(SR * DUR);
 const L = new Float32Array(N);
-const DRUMS_IN = 5.77; // a batida entra no "Movimento"
-const DROP_START = 5.1; // respiro antes da batida
-const OUTRO = 30.6; // logo
+const DRUMS_IN = Number(process.env.DRUMS_IN ?? 5.77); // a batida entra no "Movimento"
+const DROP_START = Number(process.env.DROP_START ?? 5.1); // respiro antes da batida
+const OUTRO = Number(process.env.OUTRO ?? 30.6); // logo
 
 // Progressão: Fmaj7 – Em7 – Dm7 – Cmaj7 (2 compassos cada)
 const chords = [
