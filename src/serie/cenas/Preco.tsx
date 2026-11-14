@@ -2,16 +2,15 @@ import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { brl, pct } from "../calc";
 import { Cinetico } from "../ui/Cinetico";
 import { CopoAcai, Raios } from "../ui/Ilustracoes";
-import { Legenda } from "../ui/Legenda";
 import { cor, degrade, entra, fontFamily, sombra, suave } from "../tema";
-import { destaca, type CenaProps } from "./props";
+import type { CenaProps } from "./props";
 
 const dec = (v: number) => v.toFixed(2).replace(".", ",");
 
 export const Preco: React.FC<CenaProps> = ({ n, k }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const copo = entra(f, fps, 60, 12);
+  const copo = entra(f, fps, 30, 12);
   const etq = entra(f, fps, 120, 8);
   const contador = suave(f, 122, 160);
   const itens = [
@@ -21,14 +20,8 @@ export const Preco: React.FC<CenaProps> = ({ n, k }) => {
   ];
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <Legenda
-        frases={[
-          { em: 4, l1: "A conta *certa* é:", l2: "custo ÷ (1 − taxa − lucro)" },
-          { em: 120, l1: `O ${destaca(n.cardapio[n.carroChefe].nome)} sai por ${destaca(brl(k.preco) + ",")}`, l2: `com ${pct(n.lucro)} de lucro garantido.` },
-        ]}
-      />
-      <div style={{ position: "absolute", top: 500, left: 90, right: 90, borderRadius: 32, padding: "24px 10px", background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, opacity: entra(f, fps, 22) }}>
-        <Cinetico texto={`${dec(k.custoTotal)} ÷ (1 − ${dec(n.taxa)} − ${dec(n.lucro)}) = *${dec(k.preco)}*`} inicio={28} intervalo={3} tamanho={44} alinhar="center" corTexto={cor.preto} />
+      <div style={{ position: "absolute", top: 500, left: 90, right: 90, borderRadius: 32, padding: "24px 10px", background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, opacity: entra(f, fps, 6) }}>
+        <Cinetico texto={`${dec(k.custoTotal)} ÷ (1 − ${dec(n.taxa)} − ${dec(n.lucro)}) = *${dec(k.preco)}*`} inicio={12} intervalo={3} tamanho={44} alinhar="center" corTexto={cor.preto} />
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 640, height: 560, display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Raios tamanho={820} style={{ opacity: copo }} />

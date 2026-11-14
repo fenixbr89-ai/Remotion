@@ -1,26 +1,18 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { CopoAcai, Raios } from "../ui/Ilustracoes";
-import { Legenda } from "../ui/Legenda";
 import { cor, degrade, entra, fontFamily, suave } from "../tema";
-import { destaca, type CenaProps } from "./props";
+import type { CenaProps } from "./props";
 
 export const Cardapio: React.FC<CenaProps> = ({ n }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const foco = suave(f, 95, 125);
-  const chefe = n.cardapio[n.carroChefe].nome;
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <Legenda
-        frases={[
-          { em: 4, l1: `Cardápio *enxuto:* só ${n.cardapio.length} tamanhos.`, l2: "Pouca opção, menos desperdício." },
-          { em: 95, l1: `E a conta começa pelo ${destaca(chefe + ",")}`, l2: "o que mais vende." },
-        ]}
-      />
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingTop: 320 }}>
         <div style={{ display: "flex", alignItems: "flex-end", gap: 30 }}>
           {n.cardapio.map((c, i) => {
-            const e = entra(f, fps, 20 + i * 10, 11);
+            const e = entra(f, fps, 4 + i * 6, 11);
             const ehChefe = i === n.carroChefe;
             const base = 190 + i * 50;
             return (

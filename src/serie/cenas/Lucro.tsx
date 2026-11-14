@@ -2,7 +2,6 @@ import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { brl } from "../calc";
 import { Icone } from "../ui/Icones";
 import { Celular, MaisUm } from "../ui/Ilustracoes";
-import { Legenda } from "../ui/Legenda";
 import { cor, degrade, entra, fontFamily, suave } from "../tema";
 import type { CenaProps } from "./props";
 
@@ -20,12 +19,6 @@ export const Lucro: React.FC<CenaProps> = ({ n, k }) => {
   const conta = suave(f, 130, 190);
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <Legenda
-        frases={[
-          { em: 4, l1: `Vendendo *${n.vendasPorDia}\u00A0copos* por dia,`, l2: `${n.diasPorMes} dias no mês…` },
-          { em: 125, l1: `são *${brl(k.mes.lucro).replace(" ", "\u00A0")}* de lucro`, l2: "no fim do mês." },
-        ]}
-      />
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingTop: 300 }}>
         <div style={{ position: "relative", scale: `${(0.8 + cel * 0.2) * (1 - card * 0.18)}`, opacity: cel, translate: `0 ${(1 - cel) * 200 - card * 200}px` }}>
           <Celular largura={520}>

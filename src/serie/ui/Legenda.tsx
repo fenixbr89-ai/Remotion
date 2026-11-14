@@ -10,6 +10,8 @@ export type Frase = {
   /** linha de apoio, menor */
   l2?: string;
   tom?: "azul" | "vermelho";
+  /** frame em que a frase sai, se nenhuma outra entrar antes */
+  ate?: number;
 };
 
 const INTERVALO = 2.5;
@@ -23,9 +25,9 @@ export const Legenda: React.FC<{ frases: Frase[]; claro?: boolean; topo?: number
   return (
     <AbsoluteFill style={{ pointerEvents: "none" }}>
       {frases.map((fr, i) => {
-        const prox = frases[i + 1]?.em ?? Infinity;
-        if (f < fr.em - 1 || f > prox + 12) return null;
-        const saida = Number.isFinite(prox) ? suave(f, prox, prox + 10) : 0;
+        const prox = Math.min(frases[i + 1]?.em ?? Infinity, fr.ate ?? Infinity);
+        if (f < fr.em - 1 || f > prox + 4) return null;
+        const saida = Number.isFinite(prox) ? suave(f, prox - 8, prox + 2) : 0;
         const palavras1 = fr.l1.split(" ").length;
         return (
           <div

@@ -1,6 +1,5 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { Celular } from "../ui/Ilustracoes";
-import { Legenda } from "../ui/Legenda";
 import { cor, degrade, entra, flutua, fontFamily, sombra } from "../tema";
 import type { CenaProps } from "./props";
 
@@ -18,7 +17,6 @@ export const Comenta: React.FC<CenaProps> = ({ n }) => {
   const cel = entra(f, fps, 8, 13);
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <Legenda frases={[{ em: 4, l1: "*Comente* qual o próximo negócio", l2: "que você quer ver aqui." }]} />
       <AbsoluteFill style={{ alignItems: "center", paddingTop: 500 }}>
         <div style={{ scale: `${0.8 + cel * 0.2}`, opacity: cel, translate: `0 ${(1 - cel) * 200}px` }}>
           <Celular largura={500}>

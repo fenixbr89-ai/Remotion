@@ -2,19 +2,23 @@ import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remo
 import { brl } from "../calc";
 import { Icone, IconeChip } from "../ui/Icones";
 import { CopoAcai, Raios } from "../ui/Ilustracoes";
-import { Legenda } from "../ui/Legenda";
 import { cor, degrade, entra, fontFamily, sombra, suave } from "../tema";
 import type { CenaProps } from "./props";
+
+/** Ritmo da cena de custos (usado também pelo roteiro). */
+export const ritmoCustos = (itens: number, dur: number) => {
+  const inicio = 50;
+  const passo = Math.floor((dur - inicio - 150) / itens);
+  return { inicio, passo, fim: inicio + itens * passo + 10 };
+};
 
 /** Ingredientes surgem ao lado do copo com o preço e "voam" pra dentro dele; o custo vai somando. */
 export const Custos: React.FC<CenaProps> = ({ n, k, dur }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const inicio = 50;
-  const passo = Math.floor((dur - inicio - 150) / n.itens.length);
+  const { inicio, passo, fim } = ritmoCustos(n.itens.length, dur);
   const absorvido = (i: number) => suave(f, inicio + i * passo + 26, inicio + i * passo + 38);
   const soma = n.itens.reduce((s, it, i) => s + it.custo * absorvido(i), 0);
-  const fim = inicio + n.itens.length * passo + 10;
   const pop = entra(f, fps, fim, 7);
   // o copo "pula" a cada ingrediente que cai nele
   const pulo = n.itens.reduce((s, _, i) => {
@@ -24,12 +28,6 @@ export const Custos: React.FC<CenaProps> = ({ n, k, dur }) => {
   const copo = entra(f, fps, 10, 12);
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <Legenda
-        frases={[
-          { em: 4, l1: "Primeiro, o *custo real*", l2: "item por item, até a colher." },
-          { em: fim, l1: `Cada copo me custa ${"*" + brl(k.custoTotal).replace(" ", " ") + ".*"}`, l2: "Abaixo disso, é prejuízo." },
-        ]}
-      />
       <div style={{ position: "absolute", left: 0, right: 0, top: 560, height: 760, display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Raios tamanho={900} style={{ opacity: copo }} />
         <div style={{ scale: `${(0.6 + copo * 0.4) * (1 + pulo)}`, opacity: copo, translate: "0 60px" }}>

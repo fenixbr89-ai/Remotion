@@ -1,8 +1,8 @@
-import { useCurrentFrame, useVideoConfig } from "remotion";
-import { cor, entra, fontFamily, suave, textoDegrade, degrade } from "../tema";
+import { interpolate, interpolateColors, useCurrentFrame, useVideoConfig } from "remotion";
+import { cor, entra, fontFamily, suave, textoDegrade } from "../tema";
 
 type Props = {
-  /** Palavras entre *asteriscos* ganham degradê azul e sublinhado animado. */
+  /** Palavras entre *asteriscos* ganham destaque (degradê + marca-texto). */
   texto: string;
   inicio?: number;
   intervalo?: number;
@@ -15,11 +15,19 @@ type Props = {
   style?: React.CSSProperties;
 };
 
-/** Tipografia cinética: cada palavra sobe de dentro de uma máscara, em sequência. Nada fica inclinado. */
+/**
+ * Tipografia cinética, palavra a palavra, como se fosse falada:
+ * - cada palavra sobe com desfoque e entra em foco;
+ * - a palavra recém-"falada" acende em azul e assenta na cor do texto;
+ * - destaques ganham marca-texto que se desenha atrás;
+ * - destaques com número (R$, %) dão um pulo.
+ * Nada fica inclinado.
+ */
 export const Cinetico: React.FC<Props> = ({ texto, inicio = 0, intervalo = 3, tamanho, peso = 800, corTexto = cor.texto, alinhar = "left", tom = "azul", style }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const palavras = texto.split(" ");
+  const claro = corTexto === cor.branco || corTexto.startsWith("rgba(255");
   return (
     <div
       style={{
@@ -28,7 +36,7 @@ export const Cinetico: React.FC<Props> = ({ texto, inicio = 0, intervalo = 3, ta
         fontWeight: peso,
         color: corTexto,
         letterSpacing: tamanho > 60 ? -tamanho * 0.025 : 0,
-        lineHeight: 1.12,
+        lineHeight: 1.16,
         display: "flex",
         flexWrap: "wrap",
         justifyContent: alinhar === "center" ? "center" : "flex-start",
@@ -40,14 +48,32 @@ export const Cinetico: React.FC<Props> = ({ texto, inicio = 0, intervalo = 3, ta
         const destaque = bruta.startsWith("*");
         const p = bruta.replace(/\*/g, "");
         const t = inicio + i * intervalo;
-        const e = entra(f, fps, t, 15);
-        const linha = suave(f, t + 8, t + 22);
+        const e = entra(f, fps, t, 16);
+        const numero = destaque && /\d/.test(p);
+        const pulo = numero ? entra(f, fps, t + 4, 6) : 1;
+        const escala = numero ? interpolate(pulo, [0, 1], [1.35, 1]) : 0.9 + e * 0.1;
+        const marca = suave(f, t + 4, t + 16);
+        const acesa = claro || destaque ? corTexto : interpolateColors(f, [t + 2, t + 12], [cor.azul, corTexto]);
+        const estiloDestaque: React.CSSProperties = destaque ? (tom === "azul" ? (claro ? { color: cor.azulCeu } : textoDegrade) : { color: cor.vermelho }) : { color: acesa };
         return (
-          <span key={`${p}-${i}`} style={{ display: "inline-block", overflow: "hidden", paddingBottom: tamanho * 0.12, marginBottom: -tamanho * 0.12, position: "relative" }}>
-            <span style={{ display: "inline-block", translate: `0 ${(1 - e) * 110}%`, opacity: Math.min(1, e * 1.5), ...(destaque ? (tom === "azul" ? textoDegrade : { color: cor.vermelho }) : {}) }}>{p}</span>
+          <span key={`${p}-${i}`} style={{ display: "inline-block", position: "relative", opacity: Math.min(1, e * 1.6), translate: `0 ${(1 - e) * tamanho * 0.45}px`, filter: `blur(${(1 - Math.min(1, e)) * 8}px)`, scale: `${escala}` }}>
             {destaque && (
-              <span style={{ position: "absolute", left: 0, right: 0, bottom: tamanho * 0.06, height: Math.max(6, tamanho * 0.08), borderRadius: 99, background: tom === "azul" ? degrade : cor.vermelho, opacity: 0.3, scale: `${linha} 1`, transformOrigin: "left center" }} />
+              <span
+                style={{
+                  position: "absolute",
+                  left: -tamanho * 0.08,
+                  right: -tamanho * 0.08,
+                  top: "18%",
+                  bottom: "4%",
+                  borderRadius: tamanho * 0.16,
+                  background: tom === "azul" ? (claro ? "rgba(255,255,255,0.18)" : cor.azulFundo) : cor.vermelhoFundo,
+                  scale: `${marca} 1`,
+                  transformOrigin: "left center",
+                  zIndex: 0,
+                }}
+              />
             )}
+            <span style={{ position: "relative", zIndex: 1, display: "inline-block", ...estiloDestaque }}>{p}</span>
           </span>
         );
       })}

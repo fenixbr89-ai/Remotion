@@ -1,5 +1,4 @@
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { Legenda } from "../ui/Legenda";
 import { Loja as Fachada, MaisUm, Pessoa } from "../ui/Ilustracoes";
 import { cor, entra, flutua, fontFamily, suave } from "../tema";
 import type { CenaProps } from "./props";
@@ -20,12 +19,6 @@ export const Loja: React.FC<CenaProps> = ({ n, dur }) => {
   const zoom = interpolate(f, [dur - 60, dur], [1, 1.12], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <Legenda
-        frases={[
-          { em: 6, l1: `Se eu abrisse ${n.artigo} *${n.nome.toLowerCase()},*`, l2: "a primeira coisa que eu faria" },
-          { em: 110, l1: "é acertar o *preço* de cada copo.", l2: "Antes de vender o primeiro." },
-        ]}
-      />
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingTop: 180, scale: `${zoom}` }}>
         <div style={{ position: "relative", scale: `${0.85 + loja * 0.15}`, opacity: loja, translate: `0 ${(1 - loja) * 80}px` }}>
           <Fachada nome={n.nome} luz={luz} largura={720} />

@@ -2,7 +2,6 @@ import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remo
 import { brl, pct } from "../calc";
 import { Icone, IconeChip } from "../ui/Icones";
 import { Celular } from "../ui/Ilustracoes";
-import { Legenda } from "../ui/Legenda";
 import { cor, degrade, entra, flutua, fontFamily, suave } from "../tema";
 import type { CenaProps } from "./props";
 
@@ -22,12 +21,6 @@ export const Taxa: React.FC<CenaProps> = ({ n, k }) => {
   const tremor = f > 160 && f < 182 ? Math.sin(f * 2.4) * 12 * (1 - (f - 160) / 22) : 0;
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <Legenda
-        frases={[
-          { em: 4, l1: "O erro que eu *não* faria:", l2: `cobrar ${brl(precoErrado)} "porque todo mundo cobra".`, tom: "vermelho" },
-          { em: 160, l1: "Depois da taxa e do custo,", l2: `sobrava só *${brl(sobra).replace(" ", " ")}* por copo.`, tom: "vermelho" },
-        ]}
-      />
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingTop: 330 }}>
         <div style={{ position: "relative", scale: `${0.8 + cel * 0.2}`, opacity: cel, translate: `${tremor}px ${(1 - cel) * 200}px` }}>
           <Celular largura={560}>

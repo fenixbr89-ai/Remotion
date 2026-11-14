@@ -4,7 +4,9 @@ import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { calcular } from "./calc";
 import type { Negocio } from "./tipos";
 import { Fundo } from "./ui/Fundo";
+import { Legenda, type Frase } from "./ui/Legenda";
 import { Moldura } from "./ui/Moldura";
+import { ROTEIRO } from "./roteiro";
 import { transicaoSerie } from "./ui/Transicao";
 import { Loja } from "./cenas/Loja";
 import { Cardapio } from "./cenas/Cardapio";
@@ -30,7 +32,7 @@ export const CENAS: { nome: string; dur: number; C: React.FC<CenaProps>; etapa?:
   { nome: "Outro", dur: 150, C: Outro },
 ];
 
-export const TRANSICAO = 20;
+export const TRANSICAO = 18;
 const INICIOS = CENAS.map((_, i) => CENAS.slice(0, i).reduce((s, c) => s + c.dur, 0) - i * TRANSICAO);
 export const DURACAO = INICIOS[INICIOS.length - 1] + CENAS[CENAS.length - 1].dur;
 
@@ -50,6 +52,12 @@ export const Episodio: React.FC<Negocio> = (n) => {
   );
   const iOutro = CENAS.length - 1;
   const visivel = interpolate(f, [INICIOS[iOutro], INICIOS[iOutro] + TRANSICAO], [1, 0], clamp);
+  // legenda contínua: roteiro de todas as cenas no tempo global, sem passar pela transição
+  const frases: Frase[] = CENAS.flatMap((c, i) => {
+    const lista = ROTEIRO[c.nome](n, k, c.dur).map((fr) => ({ ...fr, em: fr.em + INICIOS[i] }));
+    if (lista.length && i + 1 < CENAS.length) lista[lista.length - 1].ate = INICIOS[i + 1] + TRANSICAO / 2;
+    return lista;
+  });
   return (
     <AbsoluteFill>
       <Fundo />
@@ -63,6 +71,7 @@ export const Episodio: React.FC<Negocio> = (n) => {
           </Fragment>
         ))}
       </TransitionSeries>
+      <Legenda frases={frases} />
       <Moldura episodio={n.episodio} visivel={visivel} etapa={etapa !== null ? Math.min(etapa, 4) : null} abas={abas} />
     </AbsoluteFill>
   );

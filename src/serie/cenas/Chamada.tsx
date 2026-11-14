@@ -1,7 +1,6 @@
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { brl, pct } from "../calc";
 import { Celular } from "../ui/Ilustracoes";
-import { Legenda } from "../ui/Legenda";
 import { Logo } from "../ui/Logo";
 import { cor, degrade, entra, fontFamily, suave } from "../tema";
 import type { CenaProps } from "./props";
@@ -20,7 +19,6 @@ export const Chamada: React.FC<CenaProps> = ({ n, k }) => {
   ];
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <Legenda frases={[{ em: 4, l1: "Eu faço essa conta em segundos", l2: "no *Preço Certo.*" }]} />
       <AbsoluteFill style={{ alignItems: "center", paddingTop: 470 }}>
         <div style={{ scale: `${0.8 + cel * 0.2}`, opacity: cel, translate: `0 ${(1 - cel) * 200}px` }}>
           <Celular largura={500}>
