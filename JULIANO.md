@@ -1,21 +1,32 @@
-# Juliano Pinturas — comercial vertical 9:16 (estilo Apple/iPhone)
+# Juliano Pinturas — comercial vertical 9:16 (estilo iPhone)
 
-Composição `JulianoPinturas` · 1080×1920 · 30 fps · 45 s (1350 frames). Sem narração por enquanto.
+Composição `JulianoPinturas` · 1080×1920 · 30 fps · 33 s (990 frames). Sem narração por enquanto.
 
 ```bash
 npx remotion render JulianoPinturas out/juliano.mp4 --pixel-format=yuv420p --crf=18
 ```
 
-- `src/juliano/JulianoVideo.tsx` — plano-sequência numa linha do tempo contínua (`T` em `tema.ts`),
-  sem cortes secos: ponto → logo → cabeçalho; cada serviço aparece grande e encolhe para o seu
-  quadradinho até preencher a grade 3×3; o rolo vira o destaque "Pintura."; o preto se espalha a
-  partir do rolo, o branco a partir de "Confiança."; o ícone do WhatsApp sai da lista e vira a cena,
-  e depois vira a logo.
-- `src/juliano/kit.tsx` — vidro iOS, card de notificação, ícone do app, texto em gradiente, fundo aurora.
-- `public/juliano/emoji/` — objetos 3D (Microsoft Fluent Emoji 3D, licença MIT).
-- `public/juliano/3d/` — logo em placa, rolo e WhatsApp enviados pelo cliente (fundos recortados).
+## Roteiro de narração
 
-## Narração (por último)
+```
+Precisa pintar, reformar ou consertar alguma coisa?
+Chama o Juliano.
+Pintura, pintura automotiva, elétrica, hidráulica, caixa d'água, telhado, reformas e pós-obra.
+Tudo com um só contato.
+Da parede da sua casa à pintura do seu carro.
+Com qualidade, capricho e confiança.
+Peça seu orçamento pelo WhatsApp.
+Juliano Pinturas. Transformando seus espaços.
+```
 
-Salve em `public/juliano/narracao.wav` e renderize com `--props='{"narracao":true}'`.
-Para o vídeo seguir a voz, ajuste os tempos de `T` em `tema.ts` às pausas da gravação.
+As cenas (A–E) e as falas que cada uma cobre estão em `src/juliano/tema.ts` (`START`).
+Quando a narração chegar: `public/juliano/narracao.wav`, ajustar `START` e os tempos de entrada
+(ex.: `CHEGA` dos serviços) às pausas da gravação, e renderizar com `--props='{"narracao":true}'`.
+
+## Arquivos
+
+- `src/juliano/JulianoVideo.tsx` — as 5 cenas; textos entram/saem palavra por palavra (`Kinetic`)
+  e ficam parados na tela; transições suaves (chicote e dissolve) entre cenas.
+- `src/juliano/kit.tsx` — barra de notificação de vidro (`Barra`), fundo aurora, logo.
+- `public/juliano/3d/` — logo, carro, lâmpada, bomba, gota, casa, tijolos, vassoura e WhatsApp
+  enviados pelo cliente (fundos recortados). `public/juliano/emoji/` — pincel (Fluent Emoji 3D, MIT).

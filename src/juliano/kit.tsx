@@ -270,3 +270,74 @@ export const Obj: React.FC<{
     }}
   />
 );
+
+/** Vidro transparente de notificação do iPhone (mais claro que o `vidro`). */
+export const vidroNotif: React.CSSProperties = {
+  background: "rgba(255,255,255,0.32)",
+  backdropFilter: "blur(26px) saturate(190%)",
+  WebkitBackdropFilter: "blur(26px) saturate(190%)",
+  border: "1.5px solid rgba(255,255,255,0.6)",
+  boxShadow: "0 18px 50px rgba(120,60,20,0.10)",
+};
+
+/** Barra de notificação de vidro: objeto 3D, título, subtítulo e "agora". */
+export const Barra: React.FC<{
+  readonly src: string;
+  readonly titulo: string;
+  readonly sub: string;
+  readonly filtro?: string;
+  readonly hora?: string;
+  readonly style?: React.CSSProperties;
+}> = ({ src, titulo, sub, filtro, hora = "agora", style }) => (
+  <div
+    style={{
+      position: "absolute",
+      left: 70,
+      width: 940,
+      height: 150,
+      borderRadius: 42,
+      padding: "0 34px 0 26px",
+      display: "flex",
+      alignItems: "center",
+      gap: 26,
+      fontFamily: FONT,
+      ...vidroNotif,
+      ...style,
+    }}
+  >
+    <Obj src={src} size={100} style={{ filter: filtro }} />
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <div
+        style={{
+          fontSize: 44,
+          fontWeight: 700,
+          color: J.preto,
+          letterSpacing: "-0.02em",
+        }}
+      >
+        {titulo}
+      </div>
+      <div
+        style={{
+          fontSize: 29,
+          color: J.cinzaEscuro,
+          opacity: 0.75,
+          marginTop: 2,
+        }}
+      >
+        {sub}
+      </div>
+    </div>
+    <div
+      style={{
+        alignSelf: "flex-start",
+        marginTop: 26,
+        fontSize: 25,
+        color: J.cinzaEscuro,
+        opacity: 0.6,
+      }}
+    >
+      {hora}
+    </div>
+  </div>
+);
