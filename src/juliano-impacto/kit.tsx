@@ -32,8 +32,8 @@ export const pop = (
 };
 
 /**
- * Palavra gigante animada letra por letra: cada letra sobe por uma máscara, girando e saindo
- * do desfoque; na saída as letras sobem e somem em sequência.
+ * Título: entra uma palavra por vez, subindo por dentro de uma máscara (o mesmo movimento do
+ * texto das faixas) e sai do mesmo jeito, subindo.
  */
 export const Big: React.FC<{
   readonly at: number;
@@ -44,7 +44,7 @@ export const Big: React.FC<{
   readonly y: number;
   readonly children: React.ReactNode;
   readonly style?: React.CSSProperties;
-}> = ({ at, out, size, color, weight = 900, y, children, style }) => {
+}> = ({ at, out, size, color, weight = 800, y, children, style }) => {
   const f = useCurrentFrame();
   const texto = typeof children === "string" ? children : null;
   const base: React.CSSProperties = {
@@ -52,23 +52,25 @@ export const Big: React.FC<{
     top: y,
     left: 40,
     right: 40,
-    textAlign: "center",
+    display: "flex",
+    justifyContent: "center",
+    columnGap: "0.24em",
     fontFamily: FONT,
     fontWeight: weight,
     fontSize: size,
     lineHeight: 1,
-    letterSpacing: "-0.045em",
+    letterSpacing: "-0.03em",
     color,
     whiteSpace: "nowrap",
     ...style,
   };
   if (!texto)
     return <div style={{ ...base, ...pop(f, at, out) }}>{children}</div>;
-  const letras = Array.from(texto);
+  const palavras = texto.split(" ");
   return (
     <div style={base}>
-      {letras.map((ch, n) => {
-        const t0 = at + n * 1.1;
+      {palavras.map((w, n) => {
+        const t0 = at + n * 4;
         const i = interpolate(f, [t0, t0 + 10], [0, 1], {
           ...CLAMP,
           easing: EASE,
@@ -76,7 +78,7 @@ export const Big: React.FC<{
         const o =
           out === undefined
             ? 0
-            : interpolate(f, [out + n * 0.7, out + n * 0.7 + 8], [0, 1], {
+            : interpolate(f, [out + n * 2, out + n * 2 + 8], [0, 1], {
                 ...CLAMP,
                 easing: EASE_IN,
               });
@@ -86,24 +88,18 @@ export const Big: React.FC<{
             style={{
               display: "inline-block",
               overflow: "hidden",
-              verticalAlign: "top",
-              padding: "0.12em 0.02em 0.14em",
-              margin: "-0.12em -0.02em -0.14em",
+              padding: "0.12em 0 0.16em",
+              margin: "-0.12em 0 -0.16em",
             }}
           >
             <span
               style={{
                 display: "inline-block",
-                whiteSpace: "pre",
-                translate: `0px ${(1 - i) * 110 - o * 110}%`,
-                rotate: `${(1 - i) * 18 - o * 10}deg`,
-                scale: String(0.6 + 0.4 * i),
-                transformOrigin: "50% 100%",
-                filter: `blur(${(1 - i) * 8 + o * 8}px)`,
-                opacity: Math.min(1, i * 2) * (1 - o),
+                translate: `0px ${(1 - i) * 105 - o * 105}%`,
+                filter: `blur(${(1 - i) * 6 + o * 6}px)`,
               }}
             >
-              {ch}
+              {w}
             </span>
           </span>
         );
@@ -171,6 +167,8 @@ export const Adesivo: React.FC<{
   readonly de?: "left" | "right";
   readonly size?: number;
   readonly classico?: boolean;
+  /** Frame em que um risco atravessa o texto (dentro da faixa, acompanha a inclinação). */
+  readonly risco?: number;
   readonly children: React.ReactNode;
 }> = ({
   at,
@@ -182,6 +180,7 @@ export const Adesivo: React.FC<{
   de = "left",
   size = 78,
   classico = false,
+  risco,
   children,
 }) => {
   const f = useCurrentFrame();
@@ -284,6 +283,22 @@ export const Adesivo: React.FC<{
           >
             {children}
           </div>
+          {risco !== undefined ? (
+            <div
+              style={{
+                position: "absolute",
+                left: "-2%",
+                right: "-2%",
+                top: "54%",
+                height: Math.max(4, size * 0.08),
+                borderRadius: size,
+                background: cor,
+                transformOrigin: "0% 50%",
+                scale: `${interpolate(f, [risco, risco + 12], [0, 1], { ...CLAMP, easing: EASE })} 1`,
+                opacity: 1 - sai,
+              }}
+            />
+          ) : null}
         </div>
       </div>
     </div>

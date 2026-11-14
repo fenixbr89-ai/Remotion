@@ -86,10 +86,17 @@ const vidro: React.CSSProperties = {
 // ===== 1 · "Sua casa tá precisando de um cuidado?" (mesmo estilo de faixas da cena seguinte) =====
 const C0: React.FC = () => (
   <Claro>
-    <Adesivo at={6} out={70} fundo={K.preto} cor={K.branco} y={680} size={104}>
+    <Adesivo
+      at={6}
+      out={70}
+      fundo={K.laranja}
+      cor={K.branco}
+      y={600}
+      size={100}
+    >
       Sua casa
     </Adesivo>
-    <Adesivo at={14} out={72} fundo={K.preto} cor={K.branco} y={830} size={86}>
+    <Adesivo at={14} out={72} fundo={K.preto} cor={K.branco} y={790} size={86}>
       tá precisando
     </Adesivo>
     <Adesivo
@@ -99,7 +106,7 @@ const C0: React.FC = () => (
       fundo={K.laranja}
       cor={K.branco}
       y={960}
-      size={104}
+      size={100}
     >
       de um cuidado?
     </Adesivo>
@@ -140,16 +147,10 @@ const C1: React.FC = () => {
         cor={K.branco}
         y={940}
         size={70}
+        risco={L(i, 166)}
       >
         Aquele reparo adiado…
       </Adesivo>
-      <Risco
-        d="M200 1010C420 1006 700 1006 900 1008"
-        at={L(i, 166)}
-        cor={K.branco}
-        width={9}
-        out={L(i, 184)}
-      />
     </Escuro>
   );
 };
