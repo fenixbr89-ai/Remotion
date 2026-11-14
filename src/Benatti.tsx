@@ -16,6 +16,8 @@ import {
   staticFile,
   useCurrentFrame,
 } from "remotion";
+import { ThreeCanvas } from "@remotion/three";
+import { PRODUTOS_3D } from "./Produtos3D";
 
 // ============================================================
 //  TEMPO — tudo em SEGUNDOS do vídeo
@@ -293,14 +295,17 @@ const Logo: React.FC<{ size: number }> = ({ size }) => (
       height: size,
       borderRadius: size * 0.24,
       overflow: "hidden",
-      background: C.red,
+      background: "#E22521",
       boxShadow: `0 ${size * 0.08}px ${size * 0.2}px rgba(120,0,0,0.35)`,
       flexShrink: 0,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
     }}
   >
     <Img
       src={staticFile("benatti-logo.jpg")}
-      style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.15)" }}
+      style={{ width: "82%", height: "82%", objectFit: "contain" }}
     />
   </div>
 );
@@ -333,74 +338,6 @@ const Cursor: React.FC<{ x: number; y: number; press: boolean; op?: number }> = 
     />
   </svg>
 );
-
-// Ícones (traço simples) usados no catálogo
-const Icone: React.FC<{ tipo: string; size?: number; cor?: string }> = ({
-  tipo,
-  size = 120,
-  cor = C.red,
-}) => {
-  const s: Record<string, React.ReactNode> = {
-    carnes: (
-      <>
-        <path d="M18 55 C12 30 42 14 64 22 C86 30 90 60 72 74 C56 86 24 80 18 55Z" fill={cor} />
-        <circle cx={62} cy={52} r={9} fill="#fff" />
-      </>
-    ),
-    frios: (
-      <>
-        <path d="M12 70 L80 30 L88 70 Z" fill={C.gold} />
-        <rect x={12} y={70} width={76} height={10} fill="#C9971A" />
-        <circle cx={60} cy={58} r={6} fill="#C9971A" />
-        <circle cx={74} cy={50} r={4} fill="#C9971A" />
-      </>
-    ),
-    frango: (
-      <>
-        <ellipse cx={40} cy={42} rx={26} ry={22} transform="rotate(-35 40 42)" fill="#E08A2E" />
-        <rect x={52} y={52} width={10} height={28} rx={5} transform="rotate(-45 57 66)" fill="#D9C7A6" />
-        <circle cx={74} cy={80} r={7} fill="#D9C7A6" />
-        <circle cx={82} cy={72} r={7} fill="#D9C7A6" />
-      </>
-    ),
-    mercearia: (
-      <>
-        <path d="M30 40 C30 18 70 18 70 40" stroke={cor} strokeWidth={7} fill="none" />
-        <path d="M14 40 L86 40 L76 84 L24 84 Z" fill={cor} />
-        <rect x={34} y={52} width={6} height={22} rx={3} fill="#fff" />
-        <rect x={47} y={52} width={6} height={22} rx={3} fill="#fff" />
-        <rect x={60} y={52} width={6} height={22} rx={3} fill="#fff" />
-      </>
-    ),
-    limpeza: (
-      <>
-        <rect x={32} y={40} width={34} height={46} rx={8} fill="#3B8FD9" />
-        <rect x={40} y={26} width={18} height={16} fill="#3B8FD9" />
-        <path d="M40 26 L40 16 L74 16 L74 26 Z" fill="#2B6FB0" />
-        <rect x={38} y={54} width={22} height={16} rx={3} fill="#fff" />
-      </>
-    ),
-    festa: (
-      <>
-        <ellipse cx={42} cy={38} rx={20} ry={25} fill={cor} />
-        <ellipse cx={66} cy={46} rx={17} ry={21} fill={C.gold} />
-        <path d="M42 70 C46 80 38 86 44 94 M66 73 C62 82 70 86 64 94" stroke={C.ink} strokeWidth={2} fill="none" />
-      </>
-    ),
-    embalagens: (
-      <>
-        <path d="M50 14 L86 30 L50 46 L14 30 Z" fill={C.gold} />
-        <path d="M14 30 L50 46 L50 88 L14 72 Z" fill="#B57A2E" />
-        <path d="M86 30 L50 46 L50 88 L86 72 Z" fill="#8E5A1E" />
-      </>
-    ),
-  };
-  return (
-    <svg width={size} height={size} viewBox="0 0 100 100">
-      {s[tipo]}
-    </svg>
-  );
-};
 
 // ============================================================
 //  MOLDURA DE CENA: entra com zoom/blur e sai "atravessando" a câmera
@@ -514,104 +451,129 @@ const Atacado: React.FC = () => {
   );
 };
 
-// 3) Catálogo tipo aplicativo, categoria ativa no ritmo da voz
+// 3) Catálogo 3D: pódio com produtos em 3D, trocando no ritmo da voz
 const CATS = [
-  { k: "carnes", nome: "Carnes", itens: ["Picanha", "Alcatra", "Costela", "Carne moída"] },
-  { k: "frios", nome: "Frios", itens: ["Mussarela", "Presunto", "Bacon", "Salame"] },
-  { k: "frango", nome: "Frango", itens: ["Peito", "Coxa e sobrecoxa", "Asa", "Filé"] },
-  { k: "mercearia", nome: "Mercearia", itens: ["Arroz", "Feijão", "Óleo", "Café"] },
-  { k: "limpeza", nome: "Limpeza", itens: ["Detergente", "Sabão", "Desinfetante", "Esponja"] },
-  { k: "festa", nome: "Festa", itens: ["Balões", "Pratos", "Copos", "Velas"] },
-  { k: "embalagens", nome: "Embalagens", itens: ["Marmitex", "Sacolas", "Potes", "Bandejas"] },
+  { k: "carnes", nome: "Carnes", itens: ["Picanha", "Alcatra", "Costela", "Linguiça", "Carne moída"] },
+  { k: "frios", nome: "Frios", itens: ["Mussarela", "Presunto", "Salame", "Queijo prato", "Bacon"] },
+  { k: "frango", nome: "Frango", itens: ["Coxa", "Sobrecoxa", "Peito", "Asa", "Frango inteiro"] },
+  { k: "mercearia", nome: "Mercearia", itens: ["Arroz", "Feijão", "Óleo", "Café", "Enlatados"] },
+  { k: "limpeza", nome: "Limpeza", itens: ["Detergente", "Desinfetante", "Sabão", "Esponja", "Água sanitária"] },
+  { k: "festa", nome: "Artigos de festa", itens: ["Balões", "Chapéus", "Copos", "Pratos", "Velas"] },
+  { k: "embalagens", nome: "Embalagens", itens: ["Marmitex", "Caixas", "Sacolas", "Potes", "Bandejas"] },
 ];
+
+const Podio: React.FC<{ t: number; cat: string; at: number; saindo?: number }> = ({ t, cat, at, saindo = 0 }) => {
+  const lista = PRODUTOS_3D[cat];
+  const pos: [number, number, number][] = [
+    [-1.6, 0, -0.5],
+    [0, 0, 0.7],
+    [1.6, 0, -0.5],
+  ];
+  return (
+    <>
+      {lista.map((Prod, i) => {
+        const k = Math.min(1.15, sp(t, at + i * 0.07, { damping: 10, stiffness: 140, mass: 0.7 }));
+        const s = (i === 1 ? 1.8 : 1.3) * k * (1 - saindo);
+        const giro = (1 - Math.min(1, k)) * Math.PI * 1.5 + Math.sin((t - at) * 1.2 + i) * 0.35 - 0.25;
+        const bob = Math.sin(t * 2.2 + i * 1.7) * 0.05 + saindo * -1.2;
+        return (
+          <group key={`${cat}-${i}`} position={[pos[i][0], pos[i][1] + bob, pos[i][2]]} scale={s} rotation={[0, giro, 0]}>
+            <Prod />
+          </group>
+        );
+      })}
+    </>
+  );
+};
 
 const Catalogo: React.FC = () => {
   const t = useT(B.catalogo);
-  const vezes = CATS.map((c) => quando(c.k === "festa" ? "artigos" : c.k, B.catalogo - 0.3));
-  const idx = vezes.reduce((acc, v, i) => (t >= v - 0.05 ? i : acc), 0);
-  const app = sp(t, B.catalogo + 0.2, SOFT);
-  const troca = sp(t, vezes[idx]);
-  const chipX = interpolate(t, vezes, vezes.map((_, i) => -Math.max(0, i - 1) * 190), CLAMP);
-  const tap = vezes[idx];
-  const pressed = t > tap - 0.05 && t < tap + 0.08;
+  const vezes = CATS.map((c) => quando(c.k === "festa" ? "artigos" : c.k, B.catalogo - 0.3) - 0.08);
+  const idx = vezes.reduce((acc, v, i) => (t >= v ? i : acc), 0);
+  const at = Math.max(vezes[idx], B.catalogo + 0.15);
+  const saida = idx > 0 ? lin(t, vezes[idx] - 0.02, vezes[idx] + 0.16) : 1;
+  const palco = sp(t, B.catalogo + 0.05, SOFT);
+  const nome = sp(t, at, { damping: 14, stiffness: 170, mass: 0.6 });
   return (
     <AbsoluteFill>
-      <Frase t={t} texto="Aqui você encontra" depois={B.catalogo - 0.3} top={210} size={54} color={C.white} />
-      <div style={{ position: "absolute", left: 0, right: 0, top: 380, perspective: 1600 }}>
-        <div
+      <Frase t={t} texto="Aqui você encontra" depois={B.catalogo - 0.3} top={230} size={54} color={C.white} />
+      {/* luz atrás do pódio */}
+      <div style={{ position: "absolute", left: 540 - 520, top: 520, width: 1040, height: 900, borderRadius: "50%", background: "radial-gradient(circle, rgba(255,220,150,0.45) 0%, rgba(255,120,80,0.12) 45%, transparent 70%)" }} />
+      <ThreeCanvas
+        width={1080}
+        height={1080}
+        style={{ position: "absolute", left: 0, top: 330 }}
+        camera={{ position: [0, 3.0, 10.5], rotation: [-0.2, 0, 0], fov: 30 }}
+      >
+        <ambientLight intensity={0.5} />
+        <hemisphereLight args={["#FFFFFF", "#7A0A0E", 0.7]} />
+        <directionalLight position={[3, 7, 6]} intensity={2.4} />
+        <directionalLight position={[-5, 3, -2]} intensity={1.0} color="#FFD27A" />
+        <group position={[0, -0.55 - (1 - palco) * 5, 0]}>
+          <mesh position={[0, -0.22, 0]}>
+            <cylinderGeometry args={[2.7, 2.8, 0.42, 64]} />
+            <meshStandardMaterial color="#FFFFFF" roughness={0.35} />
+          </mesh>
+          <mesh position={[0, -0.01, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <torusGeometry args={[2.7, 0.05, 12, 96]} />
+            <meshStandardMaterial color="#F2B820" roughness={0.25} metalness={0.7} />
+          </mesh>
+          <mesh position={[0, -0.47, 0]}>
+            <cylinderGeometry args={[2.95, 3.0, 0.1, 64]} />
+            <meshStandardMaterial color="#F2B820" roughness={0.3} metalness={0.6} />
+          </mesh>
+          {idx > 0 && saida < 1 ? <Podio t={t} cat={CATS[idx - 1].k} at={vezes[idx - 1]} saindo={saida} /> : null}
+          <Podio t={t} cat={CATS[idx].k} at={at} />
+        </group>
+      </ThreeCanvas>
+      {/* nome da categoria */}
+      <div style={{ position: "absolute", top: 1420, width: "100%", textAlign: "center" }}>
+        <span
           style={{
-            margin: "0 auto",
-            width: 880,
-            height: 1340,
-            borderRadius: 48,
-            background: C.white,
-            overflow: "hidden",
-            boxShadow: "0 40px 80px rgba(60,0,0,0.45)",
-            transform: `translateY(${(1 - app) * 1400}px) rotateX(${(1 - app) * 25 + 6}deg)`,
+            display: "inline-block",
             fontFamily: FONT,
+            fontWeight: 800,
+            fontSize: CATS[idx].nome.length > 12 ? 96 : 120,
+            color: C.white,
+            opacity: Math.min(1, nome * 1.4),
+            filter: `blur(${(1 - Math.min(1, nome)) * 12}px)`,
+            transform: `translateY(${(1 - Math.min(1, nome)) * 40}px)`,
           }}
         >
-          <div style={{ background: C.red, padding: "34px 34px 26px", display: "flex", alignItems: "center", gap: 20 }}>
-            <Logo size={74} />
-            <div style={{ flex: 1, background: C.white, borderRadius: 999, padding: "16px 28px", fontSize: 28, color: C.gray }}>
-              Buscar na Benatti
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: 14, padding: "26px 30px", transform: `translateX(${chipX}px)` }}>
-            {CATS.map((c, i) => (
-              <div
-                key={c.k}
-                style={{
-                  flexShrink: 0,
-                  padding: "14px 28px",
-                  borderRadius: 999,
-                  fontSize: 30,
-                  fontWeight: 600,
-                  background: i === idx ? C.red : "#F1F1F1",
-                  color: i === idx ? C.white : C.ink,
-                  transform: `scale(${i === idx ? 0.94 + 0.06 * troca : 1})`,
-                }}
-              >
-                {c.nome}
-              </div>
-            ))}
-          </div>
-          <div style={{ margin: "0 30px", height: 200, borderRadius: 30, background: `linear-gradient(110deg, ${C.red}, #F0352B)`, color: C.white, padding: "30px 36px", boxSizing: "border-box", position: "relative", overflow: "hidden" }}>
-            <div style={{ fontSize: 26, fontWeight: 600, opacity: 0.85 }}>FRIOS E EMBALAGENS</div>
-            <div style={{ fontSize: 58, fontWeight: 800, lineHeight: 1.1 }}>Atacado e varejo</div>
-            <div style={{ position: "absolute", right: 30, top: 30, transform: `rotate(${t * 20}deg)` }}>
-              <Icone tipo={CATS[idx].k} size={140} />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 22,
-              padding: 30,
-              transform: `translateY(${(1 - troca) * 120}px)`,
-              opacity: Math.min(1, troca * 1.3),
-            }}
-          >
-            {CATS[idx].itens.map((nome, i) => (
-              <div key={nome} style={{ background: "#F6F6F6", borderRadius: 26, padding: 24, height: 330, boxSizing: "border-box", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ width: "100%", height: 190, borderRadius: 20, background: C.white, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <div style={{ transform: `rotate(${(i - 1.5) * 8}deg)` }}>
-                    <Icone tipo={CATS[idx].k} size={150} />
-                  </div>
-                </div>
-                <div style={{ width: "100%" }}>
-                  <div style={{ fontSize: 32, fontWeight: 600, color: C.ink }}>{nome}</div>
-                  <div style={{ marginTop: 6, display: "inline-block", padding: "4px 14px", borderRadius: 8, background: i === 0 ? C.gold : "#E9F7EE", color: i === 0 ? C.ink : C.green, fontSize: 22, fontWeight: 600 }}>
-                    {i === 0 ? "Destaque" : "Disponível"}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+          {CATS[idx].nome}
+        </span>
       </div>
-      <Cursor x={interpolate(idx, [0, 1, 2], [190, 380, 420], CLAMP) + (pressed ? 0 : 20)} y={560} press={pressed} op={app} />
+      {/* itens da categoria */}
+      <div style={{ position: "absolute", top: 1575, left: 60, right: 60, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 14 }}>
+        {CATS[idx].itens.map((it, i) => {
+          const s = sp(t, at + 0.12 + i * 0.06);
+          return (
+            <div
+              key={`${idx}-${it}`}
+              style={{
+                padding: "12px 26px",
+                borderRadius: 999,
+                background: "rgba(255,255,255,0.16)",
+                border: "2px solid rgba(255,255,255,0.35)",
+                color: C.white,
+                fontFamily: FONT,
+                fontWeight: 600,
+                fontSize: 34,
+                opacity: Math.min(1, s * 1.5),
+                transform: `translateY(${(1 - Math.min(1, s)) * 30}px)`,
+              }}
+            >
+              {it}
+            </div>
+          );
+        })}
+      </div>
+      {/* progresso das 7 categorias */}
+      <div style={{ position: "absolute", top: 1790, width: "100%", display: "flex", justifyContent: "center", gap: 12 }}>
+        {CATS.map((c, i) => (
+          <div key={c.k} style={{ width: i === idx ? 48 : 14, height: 14, borderRadius: 7, background: i <= idx ? C.gold : "rgba(255,255,255,0.3)" }} />
+        ))}
+      </div>
     </AbsoluteFill>
   );
 };
@@ -685,14 +647,14 @@ const Embalagens: React.FC = () => {
           color: "transparent",
           WebkitTextStroke: `4px ${C.red}`,
           letterSpacing: -2,
-          transform: `rotate(-7deg) scale(${0.6 + 0.4 * big}) translateX(${(1 - big) * 300}px)`,
+          transform: `scale(${0.6 + 0.4 * big}) translateX(${(1 - big) * 300}px)`,
           opacity: big,
         }}
       >
         EMBALAGENS
       </div>
       <Traco
-        d="M -20 860 C 150 700, 300 980, 480 820 S 800 700, 1100 820"
+        d="M -20 830 C 150 730, 300 930, 540 830 S 900 730, 1100 830"
         p={risco}
         cor={C.gold}
         w={12}
@@ -732,43 +694,43 @@ const Embalagens: React.FC = () => {
   );
 };
 
-// 6) Balões 3D: Qualidade / Variedade / Confiança
-const Balao: React.FC<{ t: number; at: number; txt: string; rot: number; x: number; y: number; atras: number }> = ({
-  t,
-  at,
-  txt,
-  rot,
-  x,
-  y,
-  atras,
-}) => {
+// 6) Balões: Qualidade / Variedade / Confiança (retos, empilhados)
+const Balao: React.FC<{ t: number; at: number; txt: string; ativo: boolean }> = ({ t, at, txt, ativo }) => {
   const s = sp(t, at, { damping: 10, stiffness: 160, mass: 0.7 });
   return (
     <div
       style={{
-        position: "absolute",
-        left: x,
-        top: y,
-        opacity: t >= at ? 1 - atras * 0.35 : 0,
-        transform: `perspective(1200px) rotateX(18deg) rotate(${rot}deg) scale(${s * (1 - atras * 0.12)}) translateY(${-atras * 40}px)`,
-        filter: `blur(${atras * 2}px)`,
+        display: "flex",
+        justifyContent: "center",
+        opacity: t >= at ? 1 : 0,
+        transform: `translateY(${(1 - Math.min(1, s)) * 60}px) scale(${s})`,
       }}
     >
       <div
         style={{
           position: "relative",
-          padding: "34px 64px",
-          borderRadius: 44,
-          background: C.white,
+          padding: "30px 72px",
+          borderRadius: 40,
+          background: ativo ? C.red : C.white,
+          color: ativo ? C.white : C.ink,
           fontFamily: FONT,
           fontWeight: 800,
-          fontSize: 92,
-          color: C.ink,
-          boxShadow: "0 30px 50px rgba(0,0,0,0.18), 0 8px 0 #D9D9D9",
+          fontSize: 88,
+          boxShadow: ativo ? "0 24px 40px rgba(150,0,0,0.3), 0 8px 0 #9E0F14" : "0 24px 40px rgba(0,0,0,0.14), 0 8px 0 #D5D5D5",
         }}
       >
         {txt}
-        <div style={{ position: "absolute", left: 90, bottom: -40, width: 0, height: 0, borderLeft: "30px solid transparent", borderRight: "30px solid transparent", borderTop: `44px solid ${C.white}` }} />
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            marginLeft: -26,
+            bottom: -38,
+            borderLeft: "26px solid transparent",
+            borderRight: "26px solid transparent",
+            borderTop: `40px solid ${ativo ? C.red : C.white}`,
+          }}
+        />
       </div>
     </div>
   );
@@ -777,16 +739,18 @@ const Balao: React.FC<{ t: number; at: number; txt: string; rot: number; x: numb
 const Qualidade: React.FC = () => {
   const t = useT(B.qualidade);
   const itens = [
-    { txt: "Qualidade", at: quando("Qualidade", B.qualidade - 0.5), rot: -10, x: 90, y: 620 },
-    { txt: "Variedade", at: quando("variedade", B.qualidade - 0.5), rot: 6, x: 260, y: 860 },
-    { txt: "Confiança", at: quando("confiança", B.qualidade - 0.5), rot: -5, x: 150, y: 1100 },
+    { txt: "Qualidade", at: quando("Qualidade", B.qualidade - 0.5) },
+    { txt: "Variedade", at: quando("variedade", B.qualidade - 0.5) },
+    { txt: "Confiança", at: quando("confiança", B.qualidade - 0.5) },
   ];
-  const ultimo = itens.reduce((acc, it, i) => (t >= it.at ? i : acc), 0);
+  const atual = itens.reduce((acc, it, i) => (t >= it.at ? i : acc), 0);
   return (
-    <AbsoluteFill>
-      {itens.map((it, i) => (
-        <Balao key={it.txt} t={t} {...it} atras={Math.max(0, ultimo - i) > 0 ? 1 : 0} />
-      ))}
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 80 }}>
+        {itens.map((it, i) => (
+          <Balao key={it.txt} t={t} at={it.at} txt={it.txt} ativo={i === atual} />
+        ))}
+      </div>
     </AbsoluteFill>
   );
 };
@@ -850,6 +814,18 @@ const RelogioLinha: React.FC<{ t: number; at: number }> = ({ t, at }) => {
   );
 };
 
+// Horário com "fantasma" claro: o espaço já aparece e o número entra por cima
+const Hora: React.FC<{ t: number; at: number; txt: string; from: "esq" | "dir" }> = ({ t, at, txt, from }) => (
+  <span style={{ position: "relative", display: "inline-block" }}>
+    <span style={{ fontFamily: FONT, fontWeight: 800, fontSize: 130, lineHeight: 1.05, color: "rgba(0,0,0,0.07)" }}>{txt}</span>
+    <span style={{ position: "absolute", left: 0, top: 0 }}>
+      <W t={t} at={at} size={130} weight={800} from={from}>
+        {txt}
+      </W>
+    </span>
+  </span>
+);
+
 const Horario: React.FC = () => {
   const t = useT(B.horario);
   const tH = quando("horário", B.horario - 0.5);
@@ -866,15 +842,11 @@ const Horario: React.FC = () => {
         {label}
       </W>
       <div style={{ display: "flex", alignItems: "baseline", gap: 18, marginTop: 6 }}>
-        <W t={t} at={ta} size={130} weight={800} from="esq">
-          {a}
-        </W>
-        <W t={t} at={tb - 0.05} size={70} weight={300} color={C.gray}>
+        <Hora t={t} at={ta} txt={a} from="esq" />
+        <W t={t} at={tl} size={70} weight={300} color={C.gray}>
           às
         </W>
-        <W t={t} at={tb} size={130} weight={800} from="dir">
-          {b}
-        </W>
+        <Hora t={t} at={tb} txt={b} from="dir" />
       </div>
     </div>
   );
@@ -894,7 +866,7 @@ const Horario: React.FC = () => {
       <div style={{ position: "absolute", top: 800, width: "100%", transform: `translateY(${-sobe * 60}px) scale(${1 - sobe * 0.15})` }}>
         {card("SEGUNDA A SÁBADO", tSeg, "06:30", t630, "21:30", t2130, C.red)}
       </div>
-      <div style={{ position: "absolute", top: 1130, width: "100%" }}>
+      <div style={{ position: "absolute", top: 1130, width: "100%", opacity: lin(t, tDom - 0.35, tDom - 0.1) }}>
         {card("DOMINGO", tDom, "07:00", t7, "21:00", t21, C.gold)}
       </div>
     </AbsoluteFill>
@@ -1035,35 +1007,33 @@ const Mapa: React.FC = () => {
         </div>
       </div>
       {ENDERECO.map((e, i) => {
-        if (i > idx) return null;
-        const s = sp(t, vezes[i] - 0.1, { damping: 10, stiffness: 160, mass: 0.7 });
-        const atras = idx - i;
-        const rot = [-8, 6, -5, 7, -6][i];
+        if (i !== idx && i !== idx - 1) return null;
+        const s2 = sp(t, vezes[i] - 0.1, { damping: 10, stiffness: 160, mass: 0.7 });
+        const sai = i === idx - 1 ? lin(t, vezes[idx] - 0.15, vezes[idx] + 0.1) : 0;
+        const ultimo = i === ENDERECO.length - 1;
         return (
           <div
             key={e.txt}
             style={{
               position: "absolute",
-              top: 600 - atras * 70,
+              top: 560,
               width: "100%",
               display: "flex",
               justifyContent: "center",
-              opacity: atras > 2 ? 0 : 1 - atras * 0.35,
-              filter: `blur(${atras * 2.5}px)`,
-              transform: `perspective(1200px) rotateX(15deg) rotate(${rot}deg) scale(${s * (1 - atras * 0.15)})`,
-              zIndex: 10 - atras,
+              opacity: 1 - sai,
+              transform: `translateY(${-sai * 120}px) scale(${Math.min(1.05, s2) * (1 - sai * 0.2)})`,
             }}
           >
             <div
               style={{
                 position: "relative",
-                padding: "28px 52px",
+                padding: "28px 56px",
                 borderRadius: 40,
-                background: i === ENDERECO.length - 1 ? C.red : C.white,
-                color: i === ENDERECO.length - 1 ? C.white : C.ink,
+                background: ultimo ? C.red : C.white,
+                color: ultimo ? C.white : C.ink,
                 fontFamily: FONT,
                 fontWeight: 800,
-                fontSize: 74,
+                fontSize: 72,
                 whiteSpace: "nowrap",
                 boxShadow: "0 30px 50px rgba(0,0,0,0.25), 0 8px 0 rgba(0,0,0,0.12)",
               }}
@@ -1077,13 +1047,49 @@ const Mapa: React.FC = () => {
                   bottom: -40,
                   borderLeft: "28px solid transparent",
                   borderRight: "28px solid transparent",
-                  borderTop: `42px solid ${i === ENDERECO.length - 1 ? C.red : C.white}`,
+                  borderTop: `42px solid ${ultimo ? C.red : C.white}`,
                 }}
               />
             </div>
           </div>
         );
       })}
+      <div
+        style={{
+          position: "absolute",
+          left: 80,
+          right: 80,
+          top: 1420,
+          padding: "28px 40px",
+          borderRadius: 32,
+          background: "rgba(255,255,255,0.96)",
+          boxShadow: "0 24px 50px rgba(0,0,0,0.2)",
+          fontFamily: FONT,
+          opacity: idx >= 0 ? 1 : 0,
+          transform: `translateY(${(1 - Math.min(1, sp(t, vezes[0]))) * 300}px)`,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 10 }}>
+          <svg width={34} height={44} viewBox="0 0 60 80">
+            <path d="M30 78 C30 78 4 46 4 28 A26 26 0 0 1 56 28 C56 46 30 78 30 78Z" fill={C.red} />
+            <circle cx={30} cy={28} r={11} fill={C.white} />
+          </svg>
+          <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: 4, color: C.gray }}>NOSSO ENDEREÇO</div>
+        </div>
+        {[
+          "Av. das Paineiras, Qd. 96, Lt. 12",
+          "Próximo à feira de quinta",
+          "St. Pontakayana · Trindade – GO",
+        ].map((l, i) => {
+          const at = [vezes[0], vezes[2], vezes[3]][i];
+          const k = sp(t, at);
+          return (
+            <div key={l} style={{ fontSize: i === 0 ? 40 : 34, fontWeight: i === 0 ? 800 : 400, color: C.ink, lineHeight: 1.35, opacity: t >= at ? Math.min(1, k * 1.5) : 0, transform: `translateX(${(1 - Math.min(1, k)) * 40}px)` }}>
+              {l}
+            </div>
+          );
+        })}
+      </div>
     </AbsoluteFill>
   );
 };
