@@ -28,7 +28,7 @@ export const RemotionRoot: React.FC = () => {
         component={PixoraVideo}
         durationInFrames={TOTAL}
         {...V}
-        defaultProps={{ narracao: false, legendas: true }}
+        defaultProps={{ narracao: false, legendas: false }}
       />
       <Folder name="Pixora-Cenas">
         <Composition id="Cena01-Gancho" component={Cena01Gancho} durationInFrames={DUR.c01} {...V} />
