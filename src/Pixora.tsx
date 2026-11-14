@@ -461,7 +461,7 @@ const Cenas: React.FC = () => {
   const { fps } = useVideoConfig();
   const c = STEP_POS.map((p) => ({ x: p.x + CARD_W / 2, y: p.y + CARD_H / 2 }));
   const d = `M ${c[0].x} ${c[0].y} C 540 ${c[0].y}, 540 ${c[1].y}, ${c[1].x} ${c[1].y} C 540 ${c[1].y}, 540 ${c[2].y}, ${c[2].x} ${c[2].y} C 540 ${c[2].y}, 540 ${c[3].y}, ${c[3].x} ${c[3].y}`;
-  const p = draw(frame, 15, 175);
+  const p = interpolate(frame, [15, 175], [0, 1], CLAMP);
   const current = Math.min(3, Math.floor(p * 3 + 0.02));
   return (
     <AbsoluteFill>
@@ -723,10 +723,10 @@ const Camadas: React.FC = () => {
               key={name}
               style={{
                 position: "absolute",
-                left: 540 - 270,
-                top: 300 - i * 95 - (on ? lift * 50 : 0),
-                width: 540,
-                height: 300,
+                left: 540 - 230,
+                top: 300 - i * 150 - (on ? lift * 40 : 0),
+                width: 460,
+                height: 250,
                 borderRadius: 28,
                 background: on ? "#20230F" : C.card,
                 border: `3px solid ${on ? C.lime : C.border}`,
@@ -736,10 +736,11 @@ const Camadas: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: 46,
+                fontSize: 38,
                 fontWeight: 900,
                 color: on ? C.lime : C.white,
                 textTransform: "uppercase",
+                textAlign: "center",
               }}
             >
               {name}
@@ -1322,22 +1323,27 @@ const Final: React.FC = () => {
           top: 500,
           width: SIZE,
           height: SIZE,
-          isolation: "isolate",
-          mixBlendMode: "screen",
           transform: `scale(${0.4 + 0.6 * logo}) rotate(${(1 - logo) * -14}deg)`,
           opacity: Math.min(1, logo * 1.5),
           filter: `blur(${Math.max(0, 1 - logo) * 12}px)`,
         }}
       >
-        <Img src={staticFile("logo.png")} style={{ width: SIZE, height: SIZE }} />
+        {/* O logo (P branco em fundo preto) vira máscara: o preto some e o P recebe o brilho */}
         <div
           style={{
             position: "absolute",
             inset: 0,
-            mixBlendMode: "multiply",
-            background: `linear-gradient(115deg, transparent ${shine - 18}%, ${C.lime} ${shine}%, transparent ${shine + 18}%)`,
+            background: `linear-gradient(115deg, ${C.white} ${shine - 18}%, ${C.lime} ${shine}%, ${C.white} ${shine + 18}%)`,
+            maskImage: `url(${staticFile("logo.png")})`,
+            maskMode: "luminance",
+            maskSize: "contain",
+            WebkitMaskImage: `url(${staticFile("logo.png")})`,
+            WebkitMaskSize: "contain",
+            filter: `drop-shadow(0 0 30px ${C.lime}66)`,
           }}
         />
+        {/* Pré-carrega o logo para o render esperar por ele */}
+        <Img src={staticFile("logo.png")} style={{ width: 1, height: 1, opacity: 0 }} />
       </div>
       <div
         style={{
