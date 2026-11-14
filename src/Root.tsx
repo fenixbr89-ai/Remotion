@@ -14,7 +14,8 @@ import { Cena07Diferencial2 } from "./pixora/scenes/Cena07Diferencial2";
 import { Cena08ProvaSocial } from "./pixora/scenes/Cena08ProvaSocial";
 import { Cena09Beneficios } from "./pixora/scenes/Cena09Beneficios";
 import { Cena10Chamada } from "./pixora/scenes/Cena10Chamada";
-import { Cena11Logo } from "./pixora/scenes/Cena11Logo";
+import { Cena11Espera } from "./pixora/scenes/Cena11Espera";
+import { Cena12Logo } from "./pixora/scenes/Cena12Logo";
 
 const V = { fps: FPS, width: WIDTH, height: HEIGHT } as const;
 
@@ -41,7 +42,8 @@ export const RemotionRoot: React.FC = () => {
         <Composition id="Cena08-ProvaSocial" component={Cena08ProvaSocial} durationInFrames={DUR.c08} {...V} />
         <Composition id="Cena09-Beneficios" component={Cena09Beneficios} durationInFrames={DUR.c09} {...V} />
         <Composition id="Cena10-Chamada" component={Cena10Chamada} durationInFrames={DUR.c10} {...V} />
-        <Composition id="Cena11-Logo" component={Cena11Logo} durationInFrames={DUR.c11} {...V} />
+        <Composition id="Cena11-Espera" component={Cena11Espera} durationInFrames={DUR.c11} {...V} />
+        <Composition id="Cena12-Logo" component={Cena12Logo} durationInFrames={DUR.c12} {...V} />
       </Folder>
       <Folder name="Elements">
         <Composition

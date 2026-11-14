@@ -16,7 +16,8 @@ import { Cena07Diferencial2 } from "./scenes/Cena07Diferencial2";
 import { Cena08ProvaSocial } from "./scenes/Cena08ProvaSocial";
 import { Cena09Beneficios } from "./scenes/Cena09Beneficios";
 import { Cena10Chamada } from "./scenes/Cena10Chamada";
-import { Cena11Logo } from "./scenes/Cena11Logo";
+import { Cena11Espera } from "./scenes/Cena11Espera";
+import { Cena12Logo } from "./scenes/Cena12Logo";
 
 export type PixoraVideoProps = {
   /** Toca public/narracao/cena-01.mp3 … cena-10.mp3 quando true. */
@@ -28,7 +29,7 @@ const timing = (k: number) =>
   linearTiming({ durationInFrames: TRANS[k], easing: EASE_IN_OUT });
 
 // Passagens 1→2 (zoom pela tela), 2→3 (ponto que cresce), 3→4 (círculo branco)
-// e 10→11 (zoom no celular) acontecem dentro das próprias cenas.
+// 10→11 (zoom no celular) e 11→12 (preto contínuo) acontecem dentro das próprias cenas.
 export const PixoraVideo: React.FC<PixoraVideoProps> = ({ narracao, legendas }) => (
   <AbsoluteFill style={{ background: "#FFFFFF" }}>
     <TransitionSeries>
@@ -69,8 +70,11 @@ export const PixoraVideo: React.FC<PixoraVideoProps> = ({ narracao, legendas }) 
       <TransitionSeries.Sequence name="10 · Chamada" durationInFrames={DUR.c10}>
         <Cena10Chamada />
       </TransitionSeries.Sequence>
-      <TransitionSeries.Sequence name="11 · Logo" durationInFrames={DUR.c11}>
-        <Cena11Logo />
+      <TransitionSeries.Sequence name="11 · Espera" durationInFrames={DUR.c11}>
+        <Cena11Espera />
+      </TransitionSeries.Sequence>
+      <TransitionSeries.Sequence name="12 · Logo" durationInFrames={DUR.c12}>
+        <Cena12Logo />
       </TransitionSeries.Sequence>
     </TransitionSeries>
     {legendas ? <Legendas /> : null}

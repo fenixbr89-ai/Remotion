@@ -2,6 +2,7 @@ import React from "react";
 import { Sequence, staticFile } from "remotion";
 import { Audio } from "@remotion/media";
 import { NARRACAO, START, sceneFrom } from "./timeline";
+import { C01 } from "./scenes/Cena01Gancho";
 import { SELECT_AT } from "./scenes/Cena05Estilos";
 import { C08 } from "./scenes/Cena08ProvaSocial";
 import { C09 } from "./scenes/Cena09Beneficios";
@@ -14,7 +15,8 @@ const at = (n: number, local: number) => sceneFrom(n - 1) + local;
 
 const CUES: { at: number; sfx: Sfx; volume: number }[] = [
   { at: 0, sfx: "whoosh", volume: 0.35 }, // iPhone sobe
-  { at: 90, sfx: "whoosh", volume: 0.6 }, // zoom pela tela
+  { at: at(1, C01.tap), sfx: "tap", volume: 0.7 }, // play no vídeo ruim
+  { at: 92, sfx: "whoosh", volume: 0.6 }, // zoom pela tela
   { at: at(2, 122), sfx: "whoosh", volume: 0.45 }, // ponto cresce
   { at: START[2], sfx: "impact", volume: 0.85 }, // preto
   { at: at(3, 16), sfx: "tap", volume: 0.5 }, // risco em "parado"
@@ -23,13 +25,13 @@ const CUES: { at: number; sfx: Sfx; volume: number }[] = [
   ...[4, 5, 6, 7, 8].map((k) => ({ at: START[k] - 8, sfx: "whoosh" as Sfx, volume: 0.4 })),
   ...SELECT_AT.map((f) => ({ at: at(5, f), sfx: "tap" as Sfx, volume: 0.6 })),
   { at: at(7, 12), sfx: "pop", volume: 0.55 }, // 🎙️
-  { at: at(8, C08.notif), sfx: "tap", volume: 0.5 },
   { at: at(8, C08.msg1), sfx: "pop", volume: 0.45 },
   { at: at(8, C08.msg2), sfx: "pop", volume: 0.45 },
-  { at: at(9, C09.check), sfx: "ding", volume: 0.6 }, // Pix
+  { at: at(8, C08.msg3), sfx: "pop", volume: 0.45 },
+  { at: at(9, C09.amount), sfx: "ding", volume: 0.6 }, // R$ 50,00
   ...C09.items.map((f) => ({ at: at(9, f), sfx: "pop" as Sfx, volume: 0.5 })),
   { at: at(10, ZOOM_AT + 4), sfx: "whoosh", volume: 0.6 }, // entra no celular
-  { at: START[10], sfx: "impact", volume: 0.85 }, // logo
+  { at: START[11], sfx: "impact", volume: 0.85 }, // logo
 ];
 
 export const Som: React.FC<{ readonly narracao: boolean }> = ({ narracao }) => (

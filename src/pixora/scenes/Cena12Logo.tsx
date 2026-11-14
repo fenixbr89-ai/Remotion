@@ -2,9 +2,9 @@ import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { C, CLAMP, EASE, Kinetic, PixoraP, prog, useSpring } from "../ui";
 
-// 55–60s · Vindo da tela escura do celular: o P surge (0.8→1) com brilho diagonal.
+// 56–60s · Vindo da tela escura do celular: o P surge (0.8→1) com brilho diagonal.
 // "PIXORA" entra letra por letra fechando o espaçamento. Parado nos 2s finais.
-export const Cena11Logo: React.FC = () => {
+export const Cena12Logo: React.FC = () => {
   const frame = useCurrentFrame();
   const mask = prog(frame, 2, 22);
   const s = useSpring(2, 22);

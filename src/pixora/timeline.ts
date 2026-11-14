@@ -4,20 +4,21 @@ export const WIDTH = 1080;
 export const HEIGHT = 1920;
 export const TOTAL = 1800;
 
-/** Início de cada cena no roteiro (frames). Índice 11 = fim. */
-export const START = [0, 120, 270, 360, 540, 780, 960, 1110, 1290, 1470, 1650, 1800];
+/** Início de cada cena no roteiro (frames). Último índice = fim. */
+export const START = [0, 120, 270, 360, 540, 780, 960, 1110, 1290, 1470, 1605, 1680, 1800];
+export const SCENES = START.length - 1;
 
 /**
  * Transição entre a cena k+1 e k+2 (frames de sobreposição).
  * 0 = a passagem acontece dentro da própria cena (zoom, ponto que cresce, círculo).
  */
-export const TRANS = [0, 0, 0, 20, 20, 20, 20, 20, 20, 0];
+export const TRANS = [0, 0, 0, 20, 20, 20, 20, 20, 20, 0, 0];
 
 /** Frame absoluto em que a sequência da cena i (0-based) começa. */
 export const sceneFrom = (i: number) => START[i] - (i > 0 ? TRANS[i - 1] / 2 : 0);
 
 const sceneDur = (i: number) =>
-  START[i + 1] - START[i] + (i > 0 ? TRANS[i - 1] / 2 : 0) + (i < 10 ? TRANS[i] / 2 : 0);
+  START[i + 1] - START[i] + (i > 0 ? TRANS[i - 1] / 2 : 0) + (i < SCENES - 1 ? TRANS[i] / 2 : 0);
 
 export const DUR = {
   c01: sceneDur(0),
@@ -31,6 +32,7 @@ export const DUR = {
   c09: sceneDur(8),
   c10: sceneDur(9),
   c11: sceneDur(10),
+  c12: sceneDur(11),
 } as const;
 
 /** Narração (PT-BR) com a janela em que cada fala acontece. */
