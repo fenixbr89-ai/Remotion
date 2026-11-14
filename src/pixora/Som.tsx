@@ -1,7 +1,15 @@
 import React from "react";
-import { Sequence, staticFile } from "remotion";
+import { interpolate, Sequence, staticFile } from "remotion";
 import { Audio } from "@remotion/media";
-import { IDX, NARRACAO, START, sceneFrom } from "./timeline";
+import {
+  FPS,
+  IDX,
+  NARRACAO,
+  NARRACAO_ARQUIVO,
+  NARRACAO_CLIPS,
+  START,
+  sceneFrom,
+} from "./timeline";
 import { C01 } from "./scenes/Cena01Gancho";
 import { SELECT_AT } from "./scenes/Cena05Estilos";
 import { C08 } from "./scenes/Cena08ProvaSocial";
@@ -37,23 +45,47 @@ const CUES: { at: number; sfx: Sfx; volume: number }[] = [
   { at: START[IDX.c12], sfx: "impact", volume: 0.85 }, // logo
 ];
 
+/** A trilha abaixa enquanto a voz fala (com rampas suaves de 6 frames). */
+const trilhaVolume = (f: number, narracao: boolean) => {
+  if (!narracao) return 0.55;
+  const speaking = Math.max(
+    0,
+    ...NARRACAO.map((n) =>
+      interpolate(f, [n.from - 6, n.from, n.to, n.to + 6], [0, 1, 1, 0], {
+        extrapolateLeft: "clamp",
+        extrapolateRight: "clamp",
+      }),
+    ),
+  );
+  return interpolate(speaking, [0, 1], [0.5, 0.2]);
+};
+
 export const Som: React.FC<{ readonly narracao: boolean }> = ({ narracao }) => (
   <>
     <Audio
       name="Trilha"
       src={staticFile("audio/trilha.mp3")}
-      volume={narracao ? 0.32 : 0.55}
+      volume={(f) => trilhaVolume(f, narracao)}
     />
     {CUES.map((c, i) => (
       <Sequence key={i} from={c.at} name={`SFX ${c.sfx}`} layout="none">
-        <Audio src={staticFile(`audio/${c.sfx}.wav`)} volume={c.volume} />
+        <Audio src={staticFile(`audio/${c.sfx}.wav`)} volume={c.volume * (narracao ? 0.8 : 1)} />
       </Sequence>
     ))}
     {narracao
-      ? NARRACAO.map((n, i) => (
-          <Sequence key={i} from={n.from} name={`Narração ${i + 1}`} layout="none">
+      ? NARRACAO_CLIPS.map((c, i) => (
+          <Sequence
+            key={i}
+            from={Math.round(c.em * FPS)}
+            durationInFrames={Math.ceil((c.ate - c.de) * FPS)}
+            name={`Narração ${i + 1}`}
+            layout="none"
+          >
             <Audio
-              src={staticFile(`narracao/cena-${String(i + 1).padStart(2, "0")}.mp3`)}
+              src={staticFile(NARRACAO_ARQUIVO)}
+              trimBefore={Math.round(c.de * FPS)}
+              trimAfter={Math.round(c.ate * FPS)}
+              volume={1}
             />
           </Sequence>
         ))

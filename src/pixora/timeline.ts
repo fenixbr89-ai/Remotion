@@ -53,15 +53,27 @@ export const DUR = {
   c12: sceneDur(IDX.c12),
 } as const;
 
-/** Narração (PT-BR) com a janela em que cada fala acontece. */
-export const NARRACAO: { from: number; to: number; text: string }[] = [
-  { from: 14, to: 112, text: "Seu conteúdo tá parado… e ninguém para pra ver?" },
-  { from: 140, to: 262, text: "Imagem parada não prende ninguém." },
-  { from: 282, to: 356, text: "Movimento é o que segura a atenção." },
-  { from: 386, to: 590, text: "Do estilo clean ao mais impactante, do jeito da sua marca." },
-  { from: 626, to: 770, text: "Visual premium, limpo, profissional." },
-  { from: 804, to: 920, text: "Narração e trilha já vêm inclusas." },
-  { from: 966, to: 1046, text: "E o melhor…" },
-  { from: 1150, to: 1282, text: "Preço acessível, segurança e entrega rápida." },
-  { from: 1312, to: 1460, text: "Bora tirar o seu vídeo do papel? Chama a Pixora." },
+/**
+ * Narração gravada (public/narracao/pixora_narracao.wav, 30,5 s).
+ * Cada trecho do arquivo [de, ate] (segundos) toca a partir de `em` (segundos no vídeo).
+ */
+export const NARRACAO_ARQUIVO = "narracao/pixora_narracao.wav";
+export const NARRACAO_CLIPS: { de: number; ate: number; em: number; text: string }[] = [
+  { de: 0.0, ate: 3.05, em: 0.3, text: "Seu conteúdo tá parado… e ninguém para pra ver?" },
+  { de: 3.5, ate: 5.35, em: 5.0, text: "Imagem parada não prende ninguém." },
+  { de: 5.68, ate: 7.4, em: 9.4, text: "Movimento é o que prende." },
+  { de: 7.84, ate: 11.82, em: 12.6, text: "Do estilo clean ao mais impactante, do jeito da sua marca." },
+  { de: 12.06, ate: 15.08, em: 20.4, text: "Visual premium, limpo, profissional." },
+  { de: 15.52, ate: 17.36, em: 26.4, text: "Narração e trilha já vêm inclusas." },
+  { de: 17.64, ate: 20.36, em: 31.7, text: "E a entrega? Mais rápida do que você imagina." },
+  { de: 20.72, ate: 26.32, em: 37.4, text: "E o melhor: tudo isso por apenas cinquenta reais. Seguro e sem complicação." },
+  { de: 26.68, ate: 28.1, em: 44.2, text: "Bora tirar o seu vídeo do papel?" },
+  { de: 28.3, ate: 30.48, em: 46.6, text: "Chama a Pixora. Tô te esperando!" },
 ];
+
+/** Janelas de fala em frames (usadas pelas legendas e para abaixar a trilha). */
+export const NARRACAO: { from: number; to: number; text: string }[] = NARRACAO_CLIPS.map((c) => ({
+  from: Math.round(c.em * FPS),
+  to: Math.round((c.em + c.ate - c.de) * FPS),
+  text: c.text,
+}));

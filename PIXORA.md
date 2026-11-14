@@ -22,13 +22,18 @@ node scripts/gerar-audio.mjs                  # regenera trilha e SFX em public/
 
 ## Narração
 
-A narração não foi gerada (nenhum serviço de voz disponível). Para incluir:
+A narração gravada está em `public/narracao/pixora_narracao.wav` e é dividida em trechos por
+`NARRACAO_CLIPS` em `src/pixora/timeline.ts` (`de`/`ate` = trecho do arquivo, `em` = momento no vídeo).
+A trilha abaixa automaticamente enquanto a voz fala. Para trocar a gravação, substitua o arquivo e
+ajuste os tempos dos trechos. Para exportar sem voz: `--props='{"narracao":false,"legendas":false}'`.
 
-1. Grave ou gere com TTS (ex.: ElevenLabs, voz masculina jovem PT-BR) uma faixa por fala, usando os textos de `NARRACAO` em `timeline.ts`.
-2. Salve como `public/narracao/cena-01.mp3` … `cena-10.mp3`.
-3. Renderize com `--props='{"narracao":true,"legendas":true}'` (a trilha abaixa automaticamente).
+Para o arquivo final, normalize o áudio para redes sociais:
 
-Se a duração das falas diferir, ajuste `from`/`to` em `NARRACAO` — as legendas seguem esses valores.
+```bash
+ffmpeg -i out/pixora.mp4 -c:v libx264 -crf 18 -pix_fmt yuv420p -g 30 \
+  -af "alimiter=limit=0.8:level=false,loudnorm=I=-14:TP=-1.5:LRA=11" \
+  -c:a aac -b:a 192k -movflags +faststart out/pixora-final.mp4
+```
 
 ## Créditos de assets
 
