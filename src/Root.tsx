@@ -48,7 +48,7 @@ export const RemotionRoot: React.FC = () => {
         component={JulianoImpacto}
         durationInFrames={IMPACTO_TOTAL}
         {...V}
-        defaultProps={{ narracao: false }}
+        defaultProps={{ narracao: true }}
       />
       <Folder name="Pixora-Cenas">
         <Composition

@@ -37,10 +37,10 @@ renderizar com `--props='{"narracao":true}'`.
 
 ## Versão "Impacto" (estilo tipografia gigante)
 
-Composição `JulianoImpacto` (29,7 s) em `src/juliano-impacto/`: laranja/preto/off-white, títulos
+Composição `JulianoImpacto` (32,5 s) em `src/juliano-impacto/`: laranja/preto/off-white, títulos
 gigantes, estrelas laranja desfocadas, 4 serviços principais em quadrados de vidro e os demais em
-etiquetas simples. Tempos estimados até a narração nova chegar (`public/juliano/narracao-impacto.wav`,
-renderizar com `--props='{"narracao":true}'`).
+etiquetas simples. Sincronizado com a narração gravada (`public/juliano/narracao-impacto.wav`, 31 s);
+narração ligada por padrão.
 
 ```
 Sua casa tá precisando de um cuidado?
