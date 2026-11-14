@@ -12,10 +12,20 @@ import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import type { TransitionPresentation } from "@remotion/transitions";
 import { CLAMP, EASE, EASE_IN_OUT, FONT } from "../pixora/ui";
 import { dissolve, whip } from "../pixora/transicoes";
-import { Adesivo, Big, Estrela, K, Obj3D, Pessoa, pop, Risco } from "./kit";
+import { Adesivo, Big, Estrela, K, Obj3D, pop, Risco } from "./kit";
 
-// Tudo sincronizado com public/juliano/narracao.wav (frames absolutos a 30 fps).
-export const START = [0, 87, 141, 278, 528, 705, 920, 1065];
+/**
+ * Roteiro (tempos estimados até a narração nova chegar):
+ *  0–2,6s   "Sua casa tá precisando de um cuidado?"
+ *  2,6–6,4  "Parede manchada, infiltração, aquele reparo que você vive adiando…"
+ *  6,4–8,8  "A Juliano Pinturas resolve pra você."
+ *  8,8–13,2 "Pintura residencial. Pintura automotiva. Elétrica. Hidráulica."   → 4 quadrados de vidro
+ *  13,2–17,8 "E ainda: telhado, caixa d'água, reformas, pós-obra e muito mais." → etiquetas simples
+ *  17,8–20,6 "Tudo com capricho, do início ao acabamento."
+ *  20,6–26,2 "Chama no WhatsApp e pede seu orçamento: (62) 99113-2531."
+ *  26,2–30,5 "Juliano Pinturas. Seu espaço, renovado."
+ */
+export const START = [0, 78, 192, 264, 534, 618, 786, 915];
 const TRANS = 10;
 export const IMPACTO_TOTAL = START[START.length - 1];
 const from = (i: number) => START[i] - (i > 0 ? TRANS / 2 : 0);
@@ -24,37 +34,36 @@ const dur = (i: number) =>
   START[i] +
   (i > 0 ? TRANS / 2 : 0) +
   (i < START.length - 2 ? TRANS / 2 : 0);
-
-/** Converte um frame absoluto (tempo da narração) no frame local da cena i. */
+/** Frame absoluto (tempo da fala) → frame local da cena i. */
 const L = (i: number, abs: number) => abs - from(i);
 
 const Claro: React.FC<{ readonly children: React.ReactNode }> = ({
   children,
 }) => (
   <AbsoluteFill style={{ background: K.claro, overflow: "hidden" }}>
-    <Estrela x={60} y={140} size={520} blur={6} />
-    <Estrela x={1000} y={1720} size={640} blur={10} spin={-0.25} />
+    <Estrela x={60} y={140} size={520} blur={8} />
+    <Estrela x={1000} y={1720} size={640} blur={12} spin={-0.25} />
     {children}
   </AbsoluteFill>
 );
 const Escuro: React.FC<{
   readonly children: React.ReactNode;
   readonly estrelas?: boolean;
-}> = ({ children, estrelas = false }) => (
+}> = ({ children, estrelas = true }) => (
   <AbsoluteFill
     style={{
-      background: `radial-gradient(120% 80% at 50% 40%, #1A1A1F 0%, ${K.escuro} 70%)`,
+      background: `radial-gradient(120% 80% at 50% 40%, #1C1C21 0%, ${K.escuro} 70%)`,
       overflow: "hidden",
     }}
   >
     {estrelas ? (
       <>
-        <Estrela x={1020} y={120} size={420} blur={18} opacity={0.9} />
+        <Estrela x={1020} y={120} size={420} blur={20} opacity={0.9} />
         <Estrela
           x={60}
           y={1760}
           size={560}
-          blur={22}
+          blur={24}
           opacity={0.9}
           spin={-0.2}
         />
@@ -64,430 +73,330 @@ const Escuro: React.FC<{
   </AbsoluteFill>
 );
 
-// ===== 0 · "Parede descascando? Infiltração?" =====
+/** Vidro escuro estilo widget do iPhone. */
+const vidro: React.CSSProperties = {
+  background: "rgba(255,255,255,0.08)",
+  backdropFilter: "blur(28px) saturate(170%)",
+  WebkitBackdropFilter: "blur(28px) saturate(170%)",
+  border: "1.5px solid rgba(255,255,255,0.18)",
+  boxShadow:
+    "0 24px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12)",
+};
+
+// ===== 1 · "Sua casa tá precisando de um cuidado?" =====
 const C0: React.FC = () => {
   const f = useCurrentFrame();
   return (
     <Claro>
-      <Big at={9} out={46} y={700} size={96} weight={800} color={K.preto}>
-        Parede
-      </Big>
-      <Big at={12} out={46} y={800} size={150} color={K.laranja}>
-        descascando?
-      </Big>
       <Obj3D
-        src="3d/gota"
-        size={200}
-        style={{ position: "absolute", left: 440, top: 520, ...pop(f, 50) }}
+        src="3d/casa"
+        size={300}
+        style={{ position: "absolute", left: 390, top: 380, ...pop(f, 4) }}
       />
-      <Big at={52} y={800} size={170} color={K.laranja}>
-        Infiltração?
+      <Big at={8} y={760} size={110} weight={800} color={K.preto}>
+        Sua casa
+      </Big>
+      <Big at={14} y={880} size={92} weight={800} color={K.preto}>
+        tá precisando
+      </Big>
+      <Big at={22} y={990} size={130} color={K.laranja}>
+        de um cuidado?
       </Big>
     </Claro>
   );
 };
 
-// ===== 1 · "Chuveiro que não esquenta?" =====
+// ===== 2 · "Parede manchada, infiltração, aquele reparo que você vive adiando…" =====
 const C1: React.FC = () => {
-  const f = useCurrentFrame();
+  const i = 1;
   return (
     <Escuro>
-      <Obj3D
-        src="3d/chuveiro"
-        size={280}
-        style={{ position: "absolute", left: 400, top: 420, ...pop(f, 6) }}
+      <Adesivo
+        at={L(i, 84)}
+        fundo={K.laranja}
+        cor={K.branco}
+        rot={-4}
+        y={620}
+        de="left"
+        size={86}
+      >
+        Parede manchada
+      </Adesivo>
+      <Adesivo
+        at={L(i, 112)}
+        fundo={K.branco}
+        cor={K.preto}
+        rot={3}
+        y={780}
+        de="right"
+        size={86}
+      >
+        Infiltração
+      </Adesivo>
+      <Adesivo
+        at={L(i, 140)}
+        fundo={K.laranja}
+        cor={K.branco}
+        rot={-2}
+        y={940}
+        de="left"
+        size={70}
+      >
+        Aquele reparo adiado…
+      </Adesivo>
+      <Risco
+        d="M200 1010C420 990 700 995 900 1004"
+        at={L(i, 166)}
+        cor={K.branco}
+        width={9}
       />
-      <Big at={8} y={780} size={140} color={K.branco}>
-        Chuveiro
-      </Big>
-      <Big at={16} y={930} size={96} color={K.laranja}>
-        que não esquenta?
-      </Big>
     </Escuro>
   );
 };
 
-// ===== 2 · "Para de procurar um profissional pra cada coisa." → "O Juliano resolve tudo." =====
+// ===== 3 · "A Juliano Pinturas resolve pra você." =====
 const C2: React.FC = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const i = 2;
-  const destaca = interpolate(f, [L(i, 205), L(i, 220)], [0, 1], {
-    ...CLAMP,
-    easing: EASE_IN_OUT,
+  const s = spring({
+    frame: f - L(i, 196),
+    fps,
+    config: { damping: 13, stiffness: 120 },
   });
-  const aneis = interpolate(f, [L(i, 210), L(i, 236)], [0, 1], {
-    ...CLAMP,
-    easing: EASE,
-  });
-  const pessoas = [];
-  for (let r = 0; r < 3; r++) {
-    for (let c = 0; c < 3; c++) {
-      const k = r * 3 + c;
-      const centro = k === 4;
-      const s = spring({
-        frame: f - (L(i, 146) + k * 2),
-        fps,
-        config: { damping: 14 },
-      });
-      pessoas.push(
-        <div
-          key={k}
-          style={{
-            position: "absolute",
-            left: 540 + (c - 1) * 230 - 80,
-            top: 1060 + (r - 1) * 250 - 100,
-            scale: String(s * (centro ? 1 + destaca * 0.5 : 1 - destaca * 0.2)),
-            opacity: centro ? 1 : 1 - destaca,
-            filter: centro ? undefined : `blur(${destaca * 14}px)`,
-          }}
-        >
-          <Pessoa
-            size={160}
-            color={centro ? (destaca > 0.3 ? K.laranja : "#8A8A90") : K.cinza}
-          />
-        </div>,
-      );
-    }
-  }
   return (
     <Escuro>
-      {/* órbitas em volta do Juliano */}
-      {[300, 420].map((r, n) => (
-        <svg
-          key={r}
-          width="1080"
-          height="1920"
-          viewBox="0 0 1080 1920"
-          style={{ position: "absolute", inset: 0, opacity: aneis }}
-        >
-          <circle
-            cx="540"
-            cy="1080"
-            r={r * aneis}
-            fill="none"
-            stroke={K.laranja}
-            strokeOpacity="0.45"
-            strokeWidth="3"
-          />
-          {[0, 1, 2, 3].map((d) => {
-            const a = (d / 4) * Math.PI * 2 + f * (n ? -0.02 : 0.03);
-            return (
-              <circle
-                key={d}
-                cx={540 + Math.cos(a) * r * aneis}
-                cy={1080 + Math.sin(a) * r * aneis}
-                r="12"
-                fill={K.laranja}
-              />
-            );
-          })}
-        </svg>
-      ))}
-      {pessoas}
-      <Big
-        at={L(i, 141)}
-        out={L(i, 200)}
-        y={300}
-        size={92}
-        weight={800}
-        color={K.branco}
-      >
-        Para de procurar
-      </Big>
-      <Big at={L(i, 150)} out={L(i, 200)} y={410} size={74} color={K.laranja}>
-        um profissional
-      </Big>
-      <Big at={L(i, 158)} out={L(i, 200)} y={495} size={74} color={K.laranja}>
-        pra cada coisa
-      </Big>
-      <Risco
-        d="M180 350C400 330 700 340 900 352"
-        at={L(i, 172)}
-        cor={K.branco}
-        width={10}
-        out={L(i, 198)}
+      <div
+        style={{
+          position: "absolute",
+          left: 540 - 300,
+          top: 620 - 300,
+          width: 600,
+          height: 600,
+          borderRadius: "50%",
+          background:
+            "radial-gradient(closest-side, rgba(242,106,27,0.55), rgba(242,106,27,0))",
+          scale: String(s),
+        }}
       />
-      <Big at={L(i, 224)} y={330} size={110} weight={800} color={K.branco}>
-        O Juliano
+      <Obj3D
+        src="3d/logo"
+        size={400}
+        style={{
+          position: "absolute",
+          left: 340,
+          top: 420,
+          scale: String(s),
+          rotate: `${(1 - s) * -12}deg`,
+        }}
+      />
+      <Big at={L(i, 202)} y={900} size={96} weight={800} color={K.branco}>
+        A Juliano Pinturas
       </Big>
-      <Big at={L(i, 232)} y={450} size={150} color={K.laranja}>
-        resolve tudo.
+      <Big at={L(i, 212)} y={1020} size={130} color={K.laranja}>
+        resolve pra você.
       </Big>
     </Escuro>
   );
 };
 
-// ===== 3 · Serviços um atrás do outro → órbita "Um só profissional" =====
-const SERV = [
-  { src: "3d/rolo", nome: "Pintura", at: 280 },
-  { src: "3d/carro", nome: "Pintura automotiva", at: 310 },
-  { src: "3d/lampada", nome: "Elétrica", at: 331 },
-  { src: "3d/bomba", nome: "Hidráulica", at: 361 },
-  { src: "3d/gota", nome: "Caixa d'água", at: 386 },
-  { src: "3d/casa", nome: "Telhado", at: 415 },
-  { src: "3d/tijolos", nome: "Reforma", at: 440 },
-  { src: "3d/vassoura", nome: "Pós-obra", at: 464 },
+// ===== 4 · 4 serviços principais em quadrados de vidro → "E ainda: …" em etiquetas simples =====
+const PRINCIPAIS = [
+  { src: "3d/rolo", nome: "Pintura", sub: "residencial", at: 270 },
+  { src: "3d/carro", nome: "Pintura", sub: "automotiva", at: 303 },
+  { src: "3d/lampada", nome: "Elétrica", sub: "instalações", at: 336 },
+  { src: "3d/bomba", nome: "Hidráulica", sub: "instalações", at: 363 },
 ];
-const ORBITA = 490;
+const OUTROS = [
+  { txt: "Telhado", at: 418 },
+  { txt: "Caixa d'água", at: 436 },
+  { txt: "Reformas", at: 454 },
+  { txt: "Pós-obra", at: 470 },
+  { txt: "Manutenção", at: 486 },
+];
+const AINDA = 400;
 const C3: React.FC = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const i = 3;
-  const orb = interpolate(f, [L(i, ORBITA), L(i, ORBITA + 16)], [0, 1], {
+  const sobe = interpolate(f, [L(i, AINDA), L(i, AINDA + 16)], [0, 1], {
     ...CLAMP,
     easing: EASE_IN_OUT,
   });
+  const Q = 400;
+  const GAP = 36;
   return (
-    <Escuro estrelas>
-      {SERV.map((s, k) => {
-        const t0 = L(i, s.at);
-        const next = k < SERV.length - 1 ? L(i, SERV[k + 1].at) : L(i, ORBITA);
-        if (f < t0 - 1 || f > next + 8) return null;
-        const p = spring({
-          frame: f - t0,
-          fps,
-          config: { damping: 13, stiffness: 140 },
-        });
-        const sai = interpolate(f, [next - 2, next + 6], [0, 1], CLAMP);
-        return (
-          <div
-            key={s.nome}
-            style={{
-              position: "absolute",
-              inset: 0,
-              opacity: 1 - sai,
-              filter: `blur(${sai * 16}px)`,
-            }}
-          >
+    <Escuro>
+      <Big
+        at={L(i, 266)}
+        out={L(i, AINDA - 6)}
+        y={300}
+        size={84}
+        weight={800}
+        color={K.branco}
+      >
+        Especialista em
+      </Big>
+      {/* 4 quadrados de vidro; quando entra "E ainda", sobem e encolhem */}
+      <div
+        style={{
+          position: "absolute",
+          left: 540 - (Q * 2 + GAP) / 2,
+          top: 470,
+          width: Q * 2 + GAP,
+          height: Q * 2 + GAP,
+          transformOrigin: "50% 0%",
+          scale: String(1 - sobe * 0.42),
+          translate: `0px ${-sobe * 230}px`,
+        }}
+      >
+        {PRINCIPAIS.map((p, k) => {
+          const s = spring({
+            frame: f - L(i, p.at),
+            fps,
+            config: { damping: 14, stiffness: 130 },
+          });
+          const brilho = interpolate(
+            f - L(i, p.at),
+            [0, 6, 22],
+            [0, 1, 0],
+            CLAMP,
+          );
+          return (
             <div
+              key={p.sub + k}
               style={{
                 position: "absolute",
-                left: 540 - 230,
-                top: 860 - 230,
-                width: 460,
-                height: 460,
-                borderRadius: "50%",
-                background: `radial-gradient(closest-side, rgba(242,106,27,0.95), rgba(242,106,27,0.55) 70%, rgba(242,106,27,0))`,
-                scale: String(p),
-              }}
-            />
-            <Obj3D
-              src={s.src}
-              size={300}
-              style={{
-                position: "absolute",
-                left: 390,
-                top: 700,
-                scale: String(p),
-                rotate: `${(1 - p) * -18}deg`,
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                top: 1130,
-                left: 0,
-                right: 0,
+                left: (k % 2) * (Q + GAP),
+                top: Math.floor(k / 2) * (Q + GAP),
+                width: Q,
+                height: Q,
+                borderRadius: 64,
+                ...vidro,
+                boxShadow: `0 24px 60px rgba(0,0,0,0.45), 0 0 ${60 * brilho}px rgba(242,106,27,${0.7 * brilho}), inset 0 1px 0 rgba(255,255,255,0.12)`,
+                scale: String(s),
+                opacity: Math.min(1, s * 1.5),
                 display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
                 justifyContent: "center",
+                gap: 14,
+                fontFamily: FONT,
               }}
             >
-              <div
-                style={{
-                  padding: "10px 34px",
-                  background: K.laranja,
-                  color: K.branco,
-                  fontFamily: FONT,
-                  fontWeight: 800,
-                  fontSize: 70,
-                  letterSpacing: "-0.03em",
-                  rotate: "-3deg",
-                  ...pop(f, t0 + 2),
-                }}
-              >
-                {s.nome}
+              <Obj3D
+                src={p.src}
+                size={190}
+                style={{ rotate: `${(1 - s) * -20}deg` }}
+              />
+              <div style={{ textAlign: "center", lineHeight: 1.05 }}>
+                <div
+                  style={{
+                    fontSize: 52,
+                    fontWeight: 800,
+                    color: K.branco,
+                    letterSpacing: "-0.03em",
+                  }}
+                >
+                  {p.nome}
+                </div>
+                <div
+                  style={{ fontSize: 34, fontWeight: 600, color: K.laranja }}
+                >
+                  {p.sub}
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
 
-      {/* "Um só profissional": os serviços orbitam em volta do Juliano */}
-      {orb > 0 ? (
-        <>
-          <svg
-            width="1080"
-            height="1920"
-            viewBox="0 0 1080 1920"
-            style={{ position: "absolute", inset: 0, opacity: orb }}
-          >
-            <circle
-              cx="540"
-              cy="1000"
-              r={330 * orb}
-              fill="none"
-              stroke="rgba(255,255,255,0.35)"
-              strokeWidth="3"
-            />
-          </svg>
+      <Big at={L(i, AINDA + 4)} y={1020} size={110} color={K.laranja}>
+        E ainda:
+      </Big>
+      <div
+        style={{
+          position: "absolute",
+          top: 1180,
+          left: 80,
+          right: 80,
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: 22,
+        }}
+      >
+        {OUTROS.map((o) => (
           <div
+            key={o.txt}
             style={{
-              position: "absolute",
-              left: 540 - 110,
-              top: 1000 - 140,
-              scale: String(orb),
+              padding: "16px 34px",
+              borderRadius: 50,
+              ...vidro,
+              color: K.branco,
+              fontFamily: FONT,
+              fontWeight: 700,
+              fontSize: 46,
+              ...pop(f, L(i, o.at)),
             }}
           >
-            <Pessoa size={220} color={K.laranja} />
+            {o.txt}
           </div>
-          {SERV.map((s, k) => {
-            const a = (k / SERV.length) * Math.PI * 2 - Math.PI / 2 + f * 0.012;
-            const x = 540 + Math.cos(a) * 330 * orb;
-            const y = 1000 + Math.sin(a) * 330 * orb;
-            return (
-              <div
-                key={s.nome}
-                style={{
-                  position: "absolute",
-                  left: x - 62,
-                  top: y - 62,
-                  width: 124,
-                  height: 124,
-                  borderRadius: "50%",
-                  background: K.laranja,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  scale: String(orb),
-                  boxShadow: "0 0 30px rgba(242,106,27,0.6)",
-                }}
-              >
-                <Obj3D src={s.src} size={86} />
-              </div>
-            );
-          })}
-          <Big
-            at={L(i, ORBITA + 2)}
-            y={360}
-            size={96}
-            weight={800}
-            color={K.branco}
-          >
-            Um só
-          </Big>
-          <Big at={L(i, ORBITA + 8)} y={470} size={130} color={K.laranja}>
-            profissional.
-          </Big>
-        </>
-      ) : null}
+        ))}
+        <div
+          style={{
+            padding: "16px 34px",
+            borderRadius: 50,
+            background: K.laranja,
+            color: K.branco,
+            fontFamily: FONT,
+            fontWeight: 800,
+            fontSize: 46,
+            ...pop(f, L(i, 506)),
+          }}
+        >
+          e muito mais
+        </div>
+      </div>
     </Escuro>
   );
 };
 
-// ===== 4 · "do pequeno reparo ao acabamento final" → "Feito com capricho, do jeito que a sua casa merece." =====
+// ===== 5 · "Tudo com capricho, do início ao acabamento." =====
 const C4: React.FC = () => {
-  const f = useCurrentFrame();
   const i = 4;
   return (
     <Claro>
-      <Adesivo
-        at={L(i, 530)}
-        out={L(i, 600)}
-        fundo={K.laranja}
-        cor={K.branco}
-        rot={-4}
-        y={700}
-        de="left"
-      >
-        Pequeno reparo
-      </Adesivo>
-      <Adesivo
-        at={L(i, 548)}
-        out={L(i, 600)}
-        fundo={K.preto}
-        cor={K.branco}
-        rot={3}
-        y={830}
-        de="right"
-      >
-        Reforma
-      </Adesivo>
-      <Adesivo
-        at={L(i, 565)}
-        out={L(i, 600)}
-        fundo={K.laranja}
-        cor={K.branco}
-        rot={-2}
-        y={960}
-        de="left"
-      >
-        Acabamento final
-      </Adesivo>
-
-      <Big
-        at={L(i, 610)}
-        out={L(i, 650)}
-        y={700}
-        size={92}
-        weight={800}
-        color={K.preto}
-      >
-        Feito com
+      <Big at={L(i, 538)} y={640} size={96} weight={800} color={K.preto}>
+        Tudo com
       </Big>
-      <Big at={L(i, 616)} out={L(i, 650)} y={800} size={176} color={K.laranja}>
+      <Big at={L(i, 544)} y={750} size={180} color={K.laranja}>
         capricho
       </Big>
       <Risco
-        d="M170 1010C380 975 700 985 910 1000"
-        at={L(i, 628)}
+        d="M160 965C380 930 700 940 920 955"
+        at={L(i, 556)}
         cor={K.preto}
         width={12}
-        out={L(i, 648)}
       />
-
-      <Big at={L(i, 654)} y={480} size={80} weight={800} color={K.preto}>
-        do jeito que
+      <Big at={L(i, 572)} y={1040} size={70} weight={800} color={K.preto}>
+        do início ao acabamento.
       </Big>
-      <Big at={L(i, 660)} y={575} size={140} color={K.laranja}>
-        a sua casa
-      </Big>
-      <Big at={L(i, 668)} y={725} size={120} color={K.preto}>
-        merece.
-      </Big>
-      <Obj3D
-        src="3d/casa"
-        size={330}
-        style={{
-          position: "absolute",
-          left: 375,
-          top: 930,
-          ...pop(f, L(i, 664)),
-        }}
-      />
-      <Risco
-        d="M540 900C760 900 830 1010 820 1110C810 1250 680 1300 540 1300C380 1300 250 1240 250 1100C250 980 360 905 560 915"
-        at={L(i, 672)}
-        dur={16}
-        cor={K.laranja}
-        width={10}
-        length={1500}
-      />
     </Claro>
   );
 };
 
-// ===== 5 · "Chama no WhatsApp e pede seu orçamento agora: (62) 99113-2531." =====
+// ===== 6 · "Chama no WhatsApp e pede seu orçamento: (62) 99113-2531." =====
 const GRUPOS = [
-  { txt: "(62)", at: 786 },
-  { txt: "99113", at: 826 },
-  { txt: "-2531", at: 878 },
+  { txt: "(62)", at: 690 },
+  { txt: "99113", at: 726 },
+  { txt: "-2531", at: 760 },
 ];
 const C5: React.FC = () => {
   const f = useCurrentFrame();
   const i = 5;
   return (
-    <Escuro estrelas>
+    <Escuro>
       <Obj3D
         src="3d/whatsapp"
         size={240}
@@ -495,19 +404,18 @@ const C5: React.FC = () => {
           position: "absolute",
           left: 420,
           top: 300,
-          ...pop(f, L(i, 712)),
+          ...pop(f, L(i, 622)),
         }}
       />
-      <Big at={L(i, 716)} y={590} size={92} weight={800} color={K.branco}>
+      <Big at={L(i, 626)} y={590} size={92} weight={800} color={K.branco}>
         Chama no
       </Big>
-      <Big at={L(i, 722)} y={690} size={150} color={K.zap}>
+      <Big at={L(i, 632)} y={690} size={150} color={K.zap}>
         WhatsApp
       </Big>
-      <Big at={L(i, 740)} y={870} size={64} weight={700} color={K.branco}>
+      <Big at={L(i, 652)} y={870} size={64} weight={700} color={K.branco}>
         e pede seu orçamento
       </Big>
-      {/* número rola grupo por grupo, no ritmo da fala */}
       <div
         style={{
           position: "absolute",
@@ -549,19 +457,19 @@ const C5: React.FC = () => {
   );
 };
 
-// ===== 6 · "Juliano Pinturas. Seu espaço, renovado." =====
+// ===== 7 · "Juliano Pinturas. Seu espaço, renovado." =====
 const C6: React.FC = () => {
   const i = 6;
   return (
     <Claro>
-      <Big at={L(i, 924)} y={520} size={130} color={K.preto}>
+      <Big at={L(i, 790)} y={520} size={130} color={K.preto}>
         Juliano
       </Big>
-      <Big at={L(i, 930)} y={650} size={150} color={K.laranja}>
+      <Big at={L(i, 796)} y={650} size={150} color={K.laranja}>
         Pinturas
       </Big>
       <Adesivo
-        at={L(i, 966)}
+        at={L(i, 820)}
         fundo={K.preto}
         cor={K.branco}
         rot={-3}
@@ -572,7 +480,7 @@ const C6: React.FC = () => {
         Seu espaço,
       </Adesivo>
       <Adesivo
-        at={L(i, 976)}
+        at={L(i, 830)}
         fundo={K.laranja}
         cor={K.branco}
         rot={2}
@@ -583,7 +491,7 @@ const C6: React.FC = () => {
         renovado.
       </Adesivo>
       <Adesivo
-        at={L(i, 996)}
+        at={L(i, 850)}
         fundo={K.zap}
         cor={K.branco}
         rot={-1.5}
@@ -602,11 +510,11 @@ const CENAS = [C0, C1, C2, C3, C4, C5, C6];
 // as passagens têm props diferentes; o TransitionSeries aceita qualquer uma por posição
 const PASSAGENS = [
   whip("up"),
-  whip("left"),
   dissolve(1.12, 0.9),
   whip("up"),
   whip("left"),
   whip("up"),
+  whip("left"),
 ] as unknown as TransitionPresentation<Record<string, unknown>>[];
 
 export type JulianoImpactoProps = { readonly narracao: boolean };
@@ -640,13 +548,13 @@ export const JulianoImpacto: React.FC<JulianoImpactoProps> = ({ narracao }) => (
         interpolate(
           fr,
           [0, 15, IMPACTO_TOTAL - 40, IMPACTO_TOTAL],
-          [0, 0.25, 0.25, 0],
+          [0, narracao ? 0.25 : 0.6, narracao ? 0.25 : 0.6, 0],
           CLAMP,
         )
       }
     />
     {narracao ? (
-      <Audio name="Narração" src={staticFile("juliano/narracao.wav")} />
+      <Audio name="Narração" src={staticFile("juliano/narracao-impacto.wav")} />
     ) : null}
   </AbsoluteFill>
 );

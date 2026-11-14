@@ -37,7 +37,18 @@ renderizar com `--props='{"narracao":true}'`.
 
 ## Versão "Impacto" (estilo tipografia gigante)
 
-Composição `JulianoImpacto` (35,5 s) em `src/juliano-impacto/`: laranja/preto/off-white, títulos
-gigantes com entrada de impacto, estrelas laranja desfocadas, multidão → o Juliano em destaque com
-órbitas, serviços trocando no ritmo da fala, órbita "Um só profissional", etiquetas tortas, riscos de
-caneta e o número do WhatsApp rolando grupo por grupo. Usa a mesma narração (`public/juliano/narracao.wav`).
+Composição `JulianoImpacto` (30,5 s) em `src/juliano-impacto/`: laranja/preto/off-white, títulos
+gigantes, estrelas laranja desfocadas, 4 serviços principais em quadrados de vidro e os demais em
+etiquetas simples. Tempos estimados até a narração nova chegar (`public/juliano/narracao-impacto.wav`,
+renderizar com `--props='{"narracao":true}'`).
+
+```
+Sua casa tá precisando de um cuidado?
+Parede manchada, infiltração, aquele reparo que você vive adiando…
+A Juliano Pinturas resolve pra você.
+Pintura residencial. Pintura automotiva. Elétrica. Hidráulica.
+E ainda: telhado, caixa d'água, reformas, pós-obra e muito mais.
+Tudo com capricho, do início ao acabamento.
+Chama no WhatsApp e pede seu orçamento: (62) 99113-2531.
+Juliano Pinturas. Seu espaço, renovado.
+```
