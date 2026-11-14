@@ -1,6 +1,6 @@
 # Juliano Pinturas — comercial vertical 9:16 (estilo iPhone)
 
-Composição `JulianoPinturas` · 1080×1920 · 30 fps · 31 s (930 frames). Sem narração por enquanto.
+Composição `JulianoPinturas` · 1080×1920 · 30 fps · 35,5 s (1065 frames), com a narração gravada.
 
 ```bash
 npx remotion render JulianoPinturas out/juliano.mp4 --pixel-format=yuv420p --crf=18

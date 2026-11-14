@@ -1,4 +1,4 @@
-// Juliano Pinturas — estilo iPhone, guiado pelo roteiro de narração (30 fps, 930 frames = 31 s).
+// Juliano Pinturas — estilo iPhone, guiado pelo roteiro de narração (30 fps, 1065 frames = 35,5 s).
 export const J = {
   laranja: "#F26A1B",
   ambar: "#FF9F43",
@@ -13,7 +13,7 @@ export const J = {
 
 export const GRADIENTE = `linear-gradient(90deg, #E2560B 0%, ${J.laranja} 40%, ${J.ambar} 100%)`;
 
-export const J_TOTAL = 930;
+export const J_TOTAL = 1065; // narração (34 s) + 1,5 s de respiro no final
 
 /** Os serviços na ordem em que são falados. */
 export const SERVICOS: {

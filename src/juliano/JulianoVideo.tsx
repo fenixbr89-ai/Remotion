@@ -52,19 +52,23 @@ const At: React.FC<{
  *  726–840  "Chama no WhatsApp e pede seu orçamento agora: (62) 99113-2531."
  *  840–930  "Juliano Pinturas. Seu espaço, renovado."                      → WhatsApp pousa na barra final
  */
+/** Tempos ajustados à narração gravada (public/juliano/narracao.wav, 34 s). */
+const CHEGA = [280, 310, 331, 361, 386, 415, 440, 464]; // cada serviço na palavra falada
 const M = {
-  alerta: [6, 32, 58],
-  recuaAlerta: 104,
-  junta: 168,
-  logo: 184,
-  logoSobe: 236,
-  chega: (k: number) => 262 + k * 30,
-  recua: 498,
-  ponto: 598,
-  preto: 626,
-  clareia: 712,
-  zap: 726,
-  vira: 840,
+  alerta: [9, 52, 87], // "Parede descascando?" · "Infiltração?" · "Chuveiro…"
+  recuaAlerta: 141, // "Para de procurar…"
+  junta: 205,
+  logo: 224, // "O Juliano resolve tudo."
+  logoSobe: 262,
+  chega: (k: number) => CHEGA[k], // "Pintura… carro… elétrica… hidráulica… caixa d'água… telhado… reforma… pós-obra"
+  recua: 494, // "Um só profissional…"
+  ponto: 582,
+  preto: 606, // "Feito com capricho…"
+  clareia: 696,
+  zap: 708, // "Chama no WhatsApp…"
+  digita: [786, 909], // o número é digitado enquanto é falado
+  vira: 922, // "Juliano Pinturas."
+  renovado: 964, // "Seu espaço, renovado."
 };
 const TOP = 250;
 const PASSO = 168;
@@ -142,7 +146,7 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
   const listaSai = blur(f, 0, M.ponto - 4, 12, 12);
 
   // ---------- ponto que vira o preto ----------
-  const dotIn = interpolate(f, [M.recua + 56, M.recua + 64], [0, 1], CLAMP);
+  const dotIn = interpolate(f, [M.ponto - 10, M.ponto - 2], [0, 1], CLAMP);
   const dotGrow = interpolate(f, [M.ponto, M.preto], [1, 180], {
     ...CLAMP,
     easing: Easing.in(Easing.quad),
@@ -161,9 +165,7 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
   const zapY = interpolate(toBar, [0, 1], [500, 1000 + 75]);
   const typed = PHONE.slice(
     0,
-    Math.floor(
-      interpolate(f, [M.zap + 40, M.zap + 70], [0, PHONE.length], CLAMP),
-    ),
+    Math.floor(interpolate(f, M.digita, [0, PHONE.length], CLAMP)),
   );
   const bar = interpolate(f, [M.vira + 8, M.vira + 22], [0, 1], {
     ...CLAMP,
@@ -350,7 +352,7 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
               lineHeight={1.15}
             />
           </At>
-          <At y={940} style={blur(f, M.zap + 36, M.vira - 6)}>
+          <At y={940} style={blur(f, M.digita[0] - 6, M.vira - 6)}>
             <Texto size={78} color={J.preto}>
               {typed}
               <span
@@ -364,7 +366,7 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
           </At>
           <At y={560}>
             <Kinetic
-              delay={M.vira + 10}
+              delay={M.renovado}
               stagger={4}
               lines={[
                 { text: "Seu espaço,", size: 104 },
@@ -446,7 +448,7 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
           interpolate(
             fr,
             [0, 15, J_TOTAL - 40, J_TOTAL],
-            [0, narracao ? 0.3 : 0.6, narracao ? 0.3 : 0.6, 0],
+            [0, narracao ? 0.25 : 0.6, narracao ? 0.25 : 0.6, 0],
             CLAMP,
           )
         }
