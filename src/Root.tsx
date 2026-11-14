@@ -2,10 +2,19 @@ import { Composition, Folder } from "remotion";
 import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
-import { Comercial, comercialSchema, SCENES, TOTAL } from "./JulianoPinturas/Comercial";
+import {
+  Comercial,
+  comercialSchema,
+  SCENES,
+  TOTAL,
+} from "./JulianoPinturas/Comercial";
 import { Abertura } from "./JulianoPinturas/Abertura";
 import { Servicos } from "./JulianoPinturas/Servicos";
 import { Encerramento } from "./JulianoPinturas/Encerramento";
+import {
+  StoryboardFrame,
+  storyboardSchema,
+} from "./JulianoPinturas/Storyboard";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -23,9 +32,40 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{ narracao: "", volumeTrilha: 0.9 }}
       />
       <Folder name="JulianoPinturas-Cenas">
-        <Composition id="Abertura" component={Abertura} durationInFrames={SCENES.abertura} fps={30} width={1080} height={1920} />
-        <Composition id="Servicos" component={Servicos} durationInFrames={SCENES.servicos} fps={30} width={1080} height={1920} />
-        <Composition id="Encerramento" component={Encerramento} durationInFrames={SCENES.encerramento} fps={30} width={1080} height={1920} />
+        <Composition
+          id="Abertura"
+          component={Abertura}
+          durationInFrames={SCENES.abertura}
+          fps={30}
+          width={1080}
+          height={1920}
+        />
+        <Composition
+          id="Servicos"
+          component={Servicos}
+          durationInFrames={SCENES.servicos}
+          fps={30}
+          width={1080}
+          height={1920}
+        />
+        <Composition
+          id="Encerramento"
+          component={Encerramento}
+          durationInFrames={SCENES.encerramento}
+          fps={30}
+          width={1080}
+          height={1920}
+        />
+        <Composition
+          id="Storyboard"
+          component={StoryboardFrame}
+          schema={storyboardSchema}
+          durationInFrames={61}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{ quadro: "final-1" }}
+        />
       </Folder>
       <Folder name="Elements">
         <Composition
@@ -69,7 +109,6 @@ export const RemotionRoot: React.FC = () => {
           titleColor: "#000000",
         }}
       />
-
     </>
   );
 };
