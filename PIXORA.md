@@ -1,13 +1,13 @@
 # PIXORA — vídeo vertical 9:16
 
-Composição `Pixora` · 1080×1920 · 30 fps · 60 s (1800 frames).
+Composição `Pixora` · 1080×1920 · 30 fps · 54 s (1620 frames).
 
 ## Comandos
 
 ```bash
 npm i
 npm run dev                                   # Studio (cada cena também está em "Pixora-Cenas")
-npx remotion render Pixora out/pixora.mp4     # render final
+npx remotion render Pixora out/pixora.mp4 --pixel-format=yuv420p --crf=18   # render final
 node scripts/gerar-audio.mjs                  # regenera trilha e SFX em public/audio
 ```
 
@@ -35,3 +35,11 @@ Se a duração das falas diferir, ajuste `from`/`to` em `NARRACAO` — as legend
 - Emojis 3D: Microsoft Fluent Emoji (MIT) — `public/emoji/`.
 - Fonte: Inter Display (SIL OFL) — `public/fonts/`. SF Pro Display é usada se estiver instalada.
 - Trilha e SFX: sintetizados por `scripts/gerar-audio.mjs`.
+
+## Exportar para celular
+
+Para tocar liso no iPhone/Instagram, re-encode com um quadro-chave por segundo:
+
+```bash
+ffmpeg -i out/pixora.mp4 -c:v libx264 -crf 18 -pix_fmt yuv420p -g 30 -c:a aac -b:a 192k -movflags +faststart out/pixora-final.mp4
+```

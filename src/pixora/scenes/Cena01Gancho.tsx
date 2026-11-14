@@ -108,7 +108,7 @@ export const Cena01Gancho: React.FC = () => {
   const progress = interpolate(frame, [C01.tap, C01.freeze], [0.05, 0.32], CLAMP);
   const frozen = frame >= C01.freeze;
   const zoom = interpolate(frame, [92, 120], [1, 3.4], { ...CLAMP, easing: EASE_IN_OUT });
-  const screenToGray = interpolate(frame, [100, 114], [0, 1], CLAMP);
+  const screenToGray = interpolate(frame, [104, 119], [0, 1], CLAMP);
   const jolt = interpolate(frame, [70, 73, 76, 79], [0, -10, 6, 0], CLAMP);
 
   return (

@@ -11,7 +11,7 @@ export const Cena02Problema: React.FC = () => {
   );
   const tick = interpolate(frame, [30, 74], [0, 9], CLAMP);
   const flicker = frame > 30 && frame < 76 ? (1 - (tick % 1)) * 4 : 0;
-  const cardIn = prog(frame, 2, 16);
+  const cardIn = prog(frame, -4, 14);
   const cardOut = prog(frame, 112, 14, EASE_IN);
   const drop = prog(frame, 30, 44);
   const dotIn = prog(frame, 92, 10);

@@ -11,7 +11,7 @@ export const Cena03Virada: React.FC = () => {
   const frame = useCurrentFrame();
   const strike = prog(frame, 16, 10);
   const line = prog(frame, 44, 24);
-  const circle = interpolate(frame, [70, 90], [0, 1], { ...CLAMP, easing: EASE_IN });
+  const circle = interpolate(frame, [68, 90], [0, 1], { ...CLAMP, easing: EASE_IN });
 
   return (
     <AbsoluteFill style={{ background: C.black }}>

@@ -7,7 +7,6 @@ import { DUR, FPS, HEIGHT, TOTAL, WIDTH } from "./pixora/timeline";
 import { Cena01Gancho } from "./pixora/scenes/Cena01Gancho";
 import { Cena02Problema } from "./pixora/scenes/Cena02Problema";
 import { Cena03Virada } from "./pixora/scenes/Cena03Virada";
-import { Cena04Apresentacao } from "./pixora/scenes/Cena04Apresentacao";
 import { Cena05Estilos } from "./pixora/scenes/Cena05Estilos";
 import { Cena06Diferencial1 } from "./pixora/scenes/Cena06Diferencial1";
 import { Cena07Diferencial2 } from "./pixora/scenes/Cena07Diferencial2";
@@ -35,7 +34,6 @@ export const RemotionRoot: React.FC = () => {
         <Composition id="Cena01-Gancho" component={Cena01Gancho} durationInFrames={DUR.c01} {...V} />
         <Composition id="Cena02-Problema" component={Cena02Problema} durationInFrames={DUR.c02} {...V} />
         <Composition id="Cena03-Virada" component={Cena03Virada} durationInFrames={DUR.c03} {...V} />
-        <Composition id="Cena04-Apresentacao" component={Cena04Apresentacao} durationInFrames={DUR.c04} {...V} />
         <Composition id="Cena05-Estilos" component={Cena05Estilos} durationInFrames={DUR.c05} {...V} />
         <Composition id="Cena06-Diferencial1" component={Cena06Diferencial1} durationInFrames={DUR.c06} {...V} />
         <Composition id="Cena07-Diferencial2" component={Cena07Diferencial2} durationInFrames={DUR.c07} {...V} />

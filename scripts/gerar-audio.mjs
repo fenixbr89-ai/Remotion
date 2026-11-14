@@ -146,12 +146,12 @@ for (const [name, fn] of Object.entries(sfx)) {
 // ---------- trilha ----------
 const BPM = 104;
 const BEAT = 60 / BPM;
-const DUR = 60;
+const DUR = 54;
 const N = SR * DUR;
 const L = new Float32Array(N);
 const DRUMS_IN = 12; // a batida entra na cena 4
 const DROP_START = 9; // cena 3: respiro antes da batida
-const OUTRO = 55; // logo
+const OUTRO = 50; // logo
 
 // Progressão: Fmaj7 – Em7 – Dm7 – Cmaj7 (2 compassos cada)
 const chords = [
