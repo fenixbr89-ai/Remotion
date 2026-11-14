@@ -1,68 +1,83 @@
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { brl, pct } from "../calc";
+import { Batida } from "../ui/Batida";
 import { Icone, IconeChip } from "../ui/Icones";
 import { Celular } from "../ui/Ilustracoes";
+import { Odometro } from "../ui/Odometro";
 import { cor, degrade, entra, flutua, fontFamily, suave } from "../tema";
 import type { CenaProps } from "./props";
+import { Topo } from "./Topo";
 
-/** O erro comum, mostrado no celular: pedido de R$ 18 que vira R$ 1,96 depois da taxa e do custo. */
-export const Taxa: React.FC<CenaProps> = ({ n, k }) => {
+export const Erro: React.FC<CenaProps> = ({ k }) => (
+  <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
+    <Batida
+      gap={14}
+      linhas={[
+        { texto: "Muita gente cobra", em: 0, tamanho: 64 },
+        { texto: brl(k.erro.precoErrado), em: 10, tamanho: 230, efeito: "slam", corTexto: cor.preto },
+        { texto: "porque o vizinho cobra.", em: 26, tamanho: 50, peso: 700, corTexto: cor.textoSuave },
+      ]}
+    />
+  </AbsoluteFill>
+);
+
+/** O pedido no app: a taxa e o custo comem o valor e sobra quase nada. */
+export const App: React.FC<CenaProps> = ({ n, k }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const { precoErrado, taxaValor, sobra } = k.erro;
-  const cel = entra(f, fps, 6, 13);
-  const notif = entra(f, fps, 40, 10);
+  const cel = entra(f, fps, 0, 11);
+  const notif = entra(f, fps, 10, 9);
+  const tT = 34;
+  const tC = 56;
+  const tF = 80;
+  const restante = precoErrado - taxaValor * suave(f, tT, tT + 12) - k.custoTotal * suave(f, tC, tC + 12);
+  const final = entra(f, fps, tF, 8);
+  const tremor = f > tF && f < tF + 16 ? Math.sin(f * 2.6) * 14 * (1 - (f - tF) / 16) : 0;
   const linhas = [
-    { r: `Taxa do app (${pct(n.taxa)})`, v: `− ${brl(taxaValor)}`, t: 95 },
-    { r: "Custo do copo", v: `− ${brl(k.custoTotal)}`, t: 125 },
+    { r: `Taxa do app (${pct(n.taxa)})`, v: `− ${brl(taxaValor)}`, t: tT },
+    { r: "Custo do copo", v: `− ${brl(k.custoTotal)}`, t: tC },
   ];
-  const final = entra(f, fps, 160, 9);
-  const restante = precoErrado - taxaValor * suave(f, 95, 115) - k.custoTotal * suave(f, 125, 145);
-  const tremor = f > 160 && f < 182 ? Math.sin(f * 2.4) * 12 * (1 - (f - 160) / 22) : 0;
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingTop: 330 }}>
-        <div style={{ position: "relative", scale: `${0.8 + cel * 0.2}`, opacity: cel, translate: `${tremor}px ${(1 - cel) * 200}px` }}>
+      <Topo texto="Mas no app, *sobra quanto?*" tom="vermelho" />
+      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingTop: 230 }}>
+        <div style={{ position: "relative", scale: `${0.75 + cel * 0.25}`, opacity: cel, translate: `${tremor}px ${(1 - cel) * 240}px` }}>
           <Celular largura={560}>
             <div style={{ padding: "90px 34px 0" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 14, color: cor.textoSuave, fontSize: 26, fontWeight: 700 }}>
                 <div style={{ width: 44, height: 44, borderRadius: 14, background: degrade }} />
                 app de delivery · agora
               </div>
-              <div style={{ marginTop: 26, borderRadius: 28, padding: 26, background: cor.gelo, scale: `${notif}`, opacity: notif }}>
+              <div style={{ marginTop: 24, borderRadius: 28, padding: 24, background: cor.gelo, scale: `${notif}`, opacity: notif }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
                   <IconeChip nome="sacola" tamanho={64} style={{ background: cor.branco }} />
-                  <div>
-                    <div style={{ color: cor.texto, fontSize: 32, fontWeight: 800 }}>Novo pedido!</div>
-                    <div style={{ color: cor.textoSuave, fontSize: 24, fontWeight: 600 }}>1× {n.nome === "Açaiteria" ? "Açaí" : n.nome} {n.cardapio[n.carroChefe].nome}</div>
-                  </div>
+                  <div style={{ color: cor.texto, fontSize: 32, fontWeight: 800 }}>Novo pedido!</div>
                 </div>
-                <div style={{ marginTop: 18, display: "flex", justifyContent: "space-between", color: cor.preto, fontSize: 36, fontWeight: 800 }}>
+                <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", color: cor.preto, fontSize: 36, fontWeight: 800 }}>
                   <span>Total</span>
                   <span>{brl(precoErrado)}</span>
                 </div>
               </div>
               {linhas.map((l) => {
-                const e = entra(f, fps, l.t, 12);
+                const e = entra(f, fps, l.t, 10);
                 return (
-                  <div key={l.r} style={{ marginTop: 18, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 10px", borderBottom: `2px solid ${cor.gelo}`, opacity: e, translate: `${(1 - e) * 60}px 0` }}>
+                  <div key={l.r} style={{ marginTop: 14, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 8px", borderBottom: `2px solid ${cor.gelo}`, opacity: f >= l.t ? e : 0, translate: `${(1 - e) * 80}px 0` }}>
                     <span style={{ color: cor.texto, fontSize: 28, fontWeight: 600 }}>{l.r}</span>
                     <span style={{ color: cor.vermelho, fontSize: 32, fontWeight: 800 }}>{l.v}</span>
                   </div>
                 );
               })}
-              <div style={{ marginTop: 30, borderRadius: 28, padding: "24px 26px", background: f >= 150 ? cor.vermelhoFundo : cor.verdeFundo, opacity: entra(f, fps, 60) }}>
+              <div style={{ marginTop: 26, borderRadius: 28, padding: "22px 24px", background: f >= tF ? cor.vermelhoFundo : cor.verdeFundo }}>
                 <div style={{ color: cor.texto, fontSize: 26, fontWeight: 700 }}>Você fica com</div>
-                <div style={{ color: f >= 150 ? cor.vermelho : cor.verde, fontSize: 84, fontWeight: 800, letterSpacing: -3, scale: `${interpolate(final, [0, 1], [1, 1.08])}`, transformOrigin: "left center" }}>
-                  {brl(f >= 150 ? sobra : restante)}
+                <div style={{ scale: `${interpolate(final, [0, 1], [1, 1.1])}`, transformOrigin: "left center" }}>
+                  <Odometro valor={f >= tF ? sobra : restante} final={precoErrado} tamanho={84} cor={f >= tF ? cor.vermelho : cor.verde} />
                 </div>
               </div>
             </div>
           </Celular>
-          <div style={{ position: "absolute", right: -70, top: 330, scale: `${entra(f, fps, 95, 9)}`, translate: `0 ${flutua(f, 1, 10)}px`, padding: "12px 22px", borderRadius: 20, background: cor.vermelho, color: cor.branco, fontSize: 38, fontWeight: 800, boxShadow: "0 14px 30px rgba(239,68,68,0.35)" }}>
-            −{pct(n.taxa)}
-          </div>
-          <div style={{ position: "absolute", left: -80, top: 690, scale: `${final}` }}>
+          <div style={{ position: "absolute", right: -70, top: 330, scale: `${entra(f, fps, tT, 8)}`, translate: `0 ${flutua(f, 1, 10)}px`, padding: "12px 22px", borderRadius: 20, background: cor.vermelho, color: cor.branco, fontSize: 40, fontWeight: 800 }}>−{pct(n.taxa)}</div>
+          <div style={{ position: "absolute", left: -80, top: 700, scale: `${final}` }}>
             <Icone nome="alerta" tamanho={130} />
           </div>
         </div>
@@ -70,3 +85,16 @@ export const Taxa: React.FC<CenaProps> = ({ n, k }) => {
     </AbsoluteFill>
   );
 };
+
+export const Sobra: React.FC<CenaProps> = ({ k }) => (
+  <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
+    <Batida
+      gap={14}
+      linhas={[
+        { texto: "Sobra", em: 0, tamanho: 60, corTexto: cor.textoSuave, peso: 700 },
+        { texto: brl(k.erro.sobra), em: 4, tamanho: 230, efeito: "slam", corTexto: cor.vermelho },
+        { texto: "Um cupom de desconto e vira *prejuízo.*", em: 22, tamanho: 50, tom: "vermelho" },
+      ]}
+    />
+  </AbsoluteFill>
+);

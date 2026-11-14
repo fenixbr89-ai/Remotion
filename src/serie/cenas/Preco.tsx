@@ -1,56 +1,115 @@
-import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { brl, pct } from "../calc";
-import { Cinetico } from "../ui/Cinetico";
+import { Batida } from "../ui/Batida";
 import { CopoAcai, Raios } from "../ui/Ilustracoes";
-import { cor, degrade, entra, fontFamily, sombra, suave } from "../tema";
-import type { CenaProps } from "./props";
+import { Odometro } from "../ui/Odometro";
+import { cor, degrade, entra, fontFamily, sombra, suave, textoDegrade } from "../tema";
+import { destaca, type CenaProps } from "./props";
+import { Topo } from "./Topo";
 
 const dec = (v: number) => v.toFixed(2).replace(".", ",");
 
-export const Preco: React.FC<CenaProps> = ({ n, k }) => {
+/** Um termo da fórmula que chega grande e assenta. */
+const Termo: React.FC<{ t: string; em: number; tam?: number; destaque?: boolean; cor?: string }> = ({ t, em, tam = 64, destaque, cor: c }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const copo = entra(f, fps, 30, 12);
-  const etq = entra(f, fps, 120, 8);
-  const contador = suave(f, 122, 160);
-  const itens = [
-    { r: "Cobre o custo", v: brl(k.custoTotal) },
-    { r: "Paga a taxa do app", v: brl(k.taxaValor) },
-    { r: `Sobra ${pct(n.lucro)} de lucro`, v: brl(k.lucroValor) },
-  ];
+  const e = entra(f, fps, em, 9);
+  return (
+    <span style={{ display: "inline-block", fontSize: tam, fontWeight: 800, letterSpacing: -1.5, color: c ?? cor.texto, ...(destaque ? textoDegrade : {}), opacity: f >= em ? Math.min(1, e * 3) : 0, scale: `${interpolate(e, [0, 1], [1.9, 1])}` }}>
+      {t}
+    </span>
+  );
+};
+
+export const Formula: React.FC<CenaProps> = ({ n, k }) => {
+  const f = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const etq = entra(f, fps, 92, 8);
+  const linha = (children: React.ReactNode, top: number) => (
+    <div style={{ position: "absolute", top, left: 40, right: 40, display: "flex", justifyContent: "center", alignItems: "baseline", gap: 18 }}>{children}</div>
+  );
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <div style={{ position: "absolute", top: 500, left: 90, right: 90, borderRadius: 32, padding: "24px 10px", background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, opacity: entra(f, fps, 6) }}>
-        <Cinetico texto={`${dec(k.custoTotal)} ÷ (1 − ${dec(n.taxa)} − ${dec(n.lucro)}) = *${dec(k.preco)}*`} inicio={12} intervalo={3} tamanho={44} alinhar="center" corTexto={cor.preto} />
-      </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 640, height: 560, display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <Raios tamanho={820} style={{ opacity: copo }} />
-        <div style={{ scale: `${copo}`, translate: "-120px 20px" }}>
-          <CopoAcai tamanho={330} />
+      <Topo texto="A conta *certa:*" tamanho={80} />
+      {linha(
+        <>
+          <Termo t="preço" em={8} destaque />
+          <Termo t="=" em={14} />
+          <Termo t="custo" em={18} />
+          <Termo t="÷" em={24} />
+          <Termo t="(1 − taxa − lucro)" em={28} tam={56} />
+        </>,
+        470,
+      )}
+      {linha(
+        <>
+          <Termo t={dec(k.custoTotal)} em={46} cor={cor.preto} />
+          <Termo t="÷" em={50} />
+          <Termo t={`(1 − ${dec(n.taxa)} − ${dec(n.lucro)})`} em={54} tam={56} cor={cor.preto} />
+        </>,
+        580,
+      )}
+      {linha(
+        <>
+          <Termo t="=" em={70} />
+          <Termo t={dec(k.custoTotal)} em={72} cor={cor.textoSuave} />
+          <Termo t="÷" em={76} cor={cor.textoSuave} />
+          <Termo t={dec(1 - n.taxa - n.lucro)} em={80} destaque />
+        </>,
+        690,
+      )}
+      <div style={{ position: "absolute", left: 0, right: 0, top: 860, height: 560, display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Raios tamanho={860} style={{ opacity: etq }} />
+        <div style={{ translate: "-170px 30px", scale: `${entra(f, fps, 84, 10)}` }}>
+          <CopoAcai tamanho={300} />
         </div>
-        <div style={{ position: "absolute", left: "50%", marginLeft: 40, top: 150, scale: `${etq}`, opacity: Math.min(1, etq * 2), translate: `0 ${(1 - etq) * -160}px` }}>
-          <div style={{ borderRadius: 30, padding: "22px 34px", background: degrade, boxShadow: "0 24px 50px rgba(29,78,216,0.35)" }}>
+        <div style={{ position: "absolute", left: "50%", marginLeft: -20, top: 150, scale: `${interpolate(etq, [0, 1], [2, 1])}`, opacity: Math.min(1, etq * 3) }}>
+          <div style={{ borderRadius: 32, padding: "22px 34px", background: degrade, boxShadow: "0 24px 50px rgba(29,78,216,0.35)" }}>
             <div style={{ color: "rgba(255,255,255,0.85)", fontSize: 28, fontWeight: 800, letterSpacing: 3 }}>VENDER A</div>
-            <div style={{ color: cor.branco, fontSize: 84, fontWeight: 800, letterSpacing: -3, lineHeight: 1 }}>{brl(k.preco * contador)}</div>
+            <Odometro valor={k.preco * suave(f, 92, 118)} final={k.preco} tamanho={90} cor={cor.branco} />
           </div>
         </div>
       </div>
-      <div style={{ position: "absolute", top: 1220, left: 90, right: 90, borderRadius: 36, padding: "24px 34px", background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, opacity: entra(f, fps, 165) }}>
-        <div style={{ color: cor.textoSuave, fontSize: 24, fontWeight: 800, letterSpacing: 2, marginBottom: 6 }}>EM CADA COPO</div>
-        {itens.map((it, i) => {
-          const marca = entra(f, fps, 180 + i * 18, 9);
+    </AbsoluteFill>
+  );
+};
+
+export const Divisao: React.FC<CenaProps> = ({ n, k }) => {
+  const f = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const partes = [
+    { r: "Custo", v: k.custoTotal, c: "#94A3B8", t: 10 },
+    { r: `Taxa ${pct(n.taxa)}`, v: k.taxaValor, c: cor.vermelho, t: 22 },
+    { r: `Lucro ${pct(n.lucro)}`, v: k.lucroValor, c: cor.verde, t: 34 },
+  ];
+  const lucro = entra(f, fps, 56, 8);
+  return (
+    <AbsoluteFill style={{ fontFamily }}>
+      <Topo texto={`Em cada copo de ${destaca(brl(k.preco) + ":")}`} />
+      <div style={{ position: "absolute", left: 70, right: 70, top: 560, height: 150, borderRadius: 36, overflow: "hidden", display: "flex", background: cor.gelo, boxShadow: sombra }}>
+        {partes.map((p) => (
+          <div key={p.r} style={{ width: `${(p.v / k.preco) * 100 * suave(f, p.t, p.t + 12)}%`, background: p.c, scale: p.c === cor.verde ? `1 ${1 + Math.sin(Math.min(1, lucro) * Math.PI) * 0.1}` : undefined }} />
+        ))}
+      </div>
+      <div style={{ position: "absolute", left: 70, right: 70, top: 750, display: "flex", gap: 18 }}>
+        {partes.map((p) => {
+          const e = entra(f, fps, p.t + 4, 9);
           return (
-            <div key={it.r} style={{ display: "flex", alignItems: "center", gap: 18, padding: "14px 0", opacity: suave(f, 172 + i * 18, 186 + i * 18) }}>
-              <div style={{ width: 44, height: 44, borderRadius: 13, background: marca > 0.5 ? cor.verde : cor.gelo, display: "flex", alignItems: "center", justifyContent: "center", scale: `${0.7 + marca * 0.3}` }}>
-                <svg width={28} height={28} viewBox="0 0 24 24" fill="none" stroke={cor.branco} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" style={{ opacity: marca }}>
-                  <path d="M20 6 9 17l-5-5" />
-                </svg>
-              </div>
-              <span style={{ flex: 1, color: cor.texto, fontSize: 36, fontWeight: 700 }}>{it.r}</span>
-              <span style={{ color: cor.preto, fontSize: 38, fontWeight: 800 }}>{it.v}</span>
+            <div key={p.r} style={{ flex: 1, borderRadius: 30, padding: "22px 20px", background: cor.branco, border: `3px solid ${p.c}66`, boxShadow: sombra, opacity: f >= p.t ? e : 0, translate: `0 ${(1 - e) * 80}px` }}>
+              <div style={{ color: p.c, fontSize: 30, fontWeight: 800 }}>{p.r}</div>
+              <Odometro valor={p.v * suave(f, p.t + 4, p.t + 20)} final={p.v} tamanho={48} cor={cor.preto} />
             </div>
           );
         })}
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1060 }}>
+        <Batida
+          gap={6}
+          linhas={[
+            { texto: `+${brl(k.lucroValor)}`, em: 56, tamanho: 200, efeito: "slam", corTexto: cor.verde },
+            { texto: "de lucro em *cada* copo.", em: 70, tamanho: 54 },
+          ]}
+        />
       </div>
     </AbsoluteFill>
   );

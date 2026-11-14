@@ -1,39 +1,52 @@
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
+import type { TransitionPresentation } from "@remotion/transitions";
 import { Fragment } from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { calcular } from "./calc";
 import type { Negocio } from "./tipos";
 import { Fundo } from "./ui/Fundo";
-import { Legenda, type Frase } from "./ui/Legenda";
 import { Moldura } from "./ui/Moldura";
-import { ROTEIRO } from "./roteiro";
-import { transicaoSerie } from "./ui/Transicao";
-import { Loja } from "./cenas/Loja";
-import { Cardapio } from "./cenas/Cardapio";
-import { Custos } from "./cenas/Custos";
-import { Taxa } from "./cenas/Taxa";
-import { Preco } from "./cenas/Preco";
-import { Lucro } from "./cenas/Lucro";
-import { Chamada } from "./cenas/Chamada";
-import { Comenta } from "./cenas/Comenta";
-import { Outro } from "./cenas/Outro";
+import { flood, whip } from "./ui/Transicao";
+import { Cardapio, Chute, Gancho, Loja } from "./cenas/Abertura";
+import { Custo } from "./cenas/Custo";
+import { App, Erro, Sobra } from "./cenas/Taxa";
+import { Divisao, Formula } from "./cenas/Preco";
+import { Frase, Mes } from "./cenas/Lucro";
+import { Comenta, Outro, Produto } from "./cenas/Final";
 import type { CenaProps } from "./cenas/props";
 
-/** `etapa`: qual aba (Custo/Taxa/Preço/Lucro) fica ativa durante a cena. */
-export const CENAS: { nome: string; dur: number; C: React.FC<CenaProps>; etapa?: number }[] = [
-  { nome: "Loja", dur: 240, C: Loja },
-  { nome: "Cardápio", dur: 200, C: Cardapio },
-  { nome: "Custo", dur: 480, C: Custos, etapa: 0 },
-  { nome: "Taxa", dur: 320, C: Taxa, etapa: 1 },
-  { nome: "Preço", dur: 330, C: Preco, etapa: 2 },
-  { nome: "Lucro", dur: 260, C: Lucro, etapa: 3 },
-  { nome: "Chamada", dur: 180, C: Chamada },
-  { nome: "Comenta", dur: 190, C: Comenta },
-  { nome: "Outro", dur: 150, C: Outro },
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Entrada = { tipo: TransitionPresentation<any>; dur: number } | null;
+
+const FLOOD: Entrada = { tipo: flood(), dur: 16 };
+const WHIP: Entrada = { tipo: whip("esquerda"), dur: 10 };
+const WHIP_CIMA: Entrada = { tipo: whip("cima"), dur: 10 };
+const CORTE: Entrada = null;
+
+/**
+ * Linha do tempo em ritmo de Reels: cenas curtas (2–9 s), transição na entrada de cada cena.
+ * `etapa` = aba ativa (Custo/Taxa/Preço/Lucro).
+ */
+export const CENAS: { nome: string; dur: number; C: React.FC<CenaProps>; entrada: Entrada; etapa?: number }[] = [
+  { nome: "Gancho", dur: 100, C: Gancho, entrada: CORTE },
+  { nome: "Loja", dur: 105, C: Loja, entrada: FLOOD },
+  { nome: "Chute", dur: 75, C: Chute, entrada: CORTE },
+  { nome: "Cardápio", dur: 85, C: Cardapio, entrada: WHIP },
+  { nome: "Custo", dur: 260, C: Custo, entrada: CORTE, etapa: 0 },
+  { nome: "Erro", dur: 80, C: Erro, entrada: FLOOD, etapa: 1 },
+  { nome: "App", dur: 165, C: App, entrada: WHIP, etapa: 1 },
+  { nome: "Sobra", dur: 80, C: Sobra, entrada: WHIP_CIMA, etapa: 1 },
+  { nome: "Fórmula", dur: 165, C: Formula, entrada: FLOOD, etapa: 2 },
+  { nome: "Divisão", dur: 115, C: Divisao, entrada: WHIP, etapa: 2 },
+  { nome: "Mês", dur: 185, C: Mes, entrada: FLOOD, etapa: 3 },
+  { nome: "Frase", dur: 70, C: Frase, entrada: WHIP_CIMA },
+  { nome: "Produto", dur: 175, C: Produto, entrada: FLOOD },
+  { nome: "Comenta", dur: 165, C: Comenta, entrada: WHIP },
+  { nome: "Outro", dur: 145, C: Outro, entrada: FLOOD },
 ];
 
-export const TRANSICAO = 18;
-const INICIOS = CENAS.map((_, i) => CENAS.slice(0, i).reduce((s, c) => s + c.dur, 0) - i * TRANSICAO);
+const sobreposicao = (i: number) => CENAS[i].entrada?.dur ?? 0;
+const INICIOS = CENAS.map((_, i) => CENAS.slice(0, i).reduce((s, c, j) => s + c.dur - (j + 1 <= i ? sobreposicao(j + 1) : 0), 0));
 export const DURACAO = INICIOS[INICIOS.length - 1] + CENAS[CENAS.length - 1].dur;
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -41,38 +54,28 @@ const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 export const Episodio: React.FC<Negocio> = (n) => {
   const k = calcular(n);
   const f = useCurrentFrame();
-  // cena "dona" do frame: a mais recente que já começou (passado o meio da transição)
-  const atual = INICIOS.reduce((acc, ini, i) => (f >= ini + TRANSICAO / 2 ? i : acc), 0);
-  const etapa = CENAS[atual].etapa ?? (atual > 5 ? 4 : null);
+  const atual = INICIOS.reduce((acc, ini, i) => (f >= ini + sobreposicao(i) / 2 ? i : acc), 0);
+  const etapaCena = CENAS[atual].etapa;
   const iAbas = CENAS.findIndex((c) => c.etapa === 0);
-  const iFimAbas = CENAS.findIndex((c) => c.etapa === 3) + 1;
-  const abas = Math.min(
-    interpolate(f, [INICIOS[iAbas], INICIOS[iAbas] + 15], [0, 1], clamp),
-    interpolate(f, [INICIOS[iFimAbas], INICIOS[iFimAbas] + 15], [1, 0], clamp),
-  );
+  const iFimAbas = CENAS.findIndex((c, i) => i > iAbas && c.etapa === undefined);
+  const etapa = etapaCena ?? (atual >= iFimAbas ? 4 : null);
+  const abas = Math.min(interpolate(f, [INICIOS[iAbas], INICIOS[iAbas] + 10], [0, 1], clamp), interpolate(f, [INICIOS[iFimAbas], INICIOS[iFimAbas] + 10], [1, 0], clamp));
   const iOutro = CENAS.length - 1;
-  const visivel = interpolate(f, [INICIOS[iOutro], INICIOS[iOutro] + TRANSICAO], [1, 0], clamp);
-  // legenda contínua: roteiro de todas as cenas no tempo global, sem passar pela transição
-  const frases: Frase[] = CENAS.flatMap((c, i) => {
-    const lista = ROTEIRO[c.nome](n, k, c.dur).map((fr) => ({ ...fr, em: fr.em + INICIOS[i] }));
-    if (lista.length && i + 1 < CENAS.length) lista[lista.length - 1].ate = INICIOS[i + 1] + TRANSICAO / 2;
-    return lista;
-  });
+  const visivel = interpolate(f, [INICIOS[iOutro], INICIOS[iOutro] + 8], [1, 0], clamp);
   return (
     <AbsoluteFill>
       <Fundo />
       <TransitionSeries>
-        {CENAS.map(({ nome, dur, C }, i) => (
+        {CENAS.map(({ nome, dur, C, entrada }, i) => (
           <Fragment key={nome}>
-            {i > 0 && <TransitionSeries.Transition presentation={transicaoSerie()} timing={linearTiming({ durationInFrames: TRANSICAO })} />}
+            {i > 0 && entrada && <TransitionSeries.Transition presentation={entrada.tipo} timing={linearTiming({ durationInFrames: entrada.dur })} />}
             <TransitionSeries.Sequence name={nome} durationInFrames={dur}>
               <C n={n} k={k} dur={dur} />
             </TransitionSeries.Sequence>
           </Fragment>
         ))}
       </TransitionSeries>
-      <Legenda frases={frases} />
-      <Moldura episodio={n.episodio} visivel={visivel} etapa={etapa !== null ? Math.min(etapa, 4) : null} abas={abas} />
+      <Moldura episodio={n.episodio} visivel={visivel} etapa={etapa} abas={abas} />
     </AbsoluteFill>
   );
 };

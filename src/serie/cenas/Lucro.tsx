@@ -1,64 +1,65 @@
-import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
-import { brl } from "../calc";
-import { Icone } from "../ui/Icones";
-import { Celular, MaisUm } from "../ui/Ilustracoes";
-import { cor, degrade, entra, fontFamily, suave } from "../tema";
+import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { Batida } from "../ui/Batida";
+import { Odometro } from "../ui/Odometro";
+import { cor, degrade, entra, fontFamily, sombra, suave } from "../tema";
 import type { CenaProps } from "./props";
+import { Topo } from "./Topo";
 
 const num = new Intl.NumberFormat("pt-BR");
 
-export const Lucro: React.FC<CenaProps> = ({ n, k }) => {
+export const Mes: React.FC<CenaProps> = ({ n, k }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const cel = entra(f, fps, 6, 13);
-  const p = suave(f, 20, 110) * n.vendasPorDia;
-  const pedidos = Math.min(n.vendasPorDia, Math.floor(p));
-  const frac = pedidos >= n.vendasPorDia ? 1 : p - pedidos;
-  const visiveis = 5;
-  const card = entra(f, fps, 125, 11);
-  const conta = suave(f, 130, 190);
+  const dia = Math.max(1, Math.min(n.diasPorMes, Math.ceil(suave(f, 30, 80) * n.diasPorMes)));
+  const vendas = Math.round(suave(f, 6, 30) * n.vendasPorDia);
+  const total = entra(f, fps, 92, 9);
+  const flip = (f - 30) % 2 < 1 && f > 30 && f < 80;
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingTop: 300 }}>
-        <div style={{ position: "relative", scale: `${(0.8 + cel * 0.2) * (1 - card * 0.18)}`, opacity: cel, translate: `0 ${(1 - cel) * 200 - card * 200}px` }}>
-          <Celular largura={520}>
-            <div style={{ padding: "86px 30px 0" }}>
-              <div style={{ color: cor.texto, fontSize: 36, fontWeight: 800 }}>Pedidos de hoje</div>
-              <div style={{ color: cor.textoSuave, fontSize: 24, fontWeight: 600, marginBottom: 16 }}>{num.format(pedidos)} pedidos · valores de exemplo</div>
-              {Array.from({ length: visiveis }).map((_, j) => {
-                const id = pedidos - j;
-                if (id < 1) return null;
-                const novo = j === 0 ? Math.min(1, frac * 3) : 1;
-                return (
-                  <div key={id} style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 14px", marginBottom: 12, borderRadius: 22, background: j === 0 ? cor.azulFundo : cor.gelo, opacity: novo }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 22, background: cor.verde, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke={cor.branco} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ color: cor.texto, fontSize: 26, fontWeight: 800 }}>Pedido #{1000 + id}</div>
-                      <div style={{ color: cor.textoSuave, fontSize: 20, fontWeight: 600 }}>{n.cardapio[n.carroChefe].nome}</div>
-                    </div>
-                    <div style={{ color: cor.verde, fontSize: 26, fontWeight: 800 }}>+{brl(k.lucroValor)}</div>
-                  </div>
-                );
-              })}
-            </div>
-          </Celular>
-          {[0, 1, 2].map((i) => (
-            <MaisUm key={i} escala={entra(f, fps, 30 + i * 22, 8) * (1 - suave(f, 50 + i * 22, 60 + i * 22))} style={{ [i % 2 ? "right" : "left"]: -90, top: 200 + i * 180 }} />
-          ))}
+      <Topo texto="E no fim do *mês?*" tamanho={80} />
+      <div style={{ position: "absolute", left: 70, right: 70, top: 480, display: "flex", alignItems: "center", justifyContent: "center", gap: 26 }}>
+        <div style={{ borderRadius: 36, padding: "26px 34px", background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, textAlign: "center", scale: `${entra(f, fps, 0, 10)}` }}>
+          <div style={{ color: cor.preto, fontSize: 110, fontWeight: 800, letterSpacing: -4, lineHeight: 1 }}>{vendas}</div>
+          <div style={{ color: cor.textoSuave, fontSize: 30, fontWeight: 700 }}>copos por dia</div>
         </div>
-      </AbsoluteFill>
-      <div style={{ position: "absolute", left: 80, right: 80, top: 1180, borderRadius: 40, padding: "34px 40px", background: cor.verdeFundo, border: `2px solid ${cor.verde}55`, display: "flex", alignItems: "center", gap: 28, opacity: card, translate: `0 ${(1 - card) * 120}px` }}>
-        <Icone nome="calendario" tamanho={110} />
-        <div>
-          <div style={{ color: cor.texto, fontSize: 36, fontWeight: 700 }}>
-            {n.vendasPorDia} × {n.diasPorMes} dias = {num.format(k.mes.vendas)} copos
-          </div>
-          <div style={{ color: cor.verde, fontSize: 104, fontWeight: 800, letterSpacing: -4, lineHeight: 1.1 }}>{brl(k.mes.lucro * conta)}</div>
-          <div style={{ height: 10, borderRadius: 5, background: degrade, width: `${conta * 100}%` }} />
+        <div style={{ color: cor.azul, fontSize: 90, fontWeight: 800, opacity: entra(f, fps, 24) }}>×</div>
+        <div style={{ borderRadius: 36, overflow: "hidden", background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, width: 260, textAlign: "center", scale: `${entra(f, fps, 26, 10)}` }}>
+          <div style={{ background: degrade, color: cor.branco, fontSize: 30, fontWeight: 800, padding: "12px 0", letterSpacing: 2 }}>DIAS</div>
+          <div style={{ color: cor.preto, fontSize: 120, fontWeight: 800, letterSpacing: -4, lineHeight: 1.2, translate: `0 ${flip ? -8 : 0}px` }}>{dia}</div>
         </div>
       </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 820, textAlign: "center", color: cor.texto, fontSize: 48, fontWeight: 700, opacity: suave(f, 80, 90) }}>
+        = {num.format(k.mes.vendas)} copos no mês
+      </div>
+      <div style={{ position: "absolute", left: 70, right: 70, top: 940, borderRadius: 44, padding: "40px 40px", background: cor.verdeFundo, border: `3px solid ${cor.verde}66`, display: "flex", flexDirection: "column", alignItems: "center", opacity: Math.min(1, total * 3), scale: `${interpolate(total, [0, 1], [1.6, 1])}` }}>
+        <div style={{ color: cor.texto, fontSize: 40, fontWeight: 700 }}>Lucro no mês</div>
+        <Odometro valor={k.mes.lucro * suave(f, 94, 135)} final={k.mes.lucro} tamanho={124} cor={cor.verde} />
+      </div>
+      {Array.from({ length: 8 }).map((_, i) => {
+        const t = 100 + i * 4;
+        const e = suave(f, t, t + 30);
+        const x = 540 + Math.cos(i * 0.8) * 420 * e;
+        const y = 1150 - Math.sin(i * 1.3 + 1) * 320 * e - e * 180;
+        return f > t && e < 1 ? (
+          <div key={i} style={{ position: "absolute", left: x - 34, top: y, width: 68, height: 68, borderRadius: 34, background: degrade, color: cor.branco, fontSize: 24, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", opacity: 1 - e }}>
+            R$
+          </div>
+        ) : null;
+      })}
     </AbsoluteFill>
   );
 };
+
+export const Frase: React.FC<CenaProps> = () => (
+  <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
+    <Batida
+      gap={0}
+      linhas={[
+        { texto: "Isso é", em: 0, tamanho: 64, corTexto: cor.textoSuave, peso: 700 },
+        { texto: "PREÇO", em: 6, tamanho: 220, efeito: "slam", degrade: true },
+        { texto: "CERTO.", em: 14, tamanho: 220, efeito: "slam", degrade: true },
+      ]}
+    />
+  </AbsoluteFill>
+);
+
