@@ -27,50 +27,50 @@ const sec = (s: number) => Math.round(s * FPS);
 // Narração: um áudio por cena (public/narracao/cenaXX.wav).
 // `palavras` = momento de cada palavra DENTRO do áudio (s), medido por reconhecimento de voz.
 const CLIPES: { arquivo: string; dur: number; palavras: [string, number][] }[] = [
-  { arquivo: "cena01", dur: 2.04, palavras: [["Benatti", 0.33], ["Frios", 0.84], ["e", 1.04], ["Embalagens.", 1.13]] },
-  { arquivo: "cena02", dur: 4.16, palavras: [["Atacado", 0.21], ["e", 1.05], ["varejo,", 1.17], ["com", 1.83], ["qualidade", 2.07], ["e", 2.82], ["preço", 3.0], ["justo.", 3.45]] },
+  { arquivo: "cena01", dur: 1.61, palavras: [["Benatti", 0.24], ["Frios", 0.62], ["e", 0.86], ["Embalagens.", 0.96]] },
+  { arquivo: "cena02", dur: 3.34, palavras: [["Atacado", 0.18], ["e", 0.87], ["varejo,", 0.99], ["com", 1.53], ["qualidade", 1.74], ["e", 2.37], ["preço", 2.52], ["justo.", 2.91]] },
   {
     arquivo: "cena03",
-    dur: 11.4,
+    dur: 9.22,
     palavras: [
-      ["Aqui", 0.21], ["você", 0.6], ["encontra:", 0.9], ["carnes,", 1.71], ["frios,", 2.82], ["frango,", 3.99], ["mercearia,", 5.22],
-      ["produtos", 6.48], ["de", 7.2], ["limpeza,", 7.26], ["artigos", 8.31], ["de", 8.87], ["festa", 8.97], ["e", 9.69], ["embalagens", 9.86], ["em", 10.65], ["geral.", 10.77],
+      ["Aqui", 0.06], ["você", 0.39], ["encontra:", 0.63], ["carnes,", 1.26], ["frios,", 2.19], ["frango,", 3.21], ["mercearia,", 4.2],
+      ["produtos", 5.25], ["de", 5.85], ["limpeza,", 5.91], ["artigos", 6.78], ["de", 7.28], ["festa", 7.38], ["e", 7.9], ["embalagens", 8.02], ["em", 8.79], ["geral.", 8.85],
     ],
   },
-  { arquivo: "cena04", dur: 1.72, palavras: [["Tudo", 0.24], ["num", 0.63], ["só", 0.87], ["lugar!", 1.08]] },
-  { arquivo: "cena05", dur: 3.12, palavras: [["Embalagens", 0.36], ["pra", 1.02], ["sua", 1.17], ["casa", 1.38], ["e", 1.92], ["pro", 2.07], ["seu", 2.23], ["negócio.", 2.37]] },
+  { arquivo: "cena04", dur: 1.28, palavras: [["Tudo", 0.18], ["num", 0.57], ["só", 0.72], ["lugar!", 0.9]] },
+  { arquivo: "cena05", dur: 2.47, palavras: [["Embalagens", 0.3], ["pra", 0.84], ["sua", 0.99], ["casa", 1.17], ["e", 1.59], ["pro", 1.7], ["seu", 1.88], ["negócio.", 2.01]] },
   {
     arquivo: "cena06",
-    dur: 5.64,
-    palavras: [["Qualidade,", 0.21], ["variedade", 1.32], ["e", 2.37], ["confiança,", 2.49], ["com", 3.78], ["ofertas", 3.99], ["toda", 4.62], ["semana.", 4.95]],
+    dur: 4.48,
+    palavras: [["Qualidade,", 0.09], ["variedade", 0.96], ["e", 1.83], ["confiança,", 1.98], ["com", 3.03], ["ofertas", 3.21], ["toda", 3.72], ["semana.", 4.02]],
   },
   {
     arquivo: "cena07",
-    dur: 10.56,
+    dur: 8.49,
     palavras: [
-      ["Nosso", 0.27], ["horário:", 0.66], ["de", 1.59], ["segunda", 1.77], ["a", 2.37], ["sábado,", 2.43], ["das", 3.36], ["6h30", 3.68], ["da", 4.2], ["manhã", 4.32],
-      ["às", 4.95], ["21h30", 5.22], ["da", 5.79], ["noite.", 5.91], ["E", 6.78], ["aos", 6.9], ["domingos,", 7.05], ["das", 7.86], ["7h", 8.15], ["às", 9.27], ["21h.", 9.48],
+      ["Nosso", 0.09], ["horário:", 0.42], ["de", 1.17], ["segunda", 1.32], ["a", 1.83], ["sábado,", 1.86], ["das", 2.64], ["6h30", 2.91], ["da", 3.36], ["manhã", 3.45],
+      ["às", 3.96], ["21h30", 4.2], ["da", 4.68], ["noite.", 4.8], ["E", 5.49], ["aos", 5.58], ["domingos,", 5.76], ["das", 6.39], ["7h", 6.66], ["às", 7.56], ["21h.", 7.74],
     ],
   },
   {
     arquivo: "cena08",
-    dur: 10.04,
+    dur: 8.23,
     palavras: [
-      ["Venha", 0.24], ["nos", 0.6], ["visitar!", 0.78], ["Na", 1.74], ["Av.", 1.89], ["das", 2.31], ["Paineiras,", 2.49], ["quadra", 3.27], ["96,", 3.63], ["lote", 4.59], ["12,", 4.96],
-      ["próximo", 5.79], ["à", 6.16], ["feira", 6.21], ["de", 6.45], ["quinta,", 6.57], ["no", 6.96], ["Setor", 7.08], ["Pontakayana,", 7.44], ["em", 8.58], ["Trindade,", 8.7], ["Goiás.", 9.2],
+      ["Venha", 0.18], ["nos", 0.51], ["visitar!", 0.66], ["Na", 1.47], ["Av.", 1.59], ["das", 1.95], ["Paineiras,", 2.1], ["quadra", 2.73], ["96,", 3.06], ["lote", 3.81], ["12,", 4.16],
+      ["próximo", 4.8], ["à", 5.15], ["feira", 5.19], ["de", 5.4], ["quinta,", 5.49], ["no", 5.79], ["Setor", 5.91], ["Pontakayana,", 6.21], ["em", 7.14], ["Trindade,", 7.29], ["Goiás.", 7.7],
     ],
   },
-  { arquivo: "cena09", dur: 6.08, palavras: [["Faça", 0.12], ["seu", 0.51], ["pedido", 0.66], ["pelo", 1.05], ["WhatsApp:", 1.3], ["(62)", 2.13], ["99376-2140", 3.24]] },
-  { arquivo: "cena10", dur: 3.8, palavras: [["Benatti", 0.21], ["Frios", 0.93], ["e", 1.2], ["Embalagens:", 1.39], ["entregas", 2.37], ["rápidas!", 3.0]] },
+  { arquivo: "cena09", dur: 4.98, palavras: [["Faça", 0.15], ["seu", 0.45], ["pedido", 0.57], ["pelo", 0.85], ["WhatsApp:", 1.05], ["(62)", 1.74], ["99376-2140", 2.67]] },
+  { arquivo: "cena10", dur: 3.08, palavras: [["Benatti", 0.18], ["Frios", 0.78], ["e", 1.0], ["Embalagens:", 1.18], ["entregas", 1.95], ["rápidas!", 2.49]] },
 ];
 
 // Cada áudio começa logo depois do anterior (com um respiro entre cenas)
 const VOZ_INICIO = 1.0;
-const RESPIRO = 0.35;
+const RESPIRO = 0.12; // pausa entre um áudio e o próximo
 const INICIO: number[] = [];
 CLIPES.forEach((c, i) => INICIO.push(i === 0 ? VOZ_INICIO : INICIO[i - 1] + CLIPES[i - 1].dur + RESPIRO));
 const FIM_VOZ = INICIO[CLIPES.length - 1] + CLIPES[CLIPES.length - 1].dur;
-const DURACAO = Math.round((FIM_VOZ + 4.2) * 10) / 10;
+const DURACAO = Math.round((FIM_VOZ + 3.0) * 10) / 10;
 export const BENATTI_TOTAL = Math.round(DURACAO * BENATTI_FPS);
 
 const PALAVRAS = CLIPES.flatMap((c, i) => c.palavras.map(([w, a]) => ({ w, t: INICIO[i] + a })));
@@ -84,19 +84,19 @@ const quando = (palavra: string, depois = 0) => {
 
 // Cenas (s do vídeo)
 // Início de cada cena (s do vídeo): a cena entra um instante antes do seu áudio
-const ANTES = 0.15;
+const ANTES = 0.12;
 const B = {
   logo: 0,
   atacado: INICIO[1] - ANTES,
   produtos: INICIO[2] - ANTES, // inclui "Tudo num só lugar" (áudio 4)
   embalagens: INICIO[4] - ANTES,
   qualidade: INICIO[5] - ANTES,
-  ofertas: INICIO[5] + 3.78 - ANTES, // "com ofertas…" dentro do áudio 6
+  ofertas: INICIO[5] + 3.03 - ANTES, // "com ofertas…" dentro do áudio 6
   horario: INICIO[6] - ANTES,
   endereco: INICIO[7] - ANTES,
   whatsapp: INICIO[8] - ANTES,
   marca: INICIO[9] - ANTES,
-  fim: FIM_VOZ + 0.3,
+  fim: FIM_VOZ + 0.2,
 };
 
 // ============================================================
@@ -119,7 +119,7 @@ const CLAMP = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const SUAVE = Easing.bezier(0.16, 1, 0.3, 1); // curva "Apple": rápida no começo, pousa macio
 
 const useT = (start: number) => useCurrentFrame() / FPS + start;
-const rev = (t: number, at: number, dur = 0.7) => interpolate(t, [at, at + dur], [0, 1], { ...CLAMP, easing: SUAVE });
+const rev = (t: number, at: number, dur = 0.5) => interpolate(t, [at, at + dur], [0, 1], { ...CLAMP, easing: SUAVE });
 
 // Texto que surge (sobe levemente + desfoque some)
 const Surge: React.FC<{
@@ -135,7 +135,7 @@ const Surge: React.FC<{
   // texto entra letra por letra: cada letra sobe de dentro de uma "máscara" e perde o desfoque
   const letras = Array.from(children);
   const n = letras.length;
-  const passo = Math.min(0.03, 0.55 / n);
+  const passo = Math.min(0.02, 0.4 / n);
   return (
     <div
       style={{
@@ -152,7 +152,7 @@ const Surge: React.FC<{
       }}
     >
       {letras.map((ch, i) => {
-        const k = rev(t, at + i * passo, 0.65);
+        const k = rev(t, at + i * passo, 0.45);
         return (
           <span
             key={i}
@@ -205,7 +205,7 @@ const Logo: React.FC<{ size: number }> = ({ size }) => (
 // ============================================================
 //  CENA: cada uma tem o próprio fundo; troca com fade + leve zoom
 // ============================================================
-const TR = 14; // frames de sobreposição entre cenas
+const TR = 10; // frames de sobreposição entre cenas
 type Trans = "sobe" | "lado" | "zoom";
 
 // Movimento de câmera contínuo: a cena que sai e a que entra se movem juntas

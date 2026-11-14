@@ -1,7 +1,7 @@
 # Roteiro — Benatti Frios e Embalagens (estilo Apple)
 
-**Formato:** vertical 1080×1920 · 30 fps · **66,9 s**
-**Narração:** 10 áudios, um por cena, em `public/narracao/cena01.wav` … `cena10.wav` (o primeiro começa em 0:01,0; cada um começa 0,35 s depois do anterior terminar).
+**Formato:** vertical 1080×1920 · 30 fps · **52,3 s**
+**Narração:** 10 áudios, um por cena, em `public/narracao/cena01.wav` … `cena10.wav` (o primeiro começa em 0:01,0; áudios acelerados 20%; cada um começa 0,12 s depois do anterior terminar).
 **Sincronia:** os tempos abaixo são do **vídeo** e vêm da medição real de cada palavra no áudio (reconhecimento de voz), não de estimativa.
 
 ---
