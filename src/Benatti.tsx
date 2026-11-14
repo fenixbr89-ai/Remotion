@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AbsoluteFill,
+  Audio,
   Easing,
   Img,
   Sequence,
@@ -19,14 +20,23 @@ export const BENATTI_FPS = 30;
 const TRANSITION = 14;
 
 export const BENATTI_SCENES = {
-  abertura: 120, //   0s –  4s
-  categorias: 180, // 4s – 10s
-  embalagens: 120, // 10s – 14s
-  qualidade: 120, //  14s – 18s
-  horario: 150, //    18s – 23s
-  endereco: 150, //   23s – 28s
-  whatsapp: 150, //   28s – 33s
+  abertura: 162, //    0,0s –  5,4s
+  categorias: 267, //  5,4s – 14,3s
+  embalagens: 69, //  14,3s – 16,6s
+  qualidade: 72, //   16,6s – 19,0s
+  horario: 270, //    19,0s – 28,0s
+  endereco: 258, //   28,0s – 36,6s
+  whatsapp: 342, //   36,6s – 48,0s
 };
+
+// Narração (public/benatti-narracao.wav) cortada nas pausas naturais da voz.
+// `at` = segundo do vídeo em que o trecho começa; from/to = trecho do áudio (s).
+const NARRACAO = [
+  { at: 1.0, from: 0, to: 12.85 }, //   abertura + categorias
+  { at: 14.3, from: 12.85, to: 16.92 }, // embalagens + qualidade
+  { at: 19.0, from: 16.92, to: 25.51 }, // horário
+  { at: 28.0, from: 25.51, to: 42.2 }, //  endereço + WhatsApp
+];
 
 export const BENATTI_TOTAL = Object.values(BENATTI_SCENES).reduce(
   (a, b) => a + b,
@@ -480,7 +490,7 @@ const CATS = [
 const Categorias: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const highlight = Math.floor(interpolate(frame, [40, 170], [0, 7], CLAMP));
+  const highlight = Math.floor(interpolate(frame, [30, 215], [0, 7], CLAMP));
   return (
     <AbsoluteFill>
       <Title line1="TUDO NUM" line2="SÓ LUGAR!" top={150} />
@@ -1135,9 +1145,21 @@ export const Benatti: React.FC = () => {
           <Sweep />
         </Sequence>
       ))}
-      {/* Narração e trilha: coloque os arquivos em public/, descomente e importe Audio de "remotion"
-      <Audio src={staticFile("benatti-narracao.mp3")} />
-      <Audio src={staticFile("benatti-trilha.mp3")} volume={0.2} />
+      {NARRACAO.map((n, i) => (
+        <Sequence
+          key={`voz-${i}`}
+          from={Math.round(n.at * BENATTI_FPS)}
+          durationInFrames={Math.round((n.to - n.from) * BENATTI_FPS)}
+        >
+          <Audio
+            src={staticFile("benatti-narracao.wav")}
+            trimBefore={Math.round(n.from * BENATTI_FPS)}
+            trimAfter={Math.round(n.to * BENATTI_FPS)}
+          />
+        </Sequence>
+      ))}
+      {/* Trilha opcional: coloque public/benatti-trilha.mp3 e descomente
+      <Audio src={staticFile("benatti-trilha.mp3")} volume={0.12} />
       */}
     </AbsoluteFill>
   );

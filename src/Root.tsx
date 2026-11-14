@@ -16,7 +16,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="Benatti"
         component={Benatti}
-        durationInFrames={BENATTI_TOTAL} // 990 = 33s × 30fps
+        durationInFrames={BENATTI_TOTAL} // 1440 = 48s × 30fps
         fps={BENATTI_FPS}
         width={1080}
         height={1920}
