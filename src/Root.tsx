@@ -7,7 +7,7 @@ import { JulianoVideo } from "./juliano/JulianoVideo";
 import { J_TOTAL } from "./juliano/tema";
 import {
   JulianoImpacto,
-  IMPACTO_TOTAL,
+  totalDe,
 } from "./juliano-impacto/JulianoImpacto";
 import { DUR, FPS, HEIGHT, TOTAL, WIDTH } from "./pixora/timeline";
 import { Cena01Gancho } from "./pixora/scenes/Cena01Gancho";
@@ -46,9 +46,16 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="JulianoImpacto"
         component={JulianoImpacto}
-        durationInFrames={IMPACTO_TOTAL}
+        durationInFrames={totalDe("masculina")}
         {...V}
-        defaultProps={{ narracao: true }}
+        defaultProps={{ narracao: true, voz: "masculina" as const }}
+      />
+      <Composition
+        id="JulianoImpactoFeminina"
+        component={JulianoImpacto}
+        durationInFrames={totalDe("feminina")}
+        {...V}
+        defaultProps={{ narracao: true, voz: "feminina" as const }}
       />
       <Folder name="Pixora-Cenas">
         <Composition

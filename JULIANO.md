@@ -52,3 +52,11 @@ Tudo com capricho, do início ao acabamento.
 Chama no WhatsApp e faça seu orçamento sem compromisso: (62) 99113-2531.
 Juliano Pinturas. Seu espaço, renovado.
 ```
+
+### Duas vozes
+
+- `JulianoImpacto` — voz masculina (`narracao-impacto.wav`, 32,5 s).
+- `JulianoImpactoFeminina` — voz feminina (`narracao-impacto-feminina.wav`, 36,8 s).
+
+Os tempos do vídeo são definidos na voz masculina; para a feminina, `ANCORAS` mapeia cada
+momento-chave da fala de uma voz para a outra e interpola o restante.

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext, useContext } from "react";
 import {
   AbsoluteFill,
   interpolate,
@@ -27,15 +27,72 @@ import { Adesivo, Big, Estrela, K, Obj3D, pop, Risco } from "./kit";
  */
 export const START = [0, 67, 195, 268, 514, 600, 828, 975];
 const TRANS = 10;
-export const IMPACTO_TOTAL = START[START.length - 1];
-const from = (i: number) => START[i] - (i > 0 ? TRANS / 2 : 0);
-const dur = (i: number) =>
-  START[i + 1] -
-  START[i] +
+
+/**
+ * Vozes. Os tempos acima são da voz masculina; para outra voz, cada momento-chave da fala é
+ * mapeado (frame na voz masculina → frame na outra voz) e o resto é interpolado entre eles.
+ */
+export type Voz = "masculina" | "feminina";
+const ARQUIVO: Record<Voz, string> = {
+  masculina: "juliano/narracao-impacto.wav",
+  feminina: "juliano/narracao-impacto-feminina.wav",
+};
+const ANCORAS: Record<Voz, [number, number][] | null> = {
+  masculina: null,
+  feminina: [
+    [0, 0],
+    [7, 8], // "Sua casa"
+    [67, 78], // "Parede manchada"
+    [99, 114], // "Infiltração"
+    [129, 168], // "aquele reparo"
+    [162, 207], // "adiando"
+    [195, 244], // "Juliano Pinturas"
+    [225, 276], // "resolve para você"
+    [268, 326], // "Pintura residencial"
+    [312, 375], // "Pintura automotiva"
+    [349, 423], // "Elétrica"
+    [376, 452], // "Reformas"
+    [396, 485], // "E ainda"
+    [423, 509], // "pós-obra"
+    [444, 531], // "manutenção"
+    [474, 563], // "e muito mais"
+    [514, 600], // "Tudo com capricho"
+    [558, 651], // "do início ao acabamento"
+    [600, 703], // "Chama no WhatsApp"
+    [630, 729], // "e faça seu orçamento"
+    [660, 762], // "sem compromisso"
+    [692, 802], // número
+    [828, 953], // "Juliano Pinturas."
+    [868, 996], // "Seu espaço,"
+    [896, 1025], // "renovado."
+    [975, 1104], // fim (+1,5 s)
+  ],
+};
+const mapear = (voz: Voz, x: number) => {
+  const a = ANCORAS[voz];
+  if (!a) return x;
+  return interpolate(
+    x,
+    a.map((p) => p[0]),
+    a.map((p) => p[1]),
+  );
+};
+const inicio = (voz: Voz, i: number) => Math.round(mapear(voz, START[i]));
+const from = (voz: Voz, i: number) => inicio(voz, i) - (i > 0 ? TRANS / 2 : 0);
+const dur = (voz: Voz, i: number) =>
+  inicio(voz, i + 1) -
+  inicio(voz, i) +
   (i > 0 ? TRANS / 2 : 0) +
   (i < START.length - 2 ? TRANS / 2 : 0);
-/** Frame absoluto (tempo da fala) → frame local da cena i. */
-const L = (i: number, abs: number) => abs - from(i);
+export const totalDe = (voz: Voz) => inicio(voz, START.length - 1);
+export const IMPACTO_TOTAL = totalDe("masculina");
+
+const VozCtx = createContext<Voz>("masculina");
+/** Frame absoluto (tempo da fala, voz masculina) → frame local da cena i, na voz atual. */
+const useL = () => {
+  const voz = useContext(VozCtx);
+  return (i: number, abs: number) => mapear(voz, abs) - from(voz, i);
+};
 
 const Claro: React.FC<{ readonly children: React.ReactNode }> = ({
   children,
@@ -84,37 +141,48 @@ const vidro: React.CSSProperties = {
 };
 
 // ===== 1 · "Sua casa tá precisando de um cuidado?" (mesmo estilo de faixas da cena seguinte) =====
-const C0: React.FC = () => (
-  <Claro>
-    <Adesivo
-      at={6}
-      out={58}
-      fundo={K.laranja}
-      cor={K.branco}
-      y={600}
-      size={100}
-    >
-      Sua casa
-    </Adesivo>
-    <Adesivo at={20} out={60} fundo={K.preto} cor={K.branco} y={790} size={86}>
-      tá precisando
-    </Adesivo>
-    <Adesivo
-      rot={-2}
-      at={34}
-      out={62}
-      fundo={K.laranja}
-      cor={K.branco}
-      y={960}
-      size={100}
-    >
-      de um cuidado?
-    </Adesivo>
-  </Claro>
-);
+const C0: React.FC = () => {
+  const L = useL();
+  return (
+    <Claro>
+      <Adesivo
+        at={L(0, 6)}
+        out={L(0, 58)}
+        fundo={K.laranja}
+        cor={K.branco}
+        y={600}
+        size={100}
+      >
+        Sua casa
+      </Adesivo>
+      <Adesivo
+        at={L(0, 20)}
+        out={L(0, 60)}
+        fundo={K.preto}
+        cor={K.branco}
+        y={790}
+        size={86}
+      >
+        tá precisando
+      </Adesivo>
+      <Adesivo
+        rot={-2}
+        at={L(0, 34)}
+        out={L(0, 62)}
+        fundo={K.laranja}
+        cor={K.branco}
+        y={960}
+        size={100}
+      >
+        de um cuidado?
+      </Adesivo>
+    </Claro>
+  );
+};
 
 // ===== 2 · "Parede manchada, infiltração, aquele reparo que você vive adiando…" =====
 const C1: React.FC = () => {
+  const L = useL();
   const i = 1;
   return (
     <Escuro>
@@ -157,6 +225,7 @@ const C1: React.FC = () => {
 
 // ===== 3 · "Juliano Pinturas resolve para você." =====
 const C2: React.FC = () => {
+  const L = useL();
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const i = 2;
@@ -226,6 +295,7 @@ const OUTROS = [
 ];
 const AINDA = 396;
 const C3: React.FC = () => {
+  const L = useL();
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const i = 3;
@@ -391,6 +461,7 @@ const C3: React.FC = () => {
 
 // ===== 5 · "Tudo com capricho, do início ao acabamento." =====
 const C4: React.FC = () => {
+  const L = useL();
   const i = 4;
   return (
     <Claro>
@@ -416,6 +487,7 @@ const C4: React.FC = () => {
 // ===== 6 · "Chama no WhatsApp e faça seu orçamento sem compromisso: (62) 99113-2531." =====
 const NUMERO = 692;
 const C5: React.FC = () => {
+  const L = useL();
   const f = useCurrentFrame();
   const i = 5;
   const brilho = interpolate(f - L(i, NUMERO), [8, 14, 30], [0, 1, 0], CLAMP);
@@ -467,6 +539,7 @@ const C5: React.FC = () => {
 
 // ===== 7 · "Juliano Pinturas. Seu espaço, renovado." =====
 const C6: React.FC = () => {
+  const L = useL();
   const i = 6;
   return (
     <Claro>
@@ -516,44 +589,55 @@ const PASSAGENS = [
   whip("left"),
 ] as unknown as TransitionPresentation<Record<string, unknown>>[];
 
-export type JulianoImpactoProps = { readonly narracao: boolean };
+export type JulianoImpactoProps = {
+  readonly narracao: boolean;
+  readonly voz: Voz;
+};
 
-export const JulianoImpacto: React.FC<JulianoImpactoProps> = ({ narracao }) => (
-  <AbsoluteFill style={{ background: K.escuro }}>
-    <TransitionSeries>
-      {CENAS.flatMap((Cena, n) => [
-        <TransitionSeries.Sequence
-          key={`s${n}`}
-          name={`Cena ${n + 1}`}
-          durationInFrames={dur(n)}
-        >
-          <Cena />
-        </TransitionSeries.Sequence>,
-        ...(n < CENAS.length - 1
-          ? [
-              <TransitionSeries.Transition
-                key={`t${n}`}
-                presentation={PASSAGENS[n]}
-                timing={T}
-              />,
-            ]
-          : []),
-      ])}
-    </TransitionSeries>
-    <Audio
-      name="Trilha"
-      src={staticFile("juliano/trilha.mp3")}
-      volume={(fr) =>
-        interpolate(
-          fr,
-          [0, 15, IMPACTO_TOTAL - 40, IMPACTO_TOTAL],
-          [0, narracao ? 0.25 : 0.6, narracao ? 0.25 : 0.6, 0],
-          CLAMP,
-        )
-      }
-    />
-    {narracao ? (
-      <Audio name="Narração" src={staticFile("juliano/narracao-impacto.wav")} />
-    ) : null}
-  </AbsoluteFill>
-);
+export const JulianoImpacto: React.FC<JulianoImpactoProps> = ({
+  narracao,
+  voz,
+}) => {
+  const total = totalDe(voz);
+  return (
+    <VozCtx.Provider value={voz}>
+      <AbsoluteFill style={{ background: K.escuro }}>
+        <TransitionSeries>
+          {CENAS.flatMap((Cena, n) => [
+            <TransitionSeries.Sequence
+              key={`s${n}`}
+              name={`Cena ${n + 1}`}
+              durationInFrames={dur(voz, n)}
+            >
+              <Cena />
+            </TransitionSeries.Sequence>,
+            ...(n < CENAS.length - 1
+              ? [
+                  <TransitionSeries.Transition
+                    key={`t${n}`}
+                    presentation={PASSAGENS[n]}
+                    timing={T}
+                  />,
+                ]
+              : []),
+          ])}
+        </TransitionSeries>
+        <Audio
+          name="Trilha"
+          src={staticFile("juliano/trilha.mp3")}
+          volume={(fr) =>
+            interpolate(
+              fr,
+              [0, 15, total - 40, total],
+              [0, narracao ? 0.25 : 0.6, narracao ? 0.25 : 0.6, 0],
+              CLAMP,
+            )
+          }
+        />
+        {narracao ? (
+          <Audio name="Narração" src={staticFile(ARQUIVO[voz])} />
+        ) : null}
+      </AbsoluteFill>
+    </VozCtx.Provider>
+  );
+};
