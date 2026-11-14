@@ -1,54 +1,16 @@
-# Remotion video
+# Série "O que eu faria se abrisse uma…" — Preço Certo
 
-<p align="center">
-  <a href="https://github.com/remotion-dev/logo">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-dark.apng">
-      <img alt="Animated Remotion Logo" src="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-light.gif">
-    </picture>
-  </a>
-</p>
+Reels em motion graphics (1080×1920, 30 fps, 62 s) feitos com Remotion.
 
-Welcome to your Remotion project!
+## Comandos
+- `npm run dev` — abre o Remotion Studio (dá pra editar a ficha do episódio no painel de props).
+- `npm test` — confere as contas (custo, preço, sobra, lucro do mês).
+- `npx remotion render EP01-Acaiteria out/ep01-acaiteria.mp4` — gera o vídeo.
 
-## Commands
+## Novo episódio
+1. Copie `src/serie/negocios/acaiteria.ts` para `src/serie/negocios/<negocio>.ts` e troque nome, cor,
+   cardápio, itens com custo, taxa, lucro desejado, preço "errado" e vendas por dia.
+2. Em `src/Root.tsx`, adicione outro `<Composition id="EP02-…" defaultProps={<negocio>} … />`.
 
-**Install Dependencies**
-
-```console
-npm install
-```
-
-**Start Preview**
-
-```console
-npm run dev
-```
-
-**Render video**
-
-```console
-npx remotion render
-```
-
-**Upgrade Remotion**
-
-```console
-npx remotion upgrade
-```
-
-## Docs
-
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://discord.gg/6VzzNDwUwV).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/remotion-dev/remotion/issues/new).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
+As contas usam `preço = custo ÷ (1 − taxa − lucro)` e são calculadas em `src/serie/calc.ts`.
+Os valores aparecem com o selo "valores de exemplo".
