@@ -1,56 +1,61 @@
 import { Composition, Folder } from "remotion";
-import { HelloWorld } from "./HelloWorld";
-import { Logo } from "./HelloWorld/Logo";
-import { Title } from "./HelloWorld/Title";
+import { Cena01Abertura } from "./Comercial/Cena01Abertura";
+import { Cena02Pintura } from "./Comercial/Cena02Pintura";
+import { Cena03Telhados } from "./Comercial/Cena03Telhados";
+import { Cena04Instalacoes } from "./Comercial/Cena04Instalacoes";
+import { Cena05Versatilidade } from "./Comercial/Cena05Versatilidade";
+import { Cena06Logo } from "./Comercial/Cena06Logo";
+import { Comercial, DURACAO_TOTAL } from "./Comercial/Comercial";
 
-// Each <Composition> is an entry in the sidebar!
+const base = { fps: 30, width: 1920, height: 1080 } as const;
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
-      <Folder name="Elements">
+      <Composition
+        id="JulianoPinturas"
+        component={Comercial}
+        durationInFrames={DURACAO_TOTAL}
+        {...base}
+      />
+      <Folder name="Cenas">
         <Composition
-          id="Logo"
-          component={Logo}
-          durationInFrames={150}
-          fps={30}
-          width={1920}
-          height={1080}
-          defaultProps={{
-            logoColor1: "#91EAE4",
-            logoColor2: "#86A8E7",
-          }}
+          id="Cena01-Abertura"
+          component={Cena01Abertura}
+          durationInFrames={160}
+          {...base}
         />
         <Composition
-          id="Title"
-          component={Title}
-          durationInFrames={115}
-          fps={30}
-          width={1920}
-          height={1080}
-          defaultProps={{
-            titleText: "Welcome to Remotion",
-            titleColor: "#000000",
-          }}
+          id="Cena02-Pintura"
+          component={Cena02Pintura}
+          durationInFrames={230}
+          {...base}
+        />
+        <Composition
+          id="Cena03-Telhados"
+          component={Cena03Telhados}
+          durationInFrames={260}
+          {...base}
+        />
+        <Composition
+          id="Cena04-Instalacoes"
+          component={Cena04Instalacoes}
+          durationInFrames={290}
+          {...base}
+        />
+        <Composition
+          id="Cena05-Versatilidade"
+          component={Cena05Versatilidade}
+          durationInFrames={260}
+          {...base}
+        />
+        <Composition
+          id="Cena06-Logo"
+          component={Cena06Logo}
+          durationInFrames={250}
+          {...base}
         />
       </Folder>
-      <Composition
-        // You can take the "id" to render a video:
-        // bunx remotion render HelloWorld
-        id="HelloWorld"
-        component={HelloWorld}
-        durationInFrames={150}
-        fps={30}
-        width={1920}
-        height={1080}
-        // You can override these props for each render:
-        // https://www.remotion.dev/docs/parametrized-rendering
-        defaultProps={{
-          titleText: "Welcome to Remotion",
-          titleColor: "#000000",
-        }}
-      />
-
     </>
   );
 };

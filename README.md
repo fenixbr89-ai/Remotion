@@ -1,54 +1,20 @@
-# Remotion video
+# Juliano Pinturas — Comercial (45 s)
 
-<p align="center">
-  <a href="https://github.com/remotion-dev/logo">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-dark.apng">
-      <img alt="Animated Remotion Logo" src="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-light.gif">
-    </picture>
-  </a>
-</p>
+Comercial em motion graphics feito com Remotion, seguindo o roteiro de 6 cenas e a identidade da logo (branco/cinza-claro, preto e laranja).
 
-Welcome to your Remotion project!
+| Cena | Tempo | Arquivo |
+| --- | --- | --- |
+| 01 Abertura — a linha laranja revela a parede | 0–5 s | `src/Comercial/Cena01Abertura.tsx` |
+| 02 Pintura — rolo pintando em 3 passadas | 5–12 s | `src/Comercial/Cena02Pintura.tsx` |
+| 03 Telhados, calhas e pós-obra | 12–20 s | `src/Comercial/Cena03Telhados.tsx` |
+| 04 Hidráulica, elétrica, caixa d’água, manutenção | 20–29 s | `src/Comercial/Cena04Instalacoes.tsx` |
+| 05 Um só contato, muitas soluções | 29–37 s | `src/Comercial/Cena05Versatilidade.tsx` |
+| 06 Logo, WhatsApp e chamada | 37–45 s | `src/Comercial/Cena06Logo.tsx` |
 
-## Commands
+O texto da locução aparece na tela em cada cena. A trilha e os efeitos sonoros (`public/audio`) são gerados por `scripts/gerar-audio.py`; para usar uma locução gravada, adicione o arquivo em `public/` e um `<Audio>` em `src/Comercial/Comercial.tsx`.
 
-**Install Dependencies**
-
-```console
-npm install
+```bash
+npm i
+npm run dev                                        # pré-visualizar no Remotion Studio
+npx remotion render JulianoPinturas out/juliano-pinturas.mp4
 ```
-
-**Start Preview**
-
-```console
-npm run dev
-```
-
-**Render video**
-
-```console
-npx remotion render
-```
-
-**Upgrade Remotion**
-
-```console
-npx remotion upgrade
-```
-
-## Docs
-
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://discord.gg/6VzzNDwUwV).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/remotion-dev/remotion/issues/new).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
