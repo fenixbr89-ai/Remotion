@@ -60,8 +60,8 @@ Mistura: 40% Apple UI Motion · 30% Apple Product Showcase · 20% Minimalist Mot
 
 | Cena | Tempo | Arquivo |
 | --- | --- | --- |
-| Roleta de palavras → tela de bloqueio com notificações → apresentação do nome | 0–10,5s | `Abertura.tsx` |
-| Tela de apps → 5 vitrines de serviço → widgets "E muito mais" | 10,5–26,5s | `Servicos.tsx` |
+| Roleta de palavras → tela de bloqueio com notificações → "Então conheça" com a logo | 0–10,5s | `Abertura.tsx` |
+| Cartões de serviços → 5 vitrines (deslize lateral) → widgets "E muito mais" | 10,5–26,5s | `Servicos.tsx` |
 | Valores → cartão de contato (sheet) e frase final | 26,5–34s | `Encerramento.tsx` |
 
 Componentes de interface em `kit.tsx`. Trilha/SFX originais: `npm run audio`.

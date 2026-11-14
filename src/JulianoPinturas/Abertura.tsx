@@ -244,23 +244,34 @@ const LockScreen = () => {
   );
 };
 
-/** Apresentação só com tipografia — a logo fica para o final. */
+/** "Então conheça" com a logo. */
 const Apresentacao = () => {
+  const logo = useSpring(8, 15, 120);
   return (
     <Shot dur={90} bg={C.black}>
-      <div style={{ position: "absolute", top: 780, width: "100%" }}>
-        <T size={56} weight={600} color={C.grey} delay={4}>
+      <div style={{ position: "absolute", top: 300, width: "100%" }}>
+        <T size={64} weight={600} color={C.grey} delay={2}>
           Então conheça
         </T>
+      </div>
+      <Img
+        src={staticFile("img/logo.png")}
+        style={{
+          position: "absolute",
+          left: 540 - 320,
+          top: 900 - 320,
+          width: 640,
+          scale: String(0.85 + 0.15 * Math.min(logo, 1.04)),
+          opacity: Math.min(1, logo * 1.6),
+          filter: "drop-shadow(0 40px 60px rgba(255,107,0,0.25))",
+        }}
+      />
+      <div style={{ position: "absolute", top: 1330, width: "100%" }}>
+        <T size={84} color={C.white} delay={18}>
+          Juliano Pinturas
+        </T>
         <div style={{ height: 18 }} />
-        <T size={104} color={C.white} delay={10}>
-          Juliano
-        </T>
-        <T size={104} gradient delay={14}>
-          Pinturas.
-        </T>
-        <div style={{ height: 30 }} />
-        <T size={42} weight={500} color={C.grey} delay={22}>
+        <T size={44} weight={500} color={C.grey} delay={22}>
           Prestadora de serviços
         </T>
       </div>
@@ -280,7 +291,7 @@ export const Abertura: React.FC = () => (
     >
       <LockScreen />
     </Sequence>
-    <Sequence name="Apresentação (sem logo)" from={225} durationInFrames={90}>
+    <Sequence name="Então conheça (logo)" from={225} durationInFrames={90}>
       <Apresentacao />
     </Sequence>
 

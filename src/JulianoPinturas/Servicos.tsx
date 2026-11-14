@@ -9,7 +9,6 @@ import {
   useCurrentFrame,
 } from "remotion";
 import {
-  AppIcon,
   Chip,
   Glass,
   Product,
@@ -30,7 +29,6 @@ type Servico = {
   img: string;
   width: number;
   dark: boolean;
-  icon: string;
 };
 
 // Os 5 serviços principais
@@ -44,7 +42,6 @@ const SERVICOS: Servico[] = [
     img: "img/house.png",
     width: 700,
     dark: false,
-    icon: "#FFFFFF",
   },
   {
     nome: "Automotiva",
@@ -55,7 +52,6 @@ const SERVICOS: Servico[] = [
     img: "img/car.png",
     width: 580,
     dark: false,
-    icon: "#FFFFFF",
   },
   {
     nome: "Reformas",
@@ -66,7 +62,6 @@ const SERVICOS: Servico[] = [
     img: "img/bricks.png",
     width: 660,
     dark: false,
-    icon: "#FFFFFF",
   },
   {
     nome: "Hidráulica",
@@ -77,7 +72,6 @@ const SERVICOS: Servico[] = [
     img: "img/shower.png",
     width: 600,
     dark: false,
-    icon: "#FFFFFF",
   },
   {
     nome: "Elétrica",
@@ -88,50 +82,61 @@ const SERVICOS: Servico[] = [
     img: "img/bulb.png",
     width: 560,
     dark: false,
-    icon: "#FFFFFF",
   },
 ];
 
-const ICON = 230;
-const GAP_X = 90;
-const GRID_LEFT = (1080 - (3 * ICON + 2 * GAP_X)) / 2;
-const GRID_TOP = 640;
-const ROW = ICON + 140;
+// Cartões de serviço: 3 em cima, 2 centralizados embaixo
+const CARD_W = 290;
+const CARD_H = 340;
+const CARD_GAP = 40;
+const cardPos = (i: number) => {
+  const row = i < 3 ? 0 : 1;
+  const inRow = row === 0 ? 3 : 2;
+  const col = row === 0 ? i : i - 3;
+  const left = (1080 - (inRow * CARD_W + (inRow - 1) * CARD_GAP)) / 2;
+  return {
+    x: left + col * (CARD_W + CARD_GAP),
+    y: 680 + row * (CARD_H + CARD_GAP),
+  };
+};
 
-/** UI: tela inicial com os serviços como apps; o primeiro é tocado e abre. */
-const HomeScreen = () => {
+/** Os serviços em cartões; o primeiro é tocado e se expande para a vitrine. */
+const ServiceCards = () => {
   const frame = useCurrentFrame();
-  const press = interpolate(frame, [48, 52, 58], [1, 0.88, 1], CLAMP);
+  const press = interpolate(frame, [48, 52, 58], [1, 0.92, 1], CLAMP);
   const open = interpolate(frame, [56, 78], [0, 1], { ...CLAMP, easing: EASE });
-  const items = [
-    ...SERVICOS.map((s) => ({ label: s.nome, bg: s.icon, img: s.img })),
-    { label: "Mais", bg: "", img: "" },
-  ];
+  const first = cardPos(0);
   return (
-    <Shot dur={90} bg="#F2EEEA" out={false}>
-      <Wallpaper />
-      <div style={{ position: "absolute", top: 300, width: "100%" }}>
-        <T size={84} delay={2}>
-          Um app para cada
+    <Shot dur={90} bg={C.light} out={false}>
+      <div style={{ position: "absolute", top: 320, width: "100%" }}>
+        <T size={88} delay={2}>
+          Um só profissional.
         </T>
-        <T size={84} delay={6} gradient>
-          necessidade.
+        <T size={88} delay={6} gradient>
+          Vários serviços.
         </T>
       </div>
-      {items.map((it, i) => (
-        <Tile key={it.label} i={i} it={it} press={press} open={open} />
+      {SERVICOS.map((sv, i) => (
+        <Card
+          key={sv.nome}
+          i={i}
+          label={sv.nome}
+          img={sv.img}
+          press={press}
+          open={open}
+        />
       ))}
-      {/* abertura do app: o ícone se expande até ocupar a tela */}
+      {/* o cartão tocado se expande até ocupar a tela */}
       {open > 0 ? (
         <div
           style={{
             position: "absolute",
-            left: GRID_LEFT * (1 - open),
-            top: GRID_TOP * (1 - open),
-            width: ICON + (1080 - ICON) * open,
-            height: ICON + (1920 - ICON) * open,
-            borderRadius: 52 * (1 - open) + 4,
-            background: C.light,
+            left: first.x * (1 - open),
+            top: first.y * (1 - open),
+            width: CARD_W + (1080 - CARD_W) * open,
+            height: CARD_H + (1920 - CARD_H) * open,
+            borderRadius: 44 * (1 - open),
+            background: C.white,
           }}
         />
       ) : null}
@@ -139,73 +144,54 @@ const HomeScreen = () => {
   );
 };
 
-const Tile: React.FC<{
+const Card: React.FC<{
   i: number;
-  it: { label: string; bg: string; img: string };
+  label: string;
+  img: string;
   press: number;
   open: number;
-}> = ({ i, it, press, open }) => {
+}> = ({ i, label, img, press, open }) => {
   const s = useSpring(6 + i * 3, 13, 180);
-  const col = i % 3;
-  const row = Math.floor(i / 3);
+  const { x, y } = cardPos(i);
   return (
     <div
       style={{
         position: "absolute",
-        left: GRID_LEFT + col * (ICON + GAP_X),
-        top: GRID_TOP + row * ROW,
-        width: ICON,
+        left: x,
+        top: y,
+        width: CARD_W,
+        height: CARD_H,
+        borderRadius: 44,
+        background: C.white,
+        boxShadow: "0 18px 40px rgba(0,0,0,0.08)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 18,
+        justifyContent: "center",
+        gap: 20,
         scale: String(s * (i === 0 ? press : 1)),
         opacity: Math.min(1, s * 2) * (i === 0 ? 1 : 1 - open),
       }}
     >
-      {it.img ? (
-        <AppIcon size={ICON} bg={it.bg}>
-          <Img src={staticFile(it.img)} style={{ width: "78%" }} />
-        </AppIcon>
-      ) : (
-        <Glass
-          radius={ICON * 0.225}
-          style={{
-            width: ICON,
-            height: ICON,
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            padding: 44,
-            boxSizing: "border-box",
-            gap: 22,
-          }}
-        >
-          {[0, 1, 2, 3].map((k) => (
-            <div
-              key={k}
-              style={{
-                borderRadius: 18,
-                background: k === 0 ? C.orange : "rgba(0,0,0,0.12)",
-              }}
-            />
-          ))}
-        </Glass>
-      )}
+      <Img
+        src={staticFile(img)}
+        style={{ width: 200, height: 200, objectFit: "contain" }}
+      />
       <div
         style={{
           fontFamily: FONT,
           fontWeight: 600,
-          fontSize: 36,
+          fontSize: 38,
           color: C.text,
+          letterSpacing: "-0.01em",
         }}
       >
-        {it.label}
+        {label}
       </div>
     </div>
   );
 };
 
-/** Product showcase de um serviço. */
 /** Animação própria de cada serviço (o objeto "faz" o serviço). */
 const Visual: React.FC<{ s: Servico }> = ({ s }) => {
   const frame = useCurrentFrame();
@@ -553,8 +539,8 @@ const Widgets = () => (
 
 export const Servicos: React.FC = () => (
   <AbsoluteFill style={{ backgroundColor: C.light }}>
-    <Sequence name="Tela inicial (apps)" durationInFrames={90}>
-      <HomeScreen />
+    <Sequence name="Cartões de serviços" durationInFrames={90}>
+      <ServiceCards />
     </Sequence>
     <Sequence name="Serviços (carrossel)" from={90} durationInFrames={300}>
       <Carrossel />
