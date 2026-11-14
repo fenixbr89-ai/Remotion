@@ -18,14 +18,14 @@ import { Adesivo, Big, Estrela, K, Obj3D, pop, Risco } from "./kit";
  * Roteiro (tempos estimados até a narração nova chegar):
  *  0–2,6s   "Sua casa tá precisando de um cuidado?"
  *  2,6–6,4  "Parede manchada, infiltração, aquele reparo que você vive adiando…"
- *  6,4–8,8  "A Juliano Pinturas resolve pra você."
- *  8,8–12,1 "Pintura residencial. Pintura automotiva. Elétrica."   → 3 quadrados de vidro
- *  12,1–16,1 "E ainda: reformas, pós-obra e muito mais." → etiquetas simples
- *  16,1–18,9 "Tudo com capricho, do início ao acabamento."
- *  18,9–24,5 "Chama no WhatsApp e pede seu orçamento: (62) 99113-2531."
- *  24,5–28,8 "Juliano Pinturas. Seu espaço, renovado."
+ *  6,4–8,8  "Juliano Pinturas resolve para você."
+ *  8,8–13,0 "Pintura residencial. Pintura automotiva. Elétrica. Reformas." → 4 quadrados de vidro
+ *  13,0–17,0 "E ainda: pós-obra, manutenção e muito mais." → etiquetas simples
+ *  17,0–19,8 "Tudo com capricho, do início ao acabamento."
+ *  19,8–25,4 "Chama no WhatsApp e pede seu orçamento: (62) 99113-2531."
+ *  25,4–29,7 "Juliano Pinturas. Seu espaço, renovado."
  */
-export const START = [0, 78, 192, 264, 484, 568, 736, 865];
+export const START = [0, 78, 192, 264, 510, 594, 762, 891];
 const TRANS = 10;
 export const IMPACTO_TOTAL = START[START.length - 1];
 const from = (i: number) => START[i] - (i > 0 ? TRANS / 2 : 0);
@@ -154,7 +154,7 @@ const C1: React.FC = () => {
   );
 };
 
-// ===== 3 · "A Juliano Pinturas resolve pra você." =====
+// ===== 3 · "Juliano Pinturas resolve para você." =====
 const C2: React.FC = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -191,10 +191,10 @@ const C2: React.FC = () => {
         }}
       />
       <Big at={L(i, 202)} y={900} size={96} weight={800} color={K.branco}>
-        A Juliano Pinturas
+        Juliano Pinturas
       </Big>
-      <Big at={L(i, 212)} y={1020} size={130} color={K.laranja}>
-        resolve pra você.
+      <Big at={L(i, 212)} y={1020} size={112} color={K.laranja}>
+        resolve para você.
       </Big>
     </Escuro>
   );
@@ -205,13 +205,13 @@ const PRINCIPAIS = [
   { src: "3d/rolo", nome: "Pintura", sub: "residencial", at: 270 },
   { src: "3d/carro", nome: "Pintura", sub: "automotiva", at: 303 },
   { src: "3d/lampada", nome: "Elétrica", sub: "instalações", at: 336 },
+  { src: "3d/tijolos", nome: "Reformas", sub: "e acabamento", at: 363 },
 ];
 const OUTROS = [
-  { txt: "Reformas", at: 388 },
-  { txt: "Pós-obra", at: 404 },
-  { txt: "Manutenção", at: 420 },
+  { txt: "Pós-obra", at: 412 },
+  { txt: "Manutenção", at: 428 },
 ];
-const AINDA = 372;
+const AINDA = 396;
 const C3: React.FC = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -264,7 +264,7 @@ const C3: React.FC = () => {
               key={p.sub + k}
               style={{
                 position: "absolute",
-                left: k < 2 ? (k % 2) * (Q + GAP) : (Q + GAP) / 2,
+                left: (k % 2) * (Q + GAP),
                 top: Math.floor(k / 2) * (Q + GAP),
                 width: Q,
                 height: Q,
@@ -349,7 +349,7 @@ const C3: React.FC = () => {
             fontFamily: FONT,
             fontWeight: 800,
             fontSize: 46,
-            ...pop(f, L(i, 440)),
+            ...pop(f, L(i, 446)),
           }}
         >
           e muito mais
@@ -364,19 +364,19 @@ const C4: React.FC = () => {
   const i = 4;
   return (
     <Claro>
-      <Big at={L(i, 488)} y={640} size={96} weight={800} color={K.preto}>
+      <Big at={L(i, 514)} y={640} size={96} weight={800} color={K.preto}>
         Tudo com
       </Big>
-      <Big at={L(i, 494)} y={750} size={180} color={K.laranja}>
+      <Big at={L(i, 520)} y={750} size={180} color={K.laranja}>
         capricho
       </Big>
       <Risco
         d="M160 965C380 930 700 940 920 955"
-        at={L(i, 506)}
+        at={L(i, 532)}
         cor={K.preto}
         width={12}
       />
-      <Big at={L(i, 522)} y={1040} size={70} weight={800} color={K.preto}>
+      <Big at={L(i, 548)} y={1040} size={70} weight={800} color={K.preto}>
         do início ao acabamento.
       </Big>
     </Claro>
@@ -385,9 +385,9 @@ const C4: React.FC = () => {
 
 // ===== 6 · "Chama no WhatsApp e pede seu orçamento: (62) 99113-2531." =====
 const GRUPOS = [
-  { txt: "(62)", at: 640 },
-  { txt: "99113", at: 676 },
-  { txt: "-2531", at: 710 },
+  { txt: "(62)", at: 666 },
+  { txt: "99113", at: 702 },
+  { txt: "-2531", at: 736 },
 ];
 const C5: React.FC = () => {
   const f = useCurrentFrame();
@@ -401,16 +401,16 @@ const C5: React.FC = () => {
           position: "absolute",
           left: 420,
           top: 300,
-          ...pop(f, L(i, 572)),
+          ...pop(f, L(i, 598)),
         }}
       />
-      <Big at={L(i, 576)} y={590} size={92} weight={800} color={K.branco}>
+      <Big at={L(i, 602)} y={590} size={92} weight={800} color={K.branco}>
         Chama no
       </Big>
-      <Big at={L(i, 582)} y={690} size={150} color={K.zap}>
+      <Big at={L(i, 608)} y={690} size={150} color={K.zap}>
         WhatsApp
       </Big>
-      <Big at={L(i, 602)} y={870} size={64} weight={700} color={K.branco}>
+      <Big at={L(i, 628)} y={870} size={64} weight={700} color={K.branco}>
         e pede seu orçamento
       </Big>
       <div
@@ -459,14 +459,14 @@ const C6: React.FC = () => {
   const i = 6;
   return (
     <Claro>
-      <Big at={L(i, 740)} y={520} size={130} color={K.preto}>
+      <Big at={L(i, 766)} y={520} size={130} color={K.preto}>
         Juliano
       </Big>
-      <Big at={L(i, 746)} y={650} size={150} color={K.laranja}>
+      <Big at={L(i, 772)} y={650} size={150} color={K.laranja}>
         Pinturas
       </Big>
       <Adesivo
-        at={L(i, 770)}
+        at={L(i, 796)}
         fundo={K.preto}
         cor={K.branco}
         rot={-3}
@@ -477,7 +477,7 @@ const C6: React.FC = () => {
         Seu espaço,
       </Adesivo>
       <Adesivo
-        at={L(i, 780)}
+        at={L(i, 806)}
         fundo={K.laranja}
         cor={K.branco}
         rot={2}
@@ -488,7 +488,7 @@ const C6: React.FC = () => {
         renovado.
       </Adesivo>
       <Adesivo
-        at={L(i, 800)}
+        at={L(i, 826)}
         fundo={K.zap}
         cor={K.branco}
         rot={-1.5}
