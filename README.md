@@ -53,17 +53,18 @@ Found an issue with Remotion? [File an issue here](https://github.com/remotion-d
 
 Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
 
-## Comercial — O Juliano Pinturas (9:16, 30s, estilo Apple)
+## Comercial — O Juliano Pinturas (9:16, 32s, tipografia cinética)
 
-Composição `JulianoPinturas` (1080×1920, 30 fps, 900 frames), em `src/JulianoPinturas/`:
+Composição `JulianoPinturas` (1080×1920, 30 fps, 960 frames), em `src/JulianoPinturas/`.
+Estilo: fundo claro, Poppins, frases palavra por palavra, pílulas inclinadas, cursor clicando,
+anéis, eco de texto, sublinhado à mão, toggles e laranja da marca como destaque.
 
 | Cena | Tempo | Arquivo |
 | --- | --- | --- |
-| Abertura (pergunta + logo) | 0–6s | `Abertura.tsx` |
-| 5 serviços + "E muito mais" | 6–19s | `Servicos.tsx` |
-| Valores + assinatura e contato | 19–30s | `Encerramento.tsx` |
+| Abertura (pergunta → "Conheça o Juliano Pinturas") | 0–10,5s | `Abertura.tsx` |
+| Logo, 5 serviços e "e muito mais" | 10,5–24s | `Servicos.tsx` |
+| Valores, "Entre em contato" e assinatura | 24–32s | `Encerramento.tsx` |
 
-- Cortes no grid da trilha (120 BPM = 15 frames por batida).
-- Trilha e efeitos sonoros originais, gerados por `npm run audio` (`scripts/synth_audio.py`).
-- Narração: coloque o arquivo em `public/audio/narracao.mp3` e defina a prop `narracao` como `"audio/narracao.mp3"`; a trilha abaixa automaticamente.
-- Prévia: `npm run dev` · Render: `npm run render` (saída em `out/`).
+Efeitos reutilizáveis em `fx.tsx`. Trilha/SFX originais: `npm run audio`.
+Narração: coloque em `public/audio/narracao.mp3` e defina a prop `narracao`.
+Prévia: `npm run dev` · Render: `npm run render`.

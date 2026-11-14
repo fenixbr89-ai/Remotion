@@ -1,27 +1,26 @@
 import { loadFont } from "@remotion/fonts";
 import { Easing, staticFile } from "remotion";
 
-// Inter (Google Fonts, licença OFL), embutida para render offline.
-// Pesos altos + tracking negativo aproximam a tipografia das campanhas da Apple.
-export const SANS = "Inter";
-loadFont({
-  family: SANS,
-  url: staticFile("fonts/Inter-Variable.woff2"),
-  weight: "100 900",
-});
+// Poppins (Google Fonts, licença OFL), embutida para render offline
+export const FONT = "Poppins";
+for (const w of ["500", "600", "700", "800"]) {
+  loadFont({
+    family: FONT,
+    url: staticFile(`fonts/Poppins-${w}.woff2`),
+    weight: w,
+  });
+}
 
-// Identidade da logo: preto, branco e laranja
+// Fundo claro, texto grafite e laranja da marca como único destaque
 export const C = {
-  black: "#000000",
-  white: "#F5F5F7",
-  text: "#1D1D1F",
-  grey: "#86868B",
+  bg: "#FAFAFA",
+  ink: "#1C1C1C",
+  grey: "#8E8E8E",
+  light: "#E7E7E7",
+  mid: "#5E5E5E",
   orange: "#FF6B00",
+  white: "#FFFFFF",
 };
-
-// Texto em degradê laranja (destaques)
-export const ORANGE_GRADIENT =
-  "linear-gradient(90deg, #FF9500 0%, #FF6B00 50%, #FF4D00 100%)";
 
 // Trilha a 120 BPM => 1 batida = 15 frames
 export const BEAT = 15;
@@ -31,5 +30,5 @@ export const CLAMP = {
   extrapolateRight: "clamp",
 } as const;
 
-// Curva suave e precisa, típica das animações da Apple
 export const EASE = Easing.bezier(0.22, 1, 0.36, 1);
+export const BACK = Easing.bezier(0.34, 1.56, 0.64, 1);

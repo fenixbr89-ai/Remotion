@@ -9,7 +9,7 @@ SR = 44100
 BPM = 120
 BEAT = 60 / BPM
 BAR = BEAT * 4
-DUR = 30.0
+DUR = 32.0
 rng = np.random.default_rng(7)
 OUT = "public/audio/"
 
@@ -106,8 +106,8 @@ def both(x, at, g=1.0, pan=0.0):
 
 
 nbars = int(DUR / BAR)
-FULL = lambda b: (2 <= b <= 9) or (11 <= b <= 13)
-BREAK = lambda b: b == 10
+FULL = lambda b: 1 <= b <= 14
+BREAK = lambda b: False
 
 # sidechain envelope
 t_all = np.arange(N) / SR
@@ -151,8 +151,8 @@ for b in range(nbars):
                 n = ch[(beat * 4 + s) % 3] + 12 * (1 + (s % 2))
                 add(arp, pluck(mtof(n)), tb + s * BEAT / 4, 0.6)
 
-# riser in breakdown bar (20-22s)
-rt0 = 10 * BAR
+# riser leading into the closing card (22-24s)
+rt0 = 11 * BAR
 rt = t_(BAR)
 noise = rng.standard_normal(len(rt))
 riser = onepole_lp(noise, 300 + 9000 * (rt / BAR) ** 2) * (rt / BAR) ** 1.5
@@ -163,7 +163,7 @@ for k in range(16):
     both(CLAP, rt0 + BAR / 2 + k * BEAT / 8, 0.15 + 0.35 * k / 16)
 
 # final impact at 28s (bar 14 beat 0)
-fin_t = 14 * BAR
+fin_t = 15 * BAR
 ft = t_(2.0)
 boom = np.sin(2 * np.pi * np.cumsum(40 + 60 * np.exp(-ft * 10)) / SR) * np.exp(-ft * 2.2)
 both(boom, fin_t, 1.4)
@@ -187,6 +187,9 @@ def whoosh(d=0.45, lo=400, hi=5000):
     return y * env
 
 write("whoosh.wav", whoosh())
+write("whip.wav", whoosh(0.22, 800, 9000))
+t = t_(0.12)
+write("pop.wav", np.sin(2 * np.pi * np.cumsum(500 + 900 * t / 0.12) / SR) * np.exp(-t * 30))
 t = t_(0.06)
 write("click.wav", np.sin(2 * np.pi * 2400 * t) * np.exp(-t * 120) + 0.4 * rng.standard_normal(len(t)) * np.exp(-t * 400))
 print("ok")
