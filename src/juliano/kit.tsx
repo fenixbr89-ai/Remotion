@@ -1,5 +1,11 @@
 import React from "react";
-import { Img, interpolate, staticFile, useCurrentFrame } from "remotion";
+import {
+  Easing,
+  Img,
+  interpolate,
+  staticFile,
+  useCurrentFrame,
+} from "remotion";
 import { CLAMP, EASE, EASE_IN, FONT } from "../pixora/ui";
 import { GRADIENTE, J } from "./tema";
 
@@ -287,8 +293,10 @@ export const Barra: React.FC<{
   readonly sub: string;
   readonly filtro?: string;
   readonly hora?: string;
+  /** Frames desde que a barra apareceu (anima o ícone). */
+  readonly t?: number;
   readonly style?: React.CSSProperties;
-}> = ({ src, titulo, sub, filtro, hora = "agora", style }) => (
+}> = ({ src, titulo, sub, filtro, hora = "agora", style, t = 999 }) => (
   <div
     style={{
       position: "absolute",
@@ -305,7 +313,7 @@ export const Barra: React.FC<{
       ...style,
     }}
   >
-    <Obj src={src} size={100} style={{ filter: filtro }} />
+    <IconAnim src={src} size={100} t={t} filtro={filtro} />
     <div style={{ flex: 1, minWidth: 0 }}>
       <div
         style={{
@@ -341,3 +349,231 @@ export const Barra: React.FC<{
     </div>
   </div>
 );
+
+/**
+ * Objeto 3D animado: cada ícone tem a sua entrada (t = frames desde que apareceu).
+ * Depois da entrada ele fica parado (só a lâmpada mantém um brilho suave).
+ */
+export const IconAnim: React.FC<{
+  readonly src: string;
+  readonly size: number;
+  readonly t: number;
+  readonly filtro?: string;
+  readonly style?: React.CSSProperties;
+}> = ({ src, size, t, filtro, style }) => {
+  const nome = src.split("/")[1];
+  const k = Math.max(0, t);
+  const decai = Math.exp(-k / 9);
+  const entra = interpolate(k, [0, 12], [0, 1], { ...CLAMP, easing: EASE });
+  let tx = 0;
+  let ty = 0;
+  let rot = 0;
+  let sx = 1;
+  let sy = 1;
+  let extra: React.ReactNode = null;
+  let f = filtro ?? "";
+
+  if (nome === "carro") {
+    tx = (1 - entra) * -size * 0.9;
+    ty = -Math.abs(Math.sin(k * 0.7)) * size * 0.05 * decai;
+    rot = Math.sin(k * 0.7) * 3 * decai;
+  } else if (nome === "lampada") {
+    const on = interpolate(k, [6, 9, 11, 14], [0, 1, 0.4, 1], CLAMP);
+    f = `${f} grayscale(${1 - on}) brightness(${0.75 + 0.25 * on})`;
+    const pulse = on * (0.55 + 0.15 * Math.sin(k / 6));
+    extra = (
+      <div
+        style={{
+          position: "absolute",
+          inset: -size * 0.35,
+          borderRadius: "50%",
+          background:
+            "radial-gradient(closest-side, rgba(255,214,90,0.75), rgba(255,214,90,0))",
+          opacity: pulse,
+        }}
+      />
+    );
+  } else if (nome === "gota") {
+    const cai = interpolate(k, [0, 8], [0, 1], {
+      ...CLAMP,
+      easing: Easing.in(Easing.quad),
+    });
+    ty = (1 - cai) * -size * 0.7;
+    const amassa = interpolate(k, [8, 11, 15, 19], [0, 1, -0.4, 0], CLAMP);
+    sy = 1 - amassa * 0.18;
+    sx = 1 + amassa * 0.14;
+    const onda = interpolate(k, [8, 26], [0, 1], CLAMP);
+    extra =
+      k >= 8 && onda < 1 ? (
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            bottom: -size * 0.02,
+            width: size * (0.4 + onda * 0.9),
+            height: size * (0.1 + onda * 0.2),
+            translate: "-50% 0",
+            borderRadius: "50%",
+            border: `${Math.max(1, size * 0.025)}px solid rgba(110,180,240,${0.7 * (1 - onda)})`,
+          }}
+        />
+      ) : null;
+  } else if (nome === "casa" || nome === "tijolos") {
+    const cai = interpolate(k, [0, 9], [0, 1], {
+      ...CLAMP,
+      easing: Easing.in(Easing.quad),
+    });
+    ty =
+      (1 - cai) * -size * 0.6 -
+      (k > 9
+        ? Math.abs(Math.sin((k - 9) * 0.5)) *
+          size *
+          0.08 *
+          Math.exp(-(k - 9) / 6)
+        : 0);
+    const amassa = interpolate(k, [9, 12, 16], [0, 1, 0], CLAMP);
+    sy = 1 - amassa * 0.1;
+    sx = 1 + amassa * 0.08;
+  } else if (nome === "vassoura") {
+    rot = Math.sin(k * 0.45) * 22 * decai;
+    tx = Math.sin(k * 0.45) * size * 0.08 * decai;
+    extra = <Brilhos t={k - 6} size={size} />;
+  } else if (nome === "bomba") {
+    sx = 1 + Math.sin(k * 0.9) * 0.02 * decai;
+    extra = <Jato t={k - 4} size={size} />;
+  } else if (nome === "pincel") {
+    rot = interpolate(k, [0, 8, 16, 24], [-40, 18, -8, 0], {
+      ...CLAMP,
+      easing: EASE,
+    });
+  } else if (nome === "whatsapp") {
+    const badge = interpolate(k, [10, 16], [0, 1], { ...CLAMP, easing: EASE });
+    extra = (
+      <div
+        style={{
+          position: "absolute",
+          right: size * 0.02,
+          top: size * 0.02,
+          width: size * 0.28,
+          height: size * 0.28,
+          borderRadius: "50%",
+          background: "#FF3B30",
+          color: "#fff",
+          fontFamily: FONT,
+          fontWeight: 700,
+          fontSize: size * 0.17,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          scale: String(badge * (1 + Math.sin(badge * Math.PI) * 0.3)),
+          boxShadow: "0 4px 10px rgba(255,59,48,0.4)",
+        }}
+      >
+        1
+      </div>
+    );
+  }
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: size,
+        height: size,
+        flexShrink: 0,
+        ...style,
+      }}
+    >
+      {nome === "lampada" ? extra : null}
+      <Img
+        src={staticFile(`juliano/${src}.png`)}
+        style={{
+          width: size,
+          height: size,
+          objectFit: "contain",
+          translate: `${tx}px ${ty}px`,
+          rotate: `${rot}deg`,
+          scale: `${sx} ${sy}`,
+          transformOrigin: "50% 100%",
+          filter: f || undefined,
+          opacity: nome === "carro" ? entra : 1,
+        }}
+      />
+      {nome === "lampada" ? null : extra}
+    </div>
+  );
+};
+
+/** Brilhinhos que ficam depois da vassoura passar. */
+const Brilhos: React.FC<{ readonly t: number; readonly size: number }> = ({
+  t,
+  size,
+}) => {
+  if (t < 0 || t > 30) return null;
+  return (
+    <>
+      {[
+        [0.85, 0.2, 0],
+        [0.1, 0.55, 5],
+        [0.75, 0.75, 9],
+      ].map(([x, y, d]) => {
+        const p = interpolate(t - d, [0, 10, 20], [0, 1, 0], CLAMP);
+        const s = size * 0.22;
+        return (
+          <svg
+            key={`${x}${y}`}
+            width={s}
+            height={s}
+            viewBox="0 0 50 50"
+            style={{
+              position: "absolute",
+              left: x * size - s / 2,
+              top: y * size - s / 2,
+              scale: String(p),
+              opacity: p,
+            }}
+          >
+            <path
+              d="M25 0C27 18 32 23 50 25C32 27 27 32 25 50C23 32 18 27 0 25C18 23 23 18 25 0Z"
+              fill={J.ambar}
+            />
+          </svg>
+        );
+      })}
+    </>
+  );
+};
+
+/** Gotinhas saindo do cano da bomba. */
+const Jato: React.FC<{ readonly t: number; readonly size: number }> = ({
+  t,
+  size,
+}) => {
+  if (t < 0 || t > 34) return null;
+  return (
+    <>
+      {[0, 6, 12].map((d, i) => {
+        const p = interpolate(t - d, [0, 18], [0, 1], CLAMP);
+        if (p <= 0 || p >= 1) return null;
+        const x = size * (0.62 + p * 0.25 + i * 0.03);
+        const y = size * (0.08 - Math.sin(p * Math.PI) * 0.12 + p * p * 0.35);
+        const s = size * 0.08;
+        return (
+          <div
+            key={d}
+            style={{
+              position: "absolute",
+              left: x,
+              top: y,
+              width: s,
+              height: s * 1.3,
+              borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%",
+              background: "#6EC1F2",
+              opacity: 1 - p * 0.6,
+            }}
+          />
+        );
+      })}
+    </>
+  );
+};

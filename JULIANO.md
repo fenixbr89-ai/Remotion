@@ -25,8 +25,12 @@ Quando a narração chegar: `public/juliano/narracao.wav`, ajustar `START` e os 
 
 ## Arquivos
 
-- `src/juliano/JulianoVideo.tsx` — as 5 cenas; textos entram/saem palavra por palavra (`Kinetic`)
-  e ficam parados na tela; transições suaves (chicote e dissolve) entre cenas.
+- `src/juliano/JulianoVideo.tsx` — linha contínua (tempos em `M`), cada momento nasce de um elemento
+  do anterior: ícones → logo → notificações caindo da logo → casa e carro se soltam da lista →
+  o ponto de "carro." vira o preto → "Confiança." fica enquanto clareia → WhatsApp pousa na barra final.
+  Textos entram/saem palavra por palavra (`Kinetic`) e ficam parados na tela.
+- `IconAnim` (em `kit.tsx`) — animação de entrada de cada ícone 3D (carro roda, lâmpada acende,
+  bomba solta gotas, gota amassa, casa/tijolos quicam, vassoura varre, WhatsApp com bolinha "1").
 - `src/juliano/kit.tsx` — barra de notificação de vidro (`Barra`), fundo aurora, logo.
 - `public/juliano/3d/` — logo, carro, lâmpada, bomba, gota, casa, tijolos, vassoura e WhatsApp
   enviados pelo cliente (fundos recortados). `public/juliano/emoji/` — pincel (Fluent Emoji 3D, MIT).

@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AbsoluteFill,
+  Easing,
   interpolate,
   spring,
   staticFile,
@@ -8,11 +9,17 @@ import {
   useVideoConfig,
 } from "remotion";
 import { Audio } from "@remotion/media";
-import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { CLAMP, EASE, EASE_IN_OUT, FONT, Kinetic } from "../pixora/ui";
-import { dissolve, whip } from "../pixora/transicoes";
-import { Aurora, Barra, blur, LogoTile, Obj, Texto, vidroNotif } from "./kit";
-import { DUR, J, J_TOTAL, SERVICOS, TRANS } from "./tema";
+import {
+  Aurora,
+  Barra,
+  blur,
+  IconAnim,
+  LogoTile,
+  Texto,
+  vidroNotif,
+} from "./kit";
+import { J, J_TOTAL, SERVICOS } from "./tema";
 
 export type JulianoVideoProps = {
   /** Toca public/juliano/narracao.wav quando true. */
@@ -22,16 +29,6 @@ export type JulianoVideoProps = {
 const PHONE = "(62) 99113-2531";
 const ease = (f: number, a: number, b: number) =>
   interpolate(f, [a, b], [0, 1], { ...CLAMP, easing: EASE_IN_OUT });
-
-const Fundo: React.FC<{
-  readonly children: React.ReactNode;
-  readonly aurora?: boolean;
-}> = ({ children, aurora = true }) => (
-  <AbsoluteFill style={{ background: J.fundo, overflow: "hidden" }}>
-    {aurora ? <Aurora opacity={1} /> : null}
-    {children}
-  </AbsoluteFill>
-);
 
 const At: React.FC<{
   readonly y: number;
@@ -43,12 +40,47 @@ const At: React.FC<{
   </div>
 );
 
-// ===== A · Gancho + logo (0–5,2s) =====
-// "Precisa pintar, reformar ou consertar alguma coisa?" → "Chama o Juliano."
-const CenaA: React.FC = () => {
+/**
+ * Linha do tempo (frames) — cada momento nasce de um elemento do anterior:
+ *  0–156   gancho: três ícones caem e se juntam → viram a logo ("Chama o Juliano.")
+ *  140–400 a logo sobe e as notificações caem dela, uma por serviço falado
+ *  392–510 "Um só contato. Muitas soluções."
+ *  506–664 casa e carro se soltam da lista → "Pra sua casa / Pro seu carro";
+ *          o ponto final de "carro." cresce e vira o fundo preto
+ *  664–800 Qualidade, Capricho, Confiança; "Confiança." fica enquanto o fundo clareia
+ *  800–990 WhatsApp aparece, número é digitado, e o ícone pousa na barra final
+ */
+const M = {
+  logoSobe: 140,
+  chega: (k: number) => 166 + k * 30,
+  recua: 392,
+  solta: 506,
+  ponto: 636,
+  preto: 664,
+  valor: (i: number) => 676 + i * 30,
+  clareia: 780,
+  zap: 812,
+  vira: 900,
+};
+const TOP = 250;
+const PASSO = 168;
+const CASA = SERVICOS.findIndex((s) => s.src === "3d/casa");
+const CARRO = SERVICOS.findIndex((s) => s.src === "3d/carro");
+
+export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const ICONS = [
+
+  // fundo preto: nasce do ponto (já cobre a tela em M.preto) e volta a clarear em M.clareia
+  const preto = interpolate(
+    f,
+    [M.preto - 2, M.preto, M.clareia, M.clareia + 12],
+    [0, 1, 1, 0],
+    CLAMP,
+  );
+
+  // ---------- gancho → logo ----------
+  const GANCHO = [
     {
       src: "emoji/pincel",
       filtro: "hue-rotate(28deg) saturate(1.3)",
@@ -59,112 +91,177 @@ const CenaA: React.FC = () => {
     { src: "3d/lampada", x: 830, at: 34 },
   ];
   const junta = ease(f, 88, 106);
-  const logo = spring({
+  const logoPop = spring({
     frame: f - 100,
     fps,
     config: { damping: 15, stiffness: 120 },
   });
+  const logoSobe = ease(f, M.logoSobe, M.logoSobe + 22);
+  const logoSize = 380 * (1 - logoSobe) + 120 * logoSobe;
+  const logoY = 820 * (1 - logoSobe) + 125 * logoSobe;
+  const logoSai = blur(f, 0, M.chega(2), 12, 14);
+
+  // ---------- lista → casa e carro ----------
+  const recua =
+    ease(f, M.recua, M.recua + 18) * (1 - ease(f, M.solta, M.solta + 16));
+  const solta = ease(f, M.solta, M.solta + 26);
+  const outrasSaem = blur(f, 0, M.solta, 12, 12);
+
+  // ---------- ponto que vira o preto ----------
+  const dotIn = interpolate(f, [M.solta + 50, M.solta + 58], [0, 1], CLAMP);
+  const dotGrow = interpolate(f, [M.ponto, M.preto], [1, 180], {
+    ...CLAMP,
+    easing: Easing.in(Easing.quad),
+  });
+  const dotCor = interpolate(f, [M.ponto, M.ponto + 10], [0, 1], CLAMP);
+
+  // ---------- WhatsApp ----------
+  const zapPop = spring({
+    frame: f - M.zap,
+    fps,
+    config: { damping: 13, stiffness: 120 },
+  });
+  const toBar = ease(f, M.vira, M.vira + 20);
+  const zapSize = interpolate(toBar, [0, 1], [230, 100]);
+  const zapX = interpolate(toBar, [0, 1], [540, 70 + 26 + 50]);
+  const zapY = interpolate(toBar, [0, 1], [500, 1000 + 75]);
+  const typed = PHONE.slice(
+    0,
+    Math.floor(
+      interpolate(f, [M.zap + 40, M.zap + 70], [0, PHONE.length], CLAMP),
+    ),
+  );
+  const bar = interpolate(f, [M.vira + 8, M.vira + 22], [0, 1], {
+    ...CLAMP,
+    easing: EASE,
+  });
+
   return (
-    <Fundo>
-      <At y={330}>
-        <Kinetic
-          delay={2}
-          stagger={3}
-          outAt={86}
-          lines={[
-            { text: "Precisa pintar,", size: 96 },
-            { text: "reformar ou consertar?", size: 70, color: J.laranja },
-          ]}
-          lineHeight={1.12}
-        />
-      </At>
-      {ICONS.map((ic) => {
-        const s = spring({
-          frame: f - ic.at,
-          fps,
-          config: { damping: 13, stiffness: 130 },
-        });
-        const x = interpolate(junta, [0, 1], [ic.x, 540]);
-        const y = interpolate(junta, [0, 1], [800, 820]);
-        const size = 210 * (1 - junta * 0.5);
-        return (
-          <Obj
-            key={ic.src}
-            src={ic.src}
-            size={size}
-            style={{
-              position: "absolute",
-              left: x - size / 2,
-              top: y - size / 2,
-              scale: String(s),
-              opacity: 1 - interpolate(f, [100, 108], [0, 1], CLAMP),
-              filter: `${ic.filtro ?? ""} blur(${junta * 6}px)`,
-            }}
-          />
-        );
-      })}
-      {f >= 98 ? (
+    <AbsoluteFill style={{ background: J.fundo, overflow: "hidden" }}>
+      <Aurora opacity={1} />
+
+      {/* ===== gancho ===== */}
+      {f < 160 ? (
+        <>
+          <At y={330}>
+            <Kinetic
+              delay={2}
+              stagger={3}
+              outAt={86}
+              lines={[
+                { text: "Precisa pintar,", size: 96 },
+                { text: "reformar ou consertar?", size: 70, color: J.laranja },
+              ]}
+              lineHeight={1.12}
+            />
+          </At>
+          {f < 110
+            ? GANCHO.map((ic) => {
+                const x = interpolate(junta, [0, 1], [ic.x, 540]);
+                const size = 210 * (1 - junta * 0.55);
+                return (
+                  <IconAnim
+                    key={ic.src}
+                    src={ic.src}
+                    size={size}
+                    t={f - ic.at}
+                    filtro={ic.filtro}
+                    style={{
+                      position: "absolute",
+                      left: x - size / 2,
+                      top: 820 - size / 2,
+                      opacity:
+                        (f >= ic.at ? 1 : 0) *
+                        (1 - interpolate(f, [100, 108], [0, 1], CLAMP)),
+                      filter: `blur(${junta * 6}px)`,
+                    }}
+                  />
+                );
+              })
+            : null}
+          <At y={1080}>
+            <Kinetic
+              delay={106}
+              stagger={4}
+              outAt={M.logoSobe - 4}
+              lines={[{ text: "Chama o Juliano.", size: 92 }]}
+            />
+          </At>
+        </>
+      ) : null}
+      {f >= 98 && f < M.chega(2) + 16 ? (
         <LogoTile
-          size={380}
+          size={logoSize}
           style={{
             position: "absolute",
-            left: 350,
-            top: 630,
-            scale: String(logo),
-            opacity: Math.min(1, logo * 1.5),
+            left: 540 - logoSize / 2,
+            top: logoY - logoSize / 2,
+            scale: String(logoPop),
+            opacity: Math.min(1, logoPop * 1.5) * (logoSai.opacity as number),
+            filter: `${logoSai.filter} drop-shadow(0 12px 24px rgba(0,0,0,0.15))`,
           }}
         />
       ) : null}
-      <At y={1080}>
-        <Kinetic
-          delay={106}
-          stagger={4}
-          lines={[{ text: "Chama o Juliano.", size: 92 }]}
-        />
-      </At>
-    </Fundo>
-  );
-};
 
-// ===== B · Serviços em barras de notificação (5,2–17s) =====
-// Cada serviço chega como notificação no instante em que é falado e empurra os anteriores para baixo.
-const CHEGA = (k: number) => 4 + k * 30;
-const TOP = 230;
-const PASSO = 168;
-const RECUA = 236;
+      {/* ===== notificações (caem da logo) → casa e carro ===== */}
+      {f >= M.chega(0) - 1 && f < M.preto + 4
+        ? SERVICOS.map((s, k) => {
+            if (f < M.chega(k) - 1) return null;
+            const fica = k === CASA || k === CARRO;
+            let slot = 0;
+            for (let j = k + 1; j < SERVICOS.length; j++)
+              slot += ease(f, M.chega(j), M.chega(j) + 12);
+            const inn = interpolate(f, [M.chega(k), M.chega(k) + 12], [0, 1], {
+              ...CLAMP,
+              easing: EASE,
+            });
+            const topLista = TOP + slot * PASSO;
+            const destino = k === CASA ? 800 : 980;
+            const top = fica
+              ? topLista + (destino - topLista) * solta
+              : topLista;
+            const troca = fica
+              ? interpolate(f, [M.solta + 8, M.solta + 20], [0, 1], CLAMP)
+              : 0;
+            const sai = fica ? blur(f, 0, M.ponto - 6, 12, 10) : outrasSaem;
+            const titulo =
+              troca < 0.5
+                ? s.titulo
+                : k === CASA
+                  ? "Pra sua casa."
+                  : "Pro seu carro.";
+            const sub =
+              troca < 0.5
+                ? s.sub
+                : k === CASA
+                  ? "Paredes, fachadas e muros"
+                  : "Pintura automotiva";
+            return (
+              <Barra
+                key={s.titulo}
+                src={s.src}
+                filtro={s.filtro}
+                titulo={titulo}
+                sub={sub}
+                t={f - M.chega(k)}
+                style={{
+                  top,
+                  // começa um pouco acima, como se caísse da logo
+                  translate: `0px ${(1 - inn) * -80}px`,
+                  opacity: inn * (1 - recua * 0.75) * (sai.opacity as number),
+                  filter: `blur(${(1 - inn) * 16 + recua * 6 + Math.abs(Math.sin(troca * Math.PI)) * 4}px) ${sai.filter}`,
+                  scale: String((0.94 + 0.06 * inn) * (1 - recua * 0.06)),
+                }}
+              />
+            );
+          })
+        : null}
 
-const CenaB: React.FC = () => {
-  const f = useCurrentFrame();
-  const recua = ease(f, RECUA, RECUA + 18);
-  return (
-    <Fundo>
-      {SERVICOS.map((s, k) => {
-        if (f < CHEGA(k) - 1) return null;
-        let slot = 0;
-        for (let j = k + 1; j < SERVICOS.length; j++)
-          slot += ease(f, CHEGA(j), CHEGA(j) + 12);
-        const inn = interpolate(f, [CHEGA(k), CHEGA(k) + 12], [0, 1], {
-          ...CLAMP,
-          easing: EASE,
-        });
-        return (
-          <Barra
-            key={s.titulo}
-            {...s}
-            style={{
-              top: TOP + slot * PASSO,
-              opacity: inn * (1 - recua * 0.75),
-              filter: `blur(${(1 - inn) * 16 + recua * 6}px)`,
-              translate: `0px ${(1 - inn) * -50}px`,
-              scale: String((0.94 + 0.06 * inn) * (1 - recua * 0.06)),
-            }}
-          />
-        );
-      })}
       <At y={760}>
         <Kinetic
-          delay={RECUA + 6}
+          delay={M.recua + 6}
           stagger={4}
+          outAt={M.solta - 6}
           lines={[
             { text: "Um só contato.", size: 104 },
             { text: "Muitas soluções.", size: 104, color: J.laranja },
@@ -172,258 +269,201 @@ const CenaB: React.FC = () => {
           lineHeight={1.1}
         />
       </At>
-    </Fundo>
-  );
-};
 
-// ===== C · Casa e carro (17–22s) =====
-const CenaC: React.FC = () => {
-  const f = useCurrentFrame();
-  return (
-    <Fundo>
-      <At y={420}>
-        <Kinetic
-          delay={8}
-          stagger={4}
-          outAt={146}
-          lines={[
-            { text: "Da sua casa", size: 104 },
-            { text: "ao seu carro.", size: 104, color: J.laranja },
-          ]}
-          lineHeight={1.1}
-        />
-      </At>
-      <Barra
-        src="3d/casa"
-        titulo="Pra sua casa."
-        sub="Paredes, fachadas e muros"
-        style={{ top: 800, ...blur(f, 24, 146, 12, 10) }}
-      />
-      <Barra
-        src="3d/carro"
-        titulo="Pro seu carro."
-        sub="Pintura automotiva"
-        style={{ top: 980, ...blur(f, 40, 146, 12, 10) }}
-      />
-    </Fundo>
-  );
-};
+      {f >= M.solta && f < M.preto + 4 ? (
+        <At y={420}>
+          <Kinetic
+            delay={M.solta + 14}
+            stagger={4}
+            lines={[
+              { text: "Da sua casa", size: 104 },
+              { text: "ao seu carro", size: 104, color: J.laranja },
+            ]}
+            lineHeight={1.1}
+            trailing={
+              <span
+                style={{
+                  display: "inline-block",
+                  width: "0.2em",
+                  height: "0.2em",
+                  marginLeft: "0.03em",
+                  borderRadius: "50%",
+                  background: dotCor < 1 ? J.laranja : "#000",
+                  opacity: dotIn,
+                  scale: String(dotGrow * (0.4 + 0.6 * dotIn)),
+                  position: "relative",
+                  zIndex: 30,
+                  boxShadow:
+                    dotCor > 0 ? `0 0 0 999px rgba(0,0,0,0)` : undefined,
+                  filter: `brightness(${1 - dotCor})`,
+                }}
+              />
+            }
+          />
+        </At>
+      ) : null}
 
-// ===== D · Valores no preto (22–26s) =====
-const CenaD: React.FC = () => {
-  const f = useCurrentFrame();
-  const WORDS = ["Qualidade.", "Capricho.", "Confiança."];
-  const at = (i: number) => 10 + i * 30;
-  return (
-    <AbsoluteFill style={{ background: "#000" }}>
-      {WORDS.map((w, i) => {
-        const nextAt = i < 2 ? at(i + 1) : 9999;
-        const gray = interpolate(f, [nextAt, nextAt + 10], [0, 1], CLAMP);
-        return (
-          <At key={w} y={680 + i * 150}>
-            <div style={{ position: "relative" }}>
-              <div style={{ opacity: 1 - gray }}>
-                <Kinetic
-                  delay={at(i)}
-                  stagger={3}
-                  outAt={122}
-                  lines={[{ text: w, size: 124, color: J.laranja }]}
-                />
+      {/* ===== fundo preto ===== */}
+      <AbsoluteFill style={{ background: "#000", opacity: preto }} />
+
+      {/* ===== valores (Confiança fica enquanto clareia) ===== */}
+      {f >= M.preto && f < M.zap + 30
+        ? ["Qualidade.", "Capricho.", "Confiança."].map((w, i) => {
+            const nextAt = i < 2 ? M.valor(i + 1) : 99999;
+            const gray = interpolate(f, [nextAt, nextAt + 10], [0, 1], CLAMP);
+            const ultimo = i === 2;
+            const out = ultimo ? M.zap - 6 : M.clareia - 8;
+            // "Confiança." sobe ao centro enquanto as outras saem
+            const y =
+              680 +
+              i * 150 -
+              (ultimo ? ease(f, M.clareia - 6, M.clareia + 16) * 150 : 0);
+            return (
+              <At key={w} y={y}>
+                <div style={{ position: "relative" }}>
+                  <div style={{ opacity: 1 - gray }}>
+                    <Kinetic
+                      delay={M.valor(i)}
+                      stagger={3}
+                      outAt={out}
+                      lines={[{ text: w, size: 124, color: J.laranja }]}
+                    />
+                  </div>
+                  <div
+                    style={{ position: "absolute", inset: 0, opacity: gray }}
+                  >
+                    <Kinetic
+                      delay={M.valor(i)}
+                      stagger={3}
+                      outAt={out}
+                      lines={[{ text: w, size: 124, color: "#6E6E73" }]}
+                    />
+                  </div>
+                </div>
+              </At>
+            );
+          })
+        : null}
+
+      {/* ===== WhatsApp → barra final ===== */}
+      {f >= M.zap - 2 ? (
+        <>
+          <At y={680}>
+            <Kinetic
+              delay={M.zap + 8}
+              stagger={4}
+              outAt={M.vira - 6}
+              lines={[
+                { text: "Peça seu orçamento", size: 80 },
+                { text: "pelo WhatsApp.", size: 96, color: J.verdeEscuro },
+              ]}
+              lineHeight={1.12}
+            />
+          </At>
+          <At y={940} style={blur(f, M.zap + 36, M.vira - 6)}>
+            <Texto size={78} color={J.preto}>
+              {typed}
+              <span
+                style={{
+                  opacity: f % 20 < 10 && typed.length < PHONE.length ? 1 : 0,
+                }}
+              >
+                |
+              </span>
+            </Texto>
+          </At>
+          <At y={560}>
+            <Kinetic
+              delay={M.vira + 10}
+              stagger={4}
+              lines={[
+                { text: "Transformando", size: 100 },
+                { text: "seus espaços.", size: 100, color: J.laranja },
+              ]}
+              lineHeight={1.1}
+            />
+          </At>
+          <div
+            style={{
+              position: "absolute",
+              left: 70,
+              width: 940,
+              top: 1000,
+              height: 150,
+              borderRadius: 42,
+              padding: "0 34px 0 150px",
+              display: "flex",
+              alignItems: "center",
+              fontFamily: FONT,
+              ...vidroNotif,
+              opacity: bar,
+              filter: `blur(${(1 - bar) * 14}px)`,
+              scale: String(0.94 + 0.06 * bar),
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <div
+                style={{
+                  fontSize: 44,
+                  fontWeight: 700,
+                  color: J.preto,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Juliano Pinturas
               </div>
-              <div style={{ position: "absolute", inset: 0, opacity: gray }}>
-                <Kinetic
-                  delay={at(i)}
-                  stagger={3}
-                  outAt={122}
-                  lines={[{ text: w, size: 124, color: "#6E6E73" }]}
-                />
+              <div
+                style={{
+                  fontSize: 34,
+                  color: J.verdeEscuro,
+                  fontWeight: 600,
+                  marginTop: 2,
+                }}
+              >
+                {PHONE}
               </div>
             </div>
-          </At>
-        );
-      })}
+            <div
+              style={{
+                alignSelf: "flex-start",
+                marginTop: 26,
+                fontSize: 25,
+                color: J.cinzaEscuro,
+                opacity: 0.6,
+              }}
+            >
+              agora
+            </div>
+          </div>
+          <IconAnim
+            src="3d/whatsapp"
+            size={zapSize}
+            t={f - M.zap}
+            style={{
+              position: "absolute",
+              left: zapX - zapSize / 2,
+              top: zapY - zapSize / 2,
+              scale: String(zapPop),
+            }}
+          />
+        </>
+      ) : null}
+
+      <Audio
+        name="Trilha"
+        src={staticFile("juliano/trilha.mp3")}
+        volume={(fr) =>
+          interpolate(
+            fr,
+            [0, 15, J_TOTAL - 40, J_TOTAL],
+            [0, narracao ? 0.3 : 0.6, narracao ? 0.3 : 0.6, 0],
+            CLAMP,
+          )
+        }
+      />
+      {narracao ? (
+        <Audio name="Narração" src={staticFile("juliano/narracao.wav")} />
+      ) : null}
     </AbsoluteFill>
   );
 };
-
-// ===== E · WhatsApp e final (26–33s) =====
-// "Peça seu orçamento pelo WhatsApp." → "Juliano Pinturas. Transformando seus espaços."
-const VIRA = 112;
-const CenaE: React.FC = () => {
-  const f = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const pop = spring({
-    frame: f - 6,
-    fps,
-    config: { damping: 14, stiffness: 120 },
-  });
-  const toBar = ease(f, VIRA, VIRA + 20);
-  // o ícone grande encolhe e vira o ícone da barra final
-  const size = interpolate(toBar, [0, 1], [230, 100]);
-  const x = interpolate(toBar, [0, 1], [540, 70 + 26 + 50]);
-  const y = interpolate(toBar, [0, 1], [500, 1000 + 75]);
-  const typed = PHONE.slice(
-    0,
-    Math.floor(interpolate(f, [44, 74], [0, PHONE.length], CLAMP)),
-  );
-  const bar = interpolate(f, [VIRA + 8, VIRA + 22], [0, 1], {
-    ...CLAMP,
-    easing: EASE,
-  });
-  return (
-    <Fundo>
-      <At y={680}>
-        <Kinetic
-          delay={12}
-          stagger={4}
-          outAt={VIRA - 6}
-          lines={[
-            { text: "Peça seu orçamento", size: 80 },
-            { text: "pelo WhatsApp.", size: 96, color: J.verdeEscuro },
-          ]}
-          lineHeight={1.12}
-        />
-      </At>
-      <At y={940} style={blur(f, 40, VIRA - 6)}>
-        <Texto size={78} color={J.preto}>
-          {typed}
-          <span
-            style={{
-              opacity: f % 20 < 10 && typed.length < PHONE.length ? 1 : 0,
-            }}
-          >
-            |
-          </span>
-        </Texto>
-      </At>
-
-      <At y={560}>
-        <Kinetic
-          delay={VIRA + 10}
-          stagger={4}
-          lines={[
-            { text: "Transformando", size: 100 },
-            { text: "seus espaços.", size: 100, color: J.laranja },
-          ]}
-          lineHeight={1.1}
-        />
-      </At>
-      {/* barra final do WhatsApp (o ícone grande pousa nela) */}
-      <div
-        style={{
-          position: "absolute",
-          left: 70,
-          width: 940,
-          top: 1000,
-          height: 150,
-          borderRadius: 42,
-          padding: "0 34px 0 150px",
-          display: "flex",
-          alignItems: "center",
-          fontFamily: FONT,
-          ...vidroNotif,
-          opacity: bar,
-          filter: `blur(${(1 - bar) * 14}px)`,
-          scale: String(0.94 + 0.06 * bar),
-        }}
-      >
-        <div style={{ flex: 1 }}>
-          <div
-            style={{
-              fontSize: 44,
-              fontWeight: 700,
-              color: J.preto,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Juliano Pinturas
-          </div>
-          <div
-            style={{
-              fontSize: 34,
-              color: J.verdeEscuro,
-              fontWeight: 600,
-              marginTop: 2,
-            }}
-          >
-            {PHONE}
-          </div>
-        </div>
-        <div
-          style={{
-            alignSelf: "flex-start",
-            marginTop: 26,
-            fontSize: 25,
-            color: J.cinzaEscuro,
-            opacity: 0.6,
-          }}
-        >
-          agora
-        </div>
-      </div>
-      <Obj
-        src="3d/whatsapp"
-        size={size}
-        style={{
-          position: "absolute",
-          left: x - size / 2,
-          top: y - size / 2,
-          scale: String(pop),
-        }}
-      />
-    </Fundo>
-  );
-};
-
-const t = (k: number) =>
-  linearTiming({ durationInFrames: TRANS[k], easing: EASE_IN_OUT });
-
-export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => (
-  <AbsoluteFill style={{ background: J.fundo }}>
-    <TransitionSeries>
-      <TransitionSeries.Sequence name="A · Gancho" durationInFrames={DUR.a}>
-        <CenaA />
-      </TransitionSeries.Sequence>
-      <TransitionSeries.Transition presentation={whip("up")} timing={t(0)} />
-      <TransitionSeries.Sequence name="B · Serviços" durationInFrames={DUR.b}>
-        <CenaB />
-      </TransitionSeries.Sequence>
-      <TransitionSeries.Transition presentation={whip("left")} timing={t(1)} />
-      <TransitionSeries.Sequence
-        name="C · Casa e carro"
-        durationInFrames={DUR.c}
-      >
-        <CenaC />
-      </TransitionSeries.Sequence>
-      <TransitionSeries.Transition
-        presentation={dissolve(1.06, 0.96)}
-        timing={t(2)}
-      />
-      <TransitionSeries.Sequence name="D · Valores" durationInFrames={DUR.d}>
-        <CenaD />
-      </TransitionSeries.Sequence>
-      <TransitionSeries.Transition
-        presentation={dissolve(1.06, 0.96)}
-        timing={t(3)}
-      />
-      <TransitionSeries.Sequence name="E · WhatsApp" durationInFrames={DUR.e}>
-        <CenaE />
-      </TransitionSeries.Sequence>
-    </TransitionSeries>
-    <Audio
-      name="Trilha"
-      src={staticFile("juliano/trilha.mp3")}
-      volume={(fr) =>
-        interpolate(
-          fr,
-          [0, 15, J_TOTAL - 40, J_TOTAL],
-          [0, narracao ? 0.3 : 0.6, narracao ? 0.3 : 0.6, 0],
-          CLAMP,
-        )
-      }
-    />
-    {narracao ? (
-      <Audio name="Narração" src={staticFile("juliano/narracao.wav")} />
-    ) : null}
-  </AbsoluteFill>
-);
