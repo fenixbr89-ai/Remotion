@@ -327,14 +327,14 @@ export const JulianoVideo: React.FC<JulianoVideoProps> = ({ narracao }) => {
             </At>
             {[
               {
-                icon: "casa-jardim",
+                icon: "3d/casa",
                 titulo: "Pra sua casa.",
                 sub: "Paredes, fachadas e muros",
                 at: 40,
                 top: 940,
               },
               {
-                icon: "carro",
+                icon: "3d/carro",
                 titulo: "Pro seu carro.",
                 sub: "Pintura automotiva",
                 at: 56,

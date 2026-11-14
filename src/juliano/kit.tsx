@@ -187,7 +187,7 @@ export const NotifBody: React.FC<{
       fontFamily: FONT,
     }}
   >
-    <Icon3D name={icon} size={104} />
+    <Obj src={icon} size={104} />
     <div>
       <div
         style={{

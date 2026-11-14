@@ -31,18 +31,18 @@ export const J_TOTAL = T.fim;
 /** Os serviços entram um atrás do outro e preenchem a grade 3×3. */
 export const SERVICOS: { src: string; titulo: string; sub: string }[] = [
   { src: "3d/rolo", titulo: "Pintura", sub: "Paredes, fachadas e acabamento" },
-  { src: "emoji/carro", titulo: "Automotiva", sub: "Pintura automotiva" },
-  { src: "emoji/lampada", titulo: "Elétrica", sub: "Instalações elétricas" },
+  { src: "3d/carro", titulo: "Automotiva", sub: "Pintura automotiva" },
+  { src: "3d/lampada", titulo: "Elétrica", sub: "Instalações elétricas" },
   {
-    src: "emoji/chuveiro",
+    src: "3d/chuveiro",
     titulo: "Hidráulica",
     sub: "Instalações hidráulicas",
   },
-  { src: "emoji/gota", titulo: "Caixa d'água", sub: "Instalação e manutenção" },
-  { src: "emoji/casa", titulo: "Telhados", sub: "Telhados e calhas" },
-  { src: "emoji/tijolo", titulo: "Reformas", sub: "Pequenas reformas" },
+  { src: "3d/gota", titulo: "Caixa d'água", sub: "Instalação e manutenção" },
+  { src: "3d/casa", titulo: "Telhados", sub: "Telhados e calhas" },
+  { src: "3d/tijolos", titulo: "Reformas", sub: "Pequenas reformas" },
   {
-    src: "emoji/vassoura",
+    src: "3d/vassoura",
     titulo: "Pós-obra",
     sub: "Limpeza e acabamento final",
   },
