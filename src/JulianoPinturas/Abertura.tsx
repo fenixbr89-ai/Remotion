@@ -7,16 +7,7 @@ import {
   staticFile,
   useCurrentFrame,
 } from "remotion";
-import {
-  Glass,
-  Product,
-  Sfx,
-  Shot,
-  T,
-  useEase,
-  useSpring,
-  Wallpaper,
-} from "./kit";
+import { Glass, Sfx, Shot, T, useEase, useSpring, Wallpaper } from "./kit";
 import { C, CLAMP, EASE, FONT, ORANGE_GRADIENT } from "./theme";
 
 const WORDS = ["pintura?", "reformas?", "manutenção?"];
@@ -111,10 +102,20 @@ const Notification: React.FC<{
           alignItems: "center",
         }}
       >
-        <Img
-          src={staticFile("img/logo.png")}
-          style={{ width: 116, height: 116, borderRadius: 28, flexShrink: 0 }}
-        />
+        <div
+          style={{
+            width: 116,
+            height: 116,
+            borderRadius: 28,
+            flexShrink: 0,
+            background: "linear-gradient(160deg, #3A3A3C, #000000)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Img src={staticFile("img/roller.png")} style={{ width: 86 }} />
+        </div>
         <div style={{ fontFamily: FONT, flex: 1 }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div style={{ fontWeight: 700, fontSize: 40, color: C.text }}>
@@ -228,21 +229,61 @@ const LockScreen = () => {
   );
 };
 
-/** Product showcase da logo original (sem alterações). */
-const LogoShowcase = () => (
-  <Shot dur={90} bg={C.black}>
-    <div style={{ position: "absolute", top: 250, width: "100%" }}>
-      <T size={50} weight={600} color={C.grey} delay={4}>
-        Prestadora de serviços
-      </T>
-      <div style={{ height: 14 }} />
-      <T size={104} color={C.white} delay={8}>
-        O Juliano Pinturas.
-      </T>
-    </div>
-    <Product src="img/logo.png" width={640} y={1060} dark />
-  </Shot>
-);
+/** Apresentação só com tipografia e traço minimalista — a logo fica para o final. */
+const Apresentacao = () => {
+  const frame = useCurrentFrame();
+  const ring = interpolate(frame, [4, 40], [0, 1], { ...CLAMP, easing: EASE });
+  return (
+    <Shot dur={90} bg={C.black}>
+      <svg
+        width={1080}
+        height={1920}
+        style={{ position: "absolute", inset: 0 }}
+      >
+        <circle
+          cx={540}
+          cy={960}
+          r={430}
+          fill="none"
+          stroke={C.orange}
+          strokeWidth={4}
+          strokeLinecap="round"
+          pathLength={1}
+          strokeDasharray="1 1"
+          strokeDashoffset={1 - ring}
+          style={{
+            rotate: `${-90 + frame * 0.8}deg`,
+            transformOrigin: "540px 960px",
+          }}
+        />
+        <circle
+          cx={540}
+          cy={960}
+          r={470}
+          fill="none"
+          stroke="rgba(255,255,255,0.1)"
+          strokeWidth={2}
+        />
+      </svg>
+      <div style={{ position: "absolute", top: 780, width: "100%" }}>
+        <T size={56} weight={600} color={C.grey} delay={4}>
+          Então conheça
+        </T>
+        <div style={{ height: 18 }} />
+        <T size={104} color={C.white} delay={10}>
+          O Juliano
+        </T>
+        <T size={104} gradient delay={14}>
+          Pinturas.
+        </T>
+        <div style={{ height: 30 }} />
+        <T size={42} weight={500} color={C.grey} delay={22}>
+          Prestadora de serviços
+        </T>
+      </div>
+    </Shot>
+  );
+};
 
 export const Abertura: React.FC = () => (
   <AbsoluteFill style={{ backgroundColor: C.black }}>
@@ -256,8 +297,8 @@ export const Abertura: React.FC = () => (
     >
       <LockScreen />
     </Sequence>
-    <Sequence name="Logo (product showcase)" from={165} durationInFrames={90}>
-      <LogoShowcase />
+    <Sequence name="Apresentação (sem logo)" from={165} durationInFrames={90}>
+      <Apresentacao />
     </Sequence>
 
     <Sfx at={15} src="click.wav" volume={0.25} />
