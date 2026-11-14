@@ -1,68 +1,68 @@
 {
   "hook": {
-    "start": 10,
-    "end": 95,
-    "parts": [10]
+    "start": 3,
+    "end": 88,
+    "parts": [3]
   },
   "conheca": {
-    "start": 101,
-    "end": 161,
-    "parts": [101]
+    "start": 94,
+    "end": 154,
+    "parts": [94]
   },
   "profissional": {
-    "start": 167,
-    "end": 238,
-    "parts": [167]
+    "start": 160,
+    "end": 231,
+    "parts": [160]
   },
   "pintura": {
-    "start": 244,
-    "end": 298,
-    "parts": [244]
+    "start": 237,
+    "end": 291,
+    "parts": [237]
   },
   "automotiva": {
-    "start": 304,
-    "end": 391,
-    "parts": [304]
+    "start": 297,
+    "end": 384,
+    "parts": [297]
   },
   "reformas": {
-    "start": 397,
-    "end": 425,
-    "parts": [397]
+    "start": 390,
+    "end": 418,
+    "parts": [390]
   },
   "hidraulica": {
-    "start": 431,
-    "end": 501,
-    "parts": [431]
+    "start": 424,
+    "end": 494,
+    "parts": [424]
   },
   "eletrica": {
-    "start": 507,
-    "end": 578,
-    "parts": [507, 530]
+    "start": 500,
+    "end": 572,
+    "parts": [500, 523]
   },
   "mais": {
-    "start": 584,
-    "end": 759,
-    "parts": [584, 620, 653, 687, 724]
+    "start": 578,
+    "end": 752,
+    "parts": [578, 613, 646, 680, 717]
   },
   "valores": {
-    "start": 765,
-    "end": 866,
-    "parts": [765]
+    "start": 758,
+    "end": 859,
+    "parts": [758]
   },
   "precisou": {
-    "start": 872,
-    "end": 905,
-    "parts": [872]
+    "start": 865,
+    "end": 898,
+    "parts": [865]
   },
   "chame": {
-    "start": 911,
-    "end": 1090,
-    "parts": [911, 1005, 1021, 1055, 1077]
+    "start": 904,
+    "end": 1083,
+    "parts": [904, 998, 1014, 1048, 1070]
   },
   "final": {
-    "start": 1096,
-    "end": 1186,
-    "parts": [1096, 1129]
+    "start": 1089,
+    "end": 1179,
+    "parts": [1089, 1122]
   },
-  "_total": 1230
+  "_total": 1223
 }

@@ -10,7 +10,7 @@ import subprocess
 SRC = "narracao-original/narracao_voz_feminina.wav"
 TEMPO = 1.1  # fala 10% mais rápida, sem mudar o tom
 FPS = 30
-LEAD = 0.35  # segundos antes da primeira palavra
+LEAD = 0.1  # a voz entra praticamente de imediato
 TAIL = 1.6  # segundos depois da última palavra
 
 # Trechos de fala (segundos no arquivo original), detectados por silêncio.

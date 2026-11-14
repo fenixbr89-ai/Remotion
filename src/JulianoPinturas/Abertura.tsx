@@ -18,8 +18,8 @@ export const Hook: React.FC<{
   cues: [number, number, number];
 }> = ({ dur, cues }) => {
   // a roleta acompanha a fala: pintura → reforma → manutenção
-  const glow = useEase(0, 14);
-  const words = useEase(cues[0], 10);
+  const glow = useEase(0, 8);
+  const words = useEase(cues[0], 6);
   const s1 = useSpring(cues[1], 16, 220);
   const s2 = useSpring(cues[2], 16, 220);
   const line = useEase(cues[2] + 8, 14);
@@ -41,7 +41,7 @@ export const Hook: React.FC<{
         }}
       />
       <div style={{ position: "absolute", top: 700, width: "100%" }}>
-        <T size={64} weight={600} color={C.grey} delay={2} dur={12}>
+        <T size={100} weight={700} color={C.white} dur={6}>
           Precisando de
         </T>
         <div

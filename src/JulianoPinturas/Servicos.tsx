@@ -475,7 +475,7 @@ const WIDGETS: { label: string; kind: "roof" | "spark" | "tv" | "leaf" }[] = [
   { label: "Telhados\ne calhas", kind: "roof" },
   { label: "Limpeza\npós-obra", kind: "spark" },
   { label: "Instalação\nde TVs", kind: "tv" },
-  { label: "Capina e\njardinagem", kind: "leaf" },
+  { label: "Jardinagem", kind: "leaf" },
 ];
 
 const Widget: React.FC<{

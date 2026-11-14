@@ -53,7 +53,7 @@ export const Comercial: React.FC<ComercialProps> = ({
         <Hook
           dur={HOOK_END}
           cues={[
-            TL.hook.start + Math.round(hookLen * 0.38),
+            0, // "Precisando de pintura?" já aparece no primeiro frame
             TL.hook.start + Math.round(hookLen * 0.6),
             TL.hook.start + Math.round(hookLen * 0.78),
           ]}
