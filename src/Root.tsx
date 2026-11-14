@@ -2,15 +2,7 @@ import { Composition, Folder } from "remotion";
 import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
-import {
-  Comercial,
-  comercialSchema,
-  SCENES,
-  TOTAL,
-} from "./JulianoPinturas/Comercial";
-import { Abertura } from "./JulianoPinturas/Abertura";
-import { Servicos } from "./JulianoPinturas/Servicos";
-import { Encerramento } from "./JulianoPinturas/Encerramento";
+import { Comercial, comercialSchema, TOTAL } from "./JulianoPinturas/Comercial";
 import {
   StoryboardFrame,
   storyboardSchema,
@@ -29,33 +21,9 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1080}
         height={1920}
-        defaultProps={{ narracao: "", volumeTrilha: 0.9 }}
+        defaultProps={{ narracao: "audio/narracao.wav", volumeTrilha: 0.9 }}
       />
       <Folder name="JulianoPinturas-Cenas">
-        <Composition
-          id="Abertura"
-          component={Abertura}
-          durationInFrames={SCENES.abertura}
-          fps={30}
-          width={1080}
-          height={1920}
-        />
-        <Composition
-          id="Servicos"
-          component={Servicos}
-          durationInFrames={SCENES.servicos}
-          fps={30}
-          width={1080}
-          height={1920}
-        />
-        <Composition
-          id="Encerramento"
-          component={Encerramento}
-          durationInFrames={SCENES.encerramento}
-          fps={30}
-          width={1080}
-          height={1920}
-        />
         <Composition
           id="Storyboard"
           component={StoryboardFrame}

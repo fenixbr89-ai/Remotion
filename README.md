@@ -53,17 +53,14 @@ Found an issue with Remotion? [File an issue here](https://github.com/remotion-d
 
 Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
 
-## Comercial — O Juliano Pinturas (9:16, 34s)
+## Comercial — Juliano Pinturas (9:16, 41s, com narração)
 
-Composição `JulianoPinturas` (1080×1920, 30 fps, 1020 frames), em `src/JulianoPinturas/`.
-Mistura: 40% Apple UI Motion · 30% Apple Product Showcase · 20% Minimalist Motion · 10% Kinetic Typography.
+Composição `JulianoPinturas` (1080×1920, 30 fps), em `src/JulianoPinturas/`.
+A linha do tempo é guiada pela narração: cada cena começa quando a frase correspondente começa.
 
-| Cena | Tempo | Arquivo |
-| --- | --- | --- |
-| Roleta de palavras → tela de bloqueio com notificações → "Então conheça" com a logo | 0–10,5s | `Abertura.tsx` |
-| Cartões de serviços → 5 vitrines (deslize lateral) → widgets "E muito mais" | 10,5–26,5s | `Servicos.tsx` |
-| Valores → cartão de contato (sheet) e frase final | 26,5–34s | `Encerramento.tsx` |
+1. Narração original em `narracao-original/`. `python3 scripts/narration.py` corta as pausas longas,
+   acelera a fala em 10% e gera `public/audio/narracao.wav` + `src/JulianoPinturas/timeline.json`.
+2. `Comercial.tsx` monta as cenas a partir de `timeline.json`.
+3. Trilha/SFX originais: `npm run audio`.
 
-Componentes de interface em `kit.tsx`. Trilha/SFX originais: `npm run audio`.
-Narração: coloque em `public/audio/narracao.mp3` e defina a prop `narracao`.
 Prévia: `npm run dev` · Render: `npm run render`.

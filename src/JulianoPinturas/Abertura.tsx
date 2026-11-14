@@ -3,27 +3,29 @@ import {
   AbsoluteFill,
   Img,
   interpolate,
-  Sequence,
   staticFile,
   useCurrentFrame,
 } from "remotion";
-import { Glass, Sfx, Shot, T, useEase, useSpring, Wallpaper } from "./kit";
+import { Glass, Shot, T, useEase, useSpring, Wallpaper } from "./kit";
 import { C, CLAMP, EASE, FONT, ORANGE_GRADIENT } from "./theme";
 
 const WORDS = ["pintura?", "reformas?", "manutenção?"];
 const LINE = 170;
 
 /** Kinetic typography: "Precisando de" + roleta vertical de palavras. */
-const Hook = () => {
-  // 2s de respiro no início: a cena acende devagar antes da roleta começar
-  const glow = useEase(0, 60);
-  const words = useEase(30, 24);
-  const s1 = useSpring(75, 16, 220);
-  const s2 = useSpring(90, 16, 220);
-  const line = useEase(102, 18);
+export const Hook: React.FC<{
+  dur: number;
+  cues: [number, number, number];
+}> = ({ dur, cues }) => {
+  // a roleta acompanha a fala: pintura → reforma → manutenção
+  const glow = useEase(0, 14);
+  const words = useEase(cues[0], 10);
+  const s1 = useSpring(cues[1], 16, 220);
+  const s2 = useSpring(cues[2], 16, 220);
+  const line = useEase(cues[2] + 8, 14);
   const idx = s1 + s2;
   return (
-    <Shot dur={135} bg={C.black}>
+    <Shot dur={dur} bg={C.black}>
       <div
         style={{
           position: "absolute",
@@ -39,7 +41,7 @@ const Hook = () => {
         }}
       />
       <div style={{ position: "absolute", top: 700, width: "100%" }}>
-        <T size={64} weight={600} color={C.grey} delay={12} dur={28}>
+        <T size={64} weight={600} color={C.grey} delay={2} dur={12}>
           Precisando de
         </T>
         <div
@@ -158,19 +160,26 @@ const Notification: React.FC<{
 };
 
 /** UI: tela de bloqueio, Dynamic Island se expande e as notificações chegam. */
-const LockScreen = () => {
+export const LockScreen: React.FC<{ dur: number }> = ({ dur }) => {
   const frame = useCurrentFrame();
-  const island = interpolate(frame, [6, 14, 26, 34], [0, 1, 1, 0], {
-    ...CLAMP,
-    easing: EASE,
-  });
-  const zoom = interpolate(frame, [64, 90], [1, 2.6], {
+  // tempos originais pensados para 90 frames, comprimidos para caber em `dur`
+  const k = dur / 90;
+  const island = interpolate(
+    frame,
+    [6 * k, 14 * k, 26 * k, 34 * k],
+    [0, 1, 1, 0],
+    {
+      ...CLAMP,
+      easing: EASE,
+    },
+  );
+  const zoom = interpolate(frame, [64 * k, 90 * k], [1, 2.6], {
     ...CLAMP,
     easing: (t) => t * t * t,
   });
-  const blur = interpolate(frame, [74, 90], [0, 20], CLAMP);
+  const blur = interpolate(frame, [74 * k, 90 * k], [0, 20], CLAMP);
   return (
-    <Shot dur={90} bg="#F2EEEA" out={false}>
+    <Shot dur={dur} bg="#F2EEEA" out={false}>
       <AbsoluteFill
         style={{
           scale: String(zoom),
@@ -228,13 +237,13 @@ const LockScreen = () => {
           </T>
         </div>
         <Notification
-          delay={14}
+          delay={Math.round(10 * k)}
           y={680}
           title="Juliano Pinturas"
           body="Pintura, reformas e manutenção. Peça seu orçamento."
         />
         <Notification
-          delay={34}
+          delay={Math.round(26 * k)}
           y={950}
           title="Juliano Pinturas"
           body="Hidráulica e elétrica também. Tudo em um só lugar."
@@ -245,12 +254,12 @@ const LockScreen = () => {
 };
 
 /** "Então conheça" com a logo. */
-const Apresentacao = () => {
-  const logo = useSpring(8, 15, 120);
+export const Apresentacao: React.FC<{ dur: number }> = ({ dur }) => {
+  const logo = useSpring(0, 15, 140);
   return (
-    <Shot dur={90} bg={C.black}>
+    <Shot dur={dur} bg={C.black}>
       <div style={{ position: "absolute", top: 300, width: "100%" }}>
-        <T size={64} weight={600} color={C.grey} delay={2}>
+        <T size={64} weight={600} color={C.grey} dur={8}>
           Então conheça
         </T>
       </div>
@@ -267,38 +276,14 @@ const Apresentacao = () => {
         }}
       />
       <div style={{ position: "absolute", top: 1330, width: "100%" }}>
-        <T size={84} color={C.white} delay={18}>
+        <T size={84} color={C.white} delay={6}>
           Juliano Pinturas
         </T>
         <div style={{ height: 18 }} />
-        <T size={44} weight={500} color={C.grey} delay={22}>
+        <T size={44} weight={500} color={C.grey} delay={10}>
           Prestadora de serviços
         </T>
       </div>
     </Shot>
   );
 };
-
-export const Abertura: React.FC = () => (
-  <AbsoluteFill style={{ backgroundColor: C.black }}>
-    <Sequence name="Hook (tipografia)" durationInFrames={135}>
-      <Hook />
-    </Sequence>
-    <Sequence
-      name="Tela de bloqueio + notificações"
-      from={135}
-      durationInFrames={90}
-    >
-      <LockScreen />
-    </Sequence>
-    <Sequence name="Então conheça (logo)" from={225} durationInFrames={90}>
-      <Apresentacao />
-    </Sequence>
-
-    <Sfx at={75} src="click.wav" volume={0.25} />
-    <Sfx at={90} src="click.wav" volume={0.25} />
-    <Sfx at={149} src="ding.wav" volume={0.35} />
-    <Sfx at={169} src="ding.wav" volume={0.25} />
-    <Sfx at={200} src="whoosh.wav" volume={0.3} />
-  </AbsoluteFill>
-);

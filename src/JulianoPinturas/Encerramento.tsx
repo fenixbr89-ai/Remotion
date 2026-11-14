@@ -1,23 +1,35 @@
 import React from "react";
 import {
-  AbsoluteFill,
   Img,
   interpolate,
   Sequence,
   staticFile,
   useCurrentFrame,
 } from "remotion";
-import { Sfx, Shot, T, useEase, useSpring, Wallpaper } from "./kit";
+import { Shot, T, useEase, useSpring, Wallpaper } from "./kit";
 import { C, CLAMP, FONT } from "./theme";
 
 const VALORES = ["Dedicação.", "Responsabilidade.", "Compromisso."];
 
 /** Minimalismo + tipografia: um valor por vez. */
-const Valores = () => {
+export const Valores: React.FC<{ dur: number; cues: number[] }> = ({
+  dur,
+  cues,
+}) => {
   return (
-    <Shot dur={60} bg={C.light}>
+    <Shot dur={dur} bg={C.light}>
+      <div style={{ position: "absolute", top: 720, width: "100%" }}>
+        <T size={52} weight={600} color={C.grey} dur={8}>
+          Sempre com
+        </T>
+      </div>
       {VALORES.map((v, i) => (
-        <Sequence key={v} from={i * 20} durationInFrames={20} layout="none">
+        <Sequence
+          key={v}
+          from={cues[i]}
+          durationInFrames={(cues[i + 1] ?? dur) - cues[i]}
+          layout="none"
+        >
           <div style={{ position: "absolute", top: 860, width: "100%" }}>
             <T size={i === 1 ? 110 : 130} gradient={i === 2} dur={8}>
               {v}
@@ -30,13 +42,34 @@ const Valores = () => {
 };
 
 /** UI: cartão de contato sobe como uma "sheet" do iOS. */
-const ContactSheet = () => {
+export type ContactCues = {
+  chame: number; // "Chame Juliano Pinturas pelo WhatsApp"
+  phone: number; // o número sendo falado
+  press: number; // toque no botão
+  tag: number; // "Várias soluções, em um só lugar."
+};
+
+export const ContactSheet: React.FC<{ dur: number; cues: ContactCues }> = ({
+  dur,
+  cues,
+}) => {
   const frame = useCurrentFrame();
-  const sheet = useSpring(4, 18, 140);
-  const press = interpolate(frame, [70, 74, 82], [1, 0.94, 1], CLAMP);
-  const tag = useEase(84, 18);
+  const sheet = useSpring(cues.chame - 6, 18, 140);
+  const press = interpolate(
+    frame,
+    [cues.press, cues.press + 4, cues.press + 12],
+    [1, 0.94, 1],
+    CLAMP,
+  );
+  const tag = useEase(cues.tag - 4, 14);
+  const phone = interpolate(
+    frame,
+    [cues.phone, cues.phone + 6, cues.phone + 60, cues.phone + 70],
+    [0, 1, 1, 0],
+    CLAMP,
+  );
   return (
-    <Shot dur={165} bg="#0B0B0C" out={false}>
+    <Shot dur={dur} bg="#0B0B0C" out={false}>
       <Wallpaper dark />
       <div
         style={{
@@ -46,10 +79,10 @@ const ContactSheet = () => {
           opacity: 1 - tag,
         }}
       >
-        <T size={56} weight={600} color={C.grey} delay={2}>
+        <T size={64} weight={600} color={C.white} delay={2}>
           Precisou de algum serviço?
         </T>
-        <T size={96} color={C.white} delay={6}>
+        <T size={96} color={C.white} delay={cues.chame}>
           Chame Juliano Pinturas.
         </T>
       </div>
@@ -57,10 +90,10 @@ const ContactSheet = () => {
       <div
         style={{ position: "absolute", top: 240, width: "100%", opacity: tag }}
       >
-        <T size={96} color={C.white} delay={84}>
+        <T size={96} color={C.white} delay={cues.tag}>
           Várias soluções,
         </T>
-        <T size={96} gradient delay={88}>
+        <T size={96} gradient delay={cues.tag + 6}>
           em um só lugar.
         </T>
       </div>
@@ -98,11 +131,11 @@ const ContactSheet = () => {
           }}
         />
         <div style={{ height: 40 }} />
-        <T size={72} delay={20}>
+        <T size={72} delay={cues.chame + 10}>
           Juliano Pinturas
         </T>
         <div style={{ height: 14 }} />
-        <T size={44} weight={500} color={C.grey} delay={24}>
+        <T size={44} weight={500} color={C.grey} delay={cues.chame + 14}>
           Prestadora de serviços
         </T>
         <div style={{ height: 50 }} />
@@ -113,7 +146,10 @@ const ContactSheet = () => {
             background: C.light,
             padding: "30px 44px",
             boxSizing: "border-box",
-            opacity: useEase(30, 12),
+            opacity: useEase(cues.chame + 20, 12),
+            // destaque enquanto o número é falado
+            boxShadow: `0 0 0 ${6 * phone}px rgba(255,107,0,0.9)`,
+            scale: String(1 + 0.03 * phone),
           }}
         >
           <div
@@ -149,7 +185,7 @@ const ContactSheet = () => {
             alignItems: "center",
             justifyContent: "center",
             gap: 24,
-            scale: String(press * useSpring(40, 14, 180)),
+            scale: String(press * useSpring(cues.chame + 28, 14, 180)),
           }}
         >
           <Img src={staticFile("img/whatsapp.png")} style={{ width: 84 }} />
@@ -169,21 +205,3 @@ const ContactSheet = () => {
     </Shot>
   );
 };
-
-export const Encerramento: React.FC = () => (
-  <AbsoluteFill style={{ backgroundColor: C.light }}>
-    <Sequence name="Valores" durationInFrames={60}>
-      <Valores />
-    </Sequence>
-    <Sequence name="Contato (sheet)" from={60} durationInFrames={165}>
-      <ContactSheet />
-    </Sequence>
-
-    <Sfx at={0} src="click.wav" volume={0.2} />
-    <Sfx at={20} src="click.wav" volume={0.2} />
-    <Sfx at={40} src="click.wav" volume={0.2} />
-    <Sfx at={62} src="whoosh.wav" volume={0.3} />
-    <Sfx at={130} src="click.wav" volume={0.5} />
-    <Sfx at={134} src="ding.wav" volume={0.3} />
-  </AbsoluteFill>
-);

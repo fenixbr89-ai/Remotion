@@ -8,16 +8,7 @@ import {
   staticFile,
   useCurrentFrame,
 } from "remotion";
-import {
-  Chip,
-  Glass,
-  Product,
-  Sfx,
-  Shot,
-  T,
-  useSpring,
-  Wallpaper,
-} from "./kit";
+import { Chip, Glass, Product, Shot, T, useSpring, Wallpaper } from "./kit";
 import { C, CLAMP, EASE, FONT, ORANGE_GRADIENT } from "./theme";
 
 type Servico = {
@@ -101,13 +92,22 @@ const cardPos = (i: number) => {
 };
 
 /** Os serviços em cartões; o primeiro é tocado e se expande para a vitrine. */
-const ServiceCards = () => {
+export const ServiceCards: React.FC<{ dur: number }> = ({ dur }) => {
   const frame = useCurrentFrame();
-  const press = interpolate(frame, [48, 52, 58], [1, 0.92, 1], CLAMP);
-  const open = interpolate(frame, [56, 78], [0, 1], { ...CLAMP, easing: EASE });
+  const k = dur / 90;
+  const press = interpolate(
+    frame,
+    [48 * k, 52 * k, 58 * k],
+    [1, 0.92, 1],
+    CLAMP,
+  );
+  const open = interpolate(frame, [56 * k, 78 * k], [0, 1], {
+    ...CLAMP,
+    easing: EASE,
+  });
   const first = cardPos(0);
   return (
-    <Shot dur={90} bg={C.light} out={false}>
+    <Shot dur={dur} bg={C.light} out={false}>
       <div style={{ position: "absolute", top: 320, width: "100%" }}>
         <T size={88} delay={2}>
           Um só profissional.
@@ -118,6 +118,7 @@ const ServiceCards = () => {
       </div>
       {SERVICOS.map((sv, i) => (
         <Card
+          k={k}
           key={sv.nome}
           i={i}
           label={sv.nome}
@@ -145,13 +146,14 @@ const ServiceCards = () => {
 };
 
 const Card: React.FC<{
+  k: number;
   i: number;
   label: string;
   img: string;
   press: number;
   open: number;
-}> = ({ i, label, img, press, open }) => {
-  const s = useSpring(6 + i * 3, 13, 180);
+}> = ({ k, i, label, img, press, open }) => {
+  const s = useSpring(Math.round((6 + i * 3) * k), 13, 180);
   const { x, y } = cardPos(i);
   return (
     <div
@@ -332,10 +334,14 @@ const Visual: React.FC<{ s: Servico }> = ({ s }) => {
 };
 
 /** Product showcase de um serviço. */
-const Showcase: React.FC<{ s: Servico; out: boolean }> = ({ s, out }) => {
+const Showcase: React.FC<{ s: Servico; out: boolean; dur: number }> = ({
+  s,
+  out,
+  dur,
+}) => {
   const fg = s.dark ? C.white : C.text;
   return (
-    <Shot dur={72} bg={s.dark ? C.black : C.white} out={out}>
+    <Shot dur={dur} bg={s.dark ? C.black : C.white} out={out}>
       <div style={{ position: "absolute", top: 250, width: "100%" }}>
         <T size={42} weight={600} color={C.orange} dur={10}>
           {s.eyebrow}
@@ -370,16 +376,21 @@ const Showcase: React.FC<{ s: Servico; out: boolean }> = ({ s, out }) => {
   );
 };
 
-const SHOW = 60; // 2s por serviço
 const SWIPE = 12; // duração do deslize entre serviços
 
-/** Deslize lateral (estilo iOS) entre os serviços. */
-const Carrossel = () => {
+/**
+ * Deslize lateral (estilo iOS) entre os serviços.
+ * `starts`: frame em que cada serviço começa (sincronizado com a narração).
+ */
+export const Carrossel: React.FC<{ starts: number[]; dur: number }> = ({
+  starts,
+  dur,
+}) => {
   const frame = useCurrentFrame();
   let pos = 0;
   let speed = 0;
   for (let k = 1; k < SERVICOS.length; k++) {
-    const a = k * SHOW - SWIPE / 2;
+    const a = starts[k] - SWIPE / 2;
     pos += interpolate(frame, [a, a + SWIPE], [0, 1], {
       ...CLAMP,
       easing: Easing.bezier(0.65, 0, 0.35, 1),
@@ -394,13 +405,14 @@ const Carrossel = () => {
   return (
     <AbsoluteFill style={{ background: C.white, overflow: "hidden" }}>
       {SERVICOS.map((s, i) => {
-        const start = i === 0 ? 0 : i * SHOW - SWIPE / 2;
+        const start = i === 0 ? 0 : starts[i] - SWIPE / 2;
+        const end = i === SERVICOS.length - 1 ? dur : starts[i + 1] + SWIPE / 2;
         return (
           <Sequence
             key={s.nome}
             name={s.nome}
             from={start}
-            durationInFrames={SHOW + SWIPE}
+            durationInFrames={end - start}
             layout="none"
           >
             <AbsoluteFill
@@ -409,7 +421,11 @@ const Carrossel = () => {
                 filter: speed > 0.05 ? `blur(${speed * 10}px)` : undefined,
               }}
             >
-              <Showcase s={s} out={i === SERVICOS.length - 1} />
+              <Showcase
+                s={s}
+                out={i === SERVICOS.length - 1}
+                dur={end - start}
+              />
             </AbsoluteFill>
           </Sequence>
         );
@@ -463,11 +479,11 @@ const WIDGETS: { label: string; kind: "roof" | "spark" | "tv" | "leaf" }[] = [
 ];
 
 const Widget: React.FC<{
-  i: number;
+  at: number;
   label: string;
   kind: "roof" | "spark" | "tv" | "leaf";
-}> = ({ i, label, kind }) => {
-  const s = useSpring(10 + i * 4, 13, 170);
+}> = ({ at, label, kind }) => {
+  const s = useSpring(at, 13, 170);
   return (
     <div style={{ scale: String(s), opacity: Math.min(1, s * 2) }}>
       <Glass
@@ -514,8 +530,11 @@ const Widget: React.FC<{
 };
 
 /** UI: widgets com os demais serviços. */
-const Widgets = () => (
-  <Shot dur={90} bg="#F2EEEA">
+export const Widgets: React.FC<{ dur: number; cues: number[] }> = ({
+  dur,
+  cues,
+}) => (
+  <Shot dur={dur} bg="#F2EEEA">
     <Wallpaper />
     <div style={{ position: "absolute", top: 300, width: "100%" }}>
       <T size={110}>E muito mais.</T>
@@ -531,39 +550,8 @@ const Widgets = () => (
       }}
     >
       {WIDGETS.map((w, i) => (
-        <Widget key={w.label} i={i} label={w.label} kind={w.kind} />
+        <Widget key={w.label} at={cues[i]} label={w.label} kind={w.kind} />
       ))}
     </div>
   </Shot>
-);
-
-export const Servicos: React.FC = () => (
-  <AbsoluteFill style={{ backgroundColor: C.light }}>
-    <Sequence name="Cartões de serviços" durationInFrames={90}>
-      <ServiceCards />
-    </Sequence>
-    <Sequence name="Serviços (carrossel)" from={90} durationInFrames={300}>
-      <Carrossel />
-    </Sequence>
-    <Sequence name="E muito mais (widgets)" from={390} durationInFrames={90}>
-      <Widgets />
-    </Sequence>
-
-    {[0, 1, 2, 3, 4, 5].map((i) => (
-      <Sfx key={i} at={6 + i * 3} src="pop.wav" volume={0.18} />
-    ))}
-    <Sfx at={48} src="click.wav" volume={0.5} />
-    <Sfx at={56} src="whoosh.wav" volume={0.3} />
-    {SERVICOS.slice(1).map((s, i) => (
-      <Sfx
-        key={s.nome}
-        at={90 + (i + 1) * 60 - 6}
-        src="whip.wav"
-        volume={0.22}
-      />
-    ))}
-    {WIDGETS.map((w, i) => (
-      <Sfx key={w.label} at={400 + i * 4} src="pop.wav" volume={0.2} />
-    ))}
-  </AbsoluteFill>
 );

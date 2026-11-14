@@ -1,0 +1,68 @@
+{
+  "hook": {
+    "start": 10,
+    "end": 95,
+    "parts": [10]
+  },
+  "conheca": {
+    "start": 101,
+    "end": 161,
+    "parts": [101]
+  },
+  "profissional": {
+    "start": 167,
+    "end": 238,
+    "parts": [167]
+  },
+  "pintura": {
+    "start": 244,
+    "end": 298,
+    "parts": [244]
+  },
+  "automotiva": {
+    "start": 304,
+    "end": 391,
+    "parts": [304]
+  },
+  "reformas": {
+    "start": 397,
+    "end": 425,
+    "parts": [397]
+  },
+  "hidraulica": {
+    "start": 431,
+    "end": 501,
+    "parts": [431]
+  },
+  "eletrica": {
+    "start": 507,
+    "end": 578,
+    "parts": [507, 530]
+  },
+  "mais": {
+    "start": 584,
+    "end": 759,
+    "parts": [584, 620, 653, 687, 724]
+  },
+  "valores": {
+    "start": 765,
+    "end": 866,
+    "parts": [765]
+  },
+  "precisou": {
+    "start": 872,
+    "end": 905,
+    "parts": [872]
+  },
+  "chame": {
+    "start": 911,
+    "end": 1090,
+    "parts": [911, 1005, 1021, 1055, 1077]
+  },
+  "final": {
+    "start": 1096,
+    "end": 1186,
+    "parts": [1096, 1129]
+  },
+  "_total": 1230
+}
