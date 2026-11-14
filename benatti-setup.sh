@@ -1,5 +1,4 @@
 npm install @fontsource/inter@5
-# coloque os ícones em public/icones/ (casa, carnes, frios, frango, mercearia, limpeza, festa, embalagens .png)
 mkdir -p src
 cat > src/Benatti.tsx << 'EOF'
 import "@fontsource/inter/400.css";
@@ -31,41 +30,29 @@ export const BENATTI_TOTAL = Math.round(DURACAO * BENATTI_FPS);
 const FPS = BENATTI_FPS;
 const sec = (s: number) => Math.round(s * FPS);
 
-// Frases da narração (tempos do ÁUDIO em s, medidos nas pausas da voz)
-const FRASES: [number, number, string][] = [
-  [0.13, 1.96, "Benatti Frios e Embalagens."],
-  [1.96, 4.3, "Atacado e varejo, com qualidade e preço justo."],
-  [4.47, 6.85, "Aqui você encontra carnes, frios, frango,"],
-  [6.97, 8.85, "mercearia, produtos de limpeza,"],
-  [9.04, 11.3, "artigos de festa e embalagens em geral."],
-  [11.3, 12.76, "Tudo num só lugar!"],
-  [12.94, 15.63, "Embalagens pra sua casa e pro seu negócio."],
-  [15.81, 17.68, "Qualidade, variedade e confiança,"],
-  [17.83, 19.41, "com ofertas toda semana."],
-  [19.63, 20.96, "Nosso horário: de segunda a sábado,"],
-  [21.06, 22.88, "das 6h30 da manhã às 21h30 da noite."],
-  [23.04, 25.42, "E aos domingos, das 7h às 21h."],
-  [25.6, 26.3, "Venha nos visitar!"],
-  [26.5, 28.18, "Estamos na Av. das Paineiras,"],
-  [28.29, 30.71, "quadra 96, lote 12, próximo à feira de quinta,"],
-  [30.82, 32.48, "no Setor Pontakayana,"],
-  [32.59, 34.19, "em Trindade, Goiás."],
-  [34.3, 36.05, "Faça seu pedido pelo WhatsApp:"],
-  [36.16, 39.3, "(62) 99376-2140"],
-  [39.3, 42.16, "Benatti Frios e Embalagens: entregas rápidas!"],
+// Momento exato de cada palavra no ÁUDIO (s), medido por reconhecimento de voz
+// (Vosk, modelo em português) em public/benatti-narracao.wav
+const FALA: [string, number][] = [
+  ["Benatti", 0.13], ["Frios", 0.6], ["e", 1.03], ["Embalagens.", 1.14],
+  ["Atacado", 2.04], ["e", 2.7], ["varejo,", 2.76], ["com", 3.33], ["qualidade", 3.51], ["e", 4.35], ["preço", 4.47], ["justo.", 4.83],
+  ["Aqui", 5.28], ["você", 5.61], ["encontra", 5.85], ["carnes,", 6.24], ["frios,", 6.9], ["frango,", 7.47],
+  ["mercearia,", 8.1], ["produtos", 8.97], ["de", 9.45], ["limpeza,", 9.54],
+  ["artigos", 10.2], ["de", 10.68], ["festa", 10.77], ["e", 11.37], ["embalagens", 11.49], ["em", 12.18], ["geral.", 12.27],
+  ["Tudo", 12.87], ["num", 13.2], ["só", 13.35], ["lugar!", 13.56],
+  ["Embalagens", 14.09], ["pra", 14.73], ["sua", 14.88], ["casa", 15.15], ["e", 15.78], ["pro", 15.9], ["seu", 16.08], ["negócio.", 16.32],
+  ["Qualidade,", 16.95], ["variedade", 17.82], ["e", 18.66], ["confiança,", 18.75],
+  ["com", 19.56], ["ofertas", 19.77], ["toda", 20.25], ["semana.", 20.55],
+  ["Nosso", 21.03], ["horário:", 21.33], ["de", 21.9], ["segunda", 22.02], ["a", 22.38], ["sábado,", 22.44],
+  ["das", 23.01], ["6h30", 23.28], ["da", 23.76], ["manhã", 23.85], ["às", 24.21], ["21h30", 24.39], ["da", 24.96], ["noite.", 25.05],
+  ["E", 25.59], ["aos", 25.68], ["domingos,", 25.83], ["das", 26.46], ["7h", 26.7], ["às", 27.33], ["21h.", 27.51],
+  ["Venha", 28.29], ["nos", 28.53], ["visitar!", 28.68],
+  ["Estamos", 29.16], ["na", 29.52], ["Av.", 29.64], ["das", 30.06], ["Paineiras,", 30.21],
+  ["quadra", 30.75], ["96,", 31.08], ["lote", 31.86], ["12,", 32.16], ["próximo", 32.52], ["à", 32.94], ["feira", 33.0], ["de", 33.27], ["quinta,", 33.36],
+  ["no", 33.78], ["Setor", 33.93], ["Pontakayana,", 34.2], ["em", 34.92], ["Trindade,", 35.04], ["Goiás.", 35.55],
+  ["Faça", 36.12], ["seu", 36.36], ["pedido", 36.51], ["pelo", 36.81], ["WhatsApp:", 37.0], ["(62)", 37.53], ["99376-2140", 38.13],
+  ["Benatti", 40.02], ["Frios", 40.38], ["e", 40.68], ["Embalagens:", 40.74], ["entregas", 41.4], ["rápidas!", 41.79],
 ];
-
-// Momento (s do vídeo) de cada palavra, proporcional ao tamanho dentro da frase
-const PALAVRAS = FRASES.flatMap(([a, b, txt]) => {
-  const ws = txt.split(" ");
-  const total = ws.reduce((s, w) => s + w.length + 1, 0);
-  let acc = 0;
-  return ws.map((w) => {
-    const t = VOZ_INICIO + a + ((b - a) * acc) / total;
-    acc += w.length + 1;
-    return { w, t };
-  });
-});
+const PALAVRAS = FALA.map(([w, a]) => ({ w, t: VOZ_INICIO + a }));
 const limpa = (w: string) => w.toLowerCase().replace(/[,.!:]/g, "");
 const quando = (palavra: string, depois = 0) => {
   const q = limpa(palavra);
@@ -77,17 +64,16 @@ const quando = (palavra: string, depois = 0) => {
 // Cenas (s do vídeo)
 const B = {
   logo: 0,
-  atacado: 3.0,
-  produtos: 5.4,
-  tudo: 12.25,
-  embalagens: 13.9,
-  qualidade: 16.75,
-  ofertas: 18.8,
-  horario: 20.55,
-  endereco: 26.5,
-  whatsapp: 35.25,
-  marca: 40.25,
-  fim: 43.4,
+  atacado: 2.9,
+  produtos: 6.1,
+  embalagens: 14.95,
+  qualidade: 17.8,
+  ofertas: 20.4,
+  horario: 21.9,
+  endereco: 29.1,
+  whatsapp: 36.95,
+  marca: 40.85,
+  fim: 43.6,
 };
 
 // ============================================================
@@ -394,7 +380,8 @@ const Notificacao: React.FC<{ icone: string; titulo: string; texto: string; larg
   </div>
 );
 
-// 3) Produtos: uma notificação de vidro por categoria, no momento em que é falada
+// 3) Produtos: uma notificação de vidro por categoria, no instante exato em que é falada.
+//    Em "Tudo num só lugar!" a pilha se junta num único cartão com os 7 ícones.
 const CATS = [
   { k: "carnes", nome: "Carnes", texto: "Cortes fresquinhos" },
   { k: "frios", nome: "Frios", texto: "Queijos e embutidos" },
@@ -404,25 +391,40 @@ const CATS = [
   { k: "festa", nome: "Artigos de festa", texto: "Pra sua comemoração" },
   { k: "embalagens", nome: "Embalagens", texto: "Pra casa e negócio" },
 ];
+const ROTULO: Record<string, string> = {
+  carnes: "Carnes",
+  frios: "Frios",
+  frango: "Frango",
+  mercearia: "Mercearia",
+  limpeza: "Limpeza",
+  festa: "Festa",
+  embalagens: "Embalagens",
+};
 
 const Produtos: React.FC = () => {
   const t = useT(B.produtos);
-  const vezes = CATS.map((c) => quando(c.k === "festa" ? "artigos" : c.k, B.produtos - 0.3) - 0.15);
+  // a notificação chega ~0,1s antes da palavra (o olho precisa de um instante)
+  const vezes = CATS.map((c) => quando(c.k === "festa" ? "artigos" : c.k, B.produtos - 0.3) - 0.1);
+  const tTudo = quando("Tudo", B.produtos);
+  const junta = interpolate(t, [tTudo - 0.15, tTudo + 0.55], [0, 1], { ...CLAMP, easing: SUAVE });
+  const PY0 = 860; // altura da notificação da frente
   return (
     <AbsoluteFill>
       <Parede t={t} />
-      <Centro top={330}>
-        <Surge t={t} at={B.produtos + 0.05} size={52} weight={500} cor={C.sub}>
-          Aqui você encontra
-        </Surge>
-      </Centro>
+      <div style={{ opacity: 1 - junta, filter: `blur(${junta * 10}px)` }}>
+        <Centro top={330}>
+          <Surge t={t} at={B.produtos + 0.05} size={52} weight={500} cor={C.sub}>
+            Aqui você encontra
+          </Surge>
+        </Centro>
+      </div>
+      {/* pilha de notificações */}
       {CATS.map((c, i) => {
-        if (t < vezes[i] - 0.05) return null;
-        const chega = interpolate(t, [vezes[i], vezes[i] + 0.55], [0, 1], { ...CLAMP, easing: SUAVE });
-        // quantas notificações chegaram depois desta (ela vai para trás da pilha)
-        const atras = vezes.slice(i + 1).reduce((acc, v) => acc + interpolate(t, [v, v + 0.5], [0, 1], { ...CLAMP, easing: SUAVE }), 0);
+        if (t < vezes[i] - 0.05 || junta >= 1) return null;
+        const chega = interpolate(t, [vezes[i], vezes[i] + 0.45], [0, 1], { ...CLAMP, easing: SUAVE });
+        const atras = vezes.slice(i + 1).reduce((acc, v) => acc + interpolate(t, [v, v + 0.4], [0, 1], { ...CLAMP, easing: SUAVE }), 0);
         if (atras > 2.95) return null;
-        const y = 780 + (1 - chega) * -260 - atras * 46;
+        const y = PY0 + (1 - chega) * -260 - atras * 46 + junta * 120;
         return (
           <div
             key={c.k}
@@ -434,57 +436,76 @@ const Produtos: React.FC = () => {
               display: "flex",
               justifyContent: "center",
               zIndex: 100 - Math.round(atras * 10),
-              opacity: chega * Math.max(0, 1 - atras * 0.3),
-              filter: `blur(${(1 - chega) * 14}px)`,
-              transform: `scale(${(0.9 + 0.1 * chega) * (1 - atras * 0.06)})`,
+              opacity: chega * Math.max(0, 1 - atras * 0.3) * (1 - junta),
+              filter: `blur(${(1 - chega) * 14 + junta * 12}px)`,
+              transform: `scale(${(0.9 + 0.1 * chega) * (1 - atras * 0.06) * (1 - junta * 0.15)})`,
             }}
           >
             <Notificacao icone={c.k} titulo={c.nome} texto={c.texto} conteudo={Math.max(0, 1 - atras * 2.5)} />
           </div>
         );
       })}
-    </AbsoluteFill>
-  );
-};
-
-// 4) Tudo num só lugar. (fundo preto, os 7 ícones juntos)
-const Tudo: React.FC = () => {
-  const t = useT(B.tudo);
-  const pos = [
-    [150, 360], [400, 300], [660, 320], [900, 380],
-    [270, 560], [540, 520], [800, 570],
-  ];
-  return (
-    <AbsoluteFill>
-      {CATS.map((c, i) => {
-        const k = rev(t, B.tudo + 0.05 + i * 0.06, 0.7);
-        const flutua = Math.sin(t * 1.6 + i) * 10;
-        return (
+      {/* Tudo num só lugar: um cartão de vidro com os 7 ícones */}
+      {t >= tTudo - 0.15 ? (
+        <>
+          <Centro top={330}>
+            <Surge t={t} at={tTudo} size={96} weight={700}>
+              Tudo num só
+            </Surge>
+          </Centro>
+          <Centro top={430}>
+            <Surge t={t} at={quando("lugar", tTudo)} size={170} weight={800} degrade>
+              lugar.
+            </Surge>
+          </Centro>
           <div
-            key={c.k}
             style={{
               position: "absolute",
-              left: pos[i][0] - 105,
-              top: pos[i][1] - 105 + flutua,
-              opacity: k,
-              transform: `scale(${0.6 + 0.4 * k})`,
-              filter: `blur(${(1 - k) * 10}px)`,
+              left: 70,
+              right: 70,
+              top: 720,
+              height: 760,
+              borderRadius: 64,
+              background: "rgba(255,255,255,0.42)",
+              backdropFilter: "blur(40px) saturate(180%)",
+              WebkitBackdropFilter: "blur(40px) saturate(180%)",
+              border: "1.5px solid rgba(255,255,255,0.7)",
+              boxShadow: "0 30px 70px rgba(120,20,0,0.18), inset 0 1px 0 rgba(255,255,255,0.8)",
+              opacity: junta,
+              transform: `scale(${0.94 + 0.06 * junta})`,
             }}
           >
-            <Icone3D nome={c.k} size={210} />
+            {CATS.map((c, i) => {
+              const linha = i < 4 ? 0 : 1;
+              const col = i < 4 ? i : i - 4;
+              const porLinha = linha === 0 ? 4 : 3;
+              const cw = 940 / 4;
+              const x0 = (940 - porLinha * cw) / 2;
+              const k = interpolate(t, [tTudo + i * 0.05, tTudo + 0.55 + i * 0.05], [0, 1], { ...CLAMP, easing: SUAVE });
+              return (
+                <div
+                  key={c.k}
+                  style={{
+                    position: "absolute",
+                    left: x0 + col * cw,
+                    top: 70 + linha * 330,
+                    width: cw,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 14,
+                    opacity: k,
+                    transform: `translateY(${(1 - k) * 60}px) scale(${0.7 + 0.3 * k})`,
+                  }}
+                >
+                  <Icone3D nome={c.k} size={180} />
+                  <div style={{ fontFamily: FONT, fontSize: 32, fontWeight: 600, color: C.texto }}>{ROTULO[c.k]}</div>
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
-      <Centro top={900}>
-        <Surge t={t} at={quando("Tudo", B.tudo - 0.5)} size={120} weight={700} cor="#F5F5F7">
-          Tudo num só
-        </Surge>
-      </Centro>
-      <Centro top={1030}>
-        <Surge t={t} at={quando("lugar", B.tudo - 0.5)} size={220} weight={800} degrade>
-          lugar.
-        </Surge>
-      </Centro>
+        </>
+      ) : null}
     </AbsoluteFill>
   );
 };
@@ -775,7 +796,6 @@ const ORDEM: { k: keyof typeof B; C: React.FC; fundo: string; entra: Trans }[] =
   { k: "logo", C: Abertura, fundo: C.branco, entra: "zoom" },
   { k: "atacado", C: Atacado, fundo: C.branco, entra: "sobe" },
   { k: "produtos", C: Produtos, fundo: C.branco, entra: "sobe" },
-  { k: "tudo", C: Tudo, fundo: C.preto, entra: "zoom" },
   { k: "embalagens", C: Embalagens, fundo: C.branco, entra: "zoom" },
   { k: "qualidade", C: Qualidade, fundo: C.preto, entra: "lado" },
   { k: "ofertas", C: Ofertas, fundo: C.branco, entra: "zoom" },

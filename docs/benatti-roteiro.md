@@ -1,142 +1,139 @@
 # Roteiro — Benatti Frios e Embalagens (estilo Apple)
 
 **Formato:** vertical 1080×1920 · 30 fps · **47,5 s**
-**Narração:** `public/benatti-narracao.wav` (começa em 0:01,0)
-**Estilo:** fundo branco/preto, fonte Inter, palavras-chave em degradê vermelho → laranja, textos entrando letra por letra, ícones 3D em cartões de vidro (notificação de iPhone).
+**Narração:** `public/benatti-narracao.wav`, começa em 0:01,0 do vídeo.
+**Sincronia:** os tempos abaixo são do **vídeo** e vêm da medição real de cada palavra no áudio (reconhecimento de voz), não de estimativa.
 
 ---
 
-## Narração completa
+## Narração por cena (para gerar o áudio cena a cena)
 
-> Benatti Frios e Embalagens.
-> Atacado e varejo, com qualidade e preço justo.
-> Aqui você encontra carnes, frios, frango, mercearia, produtos de limpeza, artigos de festa e embalagens em geral.
-> Tudo num só lugar!
-> Embalagens pra sua casa e pro seu negócio.
-> Qualidade, variedade e confiança, com ofertas toda semana.
-> Nosso horário: de segunda a sábado, das seis e meia da manhã às nove e meia da noite. E aos domingos, das sete da manhã às nove da noite.
-> Venha nos visitar! Estamos na Avenida das Paineiras, quadra noventa e seis, lote doze, próximo à feira de quinta, no Setor Pontakayana, em Trindade, Goiás.
-> Faça seu pedido pelo WhatsApp: sessenta e dois, nove nove três sete seis, vinte e um quarenta.
-> Benatti Frios e Embalagens: entregas rápidas!
+Cada cena vira **um arquivo de áudio separado**. Assim cada trecho começa exatamente junto com a sua cena, e dá para regravar só um pedaço.
+Voz: masculina, amigável, ritmo de comercial (sem pressa). Velocidade de referência: **~2,4 palavras por segundo** (a narração atual).
+
+| # | Arquivo | Texto exato | Duração alvo | Velocidade / jeito |
+|---|---|---|---|---|
+| 1 | `voz-01-abertura` | Benatti Frios e Embalagens. | 2,0 s | Normal. Firme, apresentando a marca. |
+| 2 | `voz-02-atacado` | Atacado e varejo, com qualidade e preço justo. | 3,0 s | Normal. Leve ênfase em "qualidade" e "preço justo". |
+| 3 | `voz-03-produtos` | Aqui você encontra: carnes, frios, frango, mercearia, produtos de limpeza, artigos de festa e embalagens em geral. | 7,0 s | **Um pouco mais lento (−10%)**, com uma pausa curta (~0,3 s) depois de cada item, porque cada item chama um cartão na tela. |
+| 4 | `voz-04-tudo` | Tudo num só lugar! | 1,3 s | Normal, animado. |
+| 5 | `voz-05-embalagens` | Embalagens pra sua casa e pro seu negócio. | 2,5 s | Normal. Pausa de ~0,3 s depois de "casa". |
+| 6 | `voz-06-qualidade` | Qualidade, variedade e confiança, com ofertas toda semana. | 3,6 s | Normal. Pausa curta entre as três palavras. |
+| 7 | `voz-07-horario` | Nosso horário: de segunda a sábado, das seis e meia da manhã às nove e meia da noite. E aos domingos, das sete da manhã às nove da noite. | 7,0 s | **Um pouco mais lento (−10%)**, os horários bem claros. Pausa de ~0,4 s antes de "E aos domingos". |
+| 8 | `voz-08-endereco` | Venha nos visitar! Estamos na Avenida das Paineiras, quadra noventa e seis, lote doze, próximo à feira de quinta, no Setor Pontakayana, em Trindade, Goiás. | 7,5 s | **Mais lento (−15%)**, para o endereço ficar fácil de entender. Pausa curta em cada vírgula. |
+| 9 | `voz-09-whatsapp` | Faça seu pedido pelo WhatsApp: sessenta e dois, nove nove três sete seis, vinte e um quarenta. | 4,0 s | **Mais lento (−15%)** no número, dígito por dígito, com pausa entre os blocos. |
+| 10 | `voz-10-final` | Benatti Frios e Embalagens: entregas rápidas! | 2,3 s | Normal, fechando com energia. |
 
 ---
 
-## Cena a cena (segundo a segundo)
+## Cena a cena (tempos reais do vídeo)
 
-### 1. Abertura — 0:00 a 0:03 · fundo branco
+### 1. Abertura — 0:00 a 0:02,9 · branco
 | Tempo | Narração | Na tela |
 |---|---|---|
-| 0:00,0 | — | Tela branca. Uma bolinha preta cai do topo. |
-| 0:00,5 | — | A bolinha quica no centro. |
-| 0:00,8 | — | A bolinha gira e vira o **logo Benatti** (quadrado vermelho com o "B"). |
-| 0:01,1 | "Benatti…" | **"Benatti"** em vermelho (serifa) aparece letra por letra embaixo do logo. |
-| 0:01,7 | "…Frios e Embalagens." | "Frios e Embalagens" em cinza, letra por letra. |
-| 0:03,0 | — | **Transição:** a tela rola para cima. |
+| 0:00,0 | — | Bolinha preta cai do topo e quica (0:00,5). |
+| 0:00,8 | — | A bolinha vira o **logo Benatti**. |
+| 0:01,1 | "Benatti" | **Benatti** em vermelho, letra por letra. |
+| 0:01,6 | "Frios e Embalagens." | "Frios e Embalagens" em cinza. |
+| 0:02,9 | — | Transição: rola para cima. |
 
-### 2. Atacado e varejo — 0:03 a 0:05,4 · fundo branco
+### 2. Atacado e varejo — 0:02,9 a 0:06,1 · branco
 | Tempo | Narração | Na tela |
 |---|---|---|
-| 0:03,0 | "Atacado e varejo," | "Atacado e varejo." em cinza. |
-| 0:04,1 | "com qualidade" | **"Qualidade."** enorme, em degradê vermelho → laranja. |
-| 0:04,7 | "e preço justo." | **"Preço justo."** em preto, embaixo. |
-| 0:05,4 | — | **Transição:** rola para cima. |
+| 0:03,0 | "Atacado e varejo," | "Atacado e varejo." (cinza) |
+| 0:04,5 | "com qualidade" | **Qualidade.** grande, em degradê |
+| 0:05,5 | "e preço justo." | **Preço justo.** |
+| 0:06,1 | — | Transição: rola para cima. |
 
-### 3. Produtos — 0:05,4 a 0:12,25 · fundo branco com manchas suaves vermelho/dourado
-Cada categoria chega como uma **notificação de vidro** no centro (logo + "BENATTI" + "agora", ícone 3D, nome e frase). As anteriores vão para trás, empilhadas.
+### 3. Produtos + Tudo num só lugar — 0:06,1 a 0:14,95 · branco com manchas vermelho/dourado
+Notificações de vidro (estilo iPhone), uma por item, chegando 0,1 s antes da palavra; as anteriores ficam empilhadas atrás.
 
-| Tempo | Narração | Notificação que chega |
-|---|---|---|
-| 0:05,5 | "Aqui você encontra" | Texto cinza no topo: "Aqui você encontra". |
-| 0:06,4 | "carnes," | 🥩 **Carnes** — "Cortes fresquinhos" |
-| 0:06,9 | "frios," | 🧀 **Frios** — "Queijos e embutidos" |
-| 0:07,3 | "frango," | 🍗 **Frango** — "Inteiro e em pedaços" |
-| 0:07,9 | "mercearia," | 🧺 **Mercearia** — "O básico do dia a dia" |
-| 0:09,2 | "produtos de limpeza," | 🧴 **Limpeza** — "Casa sempre limpa" |
-| 0:09,9 | "artigos de festa" | 🎈 **Artigos de festa** — "Pra sua comemoração" |
-| 0:11,0 | "e embalagens em geral." | 📦 **Embalagens** — "Pra casa e negócio" |
-| 0:12,25 | — | **Transição:** zoom atravessando → tela preta. |
-
-### 4. Tudo num só lugar — 0:12,25 a 0:13,9 · fundo preto
 | Tempo | Narração | Na tela |
 |---|---|---|
-| 0:12,3 | "Tudo num só" | Os **7 ícones 3D** surgem flutuando no alto. "Tudo num só" em branco. |
-| 0:13,2 | "lugar!" | **"lugar."** enorme, em degradê. |
-| 0:13,9 | — | **Transição:** zoom → tela branca. |
+| 0:06,3 | "Aqui você encontra" | "Aqui você encontra" (cinza, topo) |
+| 0:07,1 | "carnes" | 🥩 **Carnes** — Cortes fresquinhos |
+| 0:07,8 | "frios" | 🧀 **Frios** — Queijos e embutidos |
+| 0:08,4 | "frango" | 🍗 **Frango** — Inteiro e em pedaços |
+| 0:09,0 | "mercearia" | 🧺 **Mercearia** — O básico do dia a dia |
+| 0:10,4 | "produtos de limpeza" | 🧴 **Limpeza** — Casa sempre limpa |
+| 0:11,1 | "artigos de festa" | 🎈 **Artigos de festa** — Pra sua comemoração |
+| 0:12,4 | "e embalagens em geral" | 📦 **Embalagens** — Pra casa e negócio |
+| 0:13,7 | "Tudo num só" | A pilha se desfaz e vira **um cartão de vidro com os 7 ícones** (Carnes, Frios, Frango, Mercearia / Limpeza, Festa, Embalagens). Título "Tudo num só". |
+| 0:14,6 | "lugar!" | **lugar.** em degradê. |
+| 0:14,95 | — | Transição: zoom. |
 
-### 5. Embalagens — 0:13,9 a 0:16,75 · fundo branco com manchas suaves
+### 4. Embalagens — 0:14,95 a 0:17,8 · branco com manchas
 | Tempo | Narração | Na tela |
 |---|---|---|
-| 0:13,9 | "Embalagens" | Caixa 3D grande no topo + **"Embalagens."** |
-| 0:14,8 | "pra sua casa" | Notificação de vidro: 🏠 **Pra sua casa.** — "No varejo" |
-| 0:15,8 | "e pro seu negócio." | Notificação de vidro: 📦 **Pro seu negócio.** — "No atacado" |
-| 0:16,75 | — | **Transição:** câmera desliza para o lado → tela preta. |
+| 0:15,1 | "Embalagens" | Caixa 3D + **Embalagens.** |
+| 0:15,85 | "pra sua casa" | Notificação: 🏠 **Pra sua casa.** — No varejo |
+| 0:17,0 | "e pro seu negócio." | Notificação: 📦 **Pro seu negócio.** — No atacado |
+| 0:17,8 | — | Transição: desliza para o lado. |
 
-### 6. Qualidade — 0:16,75 a 0:18,8 · fundo preto
+### 5. Qualidade — 0:17,8 a 0:20,4 · preto
 | Tempo | Narração | Na tela |
 |---|---|---|
-| 0:16,7 | "Qualidade," | **"Qualidade."** em degradê. |
-| 0:17,3 | "variedade" | **"Variedade."** acende em degradê; "Qualidade." fica cinza. |
-| 0:18,0 | "e confiança," | **"Confiança."** acende; as outras ficam cinza. |
-| 0:18,8 | — | **Transição:** zoom → tela branca. |
+| 0:17,85 | "Qualidade," | **Qualidade.** (degradê) |
+| 0:18,7 | "variedade" | **Variedade.** acende; a anterior fica cinza |
+| 0:19,65 | "e confiança," | **Confiança.** acende |
+| 0:20,4 | — | Transição: zoom. |
 
-### 7. Ofertas — 0:18,8 a 0:20,55 · fundo branco
+### 6. Ofertas — 0:20,4 a 0:21,9 · branco
 | Tempo | Narração | Na tela |
 |---|---|---|
-| 0:19,0 | "com ofertas" | **"Ofertas"** enorme em degradê. |
-| 0:19,6 | "toda semana." | "toda semana." em preto. |
-| 0:20,55 | — | **Transição:** rola para cima. |
+| 0:20,7 | "com ofertas" | **Ofertas** grande, degradê |
+| 0:21,25 | "toda semana." | "toda semana." |
+| 0:21,9 | — | Transição: rola para cima. |
 
-### 8. Horário — 0:20,55 a 0:26,5 · fundo branco
+### 7. Horário — 0:21,9 a 0:29,1 · branco
 | Tempo | Narração | Na tela |
 |---|---|---|
-| 0:20,6 | "Nosso horário:" | "Horário de funcionamento" (cinza) + **"Aberto todo dia."** |
-| 0:21,2 | "de segunda a sábado, das 6h30 às 21h30" | Linha da tabela: "Segunda a sábado" / **6h30 – 21h30** |
-| 0:24,4 | "E aos domingos, das 7h às 21h." | Linha da tabela: "Domingo" / **7h – 21h** |
-| 0:26,5 | — | **Transição:** rola para cima. |
+| 0:22,0 | "Nosso horário:" | "Horário de funcionamento" + **Aberto todo dia.** |
+| 0:22,9 | "de segunda a sábado, das 6h30 às 21h30" | "Segunda a sábado" / **6h30 – 21h30** |
+| 0:26,7 | "E aos domingos, das 7h às 21h." | "Domingo" / **7h – 21h** |
+| 0:29,1 | — | Transição: rola para cima. |
 
-### 9. Endereço — 0:26,5 a 0:35,25 · fundo cinza-claro
+### 8. Endereço — 0:29,1 a 0:36,95 · cinza-claro
 | Tempo | Narração | Na tela |
 |---|---|---|
-| 0:26,5 | "Venha nos visitar!" | **"Venha nos visitar."** no topo. |
-| 0:26,8 | — | Cartão branco estilo "Mapas" sobe com o mapa minimalista. |
-| 0:27,1 | — | "Benatti Frios e Embalagens" (título do cartão). |
-| 0:27,4 | — | O pino vermelho com o logo cai no mapa e pulsa. |
-| 0:28,0 | "Estamos na Av. das Paineiras," | "Av. das Paineiras, Qd. 96, Lt. 12" |
-| 0:30,2 | "…próximo à feira de quinta," | "Próximo à feira de quinta" |
-| 0:31,9 | "no Setor Pontakayana," | "St. Pontakayana · Trindade – GO" |
-| 0:33,7 | "em Trindade, Goiás." | Selo vermelho **"Trindade – GO"**. |
-| 0:35,25 | — | **Transição:** zoom → tela preta. |
+| 0:29,3 | "Venha nos visitar!" | **Venha nos visitar.** |
+| 0:29,4 | — | Cartão estilo "Mapas" sobe; o pino com o logo cai em 0:30,0 |
+| 0:30,6 | "Estamos na Av. das Paineiras," | "Av. das Paineiras, Qd. 96, Lt. 12" |
+| 0:33,4 | "próximo à feira de quinta," | "Próximo à feira de quinta" |
+| 0:34,8 | "no Setor Pontakayana," | "St. Pontakayana · Trindade – GO" |
+| 0:36,0 | "em Trindade, Goiás." | Selo vermelho **Trindade – GO** |
+| 0:36,95 | — | Transição: zoom → preto. |
 
-### 10. WhatsApp — 0:35,25 a 0:40,25 · fundo preto
+### 9. WhatsApp — 0:36,95 a 0:40,85 · preto
 | Tempo | Narração | Na tela |
 |---|---|---|
-| 0:35,3 | — | Ícone verde do telefone aparece. |
-| 0:35,8 | "Faça seu pedido pelo" | "Faça seu pedido pelo" em cinza. |
-| 0:36,5 | "WhatsApp:" | **"WhatsApp."** grande em branco. |
-| 0:37,2 → 0:39,6 | "(62) 99376-2140" | Número **(62) 99376-2140** em verde, digitado número a número. |
-| 0:40,25 | — | **Transição:** câmera desliza para o lado → tela branca. |
+| 0:37,0 | — | Ícone verde do telefone |
+| 0:37,5 | "Faça seu pedido pelo" | "Faça seu pedido pelo" (cinza) |
+| 0:38,0 | "WhatsApp:" | **WhatsApp.** |
+| 0:38,5 → 0:40,9 | "(62) 99376-2140" | Número em verde sendo digitado |
+| 0:40,85 | — | Transição: desliza para o lado. |
 
-### 11. Entregas rápidas — 0:40,25 a 0:43,4 · fundo branco
+### 10. Entregas rápidas — 0:40,85 a 0:43,6 · branco
 | Tempo | Narração | Na tela |
 |---|---|---|
-| 0:40,3 | "Benatti Frios e Embalagens:" | Logo Benatti aparece no centro. |
-| 0:42,0 | "entregas" | **"Entregas"** em preto. |
-| 0:42,6 | "rápidas!" | **"rápidas."** enorme em degradê. |
-| 0:43,4 | — | **Transição:** zoom → tela preta. |
+| 0:41,0 | "Benatti Frios e Embalagens:" | Logo Benatti |
+| 0:42,4 | "entregas" | **Entregas** |
+| 0:42,8 | "rápidas!" | **rápidas.** em degradê |
+| 0:43,6 | — | Transição: zoom → preto. |
 
-### 12. Final — 0:43,4 a 0:47,5 · fundo preto (sem narração)
+### 11. Final — 0:43,6 a 0:47,5 · preto (sem narração)
 | Tempo | Na tela |
 |---|---|
-| 0:43,6 | Logo Benatti surge do desfoque. |
-| 0:44,0 | **B E N A T T I** (letras espaçadas, branco). |
-| 0:44,4 | "Frios e Embalagens" (cinza). |
-| 0:44,8 | "@benattifrios · (62) 99376-2140" (cinza). |
-| 0:46,9 → 0:47,5 | Tudo some suavemente. Fim. |
+| 0:43,8 | Logo |
+| 0:44,2 | **B E N A T T I** |
+| 0:44,6 | "Frios e Embalagens" |
+| 0:45,0 | "@benattifrios · (62) 99376-2140" |
+| 0:46,9 → 0:47,5 | Tudo some. Fim. |
 
 ---
 
-### Para ajustar
-- Tempos das cenas: objeto `B` em `src/Benatti.tsx`.
-- Tempos das frases da narração: `FRASES` (em segundos do áudio; o vídeo soma 1 s).
-- Textos das notificações: `CATS` (nome e frase de cada categoria).
+### Para ajustar no código (`src/Benatti.tsx`)
+- `FALA`: momento de cada palavra no áudio (medido). Se trocar a narração, é só medir de novo.
+- `B`: início de cada cena.
+- `CATS`: nome e frase de cada notificação.
 - Ícones: `public/icones/*.png`.
