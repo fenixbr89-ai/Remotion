@@ -5,7 +5,6 @@ import { calcular } from "./calc";
 import { pontes } from "./pontes";
 import type { Negocio } from "./tipos";
 import { Fundo } from "./ui/Fundo";
-import { Moldura } from "./ui/Moldura";
 import { Ponte } from "./ui/Ponte";
 import { Cardapio, Chute, Gancho, Loja } from "./cenas/Abertura";
 import { Custo } from "./cenas/Custo";
@@ -15,19 +14,19 @@ import { Frase, Mes } from "./cenas/Lucro";
 import { Comenta, Outro, Produto } from "./cenas/Final";
 import type { CenaProps } from "./cenas/props";
 
-/** Linha do tempo: cortes secos entre cenas, costurados por elementos-ponte. `etapa` = aba ativa. */
-export const CENAS: { nome: string; dur: number; C: React.FC<CenaProps>; etapa?: number }[] = [
+/** Linha do tempo: cortes secos entre cenas, costurados por elementos-ponte. */
+export const CENAS: { nome: string; dur: number; C: React.FC<CenaProps> }[] = [
   { nome: "Gancho", dur: 95, C: Gancho },
   { nome: "Loja", dur: 100, C: Loja },
   { nome: "Chute", dur: 80, C: Chute },
   { nome: "Cardápio", dur: 75, C: Cardapio },
-  { nome: "Custo", dur: 240, C: Custo, etapa: 0 },
-  { nome: "Erro", dur: 70, C: Erro, etapa: 1 },
-  { nome: "App", dur: 150, C: App, etapa: 1 },
-  { nome: "Sobra", dur: 75, C: Sobra, etapa: 1 },
-  { nome: "Fórmula", dur: 150, C: Formula, etapa: 2 },
-  { nome: "Divisão", dur: 105, C: Divisao, etapa: 2 },
-  { nome: "Mês", dur: 170, C: Mes, etapa: 3 },
+  { nome: "Custo", dur: 240, C: Custo },
+  { nome: "Erro", dur: 70, C: Erro },
+  { nome: "App", dur: 150, C: App },
+  { nome: "Sobra", dur: 75, C: Sobra },
+  { nome: "Fórmula", dur: 150, C: Formula },
+  { nome: "Divisão", dur: 105, C: Divisao },
+  { nome: "Mês", dur: 170, C: Mes },
   { nome: "Frase", dur: 65, C: Frase },
   { nome: "Produto", dur: 165, C: Produto },
   { nome: "Comenta", dur: 150, C: Comenta },
@@ -53,15 +52,7 @@ const Palco: React.FC<{ dur: number; children: React.ReactNode }> = ({ dur, chil
 
 export const Episodio: React.FC<Negocio> = (n) => {
   const k = calcular(n);
-  const f = useCurrentFrame();
   const defs = pontes(k);
-  const atual = INICIOS.reduce((acc, ini, i) => (f >= ini ? i : acc), 0);
-  const iAbas = CENAS.findIndex((c) => c.etapa === 0);
-  const iFimAbas = CENAS.findIndex((c, i) => i > iAbas && c.etapa === undefined);
-  const etapa = CENAS[atual].etapa ?? (atual >= iFimAbas ? 4 : null);
-  const abas = Math.min(interpolate(f, [INICIOS[iAbas], INICIOS[iAbas] + 10], [0, 1], clamp), interpolate(f, [INICIOS[iFimAbas], INICIOS[iFimAbas] + 10], [1, 0], clamp));
-  const iOutro = CENAS.length - 1;
-  const visivel = interpolate(f, [INICIOS[iOutro], INICIOS[iOutro] + 6], [1, 0], clamp);
   return (
     <AbsoluteFill>
       <Fundo />
@@ -81,7 +72,6 @@ export const Episodio: React.FC<Negocio> = (n) => {
           </Sequence>
         );
       })}
-      <Moldura episodio={n.episodio} visivel={visivel} etapa={etapa} abas={abas} />
       {CENAS.map(({ nome }, i) => (defs[nome] ? <Ponte key={nome} def={defs[nome]} corte={INICIOS[i]} /> : null))}
     </AbsoluteFill>
   );
