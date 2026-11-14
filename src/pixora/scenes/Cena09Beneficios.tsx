@@ -31,18 +31,34 @@ const ITEMS: [string, string][] = [
   ["⚡", "Sem complicação"],
 ];
 
-const Row: React.FC<{ readonly at: number; readonly emoji: string; readonly label: string }> = ({ at, emoji, label }) => {
+const Row: React.FC<{
+  readonly at: number;
+  readonly emoji: string;
+  readonly label: string;
+}> = ({ at, emoji, label }) => {
   const s = useSpring(at, 12);
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 36 }}>
-      <Sfx at={at} name="pop" volume={0.5} />
-      <EmojiBadge char={emoji} size={130} style={{ scale: String(s), rotate: `${(1 - s) * -30}deg` }} />
-      <Kinetic delay={at + 3} stagger={3} align="flex-start" lines={[{ text: label, size: 62 }]} />
+      <EmojiBadge
+        char={emoji}
+        size={130}
+        style={{ scale: String(s), rotate: `${(1 - s) * -30}deg` }}
+      />
+      <Kinetic
+        delay={at + 3}
+        stagger={3}
+        align="flex-start"
+        lines={[{ text: label, size: 62 }]}
+      />
     </div>
   );
 };
 
-const Linha: React.FC<{ readonly k: string; readonly v: string; readonly at: number }> = ({ k, v, at }) => {
+const Linha: React.FC<{
+  readonly k: string;
+  readonly v: string;
+  readonly at: number;
+}> = ({ k, v, at }) => {
   const frame = useCurrentFrame();
   const p = prog(frame, at, 10);
   return (
@@ -69,14 +85,18 @@ export const Cena09Beneficios: React.FC = () => {
   const loading = frame >= C09.pay && frame < C09.receipt;
   const swap = prog(frame, C09.receipt, 10);
   const check = prog(frame, C09.receipt + 6, 12);
-  const value = Math.round(interpolate(frame, [C09.receipt + 14, C09.amount], [0, 50], { ...CLAMP, easing: EASE }));
+  const value = Math.round(
+    interpolate(frame, [C09.receipt + 14, C09.amount], [0, 50], {
+      ...CLAMP,
+      easing: EASE,
+    }),
+  );
   const land = prog(frame, C09.amount, 10);
   const shrink = prog(frame, SHRINK, 18, EASE_IN_OUT);
 
   return (
     <AbsoluteFill style={{ background: C.gray }}>
       <BgDots />
-      <Sfx at={C09.receipt + 6} name="pop" volume={0.45} />
       <Sfx at={C09.amount} name="ding" volume={0.65} />
       <Camera
         keys={[
@@ -97,7 +117,9 @@ export const Cena09Beneficios: React.FC = () => {
             height: 760,
             top: interpolate(shrink, [0, 1], [380, 170]),
             transformOrigin: "50% 0%",
-            scale: String(interpolate(shrink, [0, 1], [1, 0.62]) * (0.9 + 0.1 * card)),
+            scale: String(
+              interpolate(shrink, [0, 1], [1, 0.62]) * (0.9 + 0.1 * card),
+            ),
             transform: `perspective(1600px) rotateY(${Math.sin(swap * Math.PI) * 25}deg)`,
             opacity: card,
             translate: `0px ${(1 - card) * 300}px`,
@@ -119,12 +141,38 @@ export const Cena09Beneficios: React.FC = () => {
               opacity: 1 - swap,
             }}
           >
-            <div style={{ fontFamily: FONT, fontSize: 32, color: C.sub, fontWeight: 500 }}>Seu pedido</div>
-            <div style={{ fontFamily: FONT, fontSize: 58, fontWeight: 700, color: C.ink, letterSpacing: "-0.03em" }}>
+            <div
+              style={{
+                fontFamily: FONT,
+                fontSize: 32,
+                color: C.sub,
+                fontWeight: 500,
+              }}
+            >
+              Seu pedido
+            </div>
+            <div
+              style={{
+                fontFamily: FONT,
+                fontSize: 58,
+                fontWeight: 700,
+                color: C.ink,
+                letterSpacing: "-0.03em",
+              }}
+            >
               Vídeo comercial
             </div>
-            <div style={{ fontFamily: FONT, fontSize: 36, color: C.sub }}>Motion graphics · 9:16 · com narração</div>
-            <div style={{ height: 120, borderRadius: 24, background: C.black, marginTop: 10 }} />
+            <div style={{ fontFamily: FONT, fontSize: 36, color: C.sub }}>
+              Motion graphics · 9:16 · com narração
+            </div>
+            <div
+              style={{
+                height: 120,
+                borderRadius: 24,
+                background: C.black,
+                marginTop: 10,
+              }}
+            />
           </div>
 
           {/* comprovante */}
@@ -141,12 +189,42 @@ export const Cena09Beneficios: React.FC = () => {
           >
             <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
               <svg width="64" height="64" viewBox="0 0 240 240">
-                <circle cx="120" cy="120" r={110 * prog(frame, C09.receipt, 10)} fill={C.green} />
-                <DrawPath d="M70 124L105 158L172 88" progress={check} length={160} color={C.white} width={22} />
+                <circle
+                  cx="120"
+                  cy="120"
+                  r={110 * prog(frame, C09.receipt, 10)}
+                  fill={C.green}
+                />
+                <DrawPath
+                  d="M70 124L105 158L172 88"
+                  progress={check}
+                  length={160}
+                  color={C.white}
+                  width={22}
+                />
               </svg>
-              <div style={{ fontFamily: FONT, fontSize: 40, fontWeight: 600, color: C.ink }}>Comprovante de Pix</div>
+              <div
+                style={{
+                  fontFamily: FONT,
+                  fontSize: 40,
+                  fontWeight: 600,
+                  color: C.ink,
+                }}
+              >
+                Comprovante de Pix
+              </div>
             </div>
-            <div style={{ fontFamily: FONT, fontSize: 32, color: C.sub, fontWeight: 500, marginTop: 6 }}>Valor</div>
+            <div
+              style={{
+                fontFamily: FONT,
+                fontSize: 32,
+                color: C.sub,
+                fontWeight: 500,
+                marginTop: 6,
+              }}
+            >
+              Valor
+            </div>
             <div
               style={{
                 fontFamily: FONT,
@@ -205,13 +283,33 @@ export const Cena09Beneficios: React.FC = () => {
             fontWeight: 600,
             color: C.white,
             opacity: card * (1 - prog(frame, C09.receipt - 2, 6)),
-            scale: String(1 - Math.sin(prog(frame, C09.pay - 2, 8) * Math.PI) * 0.06),
+            scale: String(
+              1 - Math.sin(prog(frame, C09.pay - 2, 8) * Math.PI) * 0.06,
+            ),
           }}
         >
           {loading ? (
-            <svg width="50" height="50" viewBox="0 0 50 50" style={{ rotate: `${frame * 18}deg` }}>
-              <circle cx="25" cy="25" r="19" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="6" />
-              <path d="M25 6A19 19 0 0 1 44 25" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" />
+            <svg
+              width="50"
+              height="50"
+              viewBox="0 0 50 50"
+              style={{ rotate: `${frame * 18}deg` }}
+            >
+              <circle
+                cx="25"
+                cy="25"
+                r="19"
+                fill="none"
+                stroke="rgba(255,255,255,0.3)"
+                strokeWidth="6"
+              />
+              <path
+                d="M25 6A19 19 0 0 1 44 25"
+                fill="none"
+                stroke="#fff"
+                strokeWidth="6"
+                strokeLinecap="round"
+              />
             </svg>
           ) : (
             "Pagar com Pix · R$ 50"
@@ -219,9 +317,25 @@ export const Cena09Beneficios: React.FC = () => {
         </div>
 
         <Sparkles at={C09.amount} x={390} y={720} count={14} />
-        <Sparkles at={C09.amount + 3} x={760} y={680} color={C.ink} count={10} />
+        <Sparkles
+          at={C09.amount + 3}
+          x={760}
+          y={680}
+          color={C.ink}
+          count={10}
+        />
 
-        <div style={{ position: "absolute", top: 860, left: 130, right: 80, display: "flex", flexDirection: "column", gap: 50 }}>
+        <div
+          style={{
+            position: "absolute",
+            top: 860,
+            left: 130,
+            right: 80,
+            display: "flex",
+            flexDirection: "column",
+            gap: 50,
+          }}
+        >
           {ITEMS.map(([emoji, label], i) => (
             <Row key={label} at={C09.items[i]} emoji={emoji} label={label} />
           ))}

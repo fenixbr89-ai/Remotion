@@ -12,7 +12,6 @@ import {
   IPhone,
   Kinetic,
   prog,
-  Sfx,
   useSpring,
 } from "../ui";
 
@@ -46,7 +45,8 @@ const VideoRuim: React.FC = () => {
           width: 300,
           height: 300,
           borderRadius: 24,
-          background: "radial-gradient(circle at 35% 30%, #fff 0%, #c9c9c9 45%, #8a8a8a 100%)",
+          background:
+            "radial-gradient(circle at 35% 30%, #fff 0%, #c9c9c9 45%, #8a8a8a 100%)",
           rotate: `${wobble}deg`,
         }}
       />
@@ -120,19 +120,23 @@ export const Cena01Gancho: React.FC = () => {
   const rise = useSpring(0, 18);
   const tap = prog(frame, C01.tap, 10);
   const playing = frame >= C01.tap + 2;
-  const progress = interpolate(frame, [C01.tap, C01.freeze], [0.05, 0.32], CLAMP);
+  const progress = interpolate(
+    frame,
+    [C01.tap, C01.freeze],
+    [0.05, 0.32],
+    CLAMP,
+  );
   const frozen = frame >= C01.freeze;
-  const zoom = interpolate(frame, [80, 102], [1, 3.4], { ...CLAMP, easing: EASE_IN_OUT });
+  const zoom = interpolate(frame, [80, 102], [1, 3.4], {
+    ...CLAMP,
+    easing: EASE_IN_OUT,
+  });
   const screenToGray = interpolate(frame, [88, 101], [0, 1], CLAMP);
   const views = useSpring(C01.views, 13);
 
   return (
     <AbsoluteFill style={{ background: C.white }}>
       <BgDots />
-      <Sfx at={0} name="whoosh" volume={0.35} />
-      <Sfx at={C01.freeze} name="pop" volume={0.4} />
-      <Sfx at={C01.views} name="pop" volume={0.5} />
-      <Sfx at={80} name="whoosh" volume={0.6} />
       <AbsoluteFill
         style={{
           transformOrigin: "540px 1000px",
@@ -141,7 +145,11 @@ export const Cena01Gancho: React.FC = () => {
         }}
       >
         <Camera
-          keys={[{ f: 0, z: 0.96 }, { f: 40, z: 1.04 }, { f: 80, z: 1.08 }]}
+          keys={[
+            { f: 0, z: 0.96 },
+            { f: 40, z: 1.04 },
+            { f: 80, z: 1.08 },
+          ]}
           punches={[{ f: C01.freeze, amt: 0.05 }]}
           origin="50% 52%"
         >
@@ -174,7 +182,8 @@ export const Cena01Gancho: React.FC = () => {
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: "linear-gradient(160deg, #D1D1D6 0%, #E5E5EA 55%, #F2F2F7 100%)",
+                    background:
+                      "linear-gradient(160deg, #D1D1D6 0%, #E5E5EA 55%, #F2F2F7 100%)",
                   }}
                 />
               )}
@@ -213,8 +222,21 @@ export const Cena01Gancho: React.FC = () => {
                     rotate: `${(frame - C01.freeze) * 14}deg`,
                   }}
                 >
-                  <circle cx="45" cy="45" r="36" fill="none" stroke="rgba(0,0,0,0.25)" strokeWidth="9" />
-                  <path d="M45 9A36 36 0 0 1 81 45" fill="none" stroke="#fff" strokeWidth="9" strokeLinecap="round" />
+                  <circle
+                    cx="45"
+                    cy="45"
+                    r="36"
+                    fill="none"
+                    stroke="rgba(0,0,0,0.25)"
+                    strokeWidth="9"
+                  />
+                  <path
+                    d="M45 9A36 36 0 0 1 81 45"
+                    fill="none"
+                    stroke="#fff"
+                    strokeWidth="9"
+                    strokeLinecap="round"
+                  />
                 </svg>
               ) : null}
               <div
@@ -228,9 +250,23 @@ export const Cena01Gancho: React.FC = () => {
                   background: "rgba(0,0,0,0.18)",
                 }}
               >
-                <div style={{ width: `${progress * 100}%`, height: "100%", borderRadius: 4, background: C.ink }} />
+                <div
+                  style={{
+                    width: `${progress * 100}%`,
+                    height: "100%",
+                    borderRadius: 4,
+                    background: C.ink,
+                  }}
+                />
               </div>
-              <div style={{ position: "absolute", inset: 0, background: C.gray, opacity: screenToGray }} />
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: C.gray,
+                  opacity: screenToGray,
+                }}
+              />
             </IPhone>
           </div>
 

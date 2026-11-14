@@ -1,16 +1,23 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { C, Camera, CLAMP, Finger, FONT, prog, Sfx, useSpring } from "../ui";
+import { C, Camera, CLAMP, Finger, FONT, prog, useSpring } from "../ui";
 
 /** Frames locais: digita e envia, cliente digita e responde, envia de novo. */
-export const C08 = { type1: 0, send1: 16, typing: 26, msg2: 50, type3: 56, send3: 72 };
+export const C08 = {
+  type1: 0,
+  send1: 16,
+  typing: 26,
+  msg2: 50,
+  type3: 56,
+  send3: 72,
+};
 const SEND = { x: 950, y: 1560 };
 
-const Bubble: React.FC<{ readonly at: number; readonly mine: boolean; readonly children: React.ReactNode }> = ({
-  at,
-  mine,
-  children,
-}) => {
+const Bubble: React.FC<{
+  readonly at: number;
+  readonly mine: boolean;
+  readonly children: React.ReactNode;
+}> = ({ at, mine, children }) => {
   const frame = useCurrentFrame();
   const s = useSpring(at, 14);
   const p = prog(frame, at, 8);
@@ -42,7 +49,10 @@ const Bubble: React.FC<{ readonly at: number; readonly mine: boolean; readonly c
 };
 
 const typed = (frame: number, start: number, end: number, text: string) =>
-  text.slice(0, Math.round(interpolate(frame, [start, end], [0, text.length], CLAMP)));
+  text.slice(
+    0,
+    Math.round(interpolate(frame, [start, end], [0, text.length], CLAMP)),
+  );
 
 // 17,5–20,6s · "E a entrega? Mais rápida do que você imagina."
 // A Pixora digita e envia; o cliente digita "Oxi, mas já???"; a Pixora responde.
@@ -59,10 +69,16 @@ export const Cena08ProvaSocial: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ background: C.white }}>
-      <Sfx at={C08.msg2} name="pop" volume={0.5} />
       <Camera
-        keys={[{ f: 0, z: 1.0 }, { f: C08.msg2, z: 1.06, y: 40 }, { f: 103, z: 1.1, y: 60 }]}
-        punches={[{ f: C08.msg2, amt: 0.07 }, { f: C08.send3 + 2, amt: 0.04 }]}
+        keys={[
+          { f: 0, z: 1.0 },
+          { f: C08.msg2, z: 1.06, y: 40 },
+          { f: 103, z: 1.1, y: 60 },
+        ]}
+        punches={[
+          { f: C08.msg2, amt: 0.07 },
+          { f: C08.send3 + 2, amt: 0.04 },
+        ]}
       >
         {/* cabeçalho do contato */}
         <div
@@ -96,7 +112,16 @@ export const Cena08ProvaSocial: React.FC = () => {
               <path d="M4 86C6 62 22 54 40 54S74 62 76 86Z" fill="#fff" />
             </svg>
           </div>
-          <div style={{ fontFamily: FONT, fontSize: 36, fontWeight: 600, color: C.ink }}>Cliente</div>
+          <div
+            style={{
+              fontFamily: FONT,
+              fontSize: 36,
+              fontWeight: 600,
+              color: C.ink,
+            }}
+          >
+            Cliente
+          </div>
         </div>
 
         <div
@@ -174,7 +199,16 @@ export const Cena08ProvaSocial: React.FC = () => {
           }}
         >
           {field || "iMessage"}
-          {field ? <span style={{ width: 4, height: 50, background: C.blue, marginLeft: 4 }} /> : null}
+          {field ? (
+            <span
+              style={{
+                width: 4,
+                height: 50,
+                background: C.blue,
+                marginLeft: 4,
+              }}
+            />
+          ) : null}
           <div
             style={{
               position: "absolute",
@@ -189,7 +223,14 @@ export const Cena08ProvaSocial: React.FC = () => {
             }}
           >
             <svg width="34" height="38" viewBox="0 0 34 38">
-              <path d="M17 34V5M5 16L17 4L29 16" fill="none" stroke="white" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M17 34V5M5 16L17 4L29 16"
+                fill="none"
+                stroke="white"
+                strokeWidth="5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </div>
         </div>

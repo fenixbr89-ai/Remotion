@@ -9,10 +9,15 @@ const trilhaVolume = (f: number, narracao: boolean) => {
   const speaking = Math.max(
     0,
     ...FALA.map(([a, b]) =>
-      interpolate(f, [a * FPS - 5, a * FPS, b * FPS, b * FPS + 5], [0, 1, 1, 0], {
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp",
-      }),
+      interpolate(
+        f,
+        [a * FPS - 5, a * FPS, b * FPS, b * FPS + 5],
+        [0, 1, 1, 0],
+        {
+          extrapolateLeft: "clamp",
+          extrapolateRight: "clamp",
+        },
+      ),
     ),
   );
   return interpolate(speaking, [0, 1], [0.55, 0.24]);
@@ -26,6 +31,8 @@ export const Som: React.FC<{ readonly narracao: boolean }> = ({ narracao }) => (
       src={staticFile("audio/trilha.mp3")}
       volume={(f) => trilhaVolume(f, narracao)}
     />
-    {narracao ? <Audio name="Narração" src={staticFile(NARRACAO_ARQUIVO)} /> : null}
+    {narracao ? (
+      <Audio name="Narração" src={staticFile(NARRACAO_ARQUIVO)} />
+    ) : null}
   </>
 );

@@ -30,7 +30,9 @@ const Push: React.FC<TransitionPresentationComponentProps<PushProps>> = ({
   );
 };
 
-export const push = (direction: PushProps["direction"]): TransitionPresentation<PushProps> => ({
+export const push = (
+  direction: PushProps["direction"],
+): TransitionPresentation<PushProps> => ({
   component: Push,
   props: { direction },
 });
@@ -38,7 +40,9 @@ export const push = (direction: PushProps["direction"]): TransitionPresentation<
 // ---------- Dissolve com profundidade (a cena nova entra por cima, sem quadro vazio) ----------
 type DissolveProps = { exitScale: number; enterScale: number };
 
-const Dissolve: React.FC<TransitionPresentationComponentProps<DissolveProps>> = ({
+const Dissolve: React.FC<
+  TransitionPresentationComponentProps<DissolveProps>
+> = ({
   children,
   presentationDirection,
   presentationProgress: p,
@@ -106,7 +110,9 @@ const Whip: React.FC<TransitionPresentationComponentProps<WhipProps>> = ({
   );
 };
 
-export const whip = (direction: WhipProps["direction"]): TransitionPresentation<WhipProps> => ({
+export const whip = (
+  direction: WhipProps["direction"],
+): TransitionPresentation<WhipProps> => ({
   component: Whip,
   props: { direction },
 });

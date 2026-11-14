@@ -197,8 +197,7 @@ export const EmojiBadge: React.FC<{
       height: size,
       borderRadius: "50%",
       background: C.white,
-      boxShadow:
-        "0 24px 60px rgba(0,0,0,0.10), 0 4px 14px rgba(0,0,0,0.06)",
+      boxShadow: "0 24px 60px rgba(0,0,0,0.10), 0 4px 14px rgba(0,0,0,0.06)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -425,7 +424,9 @@ export const Kinetic: React.FC<{
               const step = line.chars ? stagger * 0.45 : stagger;
               const t = prog(frame, delay + myIdx * step, 18);
               const o =
-                outAt === undefined ? 0 : prog(frame, outAt + myIdx * (step * 0.6), 12, EASE_IN);
+                outAt === undefined
+                  ? 0
+                  : prog(frame, outAt + myIdx * (step * 0.6), 12, EASE_IN);
               return (
                 <span
                   key={ui}
@@ -481,25 +482,35 @@ export const Drift: React.FC<{
   );
 };
 
-
 // ---------- Som dentro das cenas ----------
 export type SfxName = "whoosh" | "tap" | "pop" | "ding" | "impact";
 
 /** Efeito sonoro no frame local da cena. */
-export const Sfx: React.FC<{ readonly at: number; readonly name: SfxName; readonly volume?: number }> = ({
-  at,
-  name,
-  volume = 0.5,
-}) => (
+export const Sfx: React.FC<{
+  readonly at: number;
+  readonly name: SfxName;
+  readonly volume?: number;
+}> = ({ at, name, volume = 0.5 }) => (
   <Sequence from={Math.round(at)} layout="none" name={`SFX ${name}`}>
     <Audio src={staticFile(`audio/${name}.wav`)} volume={volume} />
   </Sequence>
 );
 
 // ---------- Câmera ----------
-export type CamKey = { f: number; z?: number; x?: number; y?: number; r?: number };
+export type CamKey = {
+  f: number;
+  z?: number;
+  x?: number;
+  y?: number;
+  r?: number;
+};
 
-const track = (frame: number, keys: CamKey[], prop: "z" | "x" | "y" | "r", base: number) => {
+const track = (
+  frame: number,
+  keys: CamKey[],
+  prop: "z" | "x" | "y" | "r",
+  base: number,
+) => {
   const pts: [number, number][] = [];
   let last = base;
   for (const k of keys) {
@@ -517,42 +528,38 @@ const track = (frame: number, keys: CamKey[], prop: "z" | "x" | "y" | "r", base:
 };
 
 /**
- * Câmera da cena: keyframes de zoom/posição/rotação, tremor de mão contínuo e
- * "punches" (zoom rápido + tremida) nos momentos de impacto.
+ * Câmera da cena: keyframes suaves de zoom/posição/rotação e, nos momentos de impacto,
+ * uma leve aproximação ("punch") sem tremor.
  */
 export const Camera: React.FC<{
   readonly keys?: CamKey[];
-  readonly handheld?: number;
   readonly punches?: { f: number; amt?: number }[];
   readonly origin?: string;
+  readonly handheld?: number;
   readonly children: React.ReactNode;
-}> = ({ keys = [{ f: 0 }], handheld = 1, punches = [], origin = "50% 50%", children }) => {
+}> = ({ keys = [{ f: 0 }], punches = [], origin = "50% 50%", children }) => {
   const frame = useCurrentFrame();
   const z = track(frame, keys, "z", 1);
   const x = track(frame, keys, "x", 0);
   const y = track(frame, keys, "y", 0);
   const r = track(frame, keys, "r", 0);
   let pz = 0;
-  let shake = 0;
   for (const p of punches) {
-    const amt = p.amt ?? 0.05;
-    pz += interpolate(frame, [p.f, p.f + 3, p.f + 16], [0, amt, 0], CLAMP);
-    shake += interpolate(frame, [p.f, p.f + 2, p.f + 14], [0, amt * 260, 0], CLAMP);
+    const amt = (p.amt ?? 0.05) * 0.5;
+    pz += interpolate(frame, [p.f, p.f + 6, p.f + 24], [0, amt, 0], {
+      ...CLAMP,
+      easing: EASE_IN_OUT,
+    });
   }
-  const hx = handheld * (Math.sin(frame * 0.13) * 5 + Math.sin(frame * 0.071 + 1) * 4);
-  const hy = handheld * (Math.cos(frame * 0.11) * 5 + Math.sin(frame * 0.053 + 2) * 3);
-  const hr = handheld * Math.sin(frame * 0.09) * 0.25;
-  const sx = shake * Math.sin(frame * 2.7);
-  const sy = shake * Math.cos(frame * 3.1);
   return (
     <div
       style={{
         position: "absolute",
         inset: 0,
         transformOrigin: origin,
-        translate: `${x + hx + sx}px ${y + hy + sy}px`,
+        translate: `${x}px ${y}px`,
         scale: String(z + pz),
-        rotate: `${r + hr + sx * 0.02}deg`,
+        rotate: `${r}deg`,
       }}
     >
       {children}
@@ -572,15 +579,29 @@ export const Finger: React.FC<{
 }> = ({ path, taps, dark = false, volume = 0.6 }) => {
   const frame = useCurrentFrame();
   const fs = path.map((p) => p.f);
-  const x = interpolate(frame, fs, path.map((p) => p.x), { ...CLAMP, easing: EASE_IN_OUT });
-  const y = interpolate(frame, fs, path.map((p) => p.y), { ...CLAMP, easing: EASE_IN_OUT });
+  const x = interpolate(
+    frame,
+    fs,
+    path.map((p) => p.x),
+    { ...CLAMP, easing: EASE_IN_OUT },
+  );
+  const y = interpolate(
+    frame,
+    fs,
+    path.map((p) => p.y),
+    { ...CLAMP, easing: EASE_IN_OUT },
+  );
   const first = fs[0];
   const lastF = fs[fs.length - 1];
   const visible =
     interpolate(frame, [first, first + 6], [0, 1], CLAMP) *
     interpolate(frame, [lastF - 6, lastF], [1, 0], CLAMP);
   let press = 0;
-  for (const t of taps) press = Math.max(press, interpolate(frame, [t - 3, t, t + 7], [0, 1, 0], CLAMP));
+  for (const t of taps)
+    press = Math.max(
+      press,
+      interpolate(frame, [t - 3, t, t + 7], [0, 1, 0], CLAMP),
+    );
   return (
     <>
       {taps.map((t) => (
@@ -589,8 +610,18 @@ export const Finger: React.FC<{
       {taps.map((t) => {
         const r = prog(frame, t, 16);
         if (frame < t || r >= 1) return null;
-        const tx = interpolate(t, fs, path.map((p) => p.x), CLAMP);
-        const ty = interpolate(t, fs, path.map((p) => p.y), CLAMP);
+        const tx = interpolate(
+          t,
+          fs,
+          path.map((p) => p.x),
+          CLAMP,
+        );
+        const ty = interpolate(
+          t,
+          fs,
+          path.map((p) => p.y),
+          CLAMP,
+        );
         return (
           <div
             key={`r${t}`}
@@ -628,10 +659,10 @@ export const Finger: React.FC<{
 };
 
 // ---------- Fundo com pontos em movimento ----------
-export const BgDots: React.FC<{ readonly color?: string; readonly speed?: number }> = ({
-  color = "rgba(0,0,0,0.07)",
-  speed = 0.6,
-}) => {
+export const BgDots: React.FC<{
+  readonly color?: string;
+  readonly speed?: number;
+}> = ({ color = "rgba(0,0,0,0.07)", speed = 0.6 }) => {
   const frame = useCurrentFrame();
   const off = (frame * speed) % 60;
   return (

@@ -1,13 +1,33 @@
 import React from "react";
-import { AbsoluteFill, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import {
+  AbsoluteFill,
+  interpolate,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 import { useAudioData, visualizeAudio } from "@remotion/media-utils";
-import { BgDots, C, Camera, CLAMP, EmojiBadge, Finger, Kinetic, prog, Sfx, useSpring } from "../ui";
+import {
+  BgDots,
+  C,
+  Camera,
+  CLAMP,
+  EmojiBadge,
+  Finger,
+  Kinetic,
+  prog,
+  useSpring,
+} from "../ui";
 import { IDX, NARRACAO_ARQUIVO, sceneFrom } from "../timeline";
 
 const BARS = 25;
 const TAP = 8;
 
-const Nota: React.FC<{ readonly at: number; readonly x: number; readonly flip?: boolean }> = ({ at, x, flip }) => {
+const Nota: React.FC<{
+  readonly at: number;
+  readonly x: number;
+  readonly flip?: boolean;
+}> = ({ at, x, flip }) => {
   const frame = useCurrentFrame();
   const t = prog(frame, at, 40);
   if (frame < at) return null;
@@ -25,7 +45,13 @@ const Nota: React.FC<{ readonly at: number; readonly x: number; readonly flip?: 
         rotate: `${(flip ? -1 : 1) * t * 30}deg`,
       }}
     >
-      <path d="M25 70V12L62 4V60" fill="none" stroke={C.ink} strokeWidth="7" strokeLinejoin="round" />
+      <path
+        d="M25 70V12L62 4V60"
+        fill="none"
+        stroke={C.ink}
+        strokeWidth="7"
+        strokeLinejoin="round"
+      />
       <ellipse cx="16" cy="72" rx="13" ry="10" fill={C.ink} />
       <ellipse cx="53" cy="62" rx="13" ry="10" fill={C.ink} />
     </svg>
@@ -43,19 +69,40 @@ export const Cena07Diferencial2: React.FC = () => {
   const wave = prog(frame, TAP + 6, 10);
   const absFrame = frame + sceneFrom(IDX.c07);
   const levels = audio
-    ? visualizeAudio({ fps, frame: absFrame, audioData: audio, numberOfSamples: 32, optimizeFor: "speed" })
+    ? visualizeAudio({
+        fps,
+        frame: absFrame,
+        audioData: audio,
+        numberOfSamples: 32,
+        optimizeFor: "speed",
+      })
     : new Array(32).fill(0);
 
   return (
     <AbsoluteFill style={{ background: C.white }}>
       <BgDots />
-      <Sfx at={TAP + 4} name="pop" volume={0.5} />
       <Camera
-        keys={[{ f: 0, z: 1.0 }, { f: 30, z: 1.05 }, { f: 76, z: 1.1 }]}
-        punches={[{ f: 32, amt: 0.04 }, { f: 50, amt: 0.05 }]}
+        keys={[
+          { f: 0, z: 1.0 },
+          { f: 30, z: 1.05 },
+          { f: 76, z: 1.1 },
+        ]}
+        punches={[
+          { f: 32, amt: 0.04 },
+          { f: 50, amt: 0.05 },
+        ]}
       >
         {/* botão de gravar → microfone */}
-        <div style={{ position: "absolute", top: 400, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
+        <div
+          style={{
+            position: "absolute",
+            top: 400,
+            left: 0,
+            right: 0,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <div
             style={{
               position: "absolute",
@@ -71,7 +118,14 @@ export const Cena07Diferencial2: React.FC = () => {
               scale: String(1 - rec * 0.3),
             }}
           >
-            <div style={{ width: 150, height: 150, borderRadius: "50%", background: C.red }} />
+            <div
+              style={{
+                width: 150,
+                height: 150,
+                borderRadius: "50%",
+                background: C.red,
+              }}
+            />
           </div>
           <EmojiBadge char="🎙️" size={260} style={{ scale: String(mic) }} />
           {/* anel pulsando com a voz */}
@@ -106,8 +160,23 @@ export const Cena07Diferencial2: React.FC = () => {
           {new Array(BARS).fill(0).map((_, i) => {
             const idx = Math.abs(i - (BARS - 1) / 2);
             const v = levels[Math.min(31, Math.round(idx * 1.6))] ?? 0;
-            const h = interpolate(wave, [0, 1], [8, 14 + Math.min(200, v * 900)], CLAMP);
-            return <div key={i} style={{ width: 16, height: h, borderRadius: 8, background: C.ink }} />;
+            const h = interpolate(
+              wave,
+              [0, 1],
+              [8, 14 + Math.min(200, v * 900)],
+              CLAMP,
+            );
+            return (
+              <div
+                key={i}
+                style={{
+                  width: 16,
+                  height: h,
+                  borderRadius: 8,
+                  background: C.ink,
+                }}
+              />
+            );
           })}
         </div>
 

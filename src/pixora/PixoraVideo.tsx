@@ -29,7 +29,10 @@ const timing = (k: number) =>
 
 // Passagens 1→2 (zoom pela tela), 2→3 (ponto que cresce), 3→estilos (círculo branco),
 // chamada→espera (zoom no celular) e espera→logo (preto contínuo) acontecem dentro das cenas.
-export const PixoraVideo: React.FC<PixoraVideoProps> = ({ narracao, legendas }) => (
+export const PixoraVideo: React.FC<PixoraVideoProps> = ({
+  narracao,
+  legendas,
+}) => (
   <AbsoluteFill style={{ background: "#FFFFFF" }}>
     <TransitionSeries>
       <TransitionSeries.Sequence name="1 · Gancho" durationInFrames={DUR.c01}>
@@ -45,23 +48,50 @@ export const PixoraVideo: React.FC<PixoraVideoProps> = ({ narracao, legendas }) 
         <Cena05Estilos />
       </TransitionSeries.Sequence>
       {/* o card "Impacto" já está na posição da tela da cena 6: dissolve puro */}
-      <TransitionSeries.Transition presentation={dissolve(1, 1)} timing={timing(3)} />
-      <TransitionSeries.Sequence name="5 · Diferencial 1" durationInFrames={DUR.c06}>
+      <TransitionSeries.Transition
+        presentation={dissolve(1, 1)}
+        timing={timing(3)}
+      />
+      <TransitionSeries.Sequence
+        name="5 · Diferencial 1"
+        durationInFrames={DUR.c06}
+      >
         <Cena06Diferencial1 />
       </TransitionSeries.Sequence>
-      <TransitionSeries.Transition presentation={whip("left")} timing={timing(4)} />
-      <TransitionSeries.Sequence name="6 · Diferencial 2" durationInFrames={DUR.c07}>
+      <TransitionSeries.Transition
+        presentation={whip("left")}
+        timing={timing(4)}
+      />
+      <TransitionSeries.Sequence
+        name="6 · Diferencial 2"
+        durationInFrames={DUR.c07}
+      >
         <Cena07Diferencial2 />
       </TransitionSeries.Sequence>
-      <TransitionSeries.Transition presentation={whip("up")} timing={timing(5)} />
-      <TransitionSeries.Sequence name="7 · Prova social" durationInFrames={DUR.c08}>
+      <TransitionSeries.Transition
+        presentation={whip("up")}
+        timing={timing(5)}
+      />
+      <TransitionSeries.Sequence
+        name="7 · Prova social"
+        durationInFrames={DUR.c08}
+      >
         <Cena08ProvaSocial />
       </TransitionSeries.Sequence>
-      <TransitionSeries.Transition presentation={whip("left")} timing={timing(6)} />
-      <TransitionSeries.Sequence name="8 · Benefícios" durationInFrames={DUR.c09}>
+      <TransitionSeries.Transition
+        presentation={whip("left")}
+        timing={timing(6)}
+      />
+      <TransitionSeries.Sequence
+        name="8 · Benefícios"
+        durationInFrames={DUR.c09}
+      >
         <Cena09Beneficios />
       </TransitionSeries.Sequence>
-      <TransitionSeries.Transition presentation={whip("up")} timing={timing(7)} />
+      <TransitionSeries.Transition
+        presentation={whip("up")}
+        timing={timing(7)}
+      />
       <TransitionSeries.Sequence name="9 · Chamada" durationInFrames={DUR.c10}>
         <Cena10Chamada />
       </TransitionSeries.Sequence>

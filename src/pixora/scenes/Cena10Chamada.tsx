@@ -1,6 +1,17 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { C, Camera, CLAMP, EASE_IN_OUT, Finger, IPhone, Kinetic, PixoraP, prog, Sfx, useSpring } from "../ui";
+import {
+  C,
+  Camera,
+  CLAMP,
+  EASE_IN_OUT,
+  Finger,
+  IPhone,
+  Kinetic,
+  PixoraP,
+  prog,
+  useSpring,
+} from "../ui";
 
 /** Frame (local) em que a câmera começa a entrar no celular. */
 export const ZOOM_AT = 38;
@@ -12,7 +23,14 @@ const VideoBom: React.FC = () => {
   const frame = useCurrentFrame() - TAP;
   const t = frame / 30;
   return (
-    <div style={{ position: "absolute", inset: 0, background: "#0A0A0A", overflow: "hidden" }}>
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        background: "#0A0A0A",
+        overflow: "hidden",
+      }}
+    >
       {/* luzes suaves em movimento */}
       <div
         style={{
@@ -22,7 +40,8 @@ const VideoBom: React.FC = () => {
           borderRadius: "50%",
           left: -200 + Math.sin(t * 0.9) * 120,
           top: 120 + Math.cos(t * 0.7) * 100,
-          background: "radial-gradient(closest-side, rgba(10,132,255,0.55), rgba(10,132,255,0))",
+          background:
+            "radial-gradient(closest-side, rgba(10,132,255,0.55), rgba(10,132,255,0))",
           filter: "blur(30px)",
         }}
       />
@@ -34,7 +53,8 @@ const VideoBom: React.FC = () => {
           borderRadius: "50%",
           right: -240 + Math.cos(t * 0.8) * 120,
           bottom: 60 + Math.sin(t * 1.1) * 100,
-          background: "radial-gradient(closest-side, rgba(255,255,255,0.28), rgba(255,255,255,0))",
+          background:
+            "radial-gradient(closest-side, rgba(255,255,255,0.28), rgba(255,255,255,0))",
           filter: "blur(30px)",
         }}
       />
@@ -109,19 +129,35 @@ export const Cena10Chamada: React.FC = () => {
   const frame = useCurrentFrame();
   const phone = useSpring(0, 16);
   const playing = frame >= TAP + 1;
-  const zoom = interpolate(frame, [ZOOM_AT, 56], [1, 3.6], { ...CLAMP, easing: EASE_IN_OUT });
+  const zoom = interpolate(frame, [ZOOM_AT, 56], [1, 3.6], {
+    ...CLAMP,
+    easing: EASE_IN_OUT,
+  });
 
   return (
     <AbsoluteFill style={{ background: C.white }}>
-      <Sfx at={ZOOM_AT} name="whoosh" volume={0.6} />
       <AbsoluteFill
         style={{
           transformOrigin: `${PHONE.left + PHONE.width / 2}px ${PHONE.top + PHONE.height / 2}px`,
           scale: String(zoom),
         }}
       >
-        <Camera keys={[{ f: 0, z: 0.94 }, { f: ZOOM_AT, z: 1 }]} punches={[{ f: TAP, amt: 0.04 }]} handheld={0.6}>
-          <div style={{ position: "absolute", left: PHONE.left, top: PHONE.top, scale: String(0.9 + 0.1 * phone) }}>
+        <Camera
+          keys={[
+            { f: 0, z: 0.94 },
+            { f: ZOOM_AT, z: 1 },
+          ]}
+          punches={[{ f: TAP, amt: 0.04 }]}
+          handheld={0.6}
+        >
+          <div
+            style={{
+              position: "absolute",
+              left: PHONE.left,
+              top: PHONE.top,
+              scale: String(0.9 + 0.1 * phone),
+            }}
+          >
             <IPhone width={PHONE.width} height={PHONE.height} screen="#0A0A0A">
               {playing ? <VideoBom /> : null}
             </IPhone>

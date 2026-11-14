@@ -27,7 +27,7 @@ as cenas começam nas pausas da fala (`START` em `src/pixora/timeline.ts`) e cad
 câmera e efeito sonoro está no frame da palavra correspondente. `FALA` lista os trechos com voz
 (a trilha abaixa neles). Sem voz: `--props='{"narracao":false,"legendas":false}'`.
 
-Ferramentas em `ui.tsx`: `Camera` (keyframes, tremor de mão e punches), `Finger` (toque com onda e
+Ferramentas em `ui.tsx`: `Camera` (keyframes suaves e leve aproximação nos impactos, sem tremor), `Finger` (toque com onda e
 som), `Sfx`, `BgDots`, `Sparkles`. Transições em chicote (`whip`) em `transicoes.tsx`.
 
 Para o arquivo final, normalize o áudio para redes sociais:

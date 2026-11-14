@@ -1,24 +1,41 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { C, Camera, CLAMP, DrawPath, EASE, EASE_IN, FONT, Kinetic, prog, Sfx } from "../ui";
+import {
+  C,
+  Camera,
+  CLAMP,
+  DrawPath,
+  EASE,
+  EASE_IN,
+  FONT,
+  Kinetic,
+  prog,
+} from "../ui";
 
 // 3,4–5,5s · "Imagem parada não prende ninguém": views despencam, gráfico cai,
 // e o ponto final cresce até virar o preto da cena 3.
 export const Cena02Problema: React.FC = () => {
   const frame = useCurrentFrame();
-  const views = Math.round(interpolate(frame, [2, 30], [12, 3], { ...CLAMP, easing: EASE }));
+  const views = Math.round(
+    interpolate(frame, [2, 30], [12, 3], { ...CLAMP, easing: EASE }),
+  );
   const cardIn = prog(frame, -4, 12);
   const cardOut = prog(frame, 40, 10, EASE_IN);
   const graph = prog(frame, 4, 26);
   const dotIn = prog(frame, 34, 6);
-  const dotGrow = interpolate(frame, [44, 63], [1, 190], { ...CLAMP, easing: EASE_IN });
+  const dotGrow = interpolate(frame, [44, 63], [1, 190], {
+    ...CLAMP,
+    easing: EASE_IN,
+  });
 
   return (
     <AbsoluteFill style={{ background: C.gray }}>
-      <Sfx at={30} name="pop" volume={0.45} />
-      <Sfx at={44} name="whoosh" volume={0.5} />
       <Camera
-        keys={[{ f: 0, z: 1.12, r: -1 }, { f: 30, z: 1.02, r: 0 }, { f: 63, z: 1.05 }]}
+        keys={[
+          { f: 0, z: 1.12, r: -1 },
+          { f: 30, z: 1.02, r: 0 },
+          { f: 63, z: 1.05 },
+        ]}
         punches={[{ f: 30, amt: 0.05 }]}
       >
         <div
@@ -72,7 +89,12 @@ export const Cena02Problema: React.FC = () => {
             }}
           >
             {views}
-            <svg width="60" height="70" viewBox="0 0 60 70" style={{ opacity: graph }}>
+            <svg
+              width="60"
+              height="70"
+              viewBox="0 0 60 70"
+              style={{ opacity: graph }}
+            >
               <path
                 d="M30 6V60M8 40L30 62L52 40"
                 fill="none"
@@ -83,7 +105,15 @@ export const Cena02Problema: React.FC = () => {
               />
             </svg>
           </div>
-          <div style={{ position: "relative", fontFamily: FONT, fontSize: 44, color: C.sub, fontWeight: 500 }}>
+          <div
+            style={{
+              position: "relative",
+              fontFamily: FONT,
+              fontSize: 44,
+              color: C.sub,
+              fontWeight: 500,
+            }}
+          >
             visualizações
           </div>
         </div>

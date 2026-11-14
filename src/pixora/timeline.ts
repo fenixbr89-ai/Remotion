@@ -13,7 +13,9 @@ export const S = (sec: number) => Math.round(sec * FPS);
  * Ordem: gancho, problema, virada, estilos, diferencial 1, diferencial 2,
  * prova social, benefícios, chamada, espera, logo.
  */
-export const START = [0, 102, 165, 228, 360, 459, 525, 618, 795, 846, 918, 1035];
+export const START = [
+  0, 102, 165, 228, 360, 459, 525, 618, 795, 846, 918, 1035,
+];
 export const SCENES = START.length - 1;
 export const TOTAL = START[SCENES];
 
@@ -38,13 +40,17 @@ export const IDX = {
 export const TRANS = [0, 0, 0, 10, 10, 10, 10, 10, 0, 0];
 
 /** Frame absoluto em que a sequência da cena i começa. */
-export const sceneFrom = (i: number) => START[i] - (i > 0 ? TRANS[i - 1] / 2 : 0);
+export const sceneFrom = (i: number) =>
+  START[i] - (i > 0 ? TRANS[i - 1] / 2 : 0);
 
 /** Momento da narração (segundos) → frame local da cena i. */
 export const loc = (i: number, sec: number) => S(sec) - sceneFrom(i);
 
 const sceneDur = (i: number) =>
-  START[i + 1] - START[i] + (i > 0 ? TRANS[i - 1] / 2 : 0) + (i < SCENES - 1 ? TRANS[i] / 2 : 0);
+  START[i + 1] -
+  START[i] +
+  (i > 0 ? TRANS[i - 1] / 2 : 0) +
+  (i < SCENES - 1 ? TRANS[i] / 2 : 0);
 
 export const DUR = {
   c01: sceneDur(IDX.c01),
@@ -83,14 +89,34 @@ export const FALA: [number, number][] = [
 
 /** Falas (para legendas opcionais). */
 export const NARRACAO: { from: number; to: number; text: string }[] = [
-  { from: S(0), to: S(2.9), text: "Seu conteúdo tá parado… e ninguém para pra ver?" },
+  {
+    from: S(0),
+    to: S(2.9),
+    text: "Seu conteúdo tá parado… e ninguém para pra ver?",
+  },
   { from: S(3.59), to: S(5.23), text: "Imagem parada não prende ninguém." },
   { from: S(5.76), to: S(7.28), text: "Movimento é o que prende." },
-  { from: S(7.92), to: S(11.7), text: "Do estilo clean ao mais impactante, do jeito da sua marca." },
-  { from: S(12.14), to: S(14.95), text: "Visual premium, limpo, profissional." },
+  {
+    from: S(7.92),
+    to: S(11.7),
+    text: "Do estilo clean ao mais impactante, do jeito da sua marca.",
+  },
+  {
+    from: S(12.14),
+    to: S(14.95),
+    text: "Visual premium, limpo, profissional.",
+  },
   { from: S(15.6), to: S(17.24), text: "Narração e trilha já vêm inclusas." },
-  { from: S(17.72), to: S(20.24), text: "E a entrega? Mais rápida do que você imagina." },
-  { from: S(20.8), to: S(26.2), text: "E o melhor: tudo isso por apenas cinquenta reais. Seguro e sem complicação." },
+  {
+    from: S(17.72),
+    to: S(20.24),
+    text: "E a entrega? Mais rápida do que você imagina.",
+  },
+  {
+    from: S(20.8),
+    to: S(26.2),
+    text: "E o melhor: tudo isso por apenas cinquenta reais. Seguro e sem complicação.",
+  },
   { from: S(26.76), to: S(27.98), text: "Bora tirar o seu vídeo do papel?" },
   { from: S(28.38), to: S(30.48), text: "Chama a Pixora. Tô te esperando!" },
 ];

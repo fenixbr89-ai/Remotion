@@ -1,6 +1,16 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame } from "remotion";
-import { C, Camera, Emoji, Finger, FONT, Kinetic, PixoraP, prog, Sfx, useSpring } from "../ui";
+import {
+  C,
+  Camera,
+  Emoji,
+  Finger,
+  FONT,
+  Kinetic,
+  PixoraP,
+  prog,
+  useSpring,
+} from "../ui";
 
 const TAP = 14;
 
@@ -15,8 +25,16 @@ export const Cena11Espera: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ background: C.black }}>
-      <Sfx at={TAP + 6} name="whoosh" volume={0.45} />
-      <Camera keys={[{ f: 0, z: 1 }, { f: 72, z: 1.08 }]} punches={[{ f: TAP, amt: 0.05 }, { f: 44, amt: 0.04 }]}>
+      <Camera
+        keys={[
+          { f: 0, z: 1 },
+          { f: 72, z: 1.08 },
+        ]}
+        punches={[
+          { f: TAP, amt: 0.05 },
+          { f: 44, amt: 0.04 },
+        ]}
+      >
         <div
           style={{
             position: "absolute",
@@ -34,7 +52,9 @@ export const Cena11Espera: React.FC = () => {
             fontSize: 52,
             fontWeight: 600,
             color: C.ink,
-            scale: String(btn * (1 - Math.sin(prog(frame, TAP - 2, 8) * Math.PI) * 0.08)),
+            scale: String(
+              btn * (1 - Math.sin(prog(frame, TAP - 2, 8) * Math.PI) * 0.08),
+            ),
             translate: `0px ${fly * -500}px`,
             opacity: 1 - fly,
             filter: `blur(${fly * 14}px)`,
