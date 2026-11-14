@@ -8,8 +8,6 @@ export const negocioSchema = z.object({
   /** Como aparece no gancho: "uma AÇAITERIA" */
   artigo: z.string(),
   nome: z.string(),
-  /** Ícones que flutuam no gancho */
-  iconesGancho: z.array(icone).min(1).max(4),
   cardapio: z.array(z.object({ nome: z.string(), detalhe: z.string() })).min(1).max(4),
   /** índice do carro-chefe dentro do cardápio */
   carroChefe: z.number().int().min(0),

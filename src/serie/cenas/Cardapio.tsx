@@ -1,55 +1,45 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
-import { Cinetico } from "../ui/Cinetico";
-import { Icone } from "../ui/Icones";
-import { cor, degrade, entra, fontFamily, sombra, suave } from "../tema";
+import { CopoAcai, Raios } from "../ui/Ilustracoes";
+import { Legenda } from "../ui/Legenda";
+import { cor, degrade, entra, fontFamily, suave } from "../tema";
 import { destaca, type CenaProps } from "./props";
 
 export const Cardapio: React.FC<CenaProps> = ({ n }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const foco = suave(f, 100, 130);
+  const foco = suave(f, 95, 125);
   const chefe = n.cardapio[n.carroChefe].nome;
   return (
-    <AbsoluteFill style={{ fontFamily, justifyContent: "center", padding: "180px 80px 300px" }}>
-      <Cinetico texto="Cardápio *enxuto.*" inicio={8} tamanho={84} />
-      <Cinetico texto="Pouca opção = menos desperdício." inicio={18} intervalo={2} tamanho={42} peso={600} corTexto={cor.textoSuave} style={{ marginTop: 16 }} />
-      <div style={{ display: "flex", flexDirection: "column", gap: 30, marginTop: 70 }}>
-        {n.cardapio.map((c, i) => {
-          const e = entra(f, fps, 28 + i * 10);
-          const ehChefe = i === n.carroChefe;
-          const tamanhoIcone = 70 + i * 16;
-          return (
-            <div
-              key={c.nome}
-              style={{
-                padding: 4,
-                borderRadius: 40,
-                background: ehChefe && foco > 0 ? degrade : cor.azulBorda,
-                opacity: e * (ehChefe ? 1 : 1 - foco * 0.5),
-                translate: `${(1 - e) * 400}px 0`,
-                scale: `${ehChefe ? 1 + foco * 0.05 : 1 - foco * 0.03}`,
-                boxShadow: sombra,
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 30, padding: "30px 40px", borderRadius: 36, background: cor.branco }}>
-                <div style={{ width: 110, display: "flex", justifyContent: "center" }}>
-                  <Icone nome="copo" tamanho={tamanhoIcone} style={{ scale: `${entra(f, fps, 34 + i * 10, 8)}` }} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ color: cor.texto, fontSize: 72, fontWeight: 800, letterSpacing: -2 }}>{c.nome}</div>
-                  <div style={{ color: cor.textoSuave, fontSize: 36, fontWeight: 600 }}>{c.detalhe}</div>
+    <AbsoluteFill style={{ fontFamily }}>
+      <Legenda
+        frases={[
+          { em: 4, l1: `Cardápio *enxuto:* só ${n.cardapio.length} tamanhos.`, l2: "Pouca opção, menos desperdício." },
+          { em: 95, l1: `E a conta começa pelo ${destaca(chefe + ",")}`, l2: "o que mais vende." },
+        ]}
+      />
+      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingTop: 320 }}>
+        <div style={{ display: "flex", alignItems: "flex-end", gap: 30 }}>
+          {n.cardapio.map((c, i) => {
+            const e = entra(f, fps, 20 + i * 10, 11);
+            const ehChefe = i === n.carroChefe;
+            const base = 190 + i * 50;
+            return (
+              <div key={c.nome} style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", opacity: e * (ehChefe ? 1 : 1 - foco * 0.6), translate: `0 ${(1 - e) * 200}px`, scale: `${ehChefe ? 1 + foco * 0.25 : 1 - foco * 0.1}`, zIndex: ehChefe ? 2 : 1 }}>
+                {ehChefe && <Raios tamanho={700} style={{ top: -200, opacity: foco }} />}
+                <CopoAcai tamanho={base} />
+                <div style={{ marginTop: 16, padding: "12px 26px", borderRadius: 999, background: ehChefe && foco > 0.5 ? degrade : cor.branco, border: `2px solid ${cor.azulBorda}`, color: ehChefe && foco > 0.5 ? cor.branco : cor.texto, fontSize: 40, fontWeight: 800 }}>
+                  {c.nome}
                 </div>
                 {ehChefe && (
-                  <div style={{ padding: "12px 22px", borderRadius: 999, backgroundImage: degrade, color: cor.branco, fontSize: 26, fontWeight: 800, letterSpacing: 1, scale: `${entra(f, fps, 110, 9)}` }}>
+                  <div style={{ position: "absolute", top: -60, padding: "10px 20px", borderRadius: 999, background: cor.preto, color: cor.branco, fontSize: 24, fontWeight: 800, letterSpacing: 1, scale: `${entra(f, fps, 115, 9)}` }}>
                     MAIS VENDIDO
                   </div>
                 )}
               </div>
-            </div>
-          );
-        })}
-      </div>
-      <Cinetico texto={`Vou fazer a conta do ${destaca(chefe + ",")} que é o que mais vende.`} inicio={130} intervalo={3} tamanho={50} peso={700} style={{ marginTop: 70 }} />
+            );
+          })}
+        </div>
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };

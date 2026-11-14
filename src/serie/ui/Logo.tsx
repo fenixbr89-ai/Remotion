@@ -8,22 +8,22 @@ export const IconeEtiqueta: React.FC<{ tamanho: number; cor?: string }> = ({ tam
 );
 
 /** Marca: quadrado em degradê azul com a etiqueta branca + nome. */
-export const Logo: React.FC<{ escala?: number }> = ({ escala = 1 }) => (
+export const Logo: React.FC<{ escala?: number; claro?: boolean }> = ({ escala = 1, claro = false }) => (
   <div style={{ display: "flex", alignItems: "center", gap: 22 * escala, fontFamily }}>
     <div
       style={{
         width: 84 * escala,
         height: 84 * escala,
         borderRadius: 24 * escala,
-        backgroundImage: degrade,
+        background: claro ? cor.branco : degrade,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         boxShadow: `0 ${12 * escala}px ${30 * escala}px rgba(29,78,216,0.35)`,
       }}
     >
-      <IconeEtiqueta tamanho={48 * escala} />
+      <IconeEtiqueta tamanho={48 * escala} cor={claro ? cor.azul : cor.branco} />
     </div>
-    <div style={{ color: cor.texto, fontSize: 56 * escala, fontWeight: 800, letterSpacing: -1.5 * escala }}>Preço Certo</div>
+    <div style={{ color: claro ? cor.branco : cor.texto, fontSize: 56 * escala, fontWeight: 800, letterSpacing: -1.5 * escala, whiteSpace: "nowrap" }}>Preço Certo</div>
   </div>
 );

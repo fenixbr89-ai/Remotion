@@ -5,7 +5,6 @@ export const acaiteria: Negocio = {
   episodio: 1,
   artigo: "uma",
   nome: "Açaiteria",
-  iconesGancho: ["acai", "copo", "banana", "colher"],
   cardapio: [
     { nome: "300 ml", detalhe: "Pra matar a vontade" },
     { nome: "500 ml", detalhe: "O carro-chefe" },

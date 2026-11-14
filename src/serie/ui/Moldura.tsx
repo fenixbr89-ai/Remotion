@@ -1,11 +1,15 @@
 import { AbsoluteFill } from "remotion";
 import { cor, degrade, fontFamily } from "../tema";
+import { Abas } from "./Abas";
 import { IconeEtiqueta } from "./Logo";
 
-/** Elementos fixos: marca + EP no topo, selo "valores de exemplo" embaixo. */
-export const Moldura: React.FC<{ episodio: number }> = ({ episodio }) => (
-  <AbsoluteFill style={{ fontFamily, pointerEvents: "none" }}>
-    <div style={{ position: "absolute", top: 90, left: 70, right: 70, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+/**
+ * Elementos fixos: marca + EP no topo, abas de etapa (quando houver) e selo "valores de exemplo".
+ * `visivel` e `abas` (0→1) controlam as entradas/saídas.
+ */
+export const Moldura: React.FC<{ episodio: number; visivel: number; etapa: number | null; abas: number }> = ({ episodio, visivel, etapa, abas }) => (
+  <AbsoluteFill style={{ fontFamily, pointerEvents: "none", opacity: visivel }}>
+    <div style={{ position: "absolute", top: 80, left: 70, right: 70, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 14, color: cor.texto, fontSize: 32, fontWeight: 800 }}>
         <div style={{ width: 50, height: 50, borderRadius: 14, backgroundImage: degrade, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <IconeEtiqueta tamanho={30} />
@@ -16,6 +20,7 @@ export const Moldura: React.FC<{ episodio: number }> = ({ episodio }) => (
         EP. {String(episodio).padStart(2, "0")}
       </div>
     </div>
+    {etapa !== null && <Abas ativa={etapa} style={{ position: "absolute", top: 160, left: 0, right: 0, opacity: abas, translate: `0 ${(1 - abas) * -30}px` }} />}
     <div style={{ position: "absolute", bottom: 110, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 26px", borderRadius: 999, background: cor.branco, border: `2px solid ${cor.azulBorda}`, color: cor.textoSuave, fontSize: 26, fontWeight: 700 }}>
         <div style={{ width: 10, height: 10, borderRadius: 5, background: cor.azul }} />
