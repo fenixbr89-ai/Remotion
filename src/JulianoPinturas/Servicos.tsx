@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AbsoluteFill,
+  Easing,
   Img,
   interpolate,
   Sequence,
@@ -18,7 +19,7 @@ import {
   useSpring,
   Wallpaper,
 } from "./kit";
-import { C, CLAMP, EASE, FONT } from "./theme";
+import { C, CLAMP, EASE, FONT, ORANGE_GRADIENT } from "./theme";
 
 type Servico = {
   nome: string;
@@ -205,11 +206,150 @@ const Tile: React.FC<{
 };
 
 /** Product showcase de um serviço. */
-const Showcase: React.FC<{ s: Servico }> = ({ s }) => {
-  const bg = s.dark ? C.black : C.white;
+/** Animação própria de cada serviço (o objeto "faz" o serviço). */
+const Visual: React.FC<{ s: Servico }> = ({ s }) => {
+  const frame = useCurrentFrame();
+  if (s.nome === "Pintura") {
+    // o rolo atravessa a tela e deixa uma faixa laranja atrás da casa
+    const rx = interpolate(frame, [2, 22], [-420, 1180], {
+      ...CLAMP,
+      easing: EASE,
+    });
+    return (
+      <>
+        <div
+          style={{
+            position: "absolute",
+            left: -60,
+            top: 1010,
+            width: Math.max(0, rx + 60),
+            height: 230,
+            background: ORANGE_GRADIENT,
+            borderRadius: "0 120px 120px 0",
+            rotate: "-5deg",
+            transformOrigin: "left center",
+          }}
+        />
+        <Product src={s.img} width={s.width} y={1060} delay={12} fade={false} />
+        <Img
+          src={staticFile("img/roller.png")}
+          style={{
+            position: "absolute",
+            left: rx - 200,
+            top: 880,
+            width: 380,
+            rotate: "-18deg",
+            opacity: interpolate(frame, [18, 24], [1, 0], CLAMP),
+          }}
+        />
+      </>
+    );
+  }
+  if (s.nome === "Automotiva") {
+    // o carro entra deslizando, freia com balanço e um reflexo passa pela lataria
+    const cx = interpolate(frame, [2, 16], [-700, 0], {
+      ...CLAMP,
+      easing: EASE,
+    });
+    const tilt = interpolate(frame, [12, 17, 24], [0, -4, 0], CLAMP);
+    const shine = interpolate(frame, [22, 40], [-60, 160], CLAMP);
+    const blur = interpolate(frame, [2, 14], [18, 0], CLAMP);
+    const float = Math.sin(frame / 16) * 10;
+    const car = staticFile("img/car.png");
+    return (
+      <div
+        style={{
+          position: "absolute",
+          left: 540 - s.width / 2 + cx,
+          top: 1100 - s.width / 2 + float,
+          width: s.width,
+          rotate: `${tilt}deg`,
+          transformOrigin: "50% 90%",
+          filter: blur > 0.5 ? `blur(${blur}px)` : undefined,
+        }}
+      >
+        <Img src={car} style={{ width: "100%", display: "block" }} />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: `linear-gradient(110deg, rgba(255,255,255,0) ${shine - 18}%, rgba(255,255,255,0.75) ${shine}%, rgba(255,255,255,0) ${shine + 18}%)`,
+            maskImage: `url(${car})`,
+            WebkitMaskImage: `url(${car})`,
+            maskSize: "100% 100%",
+            WebkitMaskSize: "100% 100%",
+            mixBlendMode: "screen",
+          }}
+        />
+      </div>
+    );
+  }
+  if (s.nome === "Reformas") {
+    // os tijolos sobem de baixo para cima, como uma parede sendo erguida
+    const top = interpolate(frame, [4, 26], [1340, 820], {
+      ...CLAMP,
+      easing: EASE,
+    });
+    return (
+      <AbsoluteFill style={{ clipPath: `inset(${top}px 0 0 0)` }}>
+        <Product src={s.img} width={s.width} y={1100} delay={0} />
+      </AbsoluteFill>
+    );
+  }
+  if (s.nome === "Hidráulica") {
+    // gotas caindo do chuveiro sem parar
+    return (
+      <>
+        <Product src={s.img} width={s.width} y={1000} delay={2} />
+        {Array.from({ length: 9 }).map((_, k) => {
+          const t = ((frame - 8 + k * 7) % 28) / 28;
+          if (frame < 8 + (k % 3) * 3) return null;
+          const x = 600 + ((k * 53) % 150) - 30 + t * 40;
+          return (
+            <svg
+              key={k}
+              width={34}
+              height={50}
+              viewBox="0 0 40 60"
+              style={{
+                position: "absolute",
+                left: x,
+                top: 1180 + t * 300,
+                opacity: 1 - t,
+              }}
+            >
+              <path
+                d="M20 2 C28 18 38 30 38 40 a18 18 0 0 1 -36 0 C2 30 12 18 20 2 Z"
+                fill="#3FB6E8"
+              />
+            </svg>
+          );
+        })}
+      </>
+    );
+  }
+  // Elétrica: a lâmpada pisca e acende
+  const flick = [0.25, 0.25, 1, 0.3, 0.3, 1, 1, 0.5, 1];
+  const k = Math.floor((frame - 6) / 2);
+  const on = frame < 6 ? 0.25 : k < flick.length ? flick[k] : 1;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        filter: `brightness(${0.75 + 0.35 * on}) drop-shadow(0 0 ${60 * on}px rgba(255,200,0,${0.9 * on}))`,
+      }}
+    >
+      <Product src={s.img} width={s.width} y={1100} delay={0} />
+    </div>
+  );
+};
+
+/** Product showcase de um serviço. */
+const Showcase: React.FC<{ s: Servico; out: boolean }> = ({ s, out }) => {
   const fg = s.dark ? C.white : C.text;
   return (
-    <Shot dur={60} bg={bg}>
+    <Shot dur={72} bg={s.dark ? C.black : C.white} out={out}>
       <div style={{ position: "absolute", top: 250, width: "100%" }}>
         <T size={42} weight={600} color={C.orange} dur={10}>
           {s.eyebrow}
@@ -223,7 +363,7 @@ const Showcase: React.FC<{ s: Servico }> = ({ s }) => {
           {s.sub}
         </T>
       </div>
-      <Product src={s.img} width={s.width} y={1100} delay={4} dark={s.dark} />
+      <Visual s={s} />
       <div
         style={{
           position: "absolute",
@@ -241,6 +381,54 @@ const Showcase: React.FC<{ s: Servico }> = ({ s }) => {
         ))}
       </div>
     </Shot>
+  );
+};
+
+const SHOW = 60; // 2s por serviço
+const SWIPE = 12; // duração do deslize entre serviços
+
+/** Deslize lateral (estilo iOS) entre os serviços. */
+const Carrossel = () => {
+  const frame = useCurrentFrame();
+  let pos = 0;
+  let speed = 0;
+  for (let k = 1; k < SERVICOS.length; k++) {
+    const a = k * SHOW - SWIPE / 2;
+    pos += interpolate(frame, [a, a + SWIPE], [0, 1], {
+      ...CLAMP,
+      easing: Easing.bezier(0.65, 0, 0.35, 1),
+    });
+    speed += interpolate(
+      frame,
+      [a, a + SWIPE / 2, a + SWIPE],
+      [0, 1, 0],
+      CLAMP,
+    );
+  }
+  return (
+    <AbsoluteFill style={{ background: C.white, overflow: "hidden" }}>
+      {SERVICOS.map((s, i) => {
+        const start = i === 0 ? 0 : i * SHOW - SWIPE / 2;
+        return (
+          <Sequence
+            key={s.nome}
+            name={s.nome}
+            from={start}
+            durationInFrames={SHOW + SWIPE}
+            layout="none"
+          >
+            <AbsoluteFill
+              style={{
+                translate: `${(i - pos) * 1080}px 0`,
+                filter: speed > 0.05 ? `blur(${speed * 10}px)` : undefined,
+              }}
+            >
+              <Showcase s={s} out={i === SERVICOS.length - 1} />
+            </AbsoluteFill>
+          </Sequence>
+        );
+      })}
+    </AbsoluteFill>
   );
 };
 
@@ -368,16 +556,9 @@ export const Servicos: React.FC = () => (
     <Sequence name="Tela inicial (apps)" durationInFrames={90}>
       <HomeScreen />
     </Sequence>
-    {SERVICOS.map((s, i) => (
-      <Sequence
-        key={s.nome}
-        name={s.nome}
-        from={90 + i * 60}
-        durationInFrames={60}
-      >
-        <Showcase s={s} />
-      </Sequence>
-    ))}
+    <Sequence name="Serviços (carrossel)" from={90} durationInFrames={300}>
+      <Carrossel />
+    </Sequence>
     <Sequence name="E muito mais (widgets)" from={390} durationInFrames={90}>
       <Widgets />
     </Sequence>
@@ -387,8 +568,13 @@ export const Servicos: React.FC = () => (
     ))}
     <Sfx at={48} src="click.wav" volume={0.5} />
     <Sfx at={56} src="whoosh.wav" volume={0.3} />
-    {SERVICOS.map((s, i) => (
-      <Sfx key={s.nome} at={90 + i * 60} src="whoosh.wav" volume={0.18} />
+    {SERVICOS.slice(1).map((s, i) => (
+      <Sfx
+        key={s.nome}
+        at={90 + (i + 1) * 60 - 6}
+        src="whip.wav"
+        volume={0.22}
+      />
     ))}
     {WIDGETS.map((w, i) => (
       <Sfx key={w.label} at={400 + i * 4} src="pop.wav" volume={0.2} />

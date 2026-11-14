@@ -177,7 +177,9 @@ export const Product: React.FC<{
   y: number;
   delay?: number;
   dark?: boolean;
-}> = ({ src, width, y, delay = 0, dark = false }) => {
+  /** false = entra só com escala, sem transparência (cores sempre originais) */
+  fade?: boolean;
+}> = ({ src, width, y, delay = 0, dark = false, fade = true }) => {
   const frame = useCurrentFrame();
   const f = frame - delay;
   const p = useEase(delay, 24);
@@ -199,11 +201,12 @@ export const Product: React.FC<{
         left: 540 - width / 2,
         top: y,
         width,
-        translate: `0 calc(-50% + ${(1 - p) * 80}px)`,
+        // leve flutuação contínua para o objeto nunca ficar parado
+        translate: `0 calc(-50% + ${(1 - p) * 80 + Math.sin(f / 16) * 12}px)`,
         scale: String(
           (0.9 + 0.1 * p) * interpolate(f, [0, 90], [1, 1.05], CLAMP),
         ),
-        opacity: p,
+        opacity: fade ? p : frame >= delay ? 1 : 0,
         perspective: 1800,
       }}
     >
