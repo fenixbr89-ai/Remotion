@@ -3,11 +3,9 @@ import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
 import { Comercial, comercialSchema, SCENES, TOTAL } from "./JulianoPinturas/Comercial";
-import { S1Abertura } from "./JulianoPinturas/S1Abertura";
-import { S2Servicos } from "./JulianoPinturas/S2Servicos";
-import { S3MaisSolucoes } from "./JulianoPinturas/S3MaisSolucoes";
-import { S4Diferencial } from "./JulianoPinturas/S4Diferencial";
-import { S5Encerramento } from "./JulianoPinturas/S5Encerramento";
+import { Abertura } from "./JulianoPinturas/Abertura";
+import { Servicos } from "./JulianoPinturas/Servicos";
+import { Encerramento } from "./JulianoPinturas/Encerramento";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -25,11 +23,9 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{ narracao: "", volumeTrilha: 0.9 }}
       />
       <Folder name="JulianoPinturas-Cenas">
-        <Composition id="Cena1-Abertura" component={S1Abertura} durationInFrames={SCENES.abertura} fps={30} width={1080} height={1920} />
-        <Composition id="Cena2-Servicos" component={S2Servicos} durationInFrames={SCENES.servicos} fps={30} width={1080} height={1920} />
-        <Composition id="Cena3-MaisSolucoes" component={S3MaisSolucoes} durationInFrames={SCENES.maisSolucoes} fps={30} width={1080} height={1920} />
-        <Composition id="Cena4-Diferencial" component={S4Diferencial} durationInFrames={SCENES.diferencial} fps={30} width={1080} height={1920} />
-        <Composition id="Cena5-Encerramento" component={S5Encerramento} durationInFrames={SCENES.encerramento} fps={30} width={1080} height={1920} />
+        <Composition id="Abertura" component={Abertura} durationInFrames={SCENES.abertura} fps={30} width={1080} height={1920} />
+        <Composition id="Servicos" component={Servicos} durationInFrames={SCENES.servicos} fps={30} width={1080} height={1920} />
+        <Composition id="Encerramento" component={Encerramento} durationInFrames={SCENES.encerramento} fps={30} width={1080} height={1920} />
       </Folder>
       <Folder name="Elements">
         <Composition

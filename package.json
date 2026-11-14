@@ -7,7 +7,7 @@
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc",
-    "render": "remotion render JulianoPinturas out/juliano-pinturas-9x16.mp4 --crf=18",
+    "render": "remotion render JulianoPinturas out/juliano-pinturas-9x16.mp4 --crf=22",
     "audio": "python3 scripts/synth_audio.py && ffmpeg -loglevel error -y -i public/audio/trilha.wav -b:a 192k public/audio/trilha.mp3 && rm public/audio/trilha.wav"
   },
   "repository": {},

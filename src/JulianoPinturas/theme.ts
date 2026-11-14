@@ -1,24 +1,29 @@
 import { loadFont } from "@remotion/fonts";
 import { Easing, staticFile } from "remotion";
 
-// Fontes embutidas em public/fonts (Google Fonts, licença OFL) para render offline
-export const DISPLAY = "Anton";
+// Inter (Google Fonts, licença OFL), embutida para render offline.
+// Pesos altos + tracking negativo aproximam a tipografia das campanhas da Apple.
 export const SANS = "Inter";
-loadFont({ family: DISPLAY, url: staticFile("fonts/Anton-Regular.woff2"), weight: "400" });
-loadFont({ family: SANS, url: staticFile("fonts/Inter-Variable.woff2"), weight: "100 900" });
+loadFont({
+  family: SANS,
+  url: staticFile("fonts/Inter-Variable.woff2"),
+  weight: "100 900",
+});
 
-// Identidade visual da logo: preto, branco e laranja
+// Identidade da logo: preto, branco e laranja
 export const C = {
-  black: "#0B0B0B",
-  ink: "#151515",
-  white: "#F5F5F3",
+  black: "#000000",
+  white: "#F5F5F7",
+  text: "#1D1D1F",
+  grey: "#86868B",
   orange: "#FF6B00",
-  orangeDeep: "#E85500",
-  grey: "#8A8A8A",
 };
 
-export const FPS = 30;
-// Trilha a 120 BPM => 1 batida = 15 frames, 1 compasso = 60 frames
+// Texto em degradê laranja (destaques)
+export const ORANGE_GRADIENT =
+  "linear-gradient(90deg, #FF9500 0%, #FF6B00 50%, #FF4D00 100%)";
+
+// Trilha a 120 BPM => 1 batida = 15 frames
 export const BEAT = 15;
 
 export const CLAMP = {
@@ -26,6 +31,5 @@ export const CLAMP = {
   extrapolateRight: "clamp",
 } as const;
 
-export const EASE_OUT = Easing.bezier(0.16, 1, 0.3, 1);
-export const EASE_IN = Easing.bezier(0.7, 0, 0.84, 0);
-export const SNAP = Easing.bezier(0.05, 0.9, 0.1, 1);
+// Curva suave e precisa, típica das animações da Apple
+export const EASE = Easing.bezier(0.22, 1, 0.36, 1);

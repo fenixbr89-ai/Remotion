@@ -9,7 +9,7 @@ SR = 44100
 BPM = 120
 BEAT = 60 / BPM
 BAR = BEAT * 4
-DUR = 60.0
+DUR = 30.0
 rng = np.random.default_rng(7)
 OUT = "public/audio/"
 
@@ -106,8 +106,8 @@ def both(x, at, g=1.0, pan=0.0):
 
 
 nbars = int(DUR / BAR)
-FULL = lambda b: (2 <= b <= 20) or (22 <= b <= 28)
-BREAK = lambda b: b == 21
+FULL = lambda b: (2 <= b <= 9) or (11 <= b <= 13)
+BREAK = lambda b: b == 10
 
 # sidechain envelope
 t_all = np.arange(N) / SR
@@ -134,7 +134,7 @@ for b in range(nbars):
         if not BREAK(b):
             both(KICK, tb, 1.0)
         if FULL(b) and beat in (1, 3):
-            both(CLAP, tb, 0.55)
+            both(CLAP, tb, 0.35)
         if not BREAK(b):
             both(OHAT, tb + BEAT / 2, 0.18, 0.2)
         for s in range(4):
@@ -147,12 +147,12 @@ for b in range(nbars):
                 bx = fft_band(saw(f, bt, 6), 30, 700) * np.exp(-bt * 3)
                 add(bass, bx, tb + s * BEAT / 4)
             # arp 16ths
-            if FULL(b) and b >= 4:
+            if FULL(b) and b >= 3:
                 n = ch[(beat * 4 + s) % 3] + 12 * (1 + (s % 2))
                 add(arp, pluck(mtof(n)), tb + s * BEAT / 4, 0.6)
 
-# riser in breakdown bar (42-44s)
-rt0 = 21 * BAR
+# riser in breakdown bar (20-22s)
+rt0 = 10 * BAR
 rt = t_(BAR)
 noise = rng.standard_normal(len(rt))
 riser = onepole_lp(noise, 300 + 9000 * (rt / BAR) ** 2) * (rt / BAR) ** 1.5
@@ -162,14 +162,14 @@ both(riser, rt0, 0.5)
 for k in range(16):
     both(CLAP, rt0 + BAR / 2 + k * BEAT / 8, 0.15 + 0.35 * k / 16)
 
-# final impact at 58s (bar 29 beat 0)
-fin_t = 29 * BAR
+# final impact at 28s (bar 14 beat 0)
+fin_t = 14 * BAR
 ft = t_(2.0)
 boom = np.sin(2 * np.pi * np.cumsum(40 + 60 * np.exp(-ft * 10)) / SR) * np.exp(-ft * 2.2)
 both(boom, fin_t, 1.4)
 
-L += pad * pump * 0.09 + bass * pump * 0.35 + arp * 0.05
-R += pad * pump * 0.09 + bass * pump * 0.35 + arp * 0.05
+L += pad * pump * 0.11 + bass * pump * 0.32 + arp * 0.035
+R += pad * pump * 0.11 + bass * pump * 0.32 + arp * 0.035
 # gentle fade in/out
 fade = np.ones(N)
 fade[: int(0.05 * SR)] = np.linspace(0, 1, int(0.05 * SR))
@@ -187,30 +187,6 @@ def whoosh(d=0.45, lo=400, hi=5000):
     return y * env
 
 write("whoosh.wav", whoosh())
-write("whip.wav", whoosh(0.22, 800, 9000))
-t = t_(1.4)
-imp = np.sin(2 * np.pi * np.cumsum(38 + 90 * np.exp(-t * 18)) / SR) * np.exp(-t * 3.5)
-imp += 0.5 * onepole_lp(rng.standard_normal(len(t)), 2500) * np.exp(-t * 9)
-write("impacto.wav", imp)
 t = t_(0.06)
 write("click.wav", np.sin(2 * np.pi * 2400 * t) * np.exp(-t * 120) + 0.4 * rng.standard_normal(len(t)) * np.exp(-t * 400))
-t = t_(0.12)
-write("pop.wav", np.sin(2 * np.pi * np.cumsum(500 + 900 * t / 0.12) / SR) * np.exp(-t * 30))
-t = t_(0.35)
-drop = np.sin(2 * np.pi * np.cumsum(700 + 1800 * (t / 0.35) ** 0.5) / SR) * np.exp(-t * 16)
-write("agua.wav", np.concatenate([drop, np.zeros(2000), drop[:8000] * 0.4]))
-t = t_(0.4)
-br = fft_band(rng.standard_normal(len(t)), 1800, 7000) * np.sin(np.pi * t / 0.4) ** 3
-write("pincel.wav", br)
-t = t_(0.5)
-buzz = np.sign(np.sin(2 * np.pi * 110 * t)) * (rng.random(len(t)) > 0.3)
-zap = fft_band(buzz + rng.standard_normal(len(t)) * 0.6, 200, 9000) * np.exp(-t * 6)
-write("eletrico.wav", zap)
-t = t_(0.08)
-ring = sum(np.sin(2 * np.pi * f * t) for f in (1900, 3100, 4700)) * np.exp(-t * 60)
-rat = np.concatenate([np.concatenate([ring, np.zeros(int(0.035 * SR) - len(ring) if len(ring) < int(0.035 * SR) else 0)]) for _ in range(7)])
-write("ferramenta.wav", rat)
-t = t_(0.9)
-ding = (np.sin(2 * np.pi * 988 * t) * np.exp(-t * 5) + 0.7 * (t > 0.12) * np.sin(2 * np.pi * 1319 * t) * np.exp(-np.clip(t - 0.12, 0, None) * 4))
-write("notificacao.wav", ding)
 print("ok")
