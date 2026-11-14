@@ -17,8 +17,15 @@ export const Hook: React.FC<{
   dur: number;
   cues: [number, number, number];
 }> = ({ dur, cues }) => {
-  // a roleta acompanha a fala: pintura → reforma → manutenção
+  // 1º só "Precisando de"; ela some e entram pintura → reformas → manutenção
+  const frame = useCurrentFrame();
   const glow = useEase(0, 8);
+  const intro = interpolate(
+    frame,
+    [0, 5, cues[0] - 6, cues[0]],
+    [0, 1, 1, 0],
+    CLAMP,
+  );
   const words = useEase(cues[0], 6);
   const s1 = useSpring(cues[1], 16, 220);
   const s2 = useSpring(cues[2], 16, 220);
@@ -40,15 +47,30 @@ export const Hook: React.FC<{
           scale: String(0.8 + 0.2 * glow),
         }}
       />
-      <div style={{ position: "absolute", top: 700, width: "100%" }}>
-        <T size={100} weight={700} color={C.white} dur={6}>
-          Precisando de
-        </T>
+      {/* "Precisando de" sozinha, no centro */}
+      <div
+        style={{
+          position: "absolute",
+          top: 960 - 70,
+          width: "100%",
+          textAlign: "center",
+          fontFamily: FONT,
+          fontWeight: 700,
+          fontSize: 120,
+          letterSpacing: "-0.04em",
+          color: C.white,
+          opacity: intro,
+          scale: String(0.94 + 0.06 * intro),
+          filter: intro < 0.99 ? `blur(${(1 - intro) * 14}px)` : undefined,
+        }}
+      >
+        Precisando de
+      </div>
+      <div style={{ position: "absolute", top: 960 - LINE / 2, width: "100%" }}>
         <div
           style={{
             height: LINE,
             overflow: "hidden",
-            marginTop: 16,
             opacity: words,
             filter: words < 0.99 ? `blur(${(1 - words) * 14}px)` : undefined,
           }}
