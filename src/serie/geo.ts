@@ -4,8 +4,6 @@
  */
 export type Ret = { x: number; y: number; w: number; h: number; r: number };
 
-export const TELA_CHEIA: Ret = { x: -620, y: -200, w: 2320, h: 2320, r: 1160 };
-export const PONTO_CENTRO: Ret = { x: 540, y: 960, w: 0, h: 0, r: 0 };
 
 export const LOJA_TOPO = 620;
 export const G = {
@@ -18,6 +16,7 @@ export const G = {
   custoCopo: { x: 140, y: 727, w: 300, h: 345, r: 0 },
   custoTotal: { x: 70, y: 1250, w: 940, h: 152, r: 40 },
   erroValor: { x: 90, y: 840, w: 900, h: 235, r: 0 },
+  erroBarra: { x: 240, y: 1086, w: 600, h: 18, r: 9 },
   appTotal: { x: 576, y: 785, w: 172, h: 45, r: 0 },
   appResultado: { x: 308, y: 1042, w: 464, h: 170, r: 28 },
   sobraBarra: { x: 250, y: 950, w: 580, h: 18, r: 9 },
@@ -31,6 +30,7 @@ export const G = {
   produtoBotao: { x: 325, y: 1460, w: 430, h: 106, r: 53 },
   comentaFaixa: { x: 60, y: 420, w: 960, h: 215, r: 40 },
   comentaCoracao: { x: 331, y: 1027, w: 30, h: 30, r: 15 },
+  outroCoracao: { x: 290, y: 1180, w: 110, h: 110, r: 55 },
 } satisfies Record<string, Ret>;
 
 /** Estilo absoluto a partir de um retângulo. */

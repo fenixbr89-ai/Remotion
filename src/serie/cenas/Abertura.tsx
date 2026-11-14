@@ -2,8 +2,8 @@ import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { G, LOJA_TOPO, naPosicao } from "../geo";
 import { Batida } from "../ui/Batida";
 import { Letras } from "../ui/Cinetico";
-import { CopoAcai, Loja as Fachada, MaisUm, Pessoa, Raios } from "../ui/Ilustracoes";
-import { cor, degrade, entra, estica, flutua, fontFamily, suave } from "../tema";
+import { CopoAcai, Loja as Fachada, MaisUm, Pessoa } from "../ui/Ilustracoes";
+import { cor, degrade, entra, estica, fontFamily, suave } from "../tema";
 import { destaca, marca, type CenaProps } from "./props";
 import { Topo } from "./Topo";
 
@@ -42,13 +42,13 @@ export const Loja: React.FC<CenaProps> = ({ n, ponte, marcas }) => {
       <Topo texto="A primeira coisa que eu faria:" em={ponte.entra - 6} />
       <div style={{ position: "absolute", left: 180, top: LOJA_TOPO }}>
         <Fachada nome={n.nome} luz={suave(f, ponte.entra, ponte.entra + 10)} largura={720} />
-        <div style={{ position: "absolute", left: 360 - 110, top: -170, scale: estica(f, fps, 50), translate: `0 ${flutua(f, 0, 8)}px`, width: 220, padding: "16px 0", borderRadius: 26, background: cor.branco, border: `4px solid ${cor.azul}`, textAlign: "center", color: cor.preto, fontSize: 54, fontWeight: 800 }}>
+        <div style={{ position: "absolute", left: 360 - 110, top: -170, scale: estica(f, fps, 50), width: 220, padding: "16px 0", borderRadius: 26, background: cor.branco, border: `4px solid ${cor.azul}`, textAlign: "center", color: cor.preto, fontSize: 54, fontWeight: 800 }}>
           R$ ?
         </div>
         {CLIENTES.map((c, i) => {
           const anda = suave(f, c.t, c.t + 14);
           return (
-            <div key={i} style={{ position: "absolute", bottom: 4, [c.lado < 0 ? "left" : "right"]: -c.x + (1 - anda) * -300, translate: `0 ${-Math.abs(Math.sin(f / 3)) * 8 * (1 - anda)}px` }}>
+            <div key={i} style={{ position: "absolute", bottom: 4, [c.lado < 0 ? "left" : "right"]: -c.x + (1 - anda) * -300 }}>
               <Pessoa roupa={c.roupa} pele={c.pele} altura={220} />
               <MaisUm escala={entra(f, fps, c.t + 14, 7)} style={{ top: -56, left: 8 }} />
             </div>
@@ -93,7 +93,6 @@ export const Cardapio: React.FC<CenaProps> = ({ n, ponte, marcas }) => {
   return (
     <AbsoluteFill style={{ fontFamily }}>
       <Topo texto={`${n.cardapio.length} tamanhos. Foco no ${destaca(n.cardapio[n.carroChefe].nome + ".")}`} />
-      <Raios tamanho={760} style={{ left: 540 - 380, top: 1010 - 380, opacity: foco }} />
       {n.cardapio.map((c, i) => {
         const chefe = i === n.carroChefe;
         const tam = 190 + i * 50;

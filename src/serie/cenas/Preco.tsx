@@ -1,7 +1,7 @@
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { brl, pct } from "../calc";
 import { Batida } from "../ui/Batida";
-import { CopoAcai, Raios } from "../ui/Ilustracoes";
+import { CopoAcai } from "../ui/Ilustracoes";
 import { Odometro } from "../ui/Odometro";
 import { G, naPosicao } from "../geo";
 import { cor, degrade, entra, estica, fontFamily, sombra, suave, textoDegrade } from "../tema";
@@ -66,7 +66,6 @@ export const Formula: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
         690,
       )}
       <div style={{ position: "absolute", left: 0, right: 0, top: 860, height: 560, display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <Raios tamanho={860} style={{ opacity: etq }} />
         <div style={{ translate: "-170px 30px", scale: estica(f, fps, tp - 8), transformOrigin: "center bottom" }}>
           <CopoAcai tamanho={300} />
         </div>

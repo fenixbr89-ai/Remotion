@@ -5,7 +5,7 @@ import { Celular, Cursor } from "../ui/Ilustracoes";
 import { Logo } from "../ui/Logo";
 import { Odometro } from "../ui/Odometro";
 import { G, naPosicao } from "../geo";
-import { cor, degrade, entra, estica, flutua, fontFamily, sombra, suave } from "../tema";
+import { cor, degrade, entra, estica, fontFamily, sombra, suave } from "../tema";
 import { marca, type CenaProps } from "./props";
 import { Topo } from "./Topo";
 
@@ -70,7 +70,7 @@ export const Produto: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
         <Cursor tamanho={80} />
       </div>
       {f < ponte.sai && (
-        <div style={{ ...naPosicao(G.produtoBotao), display: "flex", alignItems: "center", justifyContent: "center", background: degrade, color: cor.branco, fontSize: 46, fontWeight: 800, boxShadow: "0 20px 50px rgba(29,78,216,0.4)", scale: f < b + 15 ? estica(f, fps, b) : `${1 + Math.sin((f - b - 15) / 5) * 0.03}` }}>
+        <div style={{ ...naPosicao(G.produtoBotao), display: "flex", alignItems: "center", justifyContent: "center", background: degrade, color: cor.branco, fontSize: 46, fontWeight: 800, boxShadow: "0 20px 50px rgba(29,78,216,0.4)", scale: estica(f, fps, b) }}>
           Teste grátis
         </div>
       )}
@@ -108,7 +108,7 @@ export const Comenta: React.FC<CenaProps> = ({ n, ponte }) => {
         const e = entra(f, fps, t, 9);
         const letras = Math.max(0, Math.min(p.length, f - t - 2));
         return (
-          <div key={p} style={{ position: "absolute", ...POS[i], scale: estica(f, fps, t), opacity: Math.min(1, e * 2), translate: `0 ${flutua(f, i * 1.3, 10)}px`, display: "flex", alignItems: "center", gap: 14, padding: "16px 26px 16px 16px", borderRadius: 999, background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra }}>
+          <div key={p} style={{ position: "absolute", ...POS[i], scale: estica(f, fps, t), opacity: Math.min(1, e * 2), display: "flex", alignItems: "center", gap: 14, padding: "16px 26px 16px 16px", borderRadius: 999, background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra }}>
             <div style={{ width: 52, height: 52, borderRadius: 26, background: i % 2 ? cor.azulCeu : degrade }} />
             <span style={{ color: cor.preto, fontSize: 40, fontWeight: 800 }}>{p.slice(0, letras)}</span>
             <svg width={30} height={30} viewBox="0 0 24 24" fill={cor.vermelho} style={{ scale: `${entra(f, fps, t + 14, 7)}`, visibility: i === 0 && f >= ponte.sai ? "hidden" : "visible" }}>
@@ -121,57 +121,49 @@ export const Comenta: React.FC<CenaProps> = ({ n, ponte }) => {
   );
 };
 
-const MOEDAS = [
-  { x: 110, y: 330, s: 70 },
-  { x: 900, y: 420, s: 56 },
-  { x: 160, y: 1420, s: 60 },
-  { x: 880, y: 1500, s: 74 },
-  { x: 520, y: 1700, s: 44 },
-];
 
-export const Outro: React.FC<CenaProps> = ({ marcas }) => {
+export const Outro: React.FC<CenaProps> = ({ marcas, ponte }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const logo = entra(f, fps, 0, 10);
+  const logo = entra(f, fps, 0, 12);
   const c1 = marca(marcas, "curtir", 35);
   const c2 = marca(marcas, "seguir", 59);
   const ida1 = suave(f, c1 - 13, c1 - 1);
   const ida2 = suave(f, c2 - 13, c2 - 1);
-  const cx = interpolate(ida1, [0, 1], [900, 380]) + ida2 * 270;
-  const cy = interpolate(ida1, [0, 1], [1600, 1180]);
+  const coracao = G.outroCoracao;
+  const seguirX = coracao.x + coracao.w + 26;
+  const cx = interpolate(ida1, [0, 1], [900, coracao.x + coracao.w / 2]) + ida2 * (seguirX + 150 - (coracao.x + coracao.w / 2));
+  const cy = interpolate(ida1, [0, 1], [1600, coracao.y + coracao.h / 2]);
   const clique1 = f >= c1 && f < c1 + 6;
   const clique2 = f >= c2 && f < c2 + 6;
   const curtiu = f >= c1 + 3;
   const seguiu = f >= c2 + 3;
   return (
-    <AbsoluteFill style={{ fontFamily, background: degrade }}>
-      {MOEDAS.map((m, i) => (
-        <div key={i} style={{ position: "absolute", left: m.x, top: m.y, width: m.s, height: m.s, borderRadius: m.s / 2, background: "rgba(255,255,255,0.9)", color: cor.azul, fontSize: m.s * 0.34, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", translate: `0 ${flutua(f, i, 16)}px`, scale: `${entra(f, fps, 2 + i * 2, 10)}` }}>
-          R$
+    <AbsoluteFill style={{ fontFamily }}>
+      <div style={{ position: "absolute", top: 700, left: 0, right: 0, display: "flex", justifyContent: "center", opacity: logo, scale: `${0.8 + logo * 0.2}` }}>
+        <div style={{ scale: "1.5" }}>
+          <Logo />
         </div>
-      ))}
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
-        <div style={{ scale: `${interpolate(logo, [0, 1], [0.5, 1.5])}`, opacity: logo }}>
-          <Logo claro />
+      </div>
+      <div style={{ position: "absolute", top: 900, left: 100, right: 100 }}>
+        <Batida linhas={[{ texto: "Aproveita pra *curtir* e *seguir*", em: 4, tamanho: 62 }]} />
+      </div>
+      {f >= ponte.entra && (
+        <div style={{ ...naPosicao(coracao), background: curtiu ? cor.vermelhoFundo : cor.azulFundo, display: "flex", alignItems: "center", justifyContent: "center", scale: `${clique1 ? 0.9 : 1}` }}>
+          <svg width={56} height={56} viewBox="0 0 24 24" fill={curtiu ? cor.vermelho : "none"} stroke={curtiu ? cor.vermelho : cor.azul} strokeWidth={2.4}>
+            <path d="M12 21s-7.5-4.6-10-9.3C.4 8.5 2.3 4.5 6 4.5c2.2 0 3.6 1.3 6 3.6 2.4-2.3 3.8-3.6 6-3.6 3.7 0 5.6 4 4 7.2C19.5 16.4 12 21 12 21z" />
+          </svg>
         </div>
-        <Batida linhas={[{ texto: "Aproveita pra curtir e seguir", em: 6, tamanho: 62, corTexto: cor.branco }]} style={{ marginTop: 90, width: 820 }} />
-        <div style={{ display: "flex", alignItems: "center", gap: 26, marginTop: 70, scale: `${entra(f, fps, 14, 10)}` }}>
-          <div style={{ width: 110, height: 110, borderRadius: 55, background: curtiu ? cor.branco : "transparent", border: `5px solid ${cor.branco}`, display: "flex", alignItems: "center", justifyContent: "center", scale: `${clique1 ? 0.88 : curtiu ? 1 + Math.max(0, 1 - (f - c1 - 3) / 8) * 0.18 : 1}` }}>
-            <svg width={56} height={56} viewBox="0 0 24 24" fill={curtiu ? cor.vermelho : "none"} stroke={curtiu ? cor.vermelho : cor.branco} strokeWidth={2.4}>
-              <path d="M12 21s-7.5-4.6-10-9.3C.4 8.5 2.3 4.5 6 4.5c2.2 0 3.6 1.3 6 3.6 2.4-2.3 3.8-3.6 6-3.6 3.7 0 5.6 4 4 7.2C19.5 16.4 12 21 12 21z" />
-            </svg>
-          </div>
-          <div style={{ padding: "30px 54px", borderRadius: 999, background: seguiu ? cor.preto : cor.branco, color: seguiu ? cor.branco : cor.azulProfundo, fontSize: 44, fontWeight: 800, scale: `${clique2 ? 0.9 : 1}`, display: "flex", alignItems: "center", gap: 14 }}>
-            {seguiu ? "Seguindo" : "+ Seguir"}
-            {seguiu && (
-              <svg width={34} height={34} viewBox="0 0 24 24" fill="none" stroke={cor.branco} strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 6 9 17l-5-5" />
-              </svg>
-            )}
-          </div>
-        </div>
-      </AbsoluteFill>
-      <div style={{ position: "absolute", left: cx, top: cy, opacity: suave(f, 18, 24), scale: `${clique1 || clique2 ? 0.85 : 1}` }}>
+      )}
+      <div style={{ position: "absolute", left: seguirX, top: coracao.y, height: coracao.h, width: 320, borderRadius: 999, boxSizing: "border-box", background: seguiu ? cor.preto : degrade, color: cor.branco, fontSize: 44, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", gap: 14, scale: clique2 ? "0.92" : estica(f, fps, 8) }}>
+        {seguiu ? "Seguindo" : "+ Seguir"}
+        {seguiu && (
+          <svg width={34} height={34} viewBox="0 0 24 24" fill="none" stroke={cor.branco} strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        )}
+      </div>
+      <div style={{ position: "absolute", left: cx, top: cy, opacity: suave(f, c1 - 16, c1 - 10), scale: `${clique1 || clique2 ? 0.85 : 1}` }}>
         <Cursor tamanho={80} />
       </div>
     </AbsoluteFill>

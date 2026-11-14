@@ -21,11 +21,5 @@ export const Moldura: React.FC<{ episodio: number; visivel: number; etapa: numbe
       </div>
     </div>
     {etapa !== null && <Abas ativa={etapa} style={{ position: "absolute", top: 160, left: 0, right: 0, opacity: abas, translate: `0 ${(1 - abas) * -30}px` }} />}
-    <div style={{ position: "absolute", bottom: 110, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 26px", borderRadius: 999, background: cor.branco, border: `2px solid ${cor.azulBorda}`, color: cor.textoSuave, fontSize: 26, fontWeight: 700 }}>
-        <div style={{ width: 10, height: 10, borderRadius: 5, background: cor.azul }} />
-        valores de exemplo
-      </div>
-    </div>
   </AbsoluteFill>
 );

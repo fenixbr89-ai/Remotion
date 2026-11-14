@@ -4,7 +4,6 @@ import { EP01 } from "./sincronia";
 import { calcular } from "./calc";
 import { pontes } from "./pontes";
 import type { Negocio } from "./tipos";
-import { Formas } from "./ui/Formas";
 import { Fundo } from "./ui/Fundo";
 import { Moldura } from "./ui/Moldura";
 import { Ponte } from "./ui/Ponte";
@@ -49,7 +48,7 @@ const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const Palco: React.FC<{ dur: number; children: React.ReactNode }> = ({ dur, children }) => {
   const f = useCurrentFrame();
   const saida = interpolate(f, [dur - 7, dur], [1, 0], { ...clamp, easing: Easing.in(Easing.quad) });
-  return <AbsoluteFill style={{ opacity: saida, scale: `${0.97 + saida * 0.03}` }}>{children}</AbsoluteFill>;
+  return <AbsoluteFill style={{ opacity: saida }}>{children}</AbsoluteFill>;
 };
 
 export const Episodio: React.FC<Negocio> = (n) => {
@@ -74,7 +73,6 @@ export const Episodio: React.FC<Negocio> = (n) => {
         const sai = proxima !== undefined ? dur + proxima : dur;
         return (
           <Sequence key={nome} name={nome} from={INICIOS[i]} durationInFrames={dur}>
-            {nome !== "Outro" && <Formas semente={i + 1} dur={dur} />}
             {nome === "Outro" ? <C n={n} k={k} dur={dur} ponte={{ entra: entrada, sai }} marcas={EP01.cenas[nome].marcas} /> : (
               <Palco dur={dur}>
                 <C n={n} k={k} dur={dur} ponte={{ entra: entrada, sai }} marcas={EP01.cenas[nome].marcas} />

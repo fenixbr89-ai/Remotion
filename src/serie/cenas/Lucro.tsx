@@ -17,7 +17,6 @@ export const Mes: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
   const dia = Math.max(1, Math.min(n.diasPorMes, Math.ceil(suave(f, td, td + 40) * n.diasPorMes)));
   const vendas = Math.round(suave(f, tv, tv + 24) * n.vendasPorDia);
   const total = entra(f, fps, tt, 9);
-  const flip = (f - td) % 2 < 1 && f > td && f < td + 40;
   return (
     <AbsoluteFill style={{ fontFamily }}>
       <Topo texto="E no fim do *mês?*" tamanho={80} />
@@ -29,7 +28,7 @@ export const Mes: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
       {f >= ponte.entra && (
         <div style={{ ...naPosicao(G.mesCalendario), boxSizing: "border-box", overflow: "hidden", background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, textAlign: "center" }}>
           <div style={{ background: degrade, color: cor.branco, fontSize: 30, fontWeight: 800, padding: "12px 0", letterSpacing: 2 }}>DIAS</div>
-          <div style={{ color: cor.preto, fontSize: 120, fontWeight: 800, letterSpacing: -4, lineHeight: 1.2, translate: `0 ${flip ? -8 : 0}px` }}>{dia}</div>
+          <div style={{ color: cor.preto, fontSize: 120, fontWeight: 800, letterSpacing: -4, lineHeight: 1.2 }}>{dia}</div>
         </div>
       )}
       <div style={{ position: "absolute", left: 0, right: 0, top: 820, textAlign: "center", color: cor.texto, fontSize: 48, fontWeight: 700, opacity: suave(f, tt - 12, tt - 2) }}>
@@ -39,17 +38,6 @@ export const Mes: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
         <div style={{ color: cor.texto, fontSize: 40, fontWeight: 700 }}>Lucro no mês</div>
         <Odometro valor={k.mes.lucro * suave(f, tt + 2, tt + 50)} final={k.mes.lucro} tamanho={124} cor={cor.verde} />
       </div>
-      {Array.from({ length: 8 }).map((_, i) => {
-        const t = tt + 8 + i * 4;
-        const e = suave(f, t, t + 30);
-        const x = 540 + Math.cos(i * 0.8) * 420 * e;
-        const y = 1150 - Math.sin(i * 1.3 + 1) * 320 * e - e * 180;
-        return f > t && e < 1 ? (
-          <div key={i} style={{ position: "absolute", left: x - 34, top: y, width: 68, height: 68, borderRadius: 34, background: degrade, color: cor.branco, fontSize: 24, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", opacity: 1 - e }}>
-            R$
-          </div>
-        ) : null;
-      })}
     </AbsoluteFill>
   );
 };
@@ -69,7 +57,7 @@ export const Frase: React.FC<CenaProps> = ({ ponte, marcas }) => {
       <div style={{ position: "absolute", top: 920, left: 0, right: 0 }}>
         <Batida linhas={[{ texto: "CERTO.", em: tc, tamanho: 220, efeito: "slam", degrade: true }]} />
       </div>
-      {f < ponte.sai && <div style={{ ...naPosicao(G.fraseBarra), background: degrade, scale: `${suave(f, tc + 8, tc + 18)} 1` }} />}
+      {f >= ponte.entra && f < ponte.sai && <div style={{ ...naPosicao(G.fraseBarra), background: degrade }} />}
     </AbsoluteFill>
   );
 };

@@ -2,7 +2,7 @@ import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } fr
 import { brl } from "../calc";
 import { Batida } from "../ui/Batida";
 import { Icone } from "../ui/Icones";
-import { CopoAcai, Raios } from "../ui/Ilustracoes";
+import { CopoAcai } from "../ui/Ilustracoes";
 import { Odometro } from "../ui/Odometro";
 import { G, naPosicao } from "../geo";
 import { cor, degrade, entra, estica, fontFamily, sombra, suave } from "../tema";
@@ -33,14 +33,12 @@ export const Custo: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
     const d = f - pousa(i);
     return s + (d >= 0 && d < 8 ? Math.sin((d / 8) * Math.PI) * 0.08 : 0);
   }, 0);
-  const copo = suave(f, 0, 8);
   const recibo = entra(f, fps, 8, 12);
   return (
     <AbsoluteFill style={{ fontFamily }}>
       <Topo texto="Quanto custa *1 copo?*" />
       {/* copo */}
       <div style={{ position: "absolute", left: COPO.x, top: COPO.y, translate: "-50% -50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Raios tamanho={620} style={{ opacity: copo * 0.9 }} />
         <div style={{ width: G.custoCopo.w, height: G.custoCopo.h, scale: `${1 + squash} ${1 - squash * 0.6}`, transformOrigin: "center bottom", opacity: f >= ponte.entra ? 1 : 0 }}>
           <CopoAcai tamanho={G.custoCopo.w} />
         </div>

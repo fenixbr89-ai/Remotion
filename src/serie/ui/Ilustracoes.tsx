@@ -1,25 +1,6 @@
-import { useCurrentFrame } from "remotion";
 import { cor, degrade, fontFamily, textoDegrade } from "../tema";
 
 /** Ilustrações 2D planas da série (loja, pessoas, copo, raios, celular, cursor). */
-
-export const Raios: React.FC<{ tamanho: number; style?: React.CSSProperties }> = ({ tamanho, style }) => {
-  const f = useCurrentFrame();
-  return (
-    <div
-      style={{
-        position: "absolute",
-        width: tamanho,
-        height: tamanho,
-        borderRadius: "50%",
-        background: `repeating-conic-gradient(from ${f * 0.4}deg, ${cor.azul}2E 0deg 9deg, transparent 9deg 20deg)`,
-        maskImage: "radial-gradient(circle, black 18%, transparent 68%)",
-        WebkitMaskImage: "radial-gradient(circle, black 18%, transparent 68%)",
-        ...style,
-      }}
-    />
-  );
-};
 
 /** Fachada da loja. `luz` 0→1 acende as janelas. */
 export const Loja: React.FC<{ nome: string; luz: number; largura?: number }> = ({ nome, luz, largura = 780 }) => {

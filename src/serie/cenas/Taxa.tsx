@@ -5,7 +5,7 @@ import { Icone, IconeChip } from "../ui/Icones";
 import { Celular } from "../ui/Ilustracoes";
 import { Odometro } from "../ui/Odometro";
 import { G, naPosicao } from "../geo";
-import { cor, degrade, entra, estica, flutua, fontFamily, suave } from "../tema";
+import { cor, degrade, entra, estica, fontFamily, suave } from "../tema";
 import { marca, type CenaProps } from "./props";
 import { Topo } from "./Topo";
 
@@ -21,7 +21,8 @@ export const Erro: React.FC<CenaProps> = ({ k, ponte, marcas }) => {
           <Batida linhas={[{ texto: brl(k.erro.precoErrado), em: marca(marcas, "valor", 8), tamanho: 230, efeito: "slam", corTexto: cor.preto }]} />
         </div>
       )}
-      <div style={{ position: "absolute", top: 1100, left: 0, right: 0 }}>
+      {f >= ponte.entra && f < ponte.sai && <div style={{ ...naPosicao(G.erroBarra), background: degrade }} />}
+      <div style={{ position: "absolute", top: 1140, left: 0, right: 0 }}>
         <Batida linhas={[{ texto: "porque o vizinho cobra.", em: marca(marcas, "vizinho", 22), tamanho: 50, peso: 700, corTexto: cor.textoSuave }]} />
       </div>
     </AbsoluteFill>
@@ -39,7 +40,6 @@ export const App: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
   const tF = marca(marcas, "final", 80);
   const restante = precoErrado - taxaValor * suave(f, tT, tT + 12) - k.custoTotal * suave(f, tC, tC + 12);
   const final = entra(f, fps, tF, 8);
-  const tremor = f > tF && f < tF + 16 ? Math.sin(f * 2.6) * 14 * (1 - (f - tF) / 16) : 0;
   const linhas = [
     { r: `Taxa do app (${pct(n.taxa)})`, v: `− ${brl(taxaValor)}`, t: tT },
     { r: "Custo do copo", v: `− ${brl(k.custoTotal)}`, t: tC },
@@ -48,7 +48,7 @@ export const App: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
     <AbsoluteFill style={{ fontFamily }}>
       <Topo texto="Mas no app, *sobra quanto?*" tom="vermelho" />
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingTop: 230 }}>
-        <div style={{ position: "relative", translate: `${tremor}px 0` }}>
+        <div style={{ position: "relative" }}>
           <Celular largura={560}>
             <div style={{ padding: "90px 34px 0" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 14, color: cor.textoSuave, fontSize: 26, fontWeight: 700 }}>
@@ -82,7 +82,7 @@ export const App: React.FC<CenaProps> = ({ n, k, ponte, marcas }) => {
               </div>
             </div>
           </Celular>
-          <div style={{ position: "absolute", right: -70, top: 330, scale: `${entra(f, fps, tT, 8)}`, translate: `0 ${flutua(f, 1, 10)}px`, padding: "12px 22px", borderRadius: 20, background: cor.vermelho, color: cor.branco, fontSize: 40, fontWeight: 800 }}>−{pct(n.taxa)}</div>
+          <div style={{ position: "absolute", right: -70, top: 330, scale: `${entra(f, fps, tT, 8)}`, padding: "12px 22px", borderRadius: 20, background: cor.vermelho, color: cor.branco, fontSize: 40, fontWeight: 800 }}>−{pct(n.taxa)}</div>
           <div style={{ position: "absolute", left: -80, top: 700, scale: `${final}` }}>
             <Icone nome="alerta" tamanho={130} />
           </div>
