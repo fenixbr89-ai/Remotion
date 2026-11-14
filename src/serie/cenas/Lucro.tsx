@@ -22,8 +22,8 @@ export const Lucro: React.FC<CenaProps> = ({ n, k }) => {
     <AbsoluteFill style={{ fontFamily }}>
       <Legenda
         frases={[
-          { em: 4, l1: `Vendendo *${n.vendasPorDia} copos* por dia,`, l2: `${n.diasPorMes} dias no mês…` },
-          { em: 125, l1: `são *${brl(k.mes.lucro).replace(" ", " ")}* de lucro`, l2: "no fim do mês." },
+          { em: 4, l1: `Vendendo *${n.vendasPorDia}\u00A0copos* por dia,`, l2: `${n.diasPorMes} dias no mês…` },
+          { em: 125, l1: `são *${brl(k.mes.lucro).replace(" ", "\u00A0")}* de lucro`, l2: "no fim do mês." },
         ]}
       />
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingTop: 300 }}>
