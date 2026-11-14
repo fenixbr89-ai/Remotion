@@ -24,35 +24,59 @@ import {
 //  TEMPO — tudo em SEGUNDOS do vídeo
 // ============================================================
 export const BENATTI_FPS = 30;
-const VOZ_INICIO = 1.0; // a narração começa 1s depois do início
-const DURACAO = 47.5;
-export const BENATTI_TOTAL = Math.round(DURACAO * BENATTI_FPS);
 const FPS = BENATTI_FPS;
 const sec = (s: number) => Math.round(s * FPS);
 
-// Momento exato de cada palavra no ÁUDIO (s), medido por reconhecimento de voz
-// (Vosk, modelo em português) em public/benatti-narracao.wav
-const FALA: [string, number][] = [
-  ["Benatti", 0.13], ["Frios", 0.6], ["e", 1.03], ["Embalagens.", 1.14],
-  ["Atacado", 2.04], ["e", 2.7], ["varejo,", 2.76], ["com", 3.33], ["qualidade", 3.51], ["e", 4.35], ["preço", 4.47], ["justo.", 4.83],
-  ["Aqui", 5.28], ["você", 5.61], ["encontra", 5.85], ["carnes,", 6.24], ["frios,", 6.9], ["frango,", 7.47],
-  ["mercearia,", 8.1], ["produtos", 8.97], ["de", 9.45], ["limpeza,", 9.54],
-  ["artigos", 10.2], ["de", 10.68], ["festa", 10.77], ["e", 11.37], ["embalagens", 11.49], ["em", 12.18], ["geral.", 12.27],
-  ["Tudo", 12.87], ["num", 13.2], ["só", 13.35], ["lugar!", 13.56],
-  ["Embalagens", 14.09], ["pra", 14.73], ["sua", 14.88], ["casa", 15.15], ["e", 15.78], ["pro", 15.9], ["seu", 16.08], ["negócio.", 16.32],
-  ["Qualidade,", 16.95], ["variedade", 17.82], ["e", 18.66], ["confiança,", 18.75],
-  ["com", 19.56], ["ofertas", 19.77], ["toda", 20.25], ["semana.", 20.55],
-  ["Nosso", 21.03], ["horário:", 21.33], ["de", 21.9], ["segunda", 22.02], ["a", 22.38], ["sábado,", 22.44],
-  ["das", 23.01], ["6h30", 23.28], ["da", 23.76], ["manhã", 23.85], ["às", 24.21], ["21h30", 24.39], ["da", 24.96], ["noite.", 25.05],
-  ["E", 25.59], ["aos", 25.68], ["domingos,", 25.83], ["das", 26.46], ["7h", 26.7], ["às", 27.33], ["21h.", 27.51],
-  ["Venha", 28.29], ["nos", 28.53], ["visitar!", 28.68],
-  ["Estamos", 29.16], ["na", 29.52], ["Av.", 29.64], ["das", 30.06], ["Paineiras,", 30.21],
-  ["quadra", 30.75], ["96,", 31.08], ["lote", 31.86], ["12,", 32.16], ["próximo", 32.52], ["à", 32.94], ["feira", 33.0], ["de", 33.27], ["quinta,", 33.36],
-  ["no", 33.78], ["Setor", 33.93], ["Pontakayana,", 34.2], ["em", 34.92], ["Trindade,", 35.04], ["Goiás.", 35.55],
-  ["Faça", 36.12], ["seu", 36.36], ["pedido", 36.51], ["pelo", 36.81], ["WhatsApp:", 37.0], ["(62)", 37.53], ["99376-2140", 38.13],
-  ["Benatti", 40.02], ["Frios", 40.38], ["e", 40.68], ["Embalagens:", 40.74], ["entregas", 41.4], ["rápidas!", 41.79],
+// Narração: um áudio por cena (public/narracao/cenaXX.wav).
+// `palavras` = momento de cada palavra DENTRO do áudio (s), medido por reconhecimento de voz.
+const CLIPES: { arquivo: string; dur: number; palavras: [string, number][] }[] = [
+  { arquivo: "cena01", dur: 2.04, palavras: [["Benatti", 0.33], ["Frios", 0.84], ["e", 1.04], ["Embalagens.", 1.13]] },
+  { arquivo: "cena02", dur: 4.16, palavras: [["Atacado", 0.21], ["e", 1.05], ["varejo,", 1.17], ["com", 1.83], ["qualidade", 2.07], ["e", 2.82], ["preço", 3.0], ["justo.", 3.45]] },
+  {
+    arquivo: "cena03",
+    dur: 11.4,
+    palavras: [
+      ["Aqui", 0.21], ["você", 0.6], ["encontra:", 0.9], ["carnes,", 1.71], ["frios,", 2.82], ["frango,", 3.99], ["mercearia,", 5.22],
+      ["produtos", 6.48], ["de", 7.2], ["limpeza,", 7.26], ["artigos", 8.31], ["de", 8.87], ["festa", 8.97], ["e", 9.69], ["embalagens", 9.86], ["em", 10.65], ["geral.", 10.77],
+    ],
+  },
+  { arquivo: "cena04", dur: 1.72, palavras: [["Tudo", 0.24], ["num", 0.63], ["só", 0.87], ["lugar!", 1.08]] },
+  { arquivo: "cena05", dur: 3.12, palavras: [["Embalagens", 0.36], ["pra", 1.02], ["sua", 1.17], ["casa", 1.38], ["e", 1.92], ["pro", 2.07], ["seu", 2.23], ["negócio.", 2.37]] },
+  {
+    arquivo: "cena06",
+    dur: 5.64,
+    palavras: [["Qualidade,", 0.21], ["variedade", 1.32], ["e", 2.37], ["confiança,", 2.49], ["com", 3.78], ["ofertas", 3.99], ["toda", 4.62], ["semana.", 4.95]],
+  },
+  {
+    arquivo: "cena07",
+    dur: 10.56,
+    palavras: [
+      ["Nosso", 0.27], ["horário:", 0.66], ["de", 1.59], ["segunda", 1.77], ["a", 2.37], ["sábado,", 2.43], ["das", 3.36], ["6h30", 3.68], ["da", 4.2], ["manhã", 4.32],
+      ["às", 4.95], ["21h30", 5.22], ["da", 5.79], ["noite.", 5.91], ["E", 6.78], ["aos", 6.9], ["domingos,", 7.05], ["das", 7.86], ["7h", 8.15], ["às", 9.27], ["21h.", 9.48],
+    ],
+  },
+  {
+    arquivo: "cena08",
+    dur: 10.04,
+    palavras: [
+      ["Venha", 0.24], ["nos", 0.6], ["visitar!", 0.78], ["Na", 1.74], ["Av.", 1.89], ["das", 2.31], ["Paineiras,", 2.49], ["quadra", 3.27], ["96,", 3.63], ["lote", 4.59], ["12,", 4.96],
+      ["próximo", 5.79], ["à", 6.16], ["feira", 6.21], ["de", 6.45], ["quinta,", 6.57], ["no", 6.96], ["Setor", 7.08], ["Pontakayana,", 7.44], ["em", 8.58], ["Trindade,", 8.7], ["Goiás.", 9.2],
+    ],
+  },
+  { arquivo: "cena09", dur: 6.08, palavras: [["Faça", 0.12], ["seu", 0.51], ["pedido", 0.66], ["pelo", 1.05], ["WhatsApp:", 1.3], ["(62)", 2.13], ["99376-2140", 3.24]] },
+  { arquivo: "cena10", dur: 3.8, palavras: [["Benatti", 0.21], ["Frios", 0.93], ["e", 1.2], ["Embalagens:", 1.39], ["entregas", 2.37], ["rápidas!", 3.0]] },
 ];
-const PALAVRAS = FALA.map(([w, a]) => ({ w, t: VOZ_INICIO + a }));
+
+// Cada áudio começa logo depois do anterior (com um respiro entre cenas)
+const VOZ_INICIO = 1.0;
+const RESPIRO = 0.35;
+const INICIO: number[] = [];
+CLIPES.forEach((c, i) => INICIO.push(i === 0 ? VOZ_INICIO : INICIO[i - 1] + CLIPES[i - 1].dur + RESPIRO));
+const FIM_VOZ = INICIO[CLIPES.length - 1] + CLIPES[CLIPES.length - 1].dur;
+const DURACAO = Math.round((FIM_VOZ + 4.2) * 10) / 10;
+export const BENATTI_TOTAL = Math.round(DURACAO * BENATTI_FPS);
+
+const PALAVRAS = CLIPES.flatMap((c, i) => c.palavras.map(([w, a]) => ({ w, t: INICIO[i] + a })));
 const limpa = (w: string) => w.toLowerCase().replace(/[,.!:]/g, "");
 const quando = (palavra: string, depois = 0) => {
   const q = limpa(palavra);
@@ -62,18 +86,20 @@ const quando = (palavra: string, depois = 0) => {
 };
 
 // Cenas (s do vídeo)
+// Início de cada cena (s do vídeo): a cena entra um instante antes do seu áudio
+const ANTES = 0.15;
 const B = {
   logo: 0,
-  atacado: 2.9,
-  produtos: 6.1,
-  embalagens: 14.95,
-  qualidade: 17.8,
-  ofertas: 20.4,
-  horario: 21.9,
-  endereco: 29.1,
-  whatsapp: 36.95,
-  marca: 40.85,
-  fim: 43.6,
+  atacado: INICIO[1] - ANTES,
+  produtos: INICIO[2] - ANTES, // inclui "Tudo num só lugar" (áudio 4)
+  embalagens: INICIO[4] - ANTES,
+  qualidade: INICIO[5] - ANTES,
+  ofertas: INICIO[5] + 3.78 - ANTES, // "com ofertas…" dentro do áudio 6
+  horario: INICIO[6] - ANTES,
+  endereco: INICIO[7] - ANTES,
+  whatsapp: INICIO[8] - ANTES,
+  marca: INICIO[9] - ANTES,
+  fim: FIM_VOZ + 0.3,
 };
 
 // ============================================================
@@ -833,9 +859,11 @@ export const Benatti: React.FC = () => {
           </Sequence>
         );
       })}
-      <Sequence from={sec(VOZ_INICIO)}>
-        <Audio src={staticFile("benatti-narracao.wav")} />
-      </Sequence>
+      {CLIPES.map((c, i) => (
+        <Sequence key={c.arquivo} from={sec(INICIO[i])} durationInFrames={sec(c.dur) + 2} name={`voz-${c.arquivo}`}>
+          <Audio src={staticFile(`narracao/${c.arquivo}.wav`)} />
+        </Sequence>
+      ))}
       {/* Trilha opcional: coloque public/benatti-trilha.mp3 e descomente
       <Audio src={staticFile("benatti-trilha.mp3")} volume={0.12} />
       */}
