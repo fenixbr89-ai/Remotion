@@ -12,9 +12,8 @@ import { C, CLAMP, FONT } from "./theme";
 
 const VALORES = ["Dedicação.", "Responsabilidade.", "Compromisso."];
 
-/** Minimalismo + tipografia: um valor por vez, três pontos indicando o progresso. */
+/** Minimalismo + tipografia: um valor por vez. */
 const Valores = () => {
-  const frame = useCurrentFrame();
   return (
     <Shot dur={60} bg={C.light}>
       {VALORES.map((v, i) => (
@@ -26,31 +25,6 @@ const Valores = () => {
           </div>
         </Sequence>
       ))}
-      <div
-        style={{
-          position: "absolute",
-          top: 1120,
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          gap: 22,
-        }}
-      >
-        {VALORES.map((v, i) => {
-          const active = frame >= i * 20;
-          return (
-            <div
-              key={v}
-              style={{
-                width: frame >= i * 20 && frame < (i + 1) * 20 ? 60 : 18,
-                height: 18,
-                borderRadius: 9,
-                background: active ? C.orange : C.hair,
-              }}
-            />
-          );
-        })}
-      </div>
     </Shot>
   );
 };
@@ -76,7 +50,7 @@ const ContactSheet = () => {
           Precisou de algum serviço?
         </T>
         <T size={96} color={C.white} delay={6}>
-          Chame o Juliano.
+          Chame Juliano Pinturas.
         </T>
       </div>
       {/* frase final, aparece no lugar do título */}
@@ -125,7 +99,7 @@ const ContactSheet = () => {
         />
         <div style={{ height: 40 }} />
         <T size={72} delay={20}>
-          O Juliano Pinturas
+          Juliano Pinturas
         </T>
         <div style={{ height: 14 }} />
         <T size={44} weight={500} color={C.grey} delay={24}>

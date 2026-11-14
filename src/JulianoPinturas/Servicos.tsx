@@ -43,7 +43,7 @@ const SERVICOS: Servico[] = [
     img: "img/house.png",
     width: 700,
     dark: false,
-    icon: "linear-gradient(160deg, #FFB067, #FF6B00)",
+    icon: "#FFFFFF",
   },
   {
     nome: "Automotiva",
@@ -53,8 +53,8 @@ const SERVICOS: Servico[] = [
     chips: ["Pintura", "Retoques"],
     img: "img/car.png",
     width: 580,
-    dark: true,
-    icon: "linear-gradient(160deg, #3A3A3C, #000000)",
+    dark: false,
+    icon: "#FFFFFF",
   },
   {
     nome: "Reformas",
@@ -65,7 +65,7 @@ const SERVICOS: Servico[] = [
     img: "img/bricks.png",
     width: 660,
     dark: false,
-    icon: "linear-gradient(160deg, #FFFFFF, #E8E8ED)",
+    icon: "#FFFFFF",
   },
   {
     nome: "Hidráulica",
@@ -75,8 +75,8 @@ const SERVICOS: Servico[] = [
     chips: ["Vazamentos", "Caixas d'água"],
     img: "img/shower.png",
     width: 600,
-    dark: true,
-    icon: "linear-gradient(160deg, #6CC7FF, #0A84FF)",
+    dark: false,
+    icon: "#FFFFFF",
   },
   {
     nome: "Elétrica",
@@ -87,7 +87,7 @@ const SERVICOS: Servico[] = [
     img: "img/bulb.png",
     width: 560,
     dark: false,
-    icon: "linear-gradient(160deg, #FFE27A, #FFB800)",
+    icon: "#FFFFFF",
   },
 ];
 
@@ -206,32 +206,10 @@ const Tile: React.FC<{
 
 /** Product showcase de um serviço. */
 const Showcase: React.FC<{ s: Servico }> = ({ s }) => {
-  const frame = useCurrentFrame();
-  const bg = s.dark ? C.black : C.light;
+  const bg = s.dark ? C.black : C.white;
   const fg = s.dark ? C.white : C.text;
   return (
     <Shot dur={60} bg={bg}>
-      {/* círculo minimalista atrás do produto */}
-      <svg
-        width={1080}
-        height={1920}
-        style={{ position: "absolute", inset: 0 }}
-      >
-        <circle
-          cx={540}
-          cy={1080}
-          r={400}
-          fill="none"
-          stroke={s.dark ? "rgba(255,255,255,0.14)" : "rgba(0,0,0,0.08)"}
-          strokeWidth={3}
-          pathLength={1}
-          strokeDasharray="1 1"
-          strokeDashoffset={
-            1 - interpolate(frame, [2, 30], [0, 1], { ...CLAMP, easing: EASE })
-          }
-          style={{ rotate: "-90deg", transformOrigin: "540px 1080px" }}
-        />
-      </svg>
       <div style={{ position: "absolute", top: 250, width: "100%" }}>
         <T size={42} weight={600} color={C.orange} dur={10}>
           {s.eyebrow}
