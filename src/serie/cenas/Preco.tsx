@@ -3,7 +3,8 @@ import { brl, pct } from "../calc";
 import { Batida } from "../ui/Batida";
 import { CopoAcai, Raios } from "../ui/Ilustracoes";
 import { Odometro } from "../ui/Odometro";
-import { cor, degrade, entra, fontFamily, sombra, suave, textoDegrade } from "../tema";
+import { G, naPosicao } from "../geo";
+import { cor, degrade, entra, estica, fontFamily, sombra, suave, textoDegrade } from "../tema";
 import { destaca, type CenaProps } from "./props";
 import { Topo } from "./Topo";
 
@@ -21,7 +22,7 @@ const Termo: React.FC<{ t: string; em: number; tam?: number; destaque?: boolean;
   );
 };
 
-export const Formula: React.FC<CenaProps> = ({ n, k }) => {
+export const Formula: React.FC<CenaProps> = ({ n, k, ponte }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const etq = entra(f, fps, 92, 8);
@@ -31,6 +32,7 @@ export const Formula: React.FC<CenaProps> = ({ n, k }) => {
   return (
     <AbsoluteFill style={{ fontFamily }}>
       <Topo texto="A conta *certa:*" tamanho={80} />
+      {f >= ponte.entra && <div style={{ ...naPosicao(G.formulaLinha), background: cor.azulFundo }} />}
       {linha(
         <>
           <Termo t="preço" em={8} destaque />
@@ -60,21 +62,23 @@ export const Formula: React.FC<CenaProps> = ({ n, k }) => {
       )}
       <div style={{ position: "absolute", left: 0, right: 0, top: 860, height: 560, display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Raios tamanho={860} style={{ opacity: etq }} />
-        <div style={{ translate: "-170px 30px", scale: `${entra(f, fps, 84, 10)}` }}>
+        <div style={{ translate: "-170px 30px", scale: estica(f, fps, 84), transformOrigin: "center bottom" }}>
           <CopoAcai tamanho={300} />
         </div>
-        <div style={{ position: "absolute", left: "50%", marginLeft: -20, top: 150, scale: `${interpolate(etq, [0, 1], [2, 1])}`, opacity: Math.min(1, etq * 3) }}>
-          <div style={{ borderRadius: 32, padding: "22px 34px", background: degrade, boxShadow: "0 24px 50px rgba(29,78,216,0.35)" }}>
+      </div>
+      {f < ponte.sai && (
+        <div style={{ ...naPosicao(G.formulaEtiqueta), scale: `${interpolate(etq, [0, 1], [2, 1])}`, opacity: Math.min(1, etq * 3) }}>
+          <div style={{ boxSizing: "border-box", width: "100%", height: "100%", borderRadius: G.formulaEtiqueta.r, padding: "22px 34px", background: degrade, boxShadow: "0 24px 50px rgba(29,78,216,0.35)" }}>
             <div style={{ color: "rgba(255,255,255,0.85)", fontSize: 28, fontWeight: 800, letterSpacing: 3 }}>VENDER A</div>
             <Odometro valor={k.preco * suave(f, 92, 118)} final={k.preco} tamanho={90} cor={cor.branco} />
           </div>
         </div>
-      </div>
+      )}
     </AbsoluteFill>
   );
 };
 
-export const Divisao: React.FC<CenaProps> = ({ n, k }) => {
+export const Divisao: React.FC<CenaProps> = ({ n, k, ponte }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const partes = [
@@ -82,20 +86,19 @@ export const Divisao: React.FC<CenaProps> = ({ n, k }) => {
     { r: `Taxa ${pct(n.taxa)}`, v: k.taxaValor, c: cor.vermelho, t: 22 },
     { r: `Lucro ${pct(n.lucro)}`, v: k.lucroValor, c: cor.verde, t: 34 },
   ];
-  const lucro = entra(f, fps, 56, 8);
   return (
     <AbsoluteFill style={{ fontFamily }}>
       <Topo texto={`Em cada copo de ${destaca(brl(k.preco) + ":")}`} />
-      <div style={{ position: "absolute", left: 70, right: 70, top: 560, height: 150, borderRadius: 36, overflow: "hidden", display: "flex", background: cor.gelo, boxShadow: sombra }}>
+      <div style={{ ...naPosicao(G.divisaoBarra), overflow: "hidden", display: "flex", background: degrade, boxShadow: sombra, visibility: f >= ponte.entra ? "visible" : "hidden" }}>
         {partes.map((p) => (
-          <div key={p.r} style={{ width: `${(p.v / k.preco) * 100 * suave(f, p.t, p.t + 12)}%`, background: p.c, scale: p.c === cor.verde ? `1 ${1 + Math.sin(Math.min(1, lucro) * Math.PI) * 0.1}` : undefined }} />
+          <div key={p.r} style={{ width: `${(p.v / k.preco) * 100 * suave(f, p.t, p.t + 12)}%`, background: p.c, visibility: p.c === cor.verde && f >= ponte.sai ? "hidden" : "visible" }} />
         ))}
       </div>
       <div style={{ position: "absolute", left: 70, right: 70, top: 750, display: "flex", gap: 18 }}>
         {partes.map((p) => {
           const e = entra(f, fps, p.t + 4, 9);
           return (
-            <div key={p.r} style={{ flex: 1, borderRadius: 30, padding: "22px 20px", background: cor.branco, border: `3px solid ${p.c}66`, boxShadow: sombra, opacity: f >= p.t ? e : 0, translate: `0 ${(1 - e) * 80}px` }}>
+            <div key={p.r} style={{ flex: 1, borderRadius: 30, padding: "22px 20px", background: cor.branco, border: `3px solid ${p.c}66`, boxShadow: sombra, opacity: f >= p.t ? Math.min(1, e * 2) : 0, scale: estica(f, fps, p.t + 4) }}>
               <div style={{ color: p.c, fontSize: 30, fontWeight: 800 }}>{p.r}</div>
               <Odometro valor={p.v * suave(f, p.t + 4, p.t + 20)} final={p.v} tamanho={48} cor={cor.preto} />
             </div>

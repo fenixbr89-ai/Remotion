@@ -50,3 +50,14 @@ export const suave = (frame: number, de: number, ate: number) =>
 
 /** Flutuação contínua (px) para ícones decorativos. */
 export const flutua = (frame: number, fase = 0, amp = 14) => Math.sin(frame / 22 + fase) * amp;
+
+/**
+ * Entrada elástica (squash & stretch): cresce esticando na vertical e assenta balançando.
+ * Devolve o valor pronto para a propriedade CSS `scale`.
+ */
+export const estica = (frame: number, fps: number, inicio: number) => {
+  const e = spring({ frame: frame - inicio, fps, config: { damping: 7, mass: 0.6 } });
+  const firme = spring({ frame: frame - inicio, fps, config: { damping: 30 } });
+  const w = (e - firme) * 1.4;
+  return `${Math.max(0, e * (1 - w * 0.5))} ${Math.max(0, e * (1 + w * 0.5))}`;
+};

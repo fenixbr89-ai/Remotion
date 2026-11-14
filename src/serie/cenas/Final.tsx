@@ -4,17 +4,17 @@ import { Batida } from "../ui/Batida";
 import { Celular, Cursor } from "../ui/Ilustracoes";
 import { Logo } from "../ui/Logo";
 import { Odometro } from "../ui/Odometro";
-import { cor, degrade, entra, flutua, fontFamily, sombra, suave } from "../tema";
+import { G, naPosicao } from "../geo";
+import { cor, degrade, entra, estica, flutua, fontFamily, sombra, suave } from "../tema";
 import type { CenaProps } from "./props";
 import { Topo } from "./Topo";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 /** O app em ação: campos se preenchem, cursor clica em Calcular, loading → ✓ → preço. */
-export const Produto: React.FC<CenaProps> = ({ n, k }) => {
+export const Produto: React.FC<CenaProps> = ({ n, k, ponte }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const cel = entra(f, fps, 0, 11);
   const campos = [
     { r: "Custo do copo", v: brl(k.custoTotal), t: 12 },
     { r: "Taxa do app", v: pct(n.taxa), t: 20 },
@@ -30,10 +30,10 @@ export const Produto: React.FC<CenaProps> = ({ n, k }) => {
     <AbsoluteFill style={{ fontFamily }}>
       <Topo texto="Eu faço essa conta no *Preço Certo.*" />
       <AbsoluteFill style={{ alignItems: "center", paddingTop: 440 }}>
-        <div style={{ scale: `${0.8 + cel * 0.2}`, opacity: cel, translate: `0 ${(1 - cel) * 220}px` }}>
+        <div>
           <Celular largura={500}>
             <div style={{ height: "100%", padding: "86px 30px 0", background: cor.gelo }}>
-              <div style={{ scale: "0.6", transformOrigin: "left center", marginBottom: 6 }}>
+              <div style={{ scale: "0.6", transformOrigin: "left center", marginBottom: 6, opacity: f >= ponte.entra ? 1 : 0 }}>
                 <Logo />
               </div>
               {campos.map((c) => {
@@ -67,12 +67,12 @@ export const Produto: React.FC<CenaProps> = ({ n, k }) => {
       <div style={{ position: "absolute", left: cx, top: cy, opacity: suave(f, 32, 38) * (1 - suave(f, 80, 86)), scale: `${clique ? 0.85 : 1}` }}>
         <Cursor tamanho={80} />
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1460, display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
-        <div style={{ padding: "24px 70px", borderRadius: 999, background: degrade, color: cor.branco, fontSize: 46, fontWeight: 800, boxShadow: "0 20px 50px rgba(29,78,216,0.4)", scale: `${entra(f, fps, 100, 9) * (f > 110 ? 1 + Math.sin((f - 110) / 5) * 0.03 : 1)}` }}>
+      {f < ponte.sai && (
+        <div style={{ ...naPosicao(G.produtoBotao), display: "flex", alignItems: "center", justifyContent: "center", background: degrade, color: cor.branco, fontSize: 46, fontWeight: 800, boxShadow: "0 20px 50px rgba(29,78,216,0.4)", scale: f < 115 ? estica(f, fps, 100) : `${1 + Math.sin((f - 115) / 5) * 0.03}` }}>
           Teste grátis
         </div>
-        <div style={{ color: cor.azulProfundo, fontSize: 34, fontWeight: 700, opacity: entra(f, fps, 108) }}>siteprecocerto.vercel.app</div>
-      </div>
+      )}
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1580, textAlign: "center", color: cor.azulProfundo, fontSize: 34, fontWeight: 700, opacity: entra(f, fps, 108) * (1 - suave(f, ponte.sai - 6, ponte.sai)) }}>siteprecocerto.vercel.app</div>
     </AbsoluteFill>
   );
 };
@@ -84,12 +84,13 @@ const POS = [
   { right: 80, top: 1370 },
 ];
 
-export const Comenta: React.FC<CenaProps> = ({ n }) => {
+export const Comenta: React.FC<CenaProps> = ({ n, ponte }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const chips = [...n.proximos, "Outro?"].slice(0, 4);
   return (
     <AbsoluteFill style={{ fontFamily }}>
+      {f >= ponte.entra && <div style={{ ...naPosicao(G.comentaFaixa), background: cor.azulFundo }} />}
       <div style={{ position: "absolute", left: 0, right: 0, top: 420 }}>
         <Batida
           gap={8}
@@ -105,10 +106,10 @@ export const Comenta: React.FC<CenaProps> = ({ n }) => {
         const e = entra(f, fps, t, 9);
         const letras = Math.max(0, Math.min(p.length, f - t - 2));
         return (
-          <div key={p} style={{ position: "absolute", ...POS[i], scale: `${e}`, opacity: Math.min(1, e * 2), translate: `0 ${flutua(f, i * 1.3, 10)}px`, display: "flex", alignItems: "center", gap: 14, padding: "16px 26px 16px 16px", borderRadius: 999, background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra }}>
+          <div key={p} style={{ position: "absolute", ...POS[i], scale: estica(f, fps, t), opacity: Math.min(1, e * 2), translate: `0 ${flutua(f, i * 1.3, 10)}px`, display: "flex", alignItems: "center", gap: 14, padding: "16px 26px 16px 16px", borderRadius: 999, background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra }}>
             <div style={{ width: 52, height: 52, borderRadius: 26, background: i % 2 ? cor.azulCeu : degrade }} />
             <span style={{ color: cor.preto, fontSize: 40, fontWeight: 800 }}>{p.slice(0, letras)}</span>
-            <svg width={30} height={30} viewBox="0 0 24 24" fill={cor.vermelho} style={{ scale: `${entra(f, fps, t + 14, 7)}` }}>
+            <svg width={30} height={30} viewBox="0 0 24 24" fill={cor.vermelho} style={{ scale: `${entra(f, fps, t + 14, 7)}`, visibility: i === 0 && f >= ponte.sai ? "hidden" : "visible" }}>
               <path d="M12 21s-7.5-4.6-10-9.3C.4 8.5 2.3 4.5 6 4.5c2.2 0 3.6 1.3 6 3.6 2.4-2.3 3.8-3.6 6-3.6 3.7 0 5.6 4 4 7.2C19.5 16.4 12 21 12 21z" />
             </svg>
           </div>

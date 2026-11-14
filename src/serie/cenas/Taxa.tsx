@@ -4,30 +4,36 @@ import { Batida } from "../ui/Batida";
 import { Icone, IconeChip } from "../ui/Icones";
 import { Celular } from "../ui/Ilustracoes";
 import { Odometro } from "../ui/Odometro";
-import { cor, degrade, entra, flutua, fontFamily, suave } from "../tema";
+import { G, naPosicao } from "../geo";
+import { cor, degrade, entra, estica, flutua, fontFamily, suave } from "../tema";
 import type { CenaProps } from "./props";
 import { Topo } from "./Topo";
 
-export const Erro: React.FC<CenaProps> = ({ k }) => (
-  <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
-    <Batida
-      gap={14}
-      linhas={[
-        { texto: "Muita gente cobra", em: 0, tamanho: 64 },
-        { texto: brl(k.erro.precoErrado), em: 10, tamanho: 230, efeito: "slam", corTexto: cor.preto },
-        { texto: "porque o vizinho cobra.", em: 26, tamanho: 50, peso: 700, corTexto: cor.textoSuave },
-      ]}
-    />
-  </AbsoluteFill>
-);
+export const Erro: React.FC<CenaProps> = ({ k, ponte }) => {
+  const f = useCurrentFrame();
+  return (
+    <AbsoluteFill>
+      <div style={{ position: "absolute", top: 730, left: 0, right: 0 }}>
+        <Batida linhas={[{ texto: "Muita gente cobra", em: 0, tamanho: 64 }]} />
+      </div>
+      {f < ponte.sai && (
+        <div style={{ ...naPosicao(G.erroValor), display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <Batida linhas={[{ texto: brl(k.erro.precoErrado), em: 8, tamanho: 230, efeito: "slam", corTexto: cor.preto }]} />
+        </div>
+      )}
+      <div style={{ position: "absolute", top: 1100, left: 0, right: 0 }}>
+        <Batida linhas={[{ texto: "porque o vizinho cobra.", em: 22, tamanho: 50, peso: 700, corTexto: cor.textoSuave }]} />
+      </div>
+    </AbsoluteFill>
+  );
+};
 
 /** O pedido no app: a taxa e o custo comem o valor e sobra quase nada. */
-export const App: React.FC<CenaProps> = ({ n, k }) => {
+export const App: React.FC<CenaProps> = ({ n, k, ponte }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const { precoErrado, taxaValor, sobra } = k.erro;
-  const cel = entra(f, fps, 0, 11);
-  const notif = entra(f, fps, 10, 9);
+  const notif = estica(f, fps, 2);
   const tT = 34;
   const tC = 56;
   const tF = 80;
@@ -42,21 +48,21 @@ export const App: React.FC<CenaProps> = ({ n, k }) => {
     <AbsoluteFill style={{ fontFamily }}>
       <Topo texto="Mas no app, *sobra quanto?*" tom="vermelho" />
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingTop: 230 }}>
-        <div style={{ position: "relative", scale: `${0.75 + cel * 0.25}`, opacity: cel, translate: `${tremor}px ${(1 - cel) * 240}px` }}>
+        <div style={{ position: "relative", translate: `${tremor}px 0` }}>
           <Celular largura={560}>
             <div style={{ padding: "90px 34px 0" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 14, color: cor.textoSuave, fontSize: 26, fontWeight: 700 }}>
                 <div style={{ width: 44, height: 44, borderRadius: 14, background: degrade }} />
                 app de delivery · agora
               </div>
-              <div style={{ marginTop: 24, borderRadius: 28, padding: 24, background: cor.gelo, scale: `${notif}`, opacity: notif }}>
+              <div style={{ marginTop: 24, borderRadius: 28, padding: 24, background: cor.gelo, scale: notif }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
                   <IconeChip nome="sacola" tamanho={64} style={{ background: cor.branco }} />
                   <div style={{ color: cor.texto, fontSize: 32, fontWeight: 800 }}>Novo pedido!</div>
                 </div>
                 <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", color: cor.preto, fontSize: 36, fontWeight: 800 }}>
                   <span>Total</span>
-                  <span>{brl(precoErrado)}</span>
+                  <span style={{ opacity: f >= ponte.entra ? 1 : 0 }}>{brl(precoErrado)}</span>
                 </div>
               </div>
               {linhas.map((l) => {
@@ -68,7 +74,7 @@ export const App: React.FC<CenaProps> = ({ n, k }) => {
                   </div>
                 );
               })}
-              <div style={{ marginTop: 26, borderRadius: 28, padding: "22px 24px", background: f >= tF ? cor.vermelhoFundo : cor.verdeFundo }}>
+              <div style={{ marginTop: 26, borderRadius: 28, padding: "22px 24px", background: f >= tF ? cor.vermelhoFundo : cor.verdeFundo, visibility: f < ponte.sai ? "visible" : "hidden" }}>
                 <div style={{ color: cor.texto, fontSize: 26, fontWeight: 700 }}>Você fica com</div>
                 <div style={{ scale: `${interpolate(final, [0, 1], [1, 1.1])}`, transformOrigin: "left center" }}>
                   <Odometro valor={f >= tF ? sobra : restante} final={precoErrado} tamanho={84} cor={f >= tF ? cor.vermelho : cor.verde} />
@@ -86,15 +92,20 @@ export const App: React.FC<CenaProps> = ({ n, k }) => {
   );
 };
 
-export const Sobra: React.FC<CenaProps> = ({ k }) => (
-  <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
-    <Batida
-      gap={14}
-      linhas={[
-        { texto: "Sobra", em: 0, tamanho: 60, corTexto: cor.textoSuave, peso: 700 },
-        { texto: brl(k.erro.sobra), em: 4, tamanho: 230, efeito: "slam", corTexto: cor.vermelho },
-        { texto: "Um cupom de desconto e vira *prejuízo.*", em: 22, tamanho: 50, tom: "vermelho" },
-      ]}
-    />
-  </AbsoluteFill>
-);
+export const Sobra: React.FC<CenaProps> = ({ k, ponte }) => {
+  const f = useCurrentFrame();
+  return (
+    <AbsoluteFill>
+      <div style={{ position: "absolute", top: 600, left: 0, right: 0 }}>
+        <Batida linhas={[{ texto: "Sobra", em: 0, tamanho: 60, corTexto: cor.textoSuave, peso: 700 }]} />
+      </div>
+      <div style={{ position: "absolute", top: 690, left: 0, right: 0 }}>
+        <Batida linhas={[{ texto: brl(k.erro.sobra), em: 4, tamanho: 230, efeito: "slam", corTexto: cor.vermelho }]} />
+      </div>
+      {f >= ponte.entra && f < ponte.sai && <div style={{ ...naPosicao(G.sobraBarra), background: cor.vermelho }} />}
+      <div style={{ position: "absolute", top: 1010, left: 70, right: 70 }}>
+        <Batida linhas={[{ texto: "Um cupom de desconto e vira *prejuízo.*", em: 22, tamanho: 50, tom: "vermelho" }]} />
+      </div>
+    </AbsoluteFill>
+  );
+};

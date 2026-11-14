@@ -4,7 +4,8 @@ import { Batida } from "../ui/Batida";
 import { Icone } from "../ui/Icones";
 import { CopoAcai, Raios } from "../ui/Ilustracoes";
 import { Odometro } from "../ui/Odometro";
-import { cor, degrade, entra, fontFamily, sombra, suave } from "../tema";
+import { G, naPosicao } from "../geo";
+import { cor, degrade, entra, estica, fontFamily, sombra, suave } from "../tema";
 import type { CenaProps } from "./props";
 import { Topo } from "./Topo";
 
@@ -15,7 +16,7 @@ const COPO = { x: 290, y: 900 };
  * A conta do copo, rápida: cada ingrediente cai dentro do copo, solta um "+R$" e
  * imprime uma linha no cupom; o total gira como contador mecânico.
  */
-export const Custo: React.FC<CenaProps> = ({ n, k }) => {
+export const Custo: React.FC<CenaProps> = ({ n, k, ponte }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const inicio = 24;
@@ -29,7 +30,7 @@ export const Custo: React.FC<CenaProps> = ({ n, k }) => {
     const d = f - pousa(i);
     return s + (d >= 0 && d < 8 ? Math.sin((d / 8) * Math.PI) * 0.08 : 0);
   }, 0);
-  const copo = entra(f, fps, 0, 11);
+  const copo = suave(f, 0, 8);
   const recibo = entra(f, fps, 8, 12);
   return (
     <AbsoluteFill style={{ fontFamily }}>
@@ -37,8 +38,8 @@ export const Custo: React.FC<CenaProps> = ({ n, k }) => {
       {/* copo */}
       <div style={{ position: "absolute", left: COPO.x, top: COPO.y, translate: "-50% -50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <Raios tamanho={620} style={{ opacity: copo * 0.9 }} />
-        <div style={{ scale: `${copo * (1 + squash)} ${copo * (1 - squash * 0.6)}`, transformOrigin: "center bottom" }}>
-          <CopoAcai tamanho={300} />
+        <div style={{ width: G.custoCopo.w, height: G.custoCopo.h, scale: `${1 + squash} ${1 - squash * 0.6}`, transformOrigin: "center bottom", opacity: f >= ponte.entra ? 1 : 0 }}>
+          <CopoAcai tamanho={G.custoCopo.w} />
         </div>
       </div>
       {/* ingredientes caindo + "+R$" subindo */}
@@ -62,7 +63,7 @@ export const Custo: React.FC<CenaProps> = ({ n, k }) => {
         );
       })}
       {/* cupom */}
-      <div style={{ position: "absolute", left: 560, top: 470, width: 460, borderRadius: 28, background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, padding: "22px 26px", opacity: recibo, translate: `${(1 - recibo) * 300}px 0` }}>
+      <div style={{ position: "absolute", left: 560, top: 470, width: 460, borderRadius: 28, scale: estica(f, fps, 8), background: cor.branco, border: `2px solid ${cor.azulBorda}`, boxShadow: sombra, padding: "22px 26px", opacity: recibo, translate: `${(1 - recibo) * 300}px 0` }}>
         <div style={{ color: cor.textoSuave, fontSize: 22, fontWeight: 800, letterSpacing: 2 }}>CUPOM · 1 COPO {n.cardapio[n.carroChefe].nome.toUpperCase()}</div>
         <div style={{ borderTop: `3px dashed ${cor.azulBorda}`, margin: "14px 0 6px" }} />
         {n.itens.map((it, i) => {
@@ -77,7 +78,7 @@ export const Custo: React.FC<CenaProps> = ({ n, k }) => {
         <div style={{ borderTop: `3px dashed ${cor.azulBorda}`, margin: "8px 0 0" }} />
       </div>
       {/* total girando */}
-      <div style={{ position: "absolute", left: 70, right: 70, top: 1250, borderRadius: 40, padding: "26px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", background: degrade, boxShadow: `0 24px 60px rgba(29,78,216,${0.3 + fechou * 0.25})`, scale: `${1 + Math.sin(Math.min(1, fechou) * Math.PI) * 0.08}`, opacity: entra(f, fps, 14) }}>
+      <div style={{ ...naPosicao(G.custoTotal), boxSizing: "border-box", padding: "0 40px", display: f < ponte.sai ? "flex" : "none", alignItems: "center", justifyContent: "space-between", background: degrade, boxShadow: `0 24px 60px rgba(29,78,216,${0.3 + fechou * 0.25})`, scale: f < 30 ? estica(f, fps, 14) : `${1 + Math.sin(Math.min(1, fechou) * Math.PI) * 0.08}` }}>
         <span style={{ color: cor.branco, fontSize: 44, fontWeight: 700 }}>Custo do copo</span>
         <Odometro valor={total} final={k.custoTotal} tamanho={92} cor={cor.branco} />
       </div>
