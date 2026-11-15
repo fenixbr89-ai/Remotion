@@ -1,5 +1,6 @@
 import React from "react";
 import { Composition, Folder, Still } from "remotion";
+import { DURACAO_CHE, VideoChe } from "./che/VideoChe";
 import { DURACAO_TOTAL, VideoTordesilhas } from "./video/VideoTordesilhas";
 import { Estilo1Colagem } from "./estilos/Estilo1Colagem";
 import { Estilo2Tipografia } from "./estilos/Estilo2Tipografia";
@@ -18,6 +19,14 @@ export const QuebraPadraoEstilos: React.FC = () => (
       id="QP-Video-Tordesilhas"
       component={VideoTordesilhas}
       durationInFrames={DURACAO_TOTAL}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+    <Composition
+      id="QP-Video-CheGuevara"
+      component={VideoChe}
+      durationInFrames={DURACAO_CHE}
       fps={30}
       width={1080}
       height={1920}
