@@ -2,6 +2,7 @@ import { Composition, Folder } from "remotion";
 import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
+import { QuebraPadraoEstilos } from "./QuebraPadrao/Root";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -50,7 +51,7 @@ export const RemotionRoot: React.FC = () => {
           titleColor: "#000000",
         }}
       />
-
+      <QuebraPadraoEstilos />
     </>
   );
 };
