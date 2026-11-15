@@ -1,5 +1,6 @@
 import React from "react";
-import { Folder, Still } from "remotion";
+import { Composition, Folder, Still } from "remotion";
+import { DURACAO_TOTAL, VideoTordesilhas } from "./video/VideoTordesilhas";
 import { Estilo1Colagem } from "./estilos/Estilo1Colagem";
 import { Estilo2Tipografia } from "./estilos/Estilo2Tipografia";
 import { Estilo3Mapas } from "./estilos/Estilo3Mapas";
@@ -13,5 +14,13 @@ export const QuebraPadraoEstilos: React.FC = () => (
     <Still id="QP-Estilo3-Mapas" component={Estilo3Mapas} width={1920} height={1080} />
     <Still id="QP-Estilo4-Telejornal" component={Estilo4Telejornal} width={1920} height={1080} />
     <Still id="QP-Estilo5-Geometrico" component={Estilo5Geometrico} width={1920} height={1080} />
+    <Composition
+      id="QP-Video-Tordesilhas"
+      component={VideoTordesilhas}
+      durationInFrames={DURACAO_TOTAL}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
   </Folder>
 );
