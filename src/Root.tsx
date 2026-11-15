@@ -5,11 +5,9 @@ import { Title } from "./HelloWorld/Title";
 import { PixoraVideo } from "./pixora/PixoraVideo";
 import { JulianoVideo } from "./juliano/JulianoVideo";
 import { J_TOTAL } from "./juliano/tema";
-import {
-  JulianoImpacto,
-  totalDe,
-} from "./juliano-impacto/JulianoImpacto";
+import { JulianoImpacto, totalDe } from "./juliano-impacto/JulianoImpacto";
 import { DUR, FPS, HEIGHT, TOTAL, WIDTH } from "./pixora/timeline";
+import { DICAS_TOTAL, PixoraDicas } from "./pixora-dicas/PixoraDicas";
 import { Cena01Gancho } from "./pixora/scenes/Cena01Gancho";
 import { Cena02Problema } from "./pixora/scenes/Cena02Problema";
 import { Cena03Virada } from "./pixora/scenes/Cena03Virada";
@@ -56,6 +54,13 @@ export const RemotionRoot: React.FC = () => {
         durationInFrames={totalDe("feminina")}
         {...V}
         defaultProps={{ narracao: true, voz: "feminina" as const }}
+      />
+      <Composition
+        id="PixoraDicas"
+        component={PixoraDicas}
+        durationInFrames={DICAS_TOTAL}
+        {...V}
+        defaultProps={{ narracao: false }}
       />
       <Folder name="Pixora-Cenas">
         <Composition
