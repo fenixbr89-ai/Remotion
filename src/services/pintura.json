@@ -1,0 +1,198 @@
+{
+  "id": "Pintura",
+  "durationInFrames": 1500,
+  "music": "music.mp3",
+  "voice": "voz/pintura.mp3",
+  "scenes": [
+    {
+      "name": "01 Gancho - Descascando",
+      "duration": 75,
+      "theme": "light",
+      "voice": "Parede descascando, manchada...",
+      "size": 120,
+      "words": [
+        { "t": "Parede" },
+        { "t": "DESCASCANDO?", "accent": true, "br": true, "effect": "shake-tear" }
+      ]
+    },
+    {
+      "name": "02 Gancho - Sem vida",
+      "duration": 75,
+      "theme": "light",
+      "voice": "Fachada sem vida...",
+      "words": [
+        { "t": "Fachada" },
+        { "t": "SEM VIDA", "accent": true, "br": true, "effect": "desaturate" }
+      ],
+      "transition": { "type": "circle", "color": "#141414" }
+    },
+    {
+      "name": "03 Gancho - Desvaloriza",
+      "duration": 75,
+      "theme": "dark",
+      "voice": "...desvaloriza o seu imóvel.",
+      "words": [{ "t": "DESVALORIZA", "accent": true }],
+      "visual": { "type": "chart-down" },
+      "transition": { "type": "circle", "color": "#F26A1B" }
+    },
+    {
+      "name": "04 Virada - É aí que entra",
+      "duration": 75,
+      "theme": "light",
+      "voice": "É aí que entra...",
+      "words": [
+        { "t": "É aí" },
+        { "t": "que" },
+        { "t": "ENTRA...", "accent": true, "br": true, "effect": "dots" }
+      ],
+      "transition": { "type": "stroke", "color": "#F26A1B" }
+    },
+    {
+      "name": "05 Virada - Logo",
+      "duration": 90,
+      "theme": "light",
+      "voice": "...a Juliano Pinturas.",
+      "visual": { "type": "logo" },
+      "transition": { "type": "circle", "color": "#F26A1B" }
+    },
+    {
+      "name": "06 Serviço - Residencial",
+      "duration": 90,
+      "theme": "light",
+      "voice": "Pintura residencial, por dentro e por fora.",
+      "pill": "PINTURA RESIDENCIAL",
+      "visual": { "type": "icon-fill", "icon": "house" }
+    },
+    {
+      "name": "07 Serviço - Predial",
+      "duration": 90,
+      "theme": "light",
+      "voice": "Pintura predial: condomínios, prédios e fachadas.",
+      "pill": "PINTURA PREDIAL",
+      "visual": { "type": "building-floors", "floors": 5 }
+    },
+    {
+      "name": "08 Serviço - Preparação",
+      "duration": 90,
+      "theme": "light",
+      "voice": "Lixamento, massa e correção de trincas.",
+      "words": [
+        { "t": "PREPARAÇÃO", "accent": true },
+        { "t": "completa", "br": true }
+      ],
+      "visual": { "type": "pills", "items": ["Lixamento", "Massa", "Trincas"] }
+    },
+    {
+      "name": "09 Serviço - Tinta",
+      "duration": 90,
+      "theme": "light",
+      "voice": "Tintas de qualidade, que duram anos.",
+      "words": [
+        { "t": "Tinta de" },
+        { "t": "PRIMEIRA", "accent": true, "br": true }
+      ],
+      "visual": { "type": "roller-trail" }
+    },
+    {
+      "name": "10 Serviço - Equipe",
+      "duration": 90,
+      "theme": "light",
+      "voice": "Equipe treinada e com segurança em altura.",
+      "words": [
+        { "t": "Equipe" },
+        { "t": "TREINADA", "accent": true, "br": true }
+      ],
+      "visual": {
+        "type": "check-cards",
+        "items": [
+          { "icon": "helmet", "label": "Treinamento" },
+          { "icon": "harness", "label": "Segurança em altura" }
+        ]
+      }
+    },
+    {
+      "name": "11 Serviço - Obra limpa",
+      "duration": 90,
+      "theme": "light",
+      "voice": "Obra organizada e entregue limpa.",
+      "words": [
+        { "t": "Obra" },
+        { "t": "LIMPA", "accent": true, "br": true }
+      ],
+      "visual": { "type": "sparkles" }
+    },
+    {
+      "name": "12 Serviço - Orçamento",
+      "duration": 90,
+      "theme": "light",
+      "voice": "Orçamento sem compromisso.",
+      "visual": {
+        "type": "app-card",
+        "title": "Solicitar orçamento",
+        "button": "Solicitar orçamento",
+        "done": "Enviado"
+      },
+      "transition": { "type": "stroke", "color": "#F26A1B" }
+    },
+    {
+      "name": "13 Prova - No prazo",
+      "duration": 90,
+      "theme": "light",
+      "voice": "Entregamos no prazo combinado.",
+      "words": [
+        { "t": "No" },
+        { "t": "PRAZO", "accent": true }
+      ],
+      "visual": { "type": "calendar-flip", "day": 15 },
+      "transition": { "type": "circle", "color": "#141414" }
+    },
+    {
+      "name": "14 Prova - Acabamento",
+      "duration": 90,
+      "theme": "dark",
+      "voice": "Acabamento caprichado, do jeito que você quer.",
+      "words": [
+        { "t": "ACABAMENTO", "accent": true },
+        { "t": "perfeito", "br": true }
+      ],
+      "visual": { "type": "brush-reveal" },
+      "transition": { "type": "circle", "color": "#F26A1B" }
+    },
+    {
+      "name": "15 Prova - Cara nova",
+      "duration": 90,
+      "theme": "light",
+      "voice": "Seu imóvel de cara nova e valorizado.",
+      "words": [
+        { "t": "De cara" },
+        { "t": "NOVA", "accent": true, "br": true, "effect": "underline" }
+      ],
+      "transition": { "type": "circle", "color": "#F26A1B" }
+    },
+    {
+      "name": "16 CTA - Orçamento grátis",
+      "duration": 120,
+      "theme": "light",
+      "voice": "Peça seu orçamento grátis.",
+      "size": 130,
+      "words": [
+        { "t": "Peça seu" },
+        { "t": "ORÇAMENTO", "accent": true, "br": true },
+        { "t": "GRÁTIS", "accent": true, "br": true }
+      ],
+      "visual": { "type": "cta-logo" }
+    },
+    {
+      "name": "17 CTA - WhatsApp",
+      "duration": 90,
+      "theme": "light",
+      "voice": "Chama no WhatsApp!",
+      "words": [
+        { "t": "Chama no" },
+        { "t": "WHATSAPP", "accent": true, "br": true }
+      ],
+      "size": 130,
+      "visual": { "type": "whatsapp", "phone": "62 99113-2531" }
+    }
+  ]
+}
