@@ -4,7 +4,7 @@ import { enterStyle } from "../anim";
 import { C, FONT, s, SCENES, T } from "../constants";
 import { Caption } from "../components/Caption";
 import { Icon3D, IconBadge, LineIcon, Logo } from "../components/Icons";
-import { Marmita } from "../components/Marmita";
+import { MarmitaTop as Marmita } from "../components/MarmitaTop";
 import { SceneShell } from "../components/SceneShell";
 
 const L = (sec: number) => s(sec) - SCENES.s1.from;
@@ -13,8 +13,8 @@ const L = (sec: number) => s(sec) - SCENES.s1.from;
 const BADGES: { x: number; y: number; size?: number; node: React.ReactNode }[] = [
   { x: 190, y: 400, node: <LineIcon name="utensils" size={74} /> },
   { x: 890, y: 400, node: <Icon3D src="3d/fire.png" size={96} /> },
-  { x: 170, y: 760, node: <Icon3D src="3d/leafy_green.png" size={96} /> },
-  { x: 910, y: 760, node: <LineIcon name="chef-hat" size={74} /> },
+  { x: 150, y: 790, size: 130, node: <Icon3D src="3d/leafy_green.png" size={84} /> },
+  { x: 930, y: 790, size: 130, node: <LineIcon name="chef-hat" size={64} /> },
   { x: 205, y: 1110, node: <Icon3D src="3d/coin.png" size={92} /> },
   { x: 875, y: 1110, node: <LineIcon name="tag" size={72} /> },
   { x: 380, y: 1200, size: 130, node: <LineIcon name="shopping-bag" size={62} /> },
