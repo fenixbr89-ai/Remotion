@@ -28,20 +28,22 @@ export const Fundo: React.FC<{ tipo?: TipoFundo }> = ({ tipo = "azul" }) => {
       : tipo === "vermelho"
         ? `radial-gradient(circle at 50% 42%, #ff4a4f 0%, ${COR.vermelho} 45%, #9e0f15 100%)`
         : "radial-gradient(circle at 50% 42%, #ffffff 0%, #f3f7fc 55%, #d9e6f5 100%)";
-  const raio = tipo === "branco" ? "rgba(26,138,230,0.06)" : "rgba(255,255,255,0.08)";
+  const brilho = tipo === "branco" ? "rgba(26,138,230,0.10)" : "rgba(255,255,255,0.16)";
+  // dois brilhos suaves que passeiam devagar pela tela inteira
+  const b1x = 30 + Math.sin(frame / 50) * 25;
+  const b1y = 30 + Math.cos(frame / 60) * 15;
+  const b2x = 70 + Math.cos(frame / 55) * 25;
+  const b2y = 75 + Math.sin(frame / 45) * 15;
   return (
-    <AbsoluteFill style={{ background: base, overflow: "hidden" }}>
-      <AbsoluteFill
-        style={{
-          left: -500,
-          right: -500,
-          top: -100,
-          bottom: -100,
-          background: `repeating-conic-gradient(from 0deg at 50% 45%, ${raio} 0deg 8deg, rgba(0,0,0,0) 8deg 20deg)`,
-          rotate: `${frame * 0.15}deg`,
-        }}
-      />
-    </AbsoluteFill>
+    <AbsoluteFill
+      style={{
+        background: [
+          `radial-gradient(circle at ${b1x}% ${b1y}%, ${brilho} 0%, rgba(0,0,0,0) 35%)`,
+          `radial-gradient(circle at ${b2x}% ${b2y}%, ${brilho} 0%, rgba(0,0,0,0) 35%)`,
+          base,
+        ].join(", "),
+      }}
+    />
   );
 };
 
