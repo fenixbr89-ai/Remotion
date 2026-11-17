@@ -68,6 +68,7 @@ export const OfertasVideo: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: COR.azul }}>
       <Audio src={staticFile("narracao.wav")} />
+      <Audio src={staticFile("trilha.wav")} volume={0.22} />
       {seqs}
       {cortes.map((c) => (
         <Transicao key={c} em={c} />
