@@ -108,7 +108,7 @@ const last = words[words.length - 1].fim;
 
 export const demo: VideoDef = {
   words,
-  theme: THEMES.eletrico,
+  theme: THEMES.pb,
   scenes,
   durationInFrames: durationFor(last),
 };

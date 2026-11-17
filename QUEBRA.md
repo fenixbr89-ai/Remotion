@@ -20,5 +20,5 @@
 - `src/quebra/Legendas.tsx` — legenda Pixora (Inter Display SemiBold 56 px, top 1540, palavra por palavra).
 - `src/quebra/timing.ts` — resolve cue words → frames.
 
-Regras: fundo preto + brilho radial; branco + 1 cor de tema + vermelho só para mito/falso; nada de girar/inclinar
+Regras: **preto e branco** (fundo preto, partículas brancas); cor só em detalhes — vermelho = negativo, verde = positivo (ver CLAUDE.md); nada de girar/inclinar
 (só zoom 1→1,03 e pan); nenhuma cena parada > ~4 s; fatos conferidos; final com pergunta.

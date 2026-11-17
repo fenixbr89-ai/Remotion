@@ -5,7 +5,7 @@ import { FONT_SANS, H, W, hashString, rng } from "./theme";
  * canvas fora da tela; os pixels preenchidos viram pontos-alvo.
  * Coordenadas sempre no espaço do vídeo (1080×1920).
  */
-export type Tone = "base" | "theme" | "accent";
+export type Tone = "base" | "theme" | "accent" | "good";
 
 type LayerCommon = {
   tone?: Tone; // cor da camada (padrão: base/branco)
@@ -54,13 +54,13 @@ export type ShapeSpec = {
 export type ShapePoints = {
   xs: Float32Array;
   ys: Float32Array;
-  tone: Uint8Array; // 0 base, 1 theme, 2 accent
+  tone: Uint8Array; // 0 base, 1 theme, 2 accent (vermelho), 3 good (verde)
   cx: number;
   cy: number;
   spin: number;
 };
 
-const TONE_IDX: Record<Tone, number> = { base: 0, theme: 1, accent: 2 };
+const TONE_IDX: Record<Tone, number> = { base: 0, theme: 1, accent: 2, good: 3 };
 const SCALE = 0.5; // amostra em meia resolução
 
 const drawLayer = (ctx: CanvasRenderingContext2D, l: Layer) => {

@@ -20,9 +20,6 @@ import { rays, wave } from "../helpers";
 import { circle, Layer, path, scatter, shape, text, Tone } from "../shapes";
 import { rng, THEMES } from "../theme";
 
-const BLUE = THEMES.eletrico;
-const ORANGE = "#FF8A3D";
-const VIOLET = "#A78BFF";
 const CY = 820;
 
 /* ---------- formas próprias deste vídeo ---------- */
@@ -234,7 +231,6 @@ const scenes: Scene[] = [
   {
     cue: "pôr",
     offset: -0.1,
-    theme: ORANGE,
     shape: shape("sunset1", halfSun(CY + 150, 230), { glow: [540, CY + 60] }),
     overlays: [{ type: "label", text: "pôr do sol", x: 540, y: CY + 260 }],
   },
@@ -346,7 +342,7 @@ const scenes: Scene[] = [
     overlays: [
       { type: "arrow", from: [540, CY - 240], to: [380, CY - 440], tone: "theme" },
       { type: "arrow", from: [540, CY - 240], to: [700, CY - 440], tone: "theme" },
-      { type: "label", text: "onda curta → espalha mais", x: 540, y: CY + 380 },
+      { type: "label", text: "onda curta → espalha mais", x: 540, y: CY + 380, tone: "good" },
     ],
   },
   {
@@ -382,13 +378,11 @@ const scenes: Scene[] = [
   { cue: "espera", offset: -0.2, shape: shape("excl", [text("!", 700, { y: CY })]) },
   {
     cue: "violeta",
-    theme: VIOLET,
     shape: shape("onda-violeta", [wave(140, 940, CY, 70, 90, 11, "theme")]),
     overlays: [{ type: "label", text: "violeta · ~400 nm", x: 540, y: CY - 170, tone: "theme" }],
   },
   {
     cue: "Por",
-    theme: VIOLET,
     shape: shape("q-violeta", [text("?", 700, { y: CY, tone: "theme" })]),
   },
   {
@@ -398,8 +392,8 @@ const scenes: Scene[] = [
       { type: "label", text: "luz que o sol emite", x: 540, y: CY - 330 },
       { type: "label", text: "violeta", x: 160, y: CY + 320, align: "left" },
       { type: "label", text: "vermelho", x: 920, y: CY + 320, align: "right" },
-      { type: "arrow", from: [230, CY - 160], to: [190, CY + 40], at: 0.8 },
-      { type: "label", text: "menos", x: 230, y: CY - 190, at: 0.8 },
+      { type: "arrow", from: [230, CY - 160], to: [190, CY + 40], tone: "accent", at: 0.8 },
+      { type: "label", text: "menos", x: 230, y: CY - 190, tone: "accent", at: 0.8 },
     ],
   },
   {
@@ -409,12 +403,10 @@ const scenes: Scene[] = [
   },
   {
     cue: "pôr",
-    theme: ORANGE,
     shape: shape("sunset2", halfSun(CY + 150, 260), { glow: [540, CY + 60] }),
   },
   {
     cue: "fim",
-    theme: ORANGE,
     shape: shape("terra-tarde", [...earthArc(), circle(140, CY - 140, 60, { tone: "theme" })], {
       glow: [540, CY + 300],
     }),
@@ -425,7 +417,6 @@ const scenes: Scene[] = [
   },
   {
     cue: "atravessa",
-    theme: ORANGE,
     shape: shape("terra-tarde2", [...earthArc(), circle(140, CY - 140, 60, { tone: "theme" })], {
       glow: [540, CY + 300],
     }),
@@ -443,7 +434,6 @@ const scenes: Scene[] = [
   },
   {
     cue: "Sobram",
-    theme: ORANGE,
     shape: shape("sunset3", halfSun(CY + 200, 300), { glow: [540, CY + 100] }),
     overlays: [{ type: "label", text: "laranja + vermelho", x: 540, y: CY + 300, tone: "theme" }],
   },
@@ -463,13 +453,11 @@ const scenes: Scene[] = [
   },
   {
     cue: "Marte",
-    theme: ORANGE,
     shape: shape("marte", [circle(540, CY, 280, { tone: "theme" })]),
     overlays: [{ type: "label", text: "marte", x: 540, y: CY + 400, tone: "theme" }],
   },
   {
     cue: "poeira",
-    theme: ORANGE,
     shape: shape("poeira", [dust(), ...dome(false).slice(1)], { glow: [540, CY + 150] }),
     overlays: [{ type: "label", text: "poeira · céu alaranjado", x: 540, y: CY + 400, tone: "theme" }],
   },
@@ -489,7 +477,7 @@ const scenes: Scene[] = [
 export const ceuAzul: VideoDef = {
   audio: "ceu-azul/narracao.wav",
   words: words as Word[],
-  theme: BLUE,
+  theme: THEMES.pb,
   scenes,
   durationInFrames: durationFor(meta.audioSeconds),
 };

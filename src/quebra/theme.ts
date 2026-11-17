@@ -5,13 +5,20 @@ export const FPS = 60;
 export const W = 1080;
 export const H = 1920;
 
-/** Base sempre branca. Cada vídeo escolhe 1 cor de tema + no máximo 1 destaque. */
+/**
+ * Paleta Quebra Padrão: PRETO E BRANCO. Cor só em detalhes pequenos:
+ * vermelho = coisa negativa (falso, mito, perigo, menos, nunca);
+ * verde = coisa positiva (certo, verdade, mais, sim).
+ */
 export const BASE = "#F4F6FF";
 export const ACCENT_RED = "#FF3B3B";
+export const GOOD_GREEN = "#3DDC84";
 export const BG_TOP = "#0C0A12";
 export const BG = "#000000";
 
 export const THEMES = {
+  pb: BASE, // padrão: preto e branco
+  // as cores abaixo só por pedido explícito — o padrão do canal é preto e branco
   eletrico: "#3DA5FF", // átomos, eletricidade, céu
   energia: "#FFC83D", // energia, sol, calor
   vida: "#3DFF9A", // biologia

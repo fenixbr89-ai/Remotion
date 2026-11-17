@@ -6,7 +6,7 @@ import { Legendas } from "./Legendas";
 import { Overlays } from "./Overlays";
 import { FieldScene, ParticleField, glowAt, useShapes } from "./ParticleField";
 import { resolveScenes, Scene } from "./timing";
-import { ACCENT_RED, BASE, BG, BG_TOP } from "./theme";
+import { ACCENT_RED, BASE, BG, BG_TOP, GOOD_GREEN } from "./theme";
 
 const PAN: Record<NonNullable<Scene["pan"]>, [number, number]> = {
   left: [-36, 0],
@@ -34,14 +34,16 @@ export const QuebraVideo: React.FC<{ def: VideoDef }> = ({ def }) => {
   const zoom = 1 + 0.03 * k;
   const [px, py] = cur.pan ? PAN[cur.pan] : [0, 0];
   const theme = cur.theme ?? def.theme;
-  const colors = { base: BASE, theme, accent: ACCENT_RED };
+  const colors = { base: BASE, theme, accent: ACCENT_RED, good: GOOD_GREEN };
+  // brilho radial: bem sutil quando o tema é branco (padrão preto e branco)
+  const [ga, gb] = theme === BASE ? ["1C", "08"] : ["3A", "14"];
 
   return (
     <AbsoluteFill style={{ background: `linear-gradient(180deg, ${BG_TOP} 0%, ${BG} 55%, ${BG_TOP} 100%)` }}>
       {/* brilho radial atrás do objeto principal */}
       <AbsoluteFill
         style={{
-          background: `radial-gradient(circle 620px at ${g.x}px ${g.y}px, ${theme}3A 0%, ${theme}14 45%, transparent 100%)`,
+          background: `radial-gradient(circle 620px at ${g.x}px ${g.y}px, ${theme}${ga} 0%, ${theme}${gb} 45%, transparent 100%)`,
         }}
       />
       <AbsoluteFill
@@ -50,7 +52,7 @@ export const QuebraVideo: React.FC<{ def: VideoDef }> = ({ def }) => {
           transformOrigin: `${g.x}px ${g.y}px`,
         }}
       >
-        <ParticleField scenes={field} shapes={shapes} count={count} base={BASE} accent={ACCENT_RED} />
+        <ParticleField scenes={field} shapes={shapes} count={count} base={BASE} accent={ACCENT_RED} good={GOOD_GREEN} />
         {resolved.map((s, i) =>
           s.overlays?.length ? (
             <Overlays

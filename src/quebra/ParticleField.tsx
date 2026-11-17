@@ -14,6 +14,7 @@ type Props = {
   count?: number;
   base: string;
   accent: string;
+  good: string;
 };
 
 const easeInOut = (t: number) =>
@@ -63,7 +64,7 @@ export const useShapes = (scenes: FieldScene[], count: number) => {
 
 export const ParticleField: React.FC<
   Props & { shapes: ShapePoints[] }
-> = ({ scenes, shapes, count = 12000, base, accent }) => {
+> = ({ scenes, shapes, count = 12000, base, accent, good }) => {
   const frame = useCurrentFrame();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -106,6 +107,7 @@ export const ParticleField: React.FC<
       hexToRgb(base),
       hexToRgb(theme),
       hexToRgb(accent),
+      hexToRgb(good),
     ];
     const toneCur = tones(scenes[i].theme);
     const tonePrev = tones(scenes[Math.max(0, i - 1)].theme);
@@ -214,7 +216,7 @@ export const ParticleField: React.FC<
     ctx.drawImage(work.small, 0, 0, W, H);
     ctx.drawImage(work.sharp, 0, 0);
     ctx.globalCompositeOperation = "source-over";
-  }, [frame, scenes, shapes, attrs, work, count, base, accent]);
+  }, [frame, scenes, shapes, attrs, work, count, base, accent, good]);
 
   return (
     <canvas

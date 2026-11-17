@@ -6,7 +6,7 @@ import { FONT_MONO, FPS, H, W } from "./theme";
  * Elementos auxiliares em linha fina e rótulos mono maiúsculos.
  * Tempos (`at`) em segundos relativos ao início da cena.
  */
-type Tone = "base" | "theme" | "accent";
+type Tone = "base" | "theme" | "accent" | "good";
 type Base = { at?: number; tone?: Tone };
 
 export type Overlay = Base &
@@ -162,7 +162,7 @@ const One: React.FC<{
         <g opacity={opacity}>
           <path d={arcPath(o.x, o.y, o.r, s, e)} stroke={color} strokeWidth={2.5} fill="none" />
           {ticks}
-          <path d={`M ${o.x} ${o.y} L ${nx} ${ny}`} stroke={colors.accent} strokeWidth={3.5} strokeLinecap="round" />
+          <path d={`M ${o.x} ${o.y} L ${nx} ${ny}`} stroke={color} strokeWidth={3.5} strokeLinecap="round" />
           <circle cx={o.x} cy={o.y} r={7} fill={color} />
           {o.label ? (
             <text x={o.x} y={o.y + o.r * 0.55} textAnchor="middle" fill={color} style={{ fontFamily: FONT_MONO, fontSize: 26, letterSpacing: "0.16em" }}>
