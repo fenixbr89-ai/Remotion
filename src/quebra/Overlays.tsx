@@ -6,7 +6,7 @@ import { FONT_MONO, FPS, H, W } from "./theme";
  * Elementos auxiliares em linha fina e rótulos mono maiúsculos.
  * Tempos (`at`) em segundos relativos ao início da cena.
  */
-type Tone = "base" | "theme" | "accent" | "good";
+import type { Tone } from "./shapes";
 type Base = { at?: number; tone?: Tone };
 
 export type Overlay = Base &

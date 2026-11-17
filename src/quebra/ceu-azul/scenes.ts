@@ -38,7 +38,7 @@ const draw = (fn: (c: CanvasRenderingContext2D) => void, tone: Tone = "base", we
 });
 
 /** Sol cortado pelo horizonte. */
-const halfSun = (y: number, r: number, tone: Tone = "theme"): Layer[] => [
+const halfSun = (y: number, r: number, rayTone: Tone = "yellow"): Layer[] => [
   draw((c) => {
     c.beginPath();
     c.rect(0, 0, 1080, y - 12);
@@ -46,7 +46,7 @@ const halfSun = (y: number, r: number, tone: Tone = "theme"): Layer[] => [
     c.beginPath();
     c.arc(540, y, r, 0, Math.PI * 2);
     c.fill();
-  }, tone),
+  }),
   draw((c) => {
     c.lineWidth = 12;
     c.beginPath();
@@ -63,7 +63,7 @@ const halfSun = (y: number, r: number, tone: Tone = "theme"): Layer[] => [
       c.lineTo(540 + Math.cos(a) * (r + 130), y + Math.sin(a) * (r + 130));
       c.stroke();
     }
-  }, tone, 0.6),
+  }, rayTone, 0.6),
 ];
 
 const prismPath = "M 0 260 L 150 0 L 300 260 Z";
@@ -86,7 +86,7 @@ const fanOut = (): Layer[] =>
       c.moveTo(610, CY + 30);
       c.lineTo(990, CY - 40 + k * 46);
       c.stroke();
-    }, k >= 4 ? "theme" : "base", 0.5),
+    }, (["accent", "yellow", "good", "blue", "blue", "base"] as Tone[])[k], 0.5),
   );
 
 const molecule = (x: number, y: number, r: number, tone: Tone = "base"): Layer[] => [
@@ -94,7 +94,7 @@ const molecule = (x: number, y: number, r: number, tone: Tone = "base"): Layer[]
   circle(x + r * 0.75, y, r, { tone }),
 ];
 
-const earthArc = (tone: Tone = "theme"): Layer[] => [
+const earthArc = (tone: Tone = "blue"): Layer[] => [
   circle(540, CY + 1000, 640, { stroke: 14 }),
   circle(540, CY + 1000, 760, { stroke: 30, tone }),
 ];
@@ -161,7 +161,7 @@ const solarCurve = (): Layer[] => [
       else c.lineTo(x, y);
     }
     c.stroke();
-  }, "theme"),
+  }),
   draw((c) => {
     c.lineWidth = 8;
     c.beginPath();
@@ -208,7 +208,7 @@ const beamScatter = (): Layer[] => [
       c.arc(x, y, 5 + r() * 8, 0, Math.PI * 2);
       c.fill();
     }
-  }, "theme"),
+  }, "blue"),
 ];
 
 const dust = (): Layer =>
@@ -221,7 +221,7 @@ const dust = (): Layer =>
       c.arc(540 + Math.cos(a) * d, CY + 300 + Math.sin(a) * d, 4 + r() * 7, 0, Math.PI * 2);
       c.fill();
     }
-  }, "theme");
+  }, "yellow");
 
 /* ---------- cenas (cada uma entra na palavra `cue`) ---------- */
 
@@ -236,7 +236,7 @@ const scenes: Scene[] = [
   },
   {
     cue: "Tudo",
-    shape: shape("sol", [circle(540, CY, 170), rays(540, CY, 230, 330, 12)]),
+    shape: shape("sol", [circle(540, CY, 170), rays(540, CY, 230, 330, 12, 14, "yellow")]),
     overlays: [{ type: "label", text: "luz do sol", x: 540, y: CY + 440 }],
   },
   {
@@ -271,7 +271,7 @@ const scenes: Scene[] = [
     shape: shape("prisma-arco", [prism(), beamIn(), ...fanOut()]),
     overlays: [
       { type: "label", text: "luz branca", x: 90, y: CY + 150, align: "left" },
-      { type: "label", text: "arco-íris", x: 990, y: CY + 300, align: "right", tone: "theme", at: 0.7 },
+      { type: "label", text: "arco-íris", x: 990, y: CY + 300, align: "right", at: 0.7 },
     ],
   },
   {
@@ -290,9 +290,9 @@ const scenes: Scene[] = [
   },
   {
     cue: "azul",
-    shape: shape("ondas", [wave(140, 940, CY - 170, 70, 110, 11, "theme"), wave(140, 940, CY + 190, 70, 290, 11)]),
+    shape: shape("ondas", [wave(140, 940, CY - 170, 70, 110, 11, "blue"), wave(140, 940, CY + 190, 70, 290, 11)]),
     overlays: [
-      { type: "label", text: "azul · ~450 nm", x: 140, y: CY - 290, align: "left", tone: "theme" },
+      { type: "label", text: "azul · ~450 nm", x: 140, y: CY - 290, align: "left", tone: "blue" },
       { type: "label", text: "vermelho · ~700 nm", x: 140, y: CY + 70, align: "left" },
     ],
   },
@@ -300,7 +300,7 @@ const scenes: Scene[] = [
     cue: "Agora",
     shape: shape("terra", earthArc(), { glow: [540, CY + 300] }),
     overlays: [
-      { type: "label", text: "atmosfera", x: 540, y: CY + 100, tone: "theme" },
+      { type: "label", text: "atmosfera", x: 540, y: CY + 100, tone: "blue" },
       { type: "arrow", from: [150, 300], to: [420, CY - 30], at: 0.4 },
       { type: "label", text: "luz do sol", x: 150, y: 270, align: "left", at: 0.4 },
     ],
@@ -336,12 +336,12 @@ const scenes: Scene[] = [
   {
     cue: "Quanto",
     shape: shape("curta-espalha", [
-      wave(140, 940, CY - 170, 60, 110, 11, "theme"),
+      wave(140, 940, CY - 170, 60, 110, 11, "blue"),
       wave(140, 940, CY + 190, 60, 290, 11),
     ]),
     overlays: [
-      { type: "arrow", from: [540, CY - 240], to: [380, CY - 440], tone: "theme" },
-      { type: "arrow", from: [540, CY - 240], to: [700, CY - 440], tone: "theme" },
+      { type: "arrow", from: [540, CY - 240], to: [380, CY - 440], tone: "blue" },
+      { type: "arrow", from: [540, CY - 240], to: [700, CY - 440], tone: "blue" },
       { type: "label", text: "onda curta → espalha mais", x: 540, y: CY + 380, tone: "good" },
     ],
   },
@@ -364,15 +364,15 @@ const scenes: Scene[] = [
     cue: "Então",
     shape: shape("ceu-linha", dome(false), { glow: [540, CY + 150] }),
     overlays: [
-      { type: "arrow", from: [260, CY + 20], to: [500, CY + 240], at: 0.4 },
-      { type: "arrow", from: [540, CY - 100], to: [540, CY + 200], at: 0.5 },
-      { type: "arrow", from: [820, CY + 20], to: [580, CY + 240], at: 0.6 },
+      { type: "arrow", from: [260, CY + 20], to: [500, CY + 240], tone: "blue", at: 0.4 },
+      { type: "arrow", from: [540, CY - 100], to: [540, CY + 200], tone: "blue", at: 0.5 },
+      { type: "arrow", from: [820, CY + 20], to: [580, CY + 240], tone: "blue", at: 0.6 },
     ],
   },
   {
     cue: "tem",
     shape: shape("ceu-azul", dome(true), { glow: [540, CY + 150], edge: 0.35 }),
-    overlays: [{ type: "label", text: "luz azul espalhada", x: 540, y: CY + 400, tone: "theme" }],
+    overlays: [{ type: "label", text: "luz azul espalhada", x: 540, y: CY + 400, tone: "blue" }],
     pan: "up",
   },
   { cue: "espera", offset: -0.2, shape: shape("excl", [text("!", 700, { y: CY })]) },
@@ -407,7 +407,7 @@ const scenes: Scene[] = [
   },
   {
     cue: "fim",
-    shape: shape("terra-tarde", [...earthArc(), circle(140, CY - 140, 60, { tone: "theme" })], {
+    shape: shape("terra-tarde", [...earthArc(), circle(140, CY - 140, 60, { tone: "yellow" })], {
       glow: [540, CY + 300],
     }),
     overlays: [
@@ -417,7 +417,7 @@ const scenes: Scene[] = [
   },
   {
     cue: "atravessa",
-    shape: shape("terra-tarde2", [...earthArc(), circle(140, CY - 140, 60, { tone: "theme" })], {
+    shape: shape("terra-tarde2", [...earthArc(), circle(140, CY - 140, 60, { tone: "yellow" })], {
       glow: [540, CY + 300],
     }),
     overlays: [
@@ -429,13 +429,13 @@ const scenes: Scene[] = [
   {
     cue: "caminho",
     shape: shape("feixe-espalha", beamScatter()),
-    overlays: [{ type: "label", text: "azul espalhado no caminho", x: 540, y: CY + 520, tone: "theme" }],
+    overlays: [{ type: "label", text: "azul espalhado no caminho", x: 540, y: CY + 520, tone: "blue" }],
     pan: "right",
   },
   {
     cue: "Sobram",
     shape: shape("sunset3", halfSun(CY + 200, 300), { glow: [540, CY + 100] }),
-    overlays: [{ type: "label", text: "laranja + vermelho", x: 540, y: CY + 300, tone: "theme" }],
+    overlays: [{ type: "label", text: "laranja + vermelho", x: 540, y: CY + 300, tone: "yellow" }],
   },
   {
     cue: "sem",
@@ -459,17 +459,17 @@ const scenes: Scene[] = [
   {
     cue: "poeira",
     shape: shape("poeira", [dust(), ...dome(false).slice(1)], { glow: [540, CY + 150] }),
-    overlays: [{ type: "label", text: "poeira · céu alaranjado", x: 540, y: CY + 400, tone: "theme" }],
+    overlays: [{ type: "label", text: "poeira · céu alaranjado", x: 540, y: CY + 400, tone: "yellow" }],
   },
   {
     cue: "e",
     skip: 0,
-    shape: shape("sunset-marte", halfSun(CY + 150, 230), { glow: [540, CY + 60] }),
-    overlays: [{ type: "label", text: "pôr do sol em marte", x: 540, y: CY + 260, tone: "theme" }],
+    shape: shape("sunset-marte", halfSun(CY + 150, 230, "blue"), { glow: [540, CY + 60] }),
+    overlays: [{ type: "label", text: "pôr do sol em marte", x: 540, y: CY + 260, tone: "blue" }],
   },
   {
     cue: "Qual",
-    shape: shape("fim", [text("?", 640, { y: CY - 40 }), circle(540, CY + 330, 26, { tone: "theme" })]),
+    shape: shape("fim", [text("?", 640, { y: CY - 40 }), circle(540, CY + 330, 26, { tone: "blue" })]),
     overlays: [{ type: "label", text: "comenta aí", x: 540, y: CY + 450, tone: "theme" }],
   },
 ];

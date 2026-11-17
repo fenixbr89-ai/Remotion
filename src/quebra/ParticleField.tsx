@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { continueRender, delayRender, useCurrentFrame } from "remotion";
-import { buildShape, ShapePoints, ShapeSpec } from "./shapes";
+import { buildShape, ShapePoints, ShapeSpec, Tone, TONES } from "./shapes";
 import { FPS, H, W, hexToRgb, loadQuebraFonts, rng } from "./theme";
 
 export const MORPH_S = 0.6; // duração do morph de cada partícula
@@ -12,9 +12,8 @@ export type FieldScene = { from: number; shape: ShapeSpec; theme: string };
 type Props = {
   scenes: FieldScene[]; // ordenadas por `from` (frames)
   count?: number;
-  base: string;
-  accent: string;
-  good: string;
+  /** cor de cada Tone (exceto "theme", que vem da cena) */
+  palette: Record<Exclude<Tone, "theme">, string>;
 };
 
 const easeInOut = (t: number) =>
@@ -64,7 +63,7 @@ export const useShapes = (scenes: FieldScene[], count: number) => {
 
 export const ParticleField: React.FC<
   Props & { shapes: ShapePoints[] }
-> = ({ scenes, shapes, count = 12000, base, accent, good }) => {
+> = ({ scenes, shapes, count = 12000, palette }) => {
   const frame = useCurrentFrame();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -103,12 +102,8 @@ export const ParticleField: React.FC<
     const local = (frame - scenes[i].from) / FPS;
     const sec = frame / FPS;
 
-    const tones = (theme: string) => [
-      hexToRgb(base),
-      hexToRgb(theme),
-      hexToRgb(accent),
-      hexToRgb(good),
-    ];
+    const tones = (theme: string) =>
+      TONES.map((t) => hexToRgb(t === "theme" ? theme : palette[t]));
     const toneCur = tones(scenes[i].theme);
     const tonePrev = tones(scenes[Math.max(0, i - 1)].theme);
 
@@ -216,7 +211,7 @@ export const ParticleField: React.FC<
     ctx.drawImage(work.small, 0, 0, W, H);
     ctx.drawImage(work.sharp, 0, 0);
     ctx.globalCompositeOperation = "source-over";
-  }, [frame, scenes, shapes, attrs, work, count, base, accent, good]);
+  }, [frame, scenes, shapes, attrs, work, count, palette]);
 
   return (
     <canvas

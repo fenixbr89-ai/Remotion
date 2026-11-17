@@ -6,13 +6,15 @@ export const W = 1080;
 export const H = 1920;
 
 /**
- * Paleta Quebra Padrão: PRETO E BRANCO. Cor só em detalhes pequenos:
- * vermelho = coisa negativa (falso, mito, perigo, menos, nunca);
- * verde = coisa positiva (certo, verdade, mais, sim).
+ * Paleta Quebra Padrão: base PRETO E BRANCO, com detalhezinhos coloridos
+ * quando a cor ajuda a explicar (rótulo, seta, raio, pontinho — nunca a cena toda):
+ * vermelho = negativo · verde = positivo · azul e amarelo = detalhes do assunto.
  */
 export const BASE = "#F4F6FF";
 export const ACCENT_RED = "#FF3B3B";
 export const GOOD_GREEN = "#3DDC84";
+export const DETAIL_BLUE = "#3DA5FF";
+export const DETAIL_YELLOW = "#FFC83D";
 export const BG_TOP = "#0C0A12";
 export const BG = "#000000";
 

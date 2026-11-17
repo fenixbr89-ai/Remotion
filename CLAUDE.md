@@ -3,12 +3,14 @@
 Leia também `QUEBRA.md` (fluxo e peças do motor de partículas em `src/quebra/`).
 
 ## Paleta — REGRA FIXA (pedido do dono do canal)
-- **Os vídeos são PRETO E BRANCO.** Fundo preto, partículas, linhas e rótulos em branco.
-- Cor só em **detalhes pequenos**, nunca no objeto principal inteiro nem na cena toda:
-  - **Vermelho** (`tone: "accent"`) = coisa **negativa**: falso, mito, erro, perigo, "menos", "nunca".
-  - **Verde** (`tone: "good"`) = coisa **positiva**: certo, verdade, "mais", "sim".
-- Nada de cor de tema (azul, laranja, violeta etc.), mesmo que o assunto seja uma cor
-  (ex.: "céu azul" continua preto e branco). Use `theme: THEMES.pb`.
+- **Base PRETO E BRANCO**: fundo preto; o objeto principal, linhas e rótulos em branco na maior parte.
+- **Mas não é tudo P&B**: use **detalhezinhos coloridos** sempre que a cor ajudar a explicar —
+  um rótulo, uma seta, raios, pontinhos, uma onda específica, um anel. Nunca a cena inteira colorida.
+- Cores permitidas nos detalhes (tones em `src/quebra/shapes.ts`):
+  - **Vermelho** (`"accent"`) = coisa **negativa**: falso, mito, erro, perigo, "menos", "nunca".
+  - **Verde** (`"good"`) = coisa **positiva**: certo, verdade, "mais", "sim".
+  - **Azul** (`"blue"`) e **amarelo** (`"yellow"`) = detalhes ligados ao assunto (ex.: luz azul, raios do Sol).
+- Não usar outras cores (laranja, violeta etc.) nem cor de tema na cena toda. `theme: THEMES.pb`.
 
 ## Outras regras do canal
 - 1080×1920, 60 fps, duração = narração + 1,5 s (sempre > 1 min).

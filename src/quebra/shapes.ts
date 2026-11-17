@@ -5,7 +5,7 @@ import { FONT_SANS, H, W, hashString, rng } from "./theme";
  * canvas fora da tela; os pixels preenchidos viram pontos-alvo.
  * Coordenadas sempre no espaço do vídeo (1080×1920).
  */
-export type Tone = "base" | "theme" | "accent" | "good";
+export type Tone = "base" | "theme" | "accent" | "good" | "blue" | "yellow";
 
 type LayerCommon = {
   tone?: Tone; // cor da camada (padrão: base/branco)
@@ -54,13 +54,15 @@ export type ShapeSpec = {
 export type ShapePoints = {
   xs: Float32Array;
   ys: Float32Array;
-  tone: Uint8Array; // 0 base, 1 theme, 2 accent (vermelho), 3 good (verde)
+  tone: Uint8Array; // índice em TONES
   cx: number;
   cy: number;
   spin: number;
 };
 
-const TONE_IDX: Record<Tone, number> = { base: 0, theme: 1, accent: 2, good: 3 };
+/** Ordem das cores passadas ao ParticleField (`palette`). */
+export const TONES: Tone[] = ["base", "theme", "accent", "good", "blue", "yellow"];
+const TONE_IDX = Object.fromEntries(TONES.map((t, i) => [t, i])) as Record<Tone, number>;
 const SCALE = 0.5; // amostra em meia resolução
 
 const drawLayer = (ctx: CanvasRenderingContext2D, l: Layer) => {
