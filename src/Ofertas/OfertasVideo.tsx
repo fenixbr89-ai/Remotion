@@ -3,14 +3,29 @@ import "@fontsource/poppins/700.css";
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, Sequence, useCurrentFrame } from "remotion";
 import { COR } from "./config";
-import { Abertura, DUR_ABERTURA, DUR_FINAL, DUR_GRADE, DUR_PRODUTOS, Final, Grade, Produtos } from "./Cenas";
+import {
+  Abertura,
+  ConfiraPrecos,
+  DUR_ABERTURA,
+  DUR_CONFIRA,
+  DUR_ENCONTRA,
+  DUR_FINAL,
+  DUR_PRODUTOS,
+  DUR_TEM_MAIS,
+  Final,
+  Produtos,
+  TemMais,
+  VoceEncontra,
+} from "./Cenas";
 
 // Ordem e duração das cenas (frames a 30fps)
 export const CENAS = [
   { nome: "Abertura", dur: DUR_ABERTURA, C: Abertura },
+  { nome: "Você encontra", dur: DUR_ENCONTRA, C: VoceEncontra },
+  { nome: "Confira os preços", dur: DUR_CONFIRA, C: ConfiraPrecos },
   { nome: "Produtos", dur: DUR_PRODUTOS, C: Produtos },
-  { nome: "Imperdíveis", dur: DUR_GRADE, C: Grade },
-  { nome: "Final", dur: DUR_FINAL, C: Final },
+  { nome: "E tem mais", dur: DUR_TEM_MAIS, C: TemMais },
+  { nome: "Imperdíveis + sacola + final", dur: DUR_FINAL, C: Final },
 ];
 
 export const DURACAO_TOTAL = CENAS.reduce((s, c) => s + c.dur, 0);

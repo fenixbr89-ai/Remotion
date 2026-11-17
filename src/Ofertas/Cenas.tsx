@@ -1,45 +1,171 @@
 import React from "react";
 import { AbsoluteFill, Easing, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { CHAMADA, COR, FONTE_TITULO, PRODUTOS, VALIDADE, WHATSAPP } from "./config";
-import { clamp, Fundo, Logo, Preco, Selo, Tag, Texto, usePop } from "./ui";
+import { COR, FONTE_TEXTO, FONTE_TITULO, PRODUTOS, VALIDADE, WHATSAPP } from "./config";
+import { clamp, Estouro, Fundo, Logo, Palavras, Preco, Selo, Tag, useOut, usePop } from "./ui";
+
+const suave = Easing.bezier(0.65, 0, 0.35, 1);
 
 // Linha centralizada numa altura fixa
-const Linha: React.FC<{ y: number; children: React.ReactNode }> = ({ y, children }) => (
-  <div style={{ position: "absolute", left: 0, right: 0, top: y, display: "flex", justifyContent: "center" }}>
+const Linha: React.FC<{ y: number; children: React.ReactNode; gap?: number }> = ({ y, children, gap }) => (
+  <div
+    style={{
+      position: "absolute",
+      left: 0,
+      right: 0,
+      top: y,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      gap,
+    }}
+  >
     {children}
   </div>
 );
 
-// ================= 1. ABERTURA (2,5s) =================
-export const DUR_ABERTURA = 75;
+// Selo que entra grande no centro e depois sobe pequeno para o topo
+const SeloQueSobe: React.FC<{ entra: number; sobe: number; yCentro: number; saida?: number }> = ({
+  entra,
+  sobe,
+  yCentro,
+  saida,
+}) => {
+  const frame = useCurrentFrame();
+  const p = usePop(entra, 10);
+  const o = useOut(saida ?? 99999);
+  const t = interpolate(frame, [sobe, sobe + 14], [0, 1], { ...clamp, easing: suave });
+  return (
+    <Linha y={interpolate(t, [0, 1], [yCentro, 60])}>
+      <div style={{ scale: String(p * o * interpolate(t, [0, 1], [1, 0.44])), transformOrigin: "top center" }}>
+        <Selo width={800} />
+      </div>
+    </Linha>
+  );
+};
+
+// ================= 1. ABERTURA (azul) =================
+export const DUR_ABERTURA = 150;
 
 export const Abertura: React.FC = () => {
-  const sai = DUR_ABERTURA - 10;
+  const frame = useCurrentFrame();
+  const sai = 110;
   return (
     <AbsoluteFill>
-      <Fundo />
-      <Linha y={150}>
-        <Logo width={480} delay={0} saida={sai} />
+      <Fundo tipo="azul" />
+      <SeloQueSobe entra={4} sobe={40} yCentro={520} />
+      <Linha y={540}>
+        <Palavras texto="é dia de aproveitar" delay={52} size={70} saida={sai} />
       </Linha>
-      <Linha y={560}>
-        <Selo width={860} delay={6} saida={sai} />
-      </Linha>
-      <Linha y={1420}>
-        <Tag bg={COR.vermelho} delay={20} size={120} saida={sai}>
-          {CHAMADA}
+      <Linha y={660}>
+        <Tag bg={COR.vermelho} delay={66} size={170} saida={sai}>
+          OFERTAS
         </Tag>
       </Linha>
-      <Linha y={1610}>
-        <Texto delay={28} size={50} saida={sai}>
-          Carnes de qualidade e procedência
-        </Texto>
+      <Linha y={890}>
+        <Tag bg={COR.branco} cor={COR.marinho} delay={80} size={140} saida={sai + 2}>
+          ESPECIAIS!
+        </Tag>
       </Linha>
+      {frame > sai ? (
+        <Linha y={680}>
+          <Logo width={780} delay={sai + 6} />
+        </Linha>
+      ) : null}
     </AbsoluteFill>
   );
 };
 
-// ================= 2. PRODUTOS =================
-export const POR_PRODUTO = 50;
+// ================= 2. VOCÊ ENCONTRA (branco) =================
+export const DUR_ENCONTRA = 140;
+
+const ItemLista: React.FC<{ y: number; delay: number; texto: string; bg: string; img: string }> = ({
+  y,
+  delay,
+  texto,
+  bg,
+  img,
+}) => {
+  const p = usePop(delay + 5, 12);
+  return (
+    <Linha y={y} gap={36}>
+      <Tag bg={bg} delay={delay} size={100}>
+        {texto}
+      </Tag>
+      <Img
+        src={staticFile(img)}
+        style={{ width: 250, height: 200, objectFit: "contain", scale: String(p), filter: "drop-shadow(0 12px 14px rgba(0,0,0,0.3))" }}
+      />
+    </Linha>
+  );
+};
+
+export const VoceEncontra: React.FC = () => (
+  <AbsoluteFill>
+    <Fundo tipo="branco" />
+    <Linha y={360}>
+      <Palavras texto="Na nossa" delay={2} cor={COR.marinho} size={74} saida={38} />
+    </Linha>
+    <SeloQueSobe entra={8} sobe={40} yCentro={500} />
+    <Linha y={470}>
+      <Palavras texto="você encontra" delay={52} cor={COR.marinho} size={74} />
+    </Linha>
+    <ItemLista y={620} delay={64} texto="PERNIL" bg={COR.vermelho} img="pernil-com-osso.png" />
+    <ItemLista y={880} delay={76} texto="COSTELINHA" bg={COR.azul} img="costelinha.png" />
+    <ItemLista y={1140} delay={88} texto="LOMBO" bg={COR.azul} img="lombo.png" />
+    <Linha y={1420}>
+      <Tag bg={COR.marinho} delay={102} size={90}>
+        fresquinhos!
+      </Tag>
+    </Linha>
+  </AbsoluteFill>
+);
+
+// ================= 3. CONFIRA OS PREÇOS (vermelho) =================
+export const DUR_CONFIRA = 85;
+
+const Etiqueta: React.FC<{ delay: number }> = ({ delay }) => {
+  const frame = useCurrentFrame();
+  const p = usePop(delay, 9);
+  const flutua = Math.sin((frame - delay) / 8) * 12;
+  return (
+    <svg
+      viewBox="0 0 200 300"
+      style={{ width: 240, scale: String(p), translate: `0px ${flutua}px`, filter: "drop-shadow(0 14px 16px rgba(0,0,0,0.3))" }}
+    >
+      <path d="M100 0 L100 40" stroke={COR.branco} strokeWidth="6" />
+      <path d="M40 80 L100 40 L160 80 L160 280 Q160 295 145 295 L55 295 Q40 295 40 280 Z" fill={COR.branco} />
+      <circle cx="100" cy="85" r="12" fill={COR.vermelho} />
+      <text x="100" y="230" textAnchor="middle" fontSize="130" fontWeight="800" fill={COR.vermelho} fontFamily={FONTE_TITULO}>
+        $
+      </text>
+    </svg>
+  );
+};
+
+export const ConfiraPrecos: React.FC = () => (
+  <AbsoluteFill>
+    <Fundo tipo="vermelho" />
+    <Linha y={420}>
+      <Palavras texto="Confira" delay={4} size={74} />
+    </Linha>
+    <Linha y={540}>
+      <Tag bg={COR.branco} cor={COR.vermelho} delay={14} size={150}>
+        OS PREÇOS
+      </Tag>
+    </Linha>
+    <Linha y={760}>
+      <Tag bg={COR.marinho} delay={26} size={140}>
+        DO DIA!
+      </Tag>
+    </Linha>
+    <Linha y={1020}>
+      <Etiqueta delay={34} />
+    </Linha>
+  </AbsoluteFill>
+);
+
+// ================= 4. PRODUTOS um a um (azul) =================
+export const POR_PRODUTO = 90; // 3 segundos cada
 export const DUR_PRODUTOS = PRODUTOS.length * POR_PRODUTO;
 
 export const Produtos: React.FC = () => {
@@ -51,114 +177,189 @@ export const Produtos: React.FC = () => {
   const prod = PRODUTOS[idx];
   const ultimo = idx === PRODUTOS.length - 1;
 
-  // produto entra pela direita e sai pela esquerda
-  const entra = interpolate(local, [0, 12], [1, 0], { ...clamp, easing: Easing.bezier(0.16, 1, 0.3, 1) });
-  const sai = ultimo
-    ? 0
-    : interpolate(local, [POR_PRODUTO - 8, POR_PRODUTO], [0, 1], { ...clamp, easing: Easing.bezier(0.7, 0, 0.84, 0) });
-  const nome = spring({ frame: local - 6, fps, config: { damping: 14 } });
-  const preco = spring({ frame: local - 10, fps, config: { damping: 10 } });
+  const entra = spring({ frame: local - 2, fps, config: { damping: 12 } });
+  const sai = ultimo ? 0 : interpolate(local, [POR_PRODUTO - 9, POR_PRODUTO], [0, 1], clamp);
+  const nome = spring({ frame: local - 8, fps, config: { damping: 14 } });
+  const preco = spring({ frame: local - 16, fps, config: { damping: 8 } });
+  // pulso no preço no meio do tempo
+  const pulso = interpolate(local, [50, 56, 64], [1, 1.12, 1], clamp);
+  // movimento contínuo do produto
+  const flutua = Math.sin(local / 12) * 10;
+  const zoom = interpolate(local, [0, POR_PRODUTO], [1, 1.07]);
 
   return (
     <AbsoluteFill>
-      <Fundo />
-      <Linha y={50}>
-        <Selo width={340} delay={0} />
+      <Fundo tipo="azul" />
+      <Linha y={40}>
+        <div style={{ scale: String(card) }}>
+          <Selo width={360} />
+        </div>
       </Linha>
 
-      {/* cartão branco */}
+      {/* cartão com moldura vermelha */}
       <div
         style={{
           position: "absolute",
-          left: 90,
-          top: 430,
-          width: 900,
+          left: 100,
+          top: 410,
+          width: 880,
           height: 960,
-          borderRadius: 56,
-          background: "linear-gradient(180deg, #ffffff 0%, #eef4fb 100%)",
-          boxShadow: "0 30px 70px rgba(0,0,0,0.35)",
+          borderRadius: 60,
+          background: COR.vermelho,
+          padding: 20,
           scale: String(card),
-          overflow: "hidden",
+          boxShadow: "0 18px 0 rgba(0,0,0,0.15), 0 30px 60px rgba(0,0,0,0.35)",
         }}
       >
-        <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: 22, background: COR.vermelho }} />
-        <Img
-          src={staticFile(prod.imagem)}
+        <div
           style={{
-            position: "absolute",
-            left: "50%",
-            top: 400,
-            width: 700,
-            height: 560,
-            objectFit: "contain",
-            translate: `calc(-50% + ${entra * 900 - sai * 900}px) -50%`,
-            filter: "drop-shadow(0 20px 22px rgba(0,0,0,0.3))",
+            width: "100%",
+            height: "100%",
+            borderRadius: 44,
+            background: "radial-gradient(circle at 50% 40%, #ffffff 0%, #f1f6fc 65%, #dbe7f5 100%)",
+            position: "relative",
+            overflow: "hidden",
           }}
-        />
+        >
+          {/* sombra azul sob o produto */}
+          <div
+            style={{
+              position: "absolute",
+              left: 170,
+              right: 170,
+              top: 620,
+              height: 70,
+              borderRadius: "50%",
+              background: COR.azulEscuro,
+              opacity: 0.85,
+              filter: "blur(4px)",
+              scale: `${entra * (1 - sai)}`,
+            }}
+          />
+          <Img
+            src={staticFile(prod.imagem)}
+            style={{
+              position: "absolute",
+              left: "50%",
+              top: 390,
+              width: 680,
+              height: 520,
+              objectFit: "contain",
+              translate: `-50% calc(-50% + ${flutua}px)`,
+              scale: String(entra * zoom * (1 + sai * 0.5)),
+              rotate: `${(1 - entra) * -20}deg`,
+              opacity: 1 - sai,
+              filter: `blur(${sai * 16}px) drop-shadow(0 18px 20px rgba(0,0,0,0.3))`,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              left: 20,
+              right: 20,
+              top: 720,
+              textAlign: "center",
+              fontFamily: FONTE_TITULO,
+              fontWeight: 800,
+              fontSize: 100,
+              lineHeight: 1,
+              color: COR.marinho,
+              opacity: 1 - sai,
+              scale: String(nome),
+            }}
+          >
+            {prod.nome}
+          </div>
+        </div>
+
+        {/* preço com estouro amarelo */}
         <div
           style={{
             position: "absolute",
-            left: 30,
-            right: 30,
-            top: 720,
-            textAlign: "center",
-            fontFamily: FONTE_TITULO,
-            fontWeight: 800,
-            fontSize: 92,
-            lineHeight: 1,
-            color: COR.marinho,
-            opacity: nome * (1 - sai),
-            translate: `0px ${(1 - nome) * 30}px`,
+            right: -50,
+            top: -80,
+            width: 420,
+            height: 420,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            scale: String(preco * pulso * (1 - sai)),
           }}
         >
-          {prod.nome}
+          <div style={{ position: "absolute" }}>
+            <Estouro size={420} />
+          </div>
+          <Preco preco={prod.preco} unidade={prod.unidade} size={150} style={{ position: "relative" }} />
         </div>
       </div>
 
-      {/* preço sobre a borda de baixo do cartão */}
-      <Linha y={1290}>
-        <div style={{ scale: String(preco * (1 - sai) * card) }}>
-          <Preco preco={prod.preco} unidade={prod.unidade} size={190} />
+      <Linha y={1440}>
+        <div
+          style={{
+            fontFamily: FONTE_TEXTO,
+            fontWeight: 700,
+            fontSize: 42,
+            color: COR.marinho,
+            background: COR.branco,
+            padding: "12px 36px",
+            borderRadius: 40,
+            scale: String(card),
+            boxShadow: "0 10px 24px rgba(0,0,0,0.25)",
+          }}
+        >
+          Ofertas válidas para {VALIDADE}
         </div>
       </Linha>
-
-      <Linha y={1640}>
-        <Logo width={250} delay={4} />
+      <Linha y={1590}>
+        <Logo width={300} delay={6} />
       </Linha>
     </AbsoluteFill>
   );
 };
 
-// ================= 3. GRADE "IMPERDÍVEIS" =================
-export const DUR_GRADE = 95;
+// ================= 5. E TEM MAIS! (vermelho) =================
+export const DUR_TEM_MAIS = 45;
+
+export const TemMais: React.FC = () => (
+  <AbsoluteFill>
+    <Fundo tipo="vermelho" />
+    <Linha y={840}>
+      <Tag bg={COR.branco} cor={COR.vermelho} delay={2} size={170} saida={36}>
+        E TEM MAIS!
+      </Tag>
+    </Linha>
+  </AbsoluteFill>
+);
+
+// ================= 6. GRADE + SACOLA + FINAL (azul) =================
+export const DUR_FINAL = 330;
 
 const MiniCard: React.FC<{ i: number; delay: number }> = ({ i, delay }) => {
-  const p = usePop(delay, 12);
+  const p = usePop(delay, 11);
   const prod = PRODUTOS[i];
   return (
     <div
       style={{
-        width: 440,
-        height: 330,
+        width: 420,
+        height: 310,
         background: "#ffffff",
         borderRadius: 30,
+        border: `8px solid ${COR.vermelho}`,
         position: "relative",
         scale: String(p),
-        boxShadow: "0 14px 30px rgba(0,0,0,0.3)",
-        overflow: "hidden",
+        boxShadow: "0 12px 26px rgba(0,0,0,0.3)",
       }}
     >
-      <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: 10, background: COR.vermelho }} />
       <Img
         src={staticFile(prod.imagem)}
-        style={{ position: "absolute", left: 14, top: 50, width: 230, height: 230, objectFit: "contain" }}
+        style={{ position: "absolute", left: 10, top: 40, width: 220, height: 220, objectFit: "contain" }}
       />
       <div
         style={{
           position: "absolute",
-          right: 16,
-          top: 34,
-          width: 190,
+          right: 12,
+          top: 24,
+          width: 180,
           textAlign: "center",
           fontFamily: FONTE_TITULO,
           fontWeight: 800,
@@ -169,81 +370,127 @@ const MiniCard: React.FC<{ i: number; delay: number }> = ({ i, delay }) => {
       >
         {prod.nome}
       </div>
-      <div style={{ position: "absolute", right: 14, bottom: 22 }}>
-        <Preco preco={prod.preco} unidade={prod.unidade} size={74} />
+      <div style={{ position: "absolute", right: 10, bottom: 16 }}>
+        <Preco preco={prod.preco} unidade={prod.unidade} size={70} />
       </div>
     </div>
   );
 };
 
-export const Grade: React.FC = () => {
+const Sacola: React.FC = () => (
+  <svg viewBox="0 0 400 460" style={{ width: "100%", overflow: "visible" }}>
+    <path d="M120 120 Q120 20 200 20 Q280 20 280 120" stroke={COR.marinho} strokeWidth="18" fill="none" />
+    <path d="M40 110 L360 110 L385 440 Q386 455 370 455 L30 455 Q14 455 15 440 Z" fill={COR.azul} stroke="#ffffff" strokeWidth="8" />
+    <path d="M40 110 L360 110 L362 140 L38 140 Z" fill={COR.vermelho} />
+    <circle cx="120" cy="125" r="8" fill={COR.marinho} />
+    <circle cx="280" cy="125" r="8" fill={COR.marinho} />
+  </svg>
+);
+
+export const Final: React.FC = () => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const T_ECONOMIZAR = 70;
+  const T_SACOLA = 135;
+  const T_GUARDA = 165;
+  const T_LOGO = 215;
+
+  const sacolaP = spring({ frame: frame - T_SACOLA, fps, config: { damping: 13 } });
+  const guarda = interpolate(frame, [T_GUARDA, T_GUARDA + 22], [0, 1], { ...clamp, easing: Easing.bezier(0.5, 0, 0.3, 1) });
+  const sacolaSai = interpolate(frame, [T_LOGO - 14, T_LOGO], [0, 1], { ...clamp, easing: Easing.bezier(0.5, 0, 0.75, 0) });
+  const balanco = Math.sin(frame / 7) * 6 * (1 - guarda * 0.6);
+
   return (
     <AbsoluteFill>
-      <Fundo />
-      <Linha y={150}>
-        <Texto delay={2} size={64}>
-          São ofertas
-        </Texto>
+      <Fundo tipo="azul" />
+
+      <Linha y={160}>
+        <Palavras texto="são ofertas" delay={2} size={70} saida={T_ECONOMIZAR - 6} />
       </Linha>
-      <Linha y={250}>
-        <Tag bg={COR.vermelho} delay={8} size={130}>
-          IMPERDÍVEIS!
+      <Linha y={260}>
+        <Tag bg={COR.vermelho} delay={10} size={130} saida={T_ECONOMIZAR - 6}>
+          IMPERDÍVEIS
         </Tag>
       </Linha>
+      <Linha y={160}>
+        <Palavras texto="pra você" delay={T_ECONOMIZAR} size={70} saida={T_SACOLA - 8} />
+      </Linha>
+      <Linha y={260}>
+        <Tag bg={COR.branco} cor={COR.marinho} delay={T_ECONOMIZAR + 8} size={130} saida={T_SACOLA - 8}>
+          ECONOMIZAR
+        </Tag>
+      </Linha>
+      <Linha y={160}>
+        <Palavras texto="e encher a" delay={T_SACOLA} size={70} saida={T_LOGO - 14} />
+      </Linha>
+      <Linha y={260}>
+        <Tag bg={COR.vermelho} delay={T_SACOLA + 8} size={140} saida={T_LOGO - 14}>
+          SACOLA!
+        </Tag>
+      </Linha>
+
+      {/* grade de produtos -> entra na sacola */}
       <Linha y={500}>
-        <div style={{ display: "grid", gridTemplateColumns: "440px 440px", gap: 30 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "420px 420px",
+            gap: 30,
+            alignSelf: "flex-start",
+            scale: String(interpolate(guarda, [0, 1], [1, 0.15])),
+            translate: `0px ${interpolate(guarda, [0, 1], [0, 640])}px`,
+            opacity: interpolate(guarda, [0.7, 1], [1, 0], clamp),
+            transformOrigin: "top center",
+          }}
+        >
           {PRODUTOS.map((_, i) => (
             <MiniCard key={i} i={i} delay={14 + i * 5} />
           ))}
         </div>
       </Linha>
-      <Linha y={1640}>
-        <Logo width={250} delay={0} />
-      </Linha>
-    </AbsoluteFill>
-  );
-};
 
-// ================= 4. FINAL =================
-export const DUR_FINAL = 110;
+      {/* sacola */}
+      <div
+        style={{
+          position: "absolute",
+          left: 290,
+          width: 500,
+          top: interpolate(sacolaP, [0, 1], [1950, 1080]) + interpolate(sacolaSai, [0, 1], [0, 1000]),
+          translate: `0px ${balanco}px`,
+        }}
+      >
+        <Sacola />
+        <div style={{ position: "absolute", left: 105, top: 230, width: 290 }}>
+          <Logo width={290} delay={T_SACOLA} />
+        </div>
+      </div>
 
-export const Final: React.FC = () => {
-  return (
-    <AbsoluteFill>
-      <Fundo />
-      <Linha y={260}>
-        <Logo width={760} delay={2} />
-      </Linha>
-      <Linha y={830}>
-        <Texto delay={14} size={52}>
-          Setor Universitário
-        </Texto>
-      </Linha>
-      <Linha y={960}>
-        <Texto delay={20} size={48}>
-          Ofertas válidas para
-        </Texto>
-      </Linha>
-      <Linha y={1040}>
-        <Tag bg={COR.branco} cor={COR.marinho} delay={24} size={90}>
-          {VALIDADE}
-        </Tag>
-      </Linha>
-      <Linha y={1170}>
-        <Texto delay={28} size={40}>
-          ou enquanto durar o estoque
-        </Texto>
-      </Linha>
-      <Linha y={1330}>
-        <Texto delay={36} size={50}>
-          Peça pelo WhatsApp
-        </Texto>
-      </Linha>
-      <Linha y={1420}>
-        <Tag bg={COR.vermelho} delay={42} size={110}>
-          {WHATSAPP}
-        </Tag>
-      </Linha>
+      {/* encerramento */}
+      {frame >= T_LOGO ? (
+        <>
+          <Linha y={330}>
+            <Logo width={760} delay={T_LOGO} />
+          </Linha>
+          <Linha y={960}>
+            <Tag bg={COR.marinho} delay={T_LOGO + 16} size={90}>
+              Mais sabor e economia
+            </Tag>
+          </Linha>
+          <Linha y={1120}>
+            <Tag bg={COR.vermelho} delay={T_LOGO + 28} size={90}>
+              pertinho de você!
+            </Tag>
+          </Linha>
+          <Linha y={1350}>
+            <Palavras texto="Peça pelo WhatsApp" delay={T_LOGO + 40} size={52} />
+          </Linha>
+          <Linha y={1440}>
+            <Tag bg={COR.branco} cor={COR.marinho} delay={T_LOGO + 48} size={100}>
+              {WHATSAPP}
+            </Tag>
+          </Linha>
+        </>
+      ) : null}
     </AbsoluteFill>
   );
 };

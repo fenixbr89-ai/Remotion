@@ -5,7 +5,7 @@ import { COR, FONTE_TEXTO, FONTE_TITULO, LOGO, SELO } from "./config";
 export const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 // Entrada com leve "pulo"
-export const usePop = (delay: number, damping = 12) => {
+export const usePop = (delay: number, damping = 11) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   return spring({ frame: frame - delay, fps, config: { damping, stiffness: 170, mass: 0.8 } });
@@ -17,32 +17,35 @@ export const useOut = (at: number, dur = 8) => {
   return interpolate(frame, [at, at + dur], [1, 0], { ...clamp, easing: Easing.bezier(0.5, 0, 0.75, 0) });
 };
 
-// Fundo azul da marca com raios de luz girando devagar
-export const Fundo: React.FC = () => {
+// ---------- Fundos (azul, branco ou vermelho) com raios girando ----------
+export type TipoFundo = "azul" | "branco" | "vermelho";
+
+export const Fundo: React.FC<{ tipo?: TipoFundo }> = ({ tipo = "azul" }) => {
   const frame = useCurrentFrame();
+  const base =
+    tipo === "azul"
+      ? `radial-gradient(circle at 50% 42%, #3aa6ff 0%, ${COR.azul} 42%, ${COR.azulEscuro} 100%)`
+      : tipo === "vermelho"
+        ? `radial-gradient(circle at 50% 42%, #ff4a4f 0%, ${COR.vermelho} 45%, #9e0f15 100%)`
+        : "radial-gradient(circle at 50% 42%, #ffffff 0%, #f3f7fc 55%, #d9e6f5 100%)";
+  const raio = tipo === "branco" ? "rgba(26,138,230,0.06)" : "rgba(255,255,255,0.08)";
   return (
-    <AbsoluteFill
-      style={{ background: `radial-gradient(circle at 50% 40%, #3aa6ff 0%, ${COR.azul} 40%, ${COR.azulEscuro} 100%)` }}
-    >
+    <AbsoluteFill style={{ background: base, overflow: "hidden" }}>
       <AbsoluteFill
         style={{
           left: -500,
           right: -500,
           top: -100,
           bottom: -100,
-          background:
-            "repeating-conic-gradient(from 0deg at 50% 45%, rgba(255,255,255,0.07) 0deg 8deg, rgba(255,255,255,0) 8deg 20deg)",
+          background: `repeating-conic-gradient(from 0deg at 50% 45%, ${raio} 0deg 8deg, rgba(0,0,0,0) 8deg 20deg)`,
           rotate: `${frame * 0.15}deg`,
         }}
-      />
-      <AbsoluteFill
-        style={{ background: "radial-gradient(circle at 50% 45%, rgba(0,0,0,0) 40%, rgba(5,20,70,0.45) 100%)" }}
       />
     </AbsoluteFill>
   );
 };
 
-// Faixa de texto reta
+// ---------- Caixinha de destaque (reta) ----------
 export const Tag: React.FC<{
   children: React.ReactNode;
   bg: string;
@@ -51,7 +54,7 @@ export const Tag: React.FC<{
   size?: number;
   saida?: number;
   style?: React.CSSProperties;
-}> = ({ children, bg, cor = COR.branco, delay, size = 100, saida, style }) => {
+}> = ({ children, bg, cor = COR.branco, delay, size = 110, saida, style }) => {
   const p = usePop(delay);
   const o = useOut(saida ?? 99999);
   return (
@@ -67,7 +70,7 @@ export const Tag: React.FC<{
         padding: `${size * 0.16}px ${size * 0.3}px ${size * 0.06}px`,
         borderRadius: size * 0.18,
         scale: String(p * o),
-        boxShadow: "0 12px 30px rgba(0,0,0,0.3)",
+        boxShadow: "0 10px 0 rgba(0,0,0,0.15), 0 18px 30px rgba(0,0,0,0.25)",
         whiteSpace: "nowrap",
         ...style,
       }}
@@ -77,17 +80,16 @@ export const Tag: React.FC<{
   );
 };
 
-// Texto que sobe suave
-export const Texto: React.FC<{
-  children: React.ReactNode;
+// ---------- Texto que aparece palavra por palavra ----------
+export const Palavras: React.FC<{
+  texto: string;
   delay: number;
-  size?: number;
   cor?: string;
+  size?: number;
+  porPalavra?: number;
   saida?: number;
-  style?: React.CSSProperties;
-}> = ({ children, delay, size = 60, cor = COR.branco, saida, style }) => {
+}> = ({ texto, delay, cor = COR.branco, size = 64, porPalavra = 5, saida }) => {
   const frame = useCurrentFrame();
-  const t = interpolate(frame, [delay, delay + 10], [0, 1], { ...clamp, easing: Easing.bezier(0.16, 1, 0.3, 1) });
   const o = useOut(saida ?? 99999);
   return (
     <div
@@ -96,18 +98,29 @@ export const Texto: React.FC<{
         fontWeight: 700,
         fontSize: size,
         color: cor,
-        textAlign: "center",
-        opacity: t * o,
-        translate: `0px ${(1 - t) * 30}px`,
-        textShadow: "0 4px 12px rgba(0,0,0,0.3)",
-        ...style,
+        display: "flex",
+        gap: size * 0.28,
+        justifyContent: "center",
+        opacity: o,
+        textShadow: cor === COR.branco ? "0 3px 10px rgba(0,0,0,0.25)" : undefined,
       }}
     >
-      {children}
+      {texto.split(" ").map((w, i) => {
+        const t = interpolate(frame, [delay + i * porPalavra, delay + i * porPalavra + 7], [0, 1], {
+          ...clamp,
+          easing: Easing.bezier(0.16, 1, 0.3, 1),
+        });
+        return (
+          <span key={i} style={{ opacity: t, translate: `0px ${(1 - t) * 24}px` }}>
+            {w}
+          </span>
+        );
+      })}
     </div>
   );
 };
 
+// ---------- Logo (PNG sem fundo) ----------
 export const Logo: React.FC<{ width: number; delay: number; saida?: number; style?: React.CSSProperties }> = ({
   width,
   delay,
@@ -124,23 +137,27 @@ export const Logo: React.FC<{ width: number; delay: number; saida?: number; styl
   );
 };
 
-export const Selo: React.FC<{ width: number; delay: number; saida?: number; style?: React.CSSProperties }> = ({
-  width,
-  delay,
-  saida,
-  style,
-}) => {
-  const p = usePop(delay, 10);
-  const o = useOut(saida ?? 99999);
+// ---------- Selo da campanha ----------
+export const Selo: React.FC<{ width: number; style?: React.CSSProperties }> = ({ width, style }) => (
+  <Img src={SELO} style={{ width, filter: "drop-shadow(0 14px 22px rgba(0,0,0,0.4))", ...style }} />
+);
+
+// ---------- Estouro amarelo atrás do preço ----------
+export const Estouro: React.FC<{ size: number; cor?: string }> = ({ size, cor = COR.amarelo }) => {
+  const frame = useCurrentFrame();
+  const pts = Array.from({ length: 32 }, (_, i) => {
+    const r = i % 2 === 0 ? 50 : 41;
+    const a = (i / 32) * Math.PI * 2;
+    return `${50 + r * Math.cos(a)},${50 + r * Math.sin(a)}`;
+  }).join(" ");
   return (
-    <Img
-      src={SELO}
-      style={{ width, scale: String(p * o), filter: "drop-shadow(0 14px 22px rgba(0,0,0,0.4))", ...style }}
-    />
+    <svg viewBox="0 0 100 100" style={{ width: size, height: size, rotate: `${frame * 0.8}deg` }}>
+      <polygon points={pts} fill={cor} />
+    </svg>
   );
 };
 
-// Preço no estilo do encarte: caixa vermelha, número amarelo
+// ---------- Preço estilo encarte: caixa vermelha, número amarelo ----------
 export const Preco: React.FC<{ preco: string; unidade: string; size?: number; style?: React.CSSProperties }> = ({
   preco,
   unidade,
@@ -160,7 +177,7 @@ export const Preco: React.FC<{ preco: string; unidade: string; size?: number; st
         borderRadius: size * 0.14,
         padding: `${size * 0.12}px ${size * 0.18}px ${size * 0.02}px`,
         lineHeight: 0.9,
-        boxShadow: "0 12px 26px rgba(0,0,0,0.35)",
+        boxShadow: "0 10px 0 rgba(0,0,0,0.15), 0 16px 28px rgba(0,0,0,0.35)",
         border: `${Math.max(3, size * 0.035)}px solid white`,
         ...style,
       }}
