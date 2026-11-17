@@ -1,54 +1,18 @@
-# Remotion video
+# Vídeo de ofertas — Mariana Supermercado
 
-<p align="center">
-  <a href="https://github.com/remotion-dev/logo">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-dark.apng">
-      <img alt="Animated Remotion Logo" src="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-light.gif">
-    </picture>
-  </a>
-</p>
+Vídeo vertical (1080x1920, 30fps, ~44s) no estilo "motion de ofertas".
 
-Welcome to your Remotion project!
+## Trocar as ofertas
+Edite `src/Ofertas/config.ts`:
+- `PRODUTOS`: nome, preço, unidade e imagem de cada oferta (as imagens ficam em `public/`, de preferência PNG sem fundo).
+- `VALIDADE`: texto da validade.
+- `COR`: cores do vídeo.
 
-## Commands
+Textos das cenas ficam em `src/Ofertas/Cenas.tsx`.
 
-**Install Dependencies**
-
-```console
-npm install
+## Ver e exportar
 ```
-
-**Start Preview**
-
-```console
-npm run dev
+npm i
+npm run dev                                   # abre o Remotion Studio
+npx remotion render OfertasMariana out/ofertas-mariana.mp4
 ```
-
-**Render video**
-
-```console
-npx remotion render
-```
-
-**Upgrade Remotion**
-
-```console
-npx remotion upgrade
-```
-
-## Docs
-
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://discord.gg/6VzzNDwUwV).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/remotion-dev/remotion/issues/new).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
