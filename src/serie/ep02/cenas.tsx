@@ -2,14 +2,13 @@ import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remo
 import { brl } from "../calc";
 import { naPosicao } from "../geo";
 import { Batida } from "../ui/Batida";
-import { Cinetico } from "../ui/Cinetico";
+import { Cinetico, Letras } from "../ui/Cinetico";
 import { Icone, IconeChip, type NomeIcone } from "../ui/Icones";
 import { Celular, Cursor } from "../ui/Ilustracoes";
 import { IconeEtiqueta } from "../ui/Logo";
 import { Odometro } from "../ui/Odometro";
 import { cor, degrade, entra, estica, fontFamily, sombra, suave, textoDegrade } from "../tema";
 import { G2 } from "./geo";
-import { Marmita } from "./Marmita";
 import { MARMITARIA, type contaMarmita } from "./numeros";
 
 export type Cena02Props = { k: ReturnType<typeof contaMarmita>; dur: number; ponte: { entra: number; sai: number } };
@@ -29,38 +28,49 @@ const Legenda: React.FC<{ l1: string; l2: string; em?: number; tom?: "azul" | "v
 const soco = (f: number, t: number) => 1 + Math.sin(Math.min(1, Math.max(0, (f - t) / 10)) * Math.PI) * 0.06;
 
 /* ------------------------------------------------------------------ 1. Gancho */
-const BADGES: { icone?: NomeIcone; texto?: string; x: number; y: number }[] = [
-  { icone: "talheres", x: 70, y: 640 },
-  { icone: "chama", x: 70, y: 860 },
-  { icone: "folha", x: 70, y: 1080 },
-  { icone: "chapeu", x: 880, y: 640 },
-  { icone: "dinheiro", x: 880, y: 860 },
-  { icone: "etiqueta", x: 880, y: 1080 },
-  { icone: "sacola", x: 300, y: 1330 },
-  { icone: "moto", x: 480, y: 1330 },
-  { texto: "R$", x: 660, y: 1330 },
+const BADGES: { icone?: NomeIcone; texto?: string }[] = [
+  { icone: "talheres" },
+  { icone: "chapeu" },
+  { icone: "chama" },
+  { icone: "folha" },
+  { icone: "dinheiro" },
+  { icone: "etiqueta" },
+  { icone: "sacola" },
+  { icone: "moto" },
+  { texto: "R$" },
+];
+/** 3 em cima do texto, 6 embaixo (duas fileiras), sempre centralizados */
+const POS_BADGES = [
+  [300, 470],
+  [475, 470],
+  [650, 470],
+  [300, 1140],
+  [475, 1140],
+  [650, 1140],
+  [300, 1310],
+  [475, 1310],
+  [650, 1310],
 ];
 
 export const Gancho: React.FC<Cena02Props> = ({ ponte }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const tampa = suave(f, 26, 44);
-  const comida: [number, number, number] = [0, 1, 2].map((i) => {
-    const e = entra(f, fps, 40 + i * 6, 9);
-    return Math.max(0, e);
-  }) as [number, number, number];
+  const nome = "MARMITARIA?";
+  const fim = 14 + nome.length * 2;
   return (
     <AbsoluteFill style={{ fontFamily }}>
-      <Legenda l1="E se eu abrisse uma" l2="*marmitaria?*" />
-      {f < ponte.sai && (
-        <div style={{ ...naPosicao(G2.marmita), scale: estica(f, fps, 2), transformOrigin: "center bottom" }}>
-          <Marmita largura={G2.marmita.w} tampa={tampa} comida={comida} vapor={suave(f, 64, 130)} />
-        </div>
-      )}
+      <div style={{ position: "absolute", top: 730, left: 0, right: 0 }}>
+        <Batida linhas={[{ texto: "E se eu abrisse uma", em: 2, tamanho: 64 }]} />
+      </div>
+      <div style={{ position: "absolute", top: 830, left: 0, right: 0 }}>
+        <Letras texto={nome} inicio={12} tamanho={136} intervalo={2} />
+      </div>
+      {f < ponte.sai && <div style={{ ...naPosicao(G2.ganchoBarra), background: degrade, scale: `${suave(f, fim, fim + 12)} 1` }} />}
       {BADGES.map((b, i) => {
-        const t = 14 + i * 4;
+        const t = fim + 4 + i * 3;
+        const [x, y] = POS_BADGES[i];
         return (
-          <div key={i} style={{ position: "absolute", left: b.x, top: b.y, width: 130, height: 130, borderRadius: 38, background: cor.branco, boxShadow: SOMBRA_CARD, display: "flex", alignItems: "center", justifyContent: "center", scale: estica(f, fps, t), opacity: Math.min(1, entra(f, fps, t, 12) * 2) }}>
+          <div key={i} style={{ position: "absolute", left: x - 65, top: y - 65, width: 130, height: 130, borderRadius: 38, background: cor.branco, boxShadow: SOMBRA_CARD, display: "flex", alignItems: "center", justifyContent: "center", scale: estica(f, fps, t), opacity: Math.min(1, entra(f, fps, t, 12) * 2) }}>
             {b.icone ? <Icone nome={b.icone} tamanho={84} /> : <span style={{ ...textoDegrade, fontSize: 52, fontWeight: 800 }}>{b.texto}</span>}
           </div>
         );
@@ -102,8 +112,10 @@ export const Custo: React.FC<Cena02Props> = ({ k, ponte }) => {
         })}
       </div>
       {f >= ponte.entra && (
-        <div style={naPosicao(G2.custoMini)}>
-          <Marmita largura={G2.custoMini.w} />
+        <div style={{ ...naPosicao(G2.custoMini), background: degrade, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <svg width={48} height={48} viewBox="0 0 24 24" fill="none" stroke={cor.branco} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7" />
+          </svg>
         </div>
       )}
       {f < ponte.sai && (

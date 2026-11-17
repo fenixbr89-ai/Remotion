@@ -1,12 +1,11 @@
 import { G2 } from "./geo";
-import { Marmita } from "./Marmita";
 import type { PonteDef } from "../ui/Ponte";
 import { cor } from "../tema";
 
 /** Pontes do EP. 02 (nome = cena que recebe). Tempos relativos ao corte. Nada cobre a tela, nada gira. */
 export const PONTES02: Record<string, PonteDef> = {
-  // a marmita encolhe e vira o ícone do card de custo
-  custo: { chaves: [{ t: -6, ret: G2.marmita, cor: cor.branco }, { t: 14, ret: G2.custoMini, cor: cor.branco }], conteudo: (r) => <Marmita largura={r.w} /> },
+  // o sublinhado de MARMITARIA encolhe e vira o ícone do card de custo
+  custo: { chaves: [{ t: -6, ret: G2.ganchoBarra, cor: cor.azul, degrade: true }, { t: 14, ret: G2.custoMini, cor: cor.azul, degrade: true }] },
   // o total "R$ 10,00" encolhe e vira a etiqueta "Custo: R$ 10,00"
   erro: { chaves: [{ t: -6, ret: G2.custoTotal, cor: cor.azul, degrade: true }, { t: 12, ret: G2.erroCusto, cor: cor.azul, degrade: true }] },
   // o risco que cortou o R$ 13 vira o campo de digitação do chat

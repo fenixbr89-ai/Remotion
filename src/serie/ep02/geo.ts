@@ -15,9 +15,9 @@ export const CENAS02 = {
 };
 
 export const G2 = {
-  marmita: { x: 180, y: 600, w: 720, h: 672, r: 0 },
+  ganchoBarra: { x: 240, y: 1010, w: 600, h: 20, r: 10 },
   custoCard: { x: 120, y: 500, w: 840, h: 900, r: 44 },
-  custoMini: { x: 162, y: 520, w: 100, h: 93, r: 0 },
+  custoMini: { x: 160, y: 526, w: 84, h: 84, r: 24 },
   custoTotal: { x: 160, y: 1236, w: 760, h: 130, r: 34 },
   erroCusto: { x: 320, y: 590, w: 440, h: 86, r: 43 },
   erroRisco: { x: 170, y: 910, w: 740, h: 26, r: 13 },
