@@ -54,18 +54,18 @@ export const Abertura: React.FC = () => {
   return (
     <AbsoluteFill>
       <Fundo tipo="azul" />
-      <SeloQueSobe entra={0} sobe={28} yCentro={560} src={SELO_CARNE} width={700} />
+      <SeloQueSobe entra={0} sobe={16} yCentro={560} src={SELO_CARNE} width={700} />
       {/* "Chegou a Terça-feira Suína do Mariana Supermercado" (0-4,2s) */}
       <Linha y={540}>
-        <Palavras texto="Chegou a" delay={22} size={74} saida={troca - 8} />
+        <Palavras texto="Chegou a" delay={31} size={74} saida={troca - 8} />
       </Linha>
       <Linha y={670}>
-        <Tag bg={COR.branco} cor={COR.marinho} delay={28} size={120} saida={troca - 8}>
+        <Tag bg={COR.branco} cor={COR.marinho} delay={36} size={120} saida={troca - 8}>
           TERÇA-FEIRA
         </Tag>
       </Linha>
       <Linha y={850}>
-        <Tag bg={COR.vermelho} delay={50} size={190} saida={troca - 6}>
+        <Tag bg={COR.vermelho} delay={54} size={190} saida={troca - 6}>
           SUÍNA
         </Tag>
       </Linha>
