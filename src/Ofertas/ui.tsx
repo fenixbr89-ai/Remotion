@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Easing, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { COR, FONTE_TEXTO, FONTE_TITULO, LOGO, SELO_TERCA } from "./config";
+import { COR, FONTE_TEXTO, FONTE_TITULO, LOGO, SELO_CARNE } from "./config";
 
 export const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
@@ -142,7 +142,7 @@ export const Logo: React.FC<{ width: number; delay: number; saida?: number; styl
 // ---------- Selo da campanha ----------
 export const Selo: React.FC<{ width: number; src?: string; style?: React.CSSProperties }> = ({
   width,
-  src = SELO_TERCA,
+  src = SELO_CARNE,
   style,
 }) => (
   <Img src={src} style={{ width, filter: "drop-shadow(0 14px 22px rgba(0,0,0,0.4))", ...style }} />
@@ -198,3 +198,34 @@ export const Preco: React.FC<{ preco: string; unidade: string; size?: number; st
     </div>
   );
 };
+
+// ---------- Selo "Terça-feira Suína" desenhado (reto, sem cabo) ----------
+export const SeloTerca: React.FC<{ size?: number; style?: React.CSSProperties }> = ({ size = 160, style }) => (
+  <div
+    style={{
+      display: "inline-flex",
+      flexDirection: "column",
+      alignItems: "center",
+      background: `linear-gradient(180deg, #f0343b 0%, ${COR.vermelho} 55%, #b5141b 100%)`,
+      borderRadius: size * 0.32,
+      border: `${size * 0.04}px solid ${COR.branco}`,
+      padding: `${size * 0.12}px ${size * 0.4}px ${size * 0.02}px`,
+      boxShadow: `0 ${size * 0.07}px 0 #8a0d12, 0 ${size * 0.16}px ${size * 0.3}px rgba(0,0,0,0.35)`,
+      fontFamily: FONTE_TITULO,
+      fontWeight: 800,
+      lineHeight: 0.9,
+      ...style,
+    }}
+  >
+    <span style={{ fontSize: size * 0.3, color: COR.branco, letterSpacing: size * 0.012, marginBottom: size * 0.1 }}>TERÇA-FEIRA</span>
+    <span
+      style={{
+        fontSize: size,
+        color: COR.amarelo,
+        textShadow: `0 ${size * 0.045}px 0 #e08a00, 0 ${size * 0.08}px ${size * 0.06}px rgba(0,0,0,0.3)`,
+      }}
+    >
+      SUÍNA
+    </span>
+  </div>
+);

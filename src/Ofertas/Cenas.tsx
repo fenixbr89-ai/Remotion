@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Easing, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { COR, FONTE_TEXTO, FONTE_TITULO, PRODUTOS, SELO_CARNE, SELO_TERCA, VALIDADE, WHATSAPP } from "./config";
-import { clamp, Estouro, Fundo, Logo, Palavras, Preco, Selo, Tag, useOut, usePop } from "./ui";
+import { COR, FONTE_TEXTO, FONTE_TITULO, PRODUTOS, SELO_CARNE, VALIDADE, WHATSAPP } from "./config";
+import { clamp, Estouro, Fundo, Logo, Palavras, Preco, Selo, SeloTerca, Tag, useOut, usePop } from "./ui";
 
 const suave = Easing.bezier(0.65, 0, 0.35, 1);
 
@@ -54,15 +54,7 @@ export const Abertura: React.FC = () => {
   return (
     <AbsoluteFill>
       <Fundo tipo="azul" />
-      <SeloQueSobe entra={2} sobe={troca} yCentro={150} src={SELO_CARNE} width={560} />
-      <Linha y={830}>
-        <div style={{ scale: String(usePop(20, 11) * useOut(troca - 6)) }}>
-          <Selo width={760} src={SELO_TERCA} />
-        </div>
-      </Linha>
-      <Linha y={1260}>
-        <Logo width={540} delay={70} saida={troca - 6} />
-      </Linha>
+      <SeloQueSobe entra={2} sobe={troca} yCentro={560} src={SELO_CARNE} width={700} />
       <Linha y={540}>
         <Palavras texto="é dia de aproveitar" delay={troca + 4} size={70} />
       </Linha>
@@ -109,7 +101,7 @@ export const VoceEncontra: React.FC = () => (
     <Fundo tipo="branco" />
     <Linha y={70}>
       <div style={{ scale: String(usePop(0, 12)) }}>
-        <Selo width={460} src={SELO_TERCA} />
+        <SeloTerca size={150} />
       </div>
     </Linha>
     <Linha y={430}>
@@ -203,7 +195,7 @@ export const Produtos: React.FC = () => {
       <Fundo tipo="azul" />
       <Linha y={40}>
         <div style={{ scale: String(card) }}>
-          <Selo width={520} src={SELO_TERCA} />
+          <SeloTerca size={160} />
         </div>
       </Linha>
 
