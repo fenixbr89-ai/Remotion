@@ -4,6 +4,7 @@ import { negocioSchema } from "./serie/tipos";
 import { acaiteria } from "./serie/negocios/acaiteria";
 import { EP02Marmitaria } from "./serie/ep02/EP02Marmitaria";
 import { EstiloA, EstiloB, EstiloC } from "./serie/ep02/Estilos";
+import { Desafio, DURACAO_DESAFIO } from "./pixora/desafio/Desafio";
 import { M1Gancho, M2Custo, M3Prejuizo, M4PrecoCerto, M5Cta } from "./serie/ep02/Manchete";
 import { DURACAO as DURACAO_EP02 } from "./serie/ep02/geo";
 
@@ -21,6 +22,7 @@ export const RemotionRoot: React.FC = () => {
         height={1920}
         defaultProps={acaiteria}
       />
+      <Composition id="DesafioMarmita" component={Desafio} durationInFrames={DURACAO_DESAFIO} fps={30} width={1080} height={1920} />
       <Composition id="EstiloA" component={EstiloA} durationInFrames={1} fps={30} width={1080} height={1920} />
       <Composition id="EstiloB" component={EstiloB} durationInFrames={1} fps={30} width={1080} height={1920} />
       <Composition id="EstiloC" component={EstiloC} durationInFrames={1} fps={30} width={1080} height={1920} />

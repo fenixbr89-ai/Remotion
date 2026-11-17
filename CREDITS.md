@@ -9,3 +9,9 @@
 
 ## Narração
 - EP. 01: narração enviada pelo cliente (`public/audio/ep01-narracao.wav`).
+
+## Vídeo "Desafio: marmita a R$ 18,90" (estilo Pixora)
+- **Ilustrações 3D Microsoft Fluent Emoji** (MIT) em `public/3d`. Licença em `public/3d/LICENSE-fluentui-emoji.txt`. Fonte: https://github.com/microsoft/fluentui-emoji
+- **Ícones Lucide** (ISC) em `public/icons`. Licença em `public/icons/LICENSE-lucide.txt`.
+- **Fontes Inter e Lora** (SIL OFL 1.1), via `@fontsource`, em `public/fonts`. **Anton** (OFL) usada só nos rascunhos de estilo.
+- Componentes Pixora (`src/pixora`) vindos do branch do EP. 02; trilha e efeitos de `public/audio/ep02` (sintetizados).
