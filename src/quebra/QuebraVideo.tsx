@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import type { VideoDef } from "./timing";
 import { Audio } from "@remotion/media";
-import { AbsoluteFill, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Easing, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { Legendas } from "./Legendas";
 import { Overlays } from "./Overlays";
 import { FieldScene, ParticleField, glowAt, useShapes } from "./ParticleField";
@@ -33,8 +33,15 @@ export const QuebraVideo: React.FC<{ def: VideoDef }> = ({ def }) => {
   const next = resolved[g.index + 1];
   const end = next ? next.from : def.durationInFrames;
   const k = interpolate(frame, [cur.from, end], [0, 1], { extrapolateRight: "clamp" });
-  const zoom = 1 + 0.03 * k;
-  const [px, py] = cur.pan ? PAN[cur.pan] : [0, 0];
+  // câmera contínua: parte de onde a cena anterior terminou e converge durante o morph
+  const prev = resolved[g.index - 1];
+  const [ppx, ppy] = prev?.pan ? PAN[prev.pan] : [0, 0];
+  const [cpx, cpy] = cur.pan ? PAN[cur.pan] : [0, 0];
+  const b = prev ? interpolate(frame, [cur.from, cur.from + 0.85 * 60], [0, 1], { extrapolateRight: "clamp", easing: Easing.inOut(Easing.cubic) }) : 1;
+  const mix = (a: number, c: number) => a + (c - a) * b;
+  const zoom = mix(prev ? 1.03 : 1, 1 + 0.03 * k);
+  const tx = mix(ppx, cpx * k);
+  const ty = mix(ppy, cpy * k);
   const theme = cur.theme ?? def.theme;
   const colors = { ...PALETTE, theme };
   // brilho radial: bem sutil quando o tema é branco (padrão preto e branco)
@@ -50,7 +57,7 @@ export const QuebraVideo: React.FC<{ def: VideoDef }> = ({ def }) => {
       />
       <AbsoluteFill
         style={{
-          transform: `translate(${px * k}px, ${py * k}px) scale(${zoom})`,
+          transform: `translate(${tx}px, ${ty}px) scale(${zoom})`,
           transformOrigin: `${g.x}px ${g.y}px`,
         }}
       >
