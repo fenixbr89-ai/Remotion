@@ -1,54 +1,25 @@
-# Remotion video
+# Preço Certo — "E se eu abrisse…" EP. 02: Marmitaria
 
-<p align="center">
-  <a href="https://github.com/remotion-dev/logo">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-dark.apng">
-      <img alt="Animated Remotion Logo" src="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-light.gif">
-    </picture>
-  </a>
-</p>
+Reel 1080×1920, 30 fps, 38 s (1140 frames). Composition: `EP02Marmitaria`.
 
-Welcome to your Remotion project!
-
-## Commands
-
-**Install Dependencies**
-
-```console
+## Comandos
+```bash
 npm install
+npm run dev            # Remotion Studio para revisar
+npx remotion render EP02Marmitaria out/EP02_marmitaria.mp4 --codec=h264
+python3 scripts/synth-audio.py   # regenera trilha e efeitos em public/audio
 ```
 
-**Start Preview**
+## Estrutura
+- `src/ep02/constants.ts` — cores, fontes, safe area, tempos de cada cena e números do roteiro (tudo num lugar só)
+- `src/ep02/anim.ts` — easing, entrada desfoque→nítido, punch de zoom, random determinístico
+- `src/ep02/components/` — `Caption`, `Card`, `SlotNumber`, `Cursor`, `IconBadge`, `CheckRow`, `ProgressBar`, `Marmita`, `SceneShell`, `Background`
+- `src/ep02/scenes/` — `Scene1Hook` … `Scene6CTA`
+- `src/ep02/EP02Marmitaria.tsx` — sequência das cenas, wipe circular e trilha/efeitos
 
-```console
-npm run dev
-```
+## Narração
+Coloque o arquivo em `public/audio/narracao.mp3`, mude `HAS_NARRATION` para `true` em
+`src/ep02/EP02Marmitaria.tsx` e ajuste `NARRATION_WINDOWS` (segundos) para o ducking da trilha.
+Os tempos das legendas ficam em `T` em `constants.ts`.
 
-**Render video**
-
-```console
-npx remotion render
-```
-
-**Upgrade Remotion**
-
-```console
-npx remotion upgrade
-```
-
-## Docs
-
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://discord.gg/6VzzNDwUwV).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/remotion-dev/remotion/issues/new).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
+Créditos e licenças: `CREDITS.md`. Legenda do post: `LEGENDA_POST.md`.
