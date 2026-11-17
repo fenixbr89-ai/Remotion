@@ -2,48 +2,35 @@ import "@fontsource/baloo-2/800.css";
 import "@fontsource/poppins/700.css";
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, Sequence, useCurrentFrame } from "remotion";
-import { COR, PRODUTOS } from "./config";
-import { Abertura, ConfiraPrecos, Final, ParaLevarMais, POR_PRODUTO, Produtos, TemMais, VoceEncontra } from "./Cenas";
+import { COR } from "./config";
+import { Abertura, DUR_ABERTURA, DUR_FINAL, DUR_GRADE, DUR_PRODUTOS, Final, Grade, Produtos } from "./Cenas";
 
-// Duração de cada cena (frames a 30fps)
+// Ordem e duração das cenas (frames a 30fps)
 export const CENAS = [
-  { nome: "Abertura", dur: 200, C: Abertura },
-  { nome: "Você encontra", dur: 170, C: VoceEncontra },
-  { nome: "Para levar mais", dur: 120, C: ParaLevarMais },
-  { nome: "Confira os preços", dur: 195, C: ConfiraPrecos },
-  { nome: "Produtos", dur: PRODUTOS.length * POR_PRODUTO, C: Produtos },
-  { nome: "E tem mais", dur: 45, C: TemMais },
-  { nome: "Final", dur: 300, C: Final },
+  { nome: "Abertura", dur: DUR_ABERTURA, C: Abertura },
+  { nome: "Produtos", dur: DUR_PRODUTOS, C: Produtos },
+  { nome: "Imperdíveis", dur: DUR_GRADE, C: Grade },
+  { nome: "Final", dur: DUR_FINAL, C: Final },
 ];
 
 export const DURACAO_TOTAL = CENAS.reduce((s, c) => s + c.dur, 0);
 
-// Faixa laranja diagonal que varre a tela entre as cenas
-const Varredura: React.FC<{ em: number }> = ({ em }) => {
+// Faixas vermelha e branca que cruzam a tela entre as cenas
+const Transicao: React.FC<{ em: number }> = ({ em }) => {
   const frame = useCurrentFrame();
-  const t = interpolate(frame, [em - 10, em + 10], [0, 1], {
+  const t = interpolate(frame, [em - 9, em + 9], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.bezier(0.45, 0, 0.55, 1),
   });
   if (t <= 0 || t >= 1) return null;
-  const x = interpolate(t, [0, 1], [-3200, 2400]);
+  const x = interpolate(t, [0, 1], [-1500, 1300]);
   return (
     <AbsoluteFill style={{ overflow: "hidden", pointerEvents: "none" }}>
-      <div
-        style={{
-          position: "absolute",
-          top: -1200,
-          left: x,
-          width: 2800,
-          height: 4400,
-          rotate: "18deg",
-          display: "flex",
-        }}
-      >
-        <div style={{ width: 160, background: "#ffd04a" }} />
-        <div style={{ flex: 1, background: `linear-gradient(90deg, ${COR.laranja}, ${COR.laranjaEscuro})` }} />
-        <div style={{ width: 160, background: "#ffd04a" }} />
+      <div style={{ position: "absolute", top: 0, bottom: 0, left: x, width: 1300, display: "flex" }}>
+        <div style={{ width: 70, background: COR.branco }} />
+        <div style={{ flex: 1, background: COR.vermelho }} />
+        <div style={{ width: 70, background: COR.branco }} />
       </div>
     </AbsoluteFill>
   );
@@ -63,10 +50,10 @@ export const OfertasVideo: React.FC = () => {
     );
   });
   return (
-    <AbsoluteFill style={{ backgroundColor: COR.verde }}>
+    <AbsoluteFill style={{ backgroundColor: COR.azul }}>
       {seqs}
       {cortes.map((c) => (
-        <Varredura key={c} em={c} />
+        <Transicao key={c} em={c} />
       ))}
     </AbsoluteFill>
   );
