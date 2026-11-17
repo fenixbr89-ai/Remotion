@@ -1,10 +1,12 @@
 import { Composition, Folder } from "remotion";
 import { QuebraVideo } from "./quebra/QuebraVideo";
 import { demo } from "./quebra/demo/scenes";
+import { ceuAzul } from "./quebra/ceu-azul/scenes";
 import { FPS, H, W } from "./quebra/theme";
 
 // As cenas contêm funções (formas desenhadas), então não passam por props serializadas.
 const Demo: React.FC = () => <QuebraVideo def={demo} />;
+const CeuAzul: React.FC = () => <QuebraVideo def={ceuAzul} />;
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -13,6 +15,14 @@ export const RemotionRoot: React.FC = () => {
         id="QP-Demo"
         component={Demo}
         durationInFrames={demo.durationInFrames}
+        fps={FPS}
+        width={W}
+        height={H}
+      />
+      <Composition
+        id="QP-CeuAzul"
+        component={CeuAzul}
+        durationInFrames={ceuAzul.durationInFrames}
         fps={FPS}
         width={W}
         height={H}

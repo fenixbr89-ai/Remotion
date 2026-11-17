@@ -51,34 +51,65 @@ if (whisperPath) {
   const caps = JSON.parse(readFileSync(whisperPath, "utf8"))
     .map((c) => ({ text: c.text.trim(), s: c.startMs / 1000, e: c.endMs / 1000 }))
     .filter((c) => norm(c.text));
-  if (caps.length === script.length) {
-    words = script.map((w, i) => ({ ...w, inicio: caps[i].s, fim: caps[i].e }));
-  } else {
-    // alinhamento guloso pelo texto; palavras sem par herdam tempo interpolado
-    let j = 0;
-    words = script.map((w) => {
-      const look = caps.slice(j, j + 6).findIndex((c) => norm(c.text) === norm(w.palavra));
-      if (look >= 0) {
-        j += look + 1;
-        return { ...w, inicio: caps[j - 1].s, fim: caps[j - 1].e };
-      }
-      return { ...w, inicio: null, fim: null };
-    });
-    for (let i = 0; i < words.length; i++) {
-      if (words[i].inicio !== null) continue;
-      const a = words[i - 1]?.fim ?? 0;
-      let k = i;
-      while (k < words.length && words[k].inicio === null) k++;
-      const b = words[k]?.inicio ?? duration;
-      const n = k - i;
-      for (let m = 0; m < n; m++) {
-        words[i + m].inicio = a + ((b - a) * m) / n;
-        words[i + m].fim = a + ((b - a) * (m + 1)) / n;
-      }
-      i = k - 1;
+  // alinhamento de sequência (Needleman-Wunsch) roteiro × transcrição,
+  // com semelhança aproximada — o texto vem do roteiro, os tempos do áudio
+  const lev = (x, y) => {
+    const dp = Array.from({ length: x.length + 1 }, (_, i) => [i]);
+    for (let j = 1; j <= y.length; j++) dp[0][j] = j;
+    for (let i = 1; i <= x.length; i++)
+      for (let j = 1; j <= y.length; j++)
+        dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + (x[i - 1] === y[j - 1] ? 0 : 1));
+    return dp[x.length][y.length];
+  };
+  const sim = (x, y) => (x && y ? 1 - lev(x, y) / Math.max(x.length, y.length) : 0);
+  const A = script.map((w) => norm(w.palavra));
+  const B = caps.map((c) => norm(c.text));
+  const n = A.length;
+  const m = B.length;
+  const GAP = -0.4;
+  const S = Array.from({ length: n + 1 }, () => new Float64Array(m + 1));
+  const P = Array.from({ length: n + 1 }, () => new Uint8Array(m + 1)); // 1 diag, 2 up, 3 left
+  for (let i = 1; i <= n; i++) { S[i][0] = i * GAP; P[i][0] = 2; }
+  for (let j = 1; j <= m; j++) { S[0][j] = j * GAP; P[0][j] = 3; }
+  for (let i = 1; i <= n; i++)
+    for (let j = 1; j <= m; j++) {
+      const q = sim(A[i - 1], B[j - 1]);
+      const d = S[i - 1][j - 1] + (q >= 0.5 ? q : -0.6);
+      const u = S[i - 1][j] + GAP;
+      const l = S[i][j - 1] + GAP;
+      if (d >= u && d >= l) { S[i][j] = d; P[i][j] = 1; }
+      else if (u >= l) { S[i][j] = u; P[i][j] = 2; }
+      else { S[i][j] = l; P[i][j] = 3; }
     }
-    console.warn(`aviso: whisper tem ${caps.length} palavras, roteiro ${script.length} — alinhado pelo texto`);
+  words = script.map((w) => ({ ...w, inicio: null, fim: null }));
+  let matched = 0;
+  for (let i = n, j = m; i > 0 || j > 0; ) {
+    const pp = P[i][j];
+    if (pp === 1) {
+      if (sim(A[i - 1], B[j - 1]) >= 0.5) {
+        words[i - 1].inicio = caps[j - 1].s;
+        words[i - 1].fim = caps[j - 1].e;
+        matched++;
+      }
+      i--; j--;
+    } else if (pp === 2) i--;
+    else j--;
   }
+  // palavras sem par: preenche o vão entre vizinhos (ex.: "1871" falado como 6 palavras)
+  for (let i = 0; i < words.length; i++) {
+    if (words[i].inicio !== null) continue;
+    const a = words[i - 1]?.fim ?? 0;
+    let k = i;
+    while (k < words.length && words[k].inicio === null) k++;
+    const b = words[k]?.inicio ?? duration;
+    const cnt = k - i;
+    for (let q = 0; q < cnt; q++) {
+      words[i + q].inicio = a + ((b - a) * q) / cnt;
+      words[i + q].fim = a + ((b - a) * (q + 1)) / cnt;
+    }
+    i = k - 1;
+  }
+  console.log(`transcrição: ${caps.length} palavras · roteiro: ${n} · casadas: ${matched}`);
 } else {
   // --- detecção de silêncio ---
   const text = spawnSync(
