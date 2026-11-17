@@ -2,6 +2,8 @@ import { Composition, Folder } from "remotion";
 import { DURACAO, Episodio } from "./serie/Episodio";
 import { negocioSchema } from "./serie/tipos";
 import { acaiteria } from "./serie/negocios/acaiteria";
+import { EP02Marmitaria } from "./serie/ep02/EP02Marmitaria";
+import { DURACAO as DURACAO_EP02 } from "./serie/ep02/geo";
 
 // Série "O que eu faria se abrisse uma…" — um <Composition> por episódio.
 export const RemotionRoot: React.FC = () => {
@@ -17,6 +19,7 @@ export const RemotionRoot: React.FC = () => {
         height={1920}
         defaultProps={acaiteria}
       />
+      <Composition id="EP02Marmitaria" component={EP02Marmitaria} durationInFrames={DURACAO_EP02} fps={30} width={1080} height={1920} />
     </Folder>
   );
 };

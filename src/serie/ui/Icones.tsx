@@ -163,6 +163,89 @@ const DESENHOS = {
       )}
     </>
   ),
+  talheres: (
+    <>
+      <path d="M20 8v18a6 6 0 0 1-4 5.7V56" stroke={C} strokeWidth={5} strokeLinecap="round" fill="none" />
+      <path d="M14 8v14M26 8v14" stroke={C} strokeWidth={4} strokeLinecap="round" />
+      <path d="M44 56V34c-6-2-8-10-8-16 0-6 4-10 8-10z" fill={A} />
+      <path d="M44 8v48" stroke={K} strokeWidth={2.5} strokeLinecap="round" />
+    </>
+  ),
+  chama: (
+    <>
+      <path d="M32 6c4 10 16 16 16 30a16 16 0 0 1-32 0c0-8 4-12 8-16 0 6 2 9 5 10-1-9 1-16 3-24z" fill={A} />
+      <path d="M32 34c3 4 7 6 7 12a7 7 0 0 1-14 0c0-4 3-7 7-12z" fill={L} />
+    </>
+  ),
+  folha: (
+    <>
+      <path d="M12 52C10 28 26 10 54 10c2 26-16 44-42 42z" fill={A} />
+      <path d="M14 50L44 20" stroke={W} strokeWidth={3.5} strokeLinecap="round" opacity={0.8} />
+      <path d="M12 52l-4 6" stroke={K} strokeWidth={3} strokeLinecap="round" />
+    </>
+  ),
+  chapeu: (
+    <>
+      <path d="M18 36c-8 0-12-6-12-11 0-7 7-12 14-10 2-6 7-9 12-9s10 3 12 9c7-2 14 3 14 10 0 5-4 11-12 11z" fill={L} />
+      <rect x="18" y="34" width="28" height="18" rx="3" fill={A} />
+      <path d="M18 44h28" stroke={W} strokeWidth={3} opacity={0.7} />
+      <path d="M18 52h28" stroke={K} strokeWidth={2.5} strokeLinecap="round" />
+    </>
+  ),
+  moto: (
+    <>
+      <circle cx="16" cy="44" r="9" fill="none" stroke={K} strokeWidth={4} />
+      <circle cx="48" cy="44" r="9" fill="none" stroke={K} strokeWidth={4} />
+      <path d="M16 44h14l8-14h10l4 14" stroke={C} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <rect x="6" y="20" width="20" height="16" rx="4" fill={A} />
+      <path d="M38 22h8" stroke={K} strokeWidth={4} strokeLinecap="round" />
+    </>
+  ),
+  arroz: (
+    <>
+      <path d="M8 32h48c0 13-10 22-24 22S8 45 8 32z" fill={A} />
+      <path d="M12 32c0-10 9-16 20-16s20 6 20 16z" fill={W} stroke={L} strokeWidth={3} />
+      {[[22, 26], [30, 22], [38, 26], [27, 29], [35, 30]].map(([x, y], i) => (
+        <ellipse key={i} cx={x} cy={y} rx={3} ry={1.6} fill={L} />
+      ))}
+      <path d="M8 32h48" stroke={K} strokeWidth={2.5} strokeLinecap="round" />
+    </>
+  ),
+  feijao: (
+    <>
+      <path d="M8 32h48c0 13-10 22-24 22S8 45 8 32z" fill={A} />
+      <path d="M12 32c0-10 9-16 20-16s20 6 20 16z" fill={C} />
+      {[[22, 25], [32, 21], [41, 26], [28, 29], [37, 30]].map(([x, y], i) => (
+        <ellipse key={i} cx={x} cy={y} rx={4} ry={2.6} fill={L} />
+      ))}
+      <path d="M8 32h48" stroke={K} strokeWidth={2.5} strokeLinecap="round" />
+    </>
+  ),
+  carne: (
+    <>
+      <path d="M10 30c0-12 14-20 28-18 12 2 18 10 16 20-2 12-16 20-30 18C14 48 10 40 10 30z" fill={A} />
+      <path d="M18 30c2-6 10-10 18-9" stroke={W} strokeWidth={4} strokeLinecap="round" fill="none" opacity={0.7} />
+      <circle cx="40" cy="34" r="6" fill={L} />
+      <circle cx="40" cy="34" r="2.5" fill={K} />
+    </>
+  ),
+  salada: (
+    <>
+      <path d="M8 34h48c0 12-10 20-24 20S8 46 8 34z" fill={A} />
+      <path d="M14 34c-2-10 6-16 12-14 2-6 12-6 14 0 6-2 12 4 10 14z" fill={L} />
+      <circle cx="24" cy="28" r="4" fill={C} />
+      <circle cx="38" cy="27" r="4" fill={C} />
+      <path d="M8 34h48" stroke={K} strokeWidth={2.5} strokeLinecap="round" />
+    </>
+  ),
+  embalagem: (
+    <>
+      <rect x="8" y="22" width="48" height="30" rx="6" fill={A} />
+      <rect x="6" y="14" width="52" height="10" rx="5" fill={C} />
+      <path d="M32 26v24" stroke={W} strokeWidth={3} opacity={0.7} />
+      <path d="M8 52h48" stroke={K} strokeWidth={2.5} strokeLinecap="round" />
+    </>
+  ),
   seta: (
     <>
       <path d="M32 8v40" stroke={A} strokeWidth={8} strokeLinecap="round" />
