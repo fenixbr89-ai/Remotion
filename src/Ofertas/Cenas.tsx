@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Easing, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { COR, FONTE_TEXTO, FONTE_TITULO, PRODUTOS, VALIDADE, WHATSAPP } from "./config";
+import { COR, FONTE_TEXTO, FONTE_TITULO, PRODUTOS, SELO_CARNE, SELO_TERCA, VALIDADE, WHATSAPP } from "./config";
 import { clamp, Estouro, Fundo, Logo, Palavras, Preco, Selo, Tag, useOut, usePop } from "./ui";
 
 const suave = Easing.bezier(0.65, 0, 0.35, 1);
@@ -24,10 +24,12 @@ const Linha: React.FC<{ y: number; children: React.ReactNode; gap?: number }> = 
 );
 
 // Selo que entra grande no centro e depois sobe pequeno para o topo
-const SeloQueSobe: React.FC<{ entra: number; sobe: number; yCentro: number; saida?: number }> = ({
+const SeloQueSobe: React.FC<{ entra: number; sobe: number; yCentro: number; src: string; width: number; saida?: number }> = ({
   entra,
   sobe,
   yCentro,
+  src,
+  width,
   saida,
 }) => {
   const frame = useCurrentFrame();
@@ -37,7 +39,7 @@ const SeloQueSobe: React.FC<{ entra: number; sobe: number; yCentro: number; said
   return (
     <Linha y={interpolate(t, [0, 1], [yCentro, 60])}>
       <div style={{ scale: String(p * o * interpolate(t, [0, 1], [1, 0.44])), transformOrigin: "top center" }}>
-        <Selo width={800} />
+        <Selo width={width} src={src} />
       </div>
     </Linha>
   );
@@ -52,7 +54,7 @@ export const Abertura: React.FC = () => {
   return (
     <AbsoluteFill>
       <Fundo tipo="azul" />
-      <SeloQueSobe entra={4} sobe={40} yCentro={520} />
+      <SeloQueSobe entra={4} sobe={40} yCentro={480} src={SELO_CARNE} width={700} />
       <Linha y={540}>
         <Palavras texto="é dia de aproveitar" delay={52} size={70} saida={sai} />
       </Linha>
@@ -105,7 +107,7 @@ export const VoceEncontra: React.FC = () => (
     <Linha y={360}>
       <Palavras texto="Na nossa" delay={2} cor={COR.marinho} size={74} saida={38} />
     </Linha>
-    <SeloQueSobe entra={8} sobe={40} yCentro={500} />
+    <SeloQueSobe entra={8} sobe={40} yCentro={520} src={SELO_TERCA} width={920} />
     <Linha y={470}>
       <Palavras texto="você encontra" delay={52} cor={COR.marinho} size={74} />
     </Linha>
@@ -192,7 +194,7 @@ export const Produtos: React.FC = () => {
       <Fundo tipo="azul" />
       <Linha y={40}>
         <div style={{ scale: String(card) }}>
-          <Selo width={360} />
+          <Selo width={520} src={SELO_TERCA} />
         </div>
       </Linha>
 

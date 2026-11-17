@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Easing, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { COR, FONTE_TEXTO, FONTE_TITULO, LOGO, SELO } from "./config";
+import { COR, FONTE_TEXTO, FONTE_TITULO, LOGO, SELO_TERCA } from "./config";
 
 export const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
@@ -138,8 +138,12 @@ export const Logo: React.FC<{ width: number; delay: number; saida?: number; styl
 };
 
 // ---------- Selo da campanha ----------
-export const Selo: React.FC<{ width: number; style?: React.CSSProperties }> = ({ width, style }) => (
-  <Img src={SELO} style={{ width, filter: "drop-shadow(0 14px 22px rgba(0,0,0,0.4))", ...style }} />
+export const Selo: React.FC<{ width: number; src?: string; style?: React.CSSProperties }> = ({
+  width,
+  src = SELO_TERCA,
+  style,
+}) => (
+  <Img src={src} style={{ width, filter: "drop-shadow(0 14px 22px rgba(0,0,0,0.4))", ...style }} />
 );
 
 // ---------- Estouro amarelo atrás do preço ----------

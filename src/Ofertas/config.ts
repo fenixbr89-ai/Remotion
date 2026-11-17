@@ -23,7 +23,8 @@ export const VALIDADE = "17 de Novembro"; // "Ofertas válidas para ..."
 export const WHATSAPP = "(62) 9 9852-4291";
 
 export const LOGO = staticFile("logo.png");
-export const SELO = staticFile("festival.png");
+export const SELO_CARNE = staticFile("carne-suina.png");
+export const SELO_TERCA = staticFile("terca-suina.png");
 
 // Cores da marca Mariana
 export const COR = {
