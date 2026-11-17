@@ -46,39 +46,42 @@ const SeloQueSobe: React.FC<{ entra: number; sobe: number; yCentro: number; src:
 };
 
 // ================= 1. ABERTURA (azul) =================
-export const DUR_ABERTURA = 150;
+// Narração: "Chegou a Terça-feira Suína do Mariana Supermercado! É dia de aproveitar ofertas especiais!"
+export const DUR_ABERTURA = 213;
 
 export const Abertura: React.FC = () => {
-  const frame = useCurrentFrame();
-  const sai = 110;
+  const troca = 126; // 4,2s: começa "é dia de aproveitar"
   return (
     <AbsoluteFill>
       <Fundo tipo="azul" />
-      <SeloQueSobe entra={4} sobe={40} yCentro={480} src={SELO_CARNE} width={700} />
+      <SeloQueSobe entra={2} sobe={troca} yCentro={150} src={SELO_CARNE} width={560} />
+      <Linha y={830}>
+        <div style={{ scale: String(usePop(20, 11) * useOut(troca - 6)) }}>
+          <Selo width={760} src={SELO_TERCA} />
+        </div>
+      </Linha>
+      <Linha y={1260}>
+        <Logo width={540} delay={70} saida={troca - 6} />
+      </Linha>
       <Linha y={540}>
-        <Palavras texto="é dia de aproveitar" delay={52} size={70} saida={sai} />
+        <Palavras texto="é dia de aproveitar" delay={troca + 4} size={70} />
       </Linha>
       <Linha y={660}>
-        <Tag bg={COR.vermelho} delay={66} size={170} saida={sai}>
+        <Tag bg={COR.vermelho} delay={160} size={170}>
           OFERTAS
         </Tag>
       </Linha>
       <Linha y={890}>
-        <Tag bg={COR.branco} cor={COR.marinho} delay={80} size={140} saida={sai + 2}>
+        <Tag bg={COR.branco} cor={COR.marinho} delay={175} size={140}>
           ESPECIAIS!
         </Tag>
       </Linha>
-      {frame > sai ? (
-        <Linha y={680}>
-          <Logo width={780} delay={sai + 6} />
-        </Linha>
-      ) : null}
     </AbsoluteFill>
   );
 };
 
 // ================= 2. VOCÊ ENCONTRA (branco) =================
-export const DUR_ENCONTRA = 140;
+export const DUR_ENCONTRA = 141;
 
 const ItemLista: React.FC<{ y: number; delay: number; texto: string; bg: string; img: string }> = ({
   y,
@@ -104,18 +107,19 @@ const ItemLista: React.FC<{ y: number; delay: number; texto: string; bg: string;
 export const VoceEncontra: React.FC = () => (
   <AbsoluteFill>
     <Fundo tipo="branco" />
-    <Linha y={360}>
-      <Palavras texto="Na nossa" delay={2} cor={COR.marinho} size={74} saida={38} />
+    <Linha y={70}>
+      <div style={{ scale: String(usePop(0, 12)) }}>
+        <Selo width={460} src={SELO_TERCA} />
+      </div>
     </Linha>
-    <SeloQueSobe entra={8} sobe={40} yCentro={520} src={SELO_TERCA} width={920} />
-    <Linha y={470}>
-      <Palavras texto="você encontra" delay={52} cor={COR.marinho} size={74} />
+    <Linha y={430}>
+      <Palavras texto="Aqui você encontra" delay={2} cor={COR.marinho} size={74} />
     </Linha>
-    <ItemLista y={620} delay={64} texto="PERNIL" bg={COR.vermelho} img="pernil-com-osso.png" />
-    <ItemLista y={880} delay={76} texto="COSTELINHA" bg={COR.azul} img="costelinha.png" />
-    <ItemLista y={1140} delay={88} texto="LOMBO" bg={COR.azul} img="lombo.png" />
-    <Linha y={1420}>
-      <Tag bg={COR.marinho} delay={102} size={90}>
+    <ItemLista y={600} delay={24} texto="PERNIL" bg={COR.vermelho} img="pernil-com-osso.png" />
+    <ItemLista y={860} delay={45} texto="COSTELINHA" bg={COR.azul} img="costelinha.png" />
+    <ItemLista y={1120} delay={72} texto="LOMBO" bg={COR.azul} img="lombo.png" />
+    <Linha y={1400}>
+      <Tag bg={COR.marinho} delay={92} size={90}>
         fresquinhos!
       </Tag>
     </Linha>
@@ -123,7 +127,7 @@ export const VoceEncontra: React.FC = () => (
 );
 
 // ================= 3. CONFIRA OS PREÇOS (vermelho) =================
-export const DUR_CONFIRA = 85;
+export const DUR_CONFIRA = 48;
 
 const Etiqueta: React.FC<{ delay: number }> = ({ delay }) => {
   const frame = useCurrentFrame();
@@ -148,43 +152,48 @@ export const ConfiraPrecos: React.FC = () => (
   <AbsoluteFill>
     <Fundo tipo="vermelho" />
     <Linha y={420}>
-      <Palavras texto="Confira" delay={4} size={74} />
+      <Palavras texto="Confira" delay={0} size={74} />
     </Linha>
     <Linha y={540}>
-      <Tag bg={COR.branco} cor={COR.vermelho} delay={14} size={150}>
+      <Tag bg={COR.branco} cor={COR.vermelho} delay={8} size={150}>
         OS PREÇOS
       </Tag>
     </Linha>
     <Linha y={760}>
-      <Tag bg={COR.marinho} delay={26} size={140}>
+      <Tag bg={COR.marinho} delay={20} size={140}>
         DO DIA!
       </Tag>
     </Linha>
     <Linha y={1020}>
-      <Etiqueta delay={34} />
+      <Etiqueta delay={24} />
     </Linha>
   </AbsoluteFill>
 );
 
 // ================= 4. PRODUTOS um a um (azul) =================
-export const POR_PRODUTO = 90; // 3 segundos cada
-export const DUR_PRODUTOS = PRODUTOS.length * POR_PRODUTO;
+// Frames de cada produto, medidos na narração (13,4s / 16,9s / 20,3s / 24,1s / 27,8s / 31,3s / fim 35,2s)
+const TEMPOS = [105, 102, 114, 111, 105, 117];
+const durProduto = (i: number) => TEMPOS[i] ?? 90;
+const inicioProduto = (i: number) => Array.from({ length: i }, (_, k) => durProduto(k)).reduce((a, b) => a + b, 0);
+export const DUR_PRODUTOS = inicioProduto(PRODUTOS.length);
 
 export const Produtos: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const card = spring({ frame, fps, config: { damping: 14 } });
-  const idx = Math.min(PRODUTOS.length - 1, Math.floor(frame / POR_PRODUTO));
-  const local = frame - idx * POR_PRODUTO;
+  let idx = 0;
+  while (idx < PRODUTOS.length - 1 && frame >= inicioProduto(idx + 1)) idx++;
+  const local = frame - inicioProduto(idx);
+  const POR_PRODUTO = durProduto(idx);
   const prod = PRODUTOS[idx];
   const ultimo = idx === PRODUTOS.length - 1;
 
   const entra = spring({ frame: local - 2, fps, config: { damping: 12 } });
   const sai = ultimo ? 0 : interpolate(local, [POR_PRODUTO - 9, POR_PRODUTO], [0, 1], clamp);
   const nome = spring({ frame: local - 8, fps, config: { damping: 14 } });
-  const preco = spring({ frame: local - 16, fps, config: { damping: 8 } });
+  const preco = spring({ frame: local - 24, fps, config: { damping: 8 } }); // quando o preço é falado
   // pulso no preço no meio do tempo
-  const pulso = interpolate(local, [50, 56, 64], [1, 1.12, 1], clamp);
+  const pulso = interpolate(local, [60, 66, 74], [1, 1.12, 1], clamp);
   // movimento contínuo do produto
   const flutua = Math.sin(local / 12) * 10;
   const zoom = interpolate(local, [0, POR_PRODUTO], [1, 1.07]);
@@ -320,13 +329,13 @@ export const Produtos: React.FC = () => {
 };
 
 // ================= 5. E TEM MAIS! (vermelho) =================
-export const DUR_TEM_MAIS = 45;
+export const DUR_TEM_MAIS = 24;
 
 export const TemMais: React.FC = () => (
   <AbsoluteFill>
     <Fundo tipo="vermelho" />
     <Linha y={840}>
-      <Tag bg={COR.branco} cor={COR.vermelho} delay={2} size={170} saida={36}>
+      <Tag bg={COR.branco} cor={COR.vermelho} delay={0} size={170}>
         E TEM MAIS!
       </Tag>
     </Linha>
@@ -334,7 +343,7 @@ export const TemMais: React.FC = () => (
 );
 
 // ================= 6. GRADE + SACOLA + FINAL (azul) =================
-export const DUR_FINAL = 330;
+export const DUR_FINAL = 550;
 
 const MiniCard: React.FC<{ i: number; delay: number }> = ({ i, delay }) => {
   const p = usePop(delay, 11);
@@ -392,10 +401,15 @@ const Sacola: React.FC = () => (
 export const Final: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const T_ECONOMIZAR = 70;
-  const T_SACOLA = 135;
-  const T_GUARDA = 165;
-  const T_LOGO = 215;
+  // tempos medidos na narração (cena começa em 36,0s)
+  const T_ECONOMIZAR = 62; // "pra você economizar" 38,3s
+  const T_SACOLA = 86; // "encher a sacola" 39,0s
+  const T_GUARDA = 100;
+  const T_LOGO = 138; // "Mariana Supermercado" 40,6s
+  const T_SABOR = 182; // 42,1s
+  const T_PERTINHO = 222; // 43,5s
+  const T_WHATS = 268; // 45,0s
+  const T_VALIDADE = 430; // 50,4s
 
   const sacolaP = spring({ frame: frame - T_SACOLA, fps, config: { damping: 13 } });
   const guarda = interpolate(frame, [T_GUARDA, T_GUARDA + 22], [0, 1], { ...clamp, easing: Easing.bezier(0.5, 0, 0.3, 1) });
@@ -473,22 +487,30 @@ export const Final: React.FC = () => {
           <Linha y={330}>
             <Logo width={760} delay={T_LOGO} />
           </Linha>
-          <Linha y={960}>
-            <Tag bg={COR.marinho} delay={T_LOGO + 16} size={90}>
+          <Linha y={900}>
+            <Tag bg={COR.marinho} delay={T_SABOR} size={90}>
               Mais sabor e economia
             </Tag>
           </Linha>
-          <Linha y={1120}>
-            <Tag bg={COR.vermelho} delay={T_LOGO + 28} size={90}>
+          <Linha y={1040}>
+            <Tag bg={COR.vermelho} delay={T_PERTINHO} size={90}>
               pertinho de você!
             </Tag>
           </Linha>
-          <Linha y={1350}>
-            <Palavras texto="Peça pelo WhatsApp" delay={T_LOGO + 40} size={52} />
+          <Linha y={1230}>
+            <Palavras texto="Peça pelo WhatsApp" delay={T_WHATS} size={52} />
           </Linha>
-          <Linha y={1440}>
-            <Tag bg={COR.branco} cor={COR.marinho} delay={T_LOGO + 48} size={100}>
+          <Linha y={1310}>
+            <Tag bg={COR.branco} cor={COR.marinho} delay={T_WHATS + 12} size={100}>
               {WHATSAPP}
+            </Tag>
+          </Linha>
+          <Linha y={1510}>
+            <Palavras texto="Ofertas válidas só para hoje" delay={T_VALIDADE} size={48} />
+          </Linha>
+          <Linha y={1590}>
+            <Tag bg={COR.vermelho} delay={T_VALIDADE + 20} size={90}>
+              {VALIDADE}
             </Tag>
           </Linha>
         </>

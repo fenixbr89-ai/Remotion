@@ -1,7 +1,8 @@
 import "@fontsource/baloo-2/800.css";
 import "@fontsource/poppins/700.css";
+import { Audio } from "@remotion/media";
 import React from "react";
-import { AbsoluteFill, Easing, interpolate, Sequence, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Easing, interpolate, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { COR } from "./config";
 import {
   Abertura,
@@ -66,6 +67,7 @@ export const OfertasVideo: React.FC = () => {
   });
   return (
     <AbsoluteFill style={{ backgroundColor: COR.azul }}>
+      <Audio src={staticFile("narracao.wav")} />
       {seqs}
       {cortes.map((c) => (
         <Transicao key={c} em={c} />
