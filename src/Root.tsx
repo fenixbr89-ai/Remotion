@@ -2,12 +2,32 @@ import { Composition, Folder } from "remotion";
 import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
+import {
+  Escritorio,
+  ESCRITORIO_DURACAO,
+  ESCRITORIO_FPS,
+  ESCRITORIO_H,
+  ESCRITORIO_W,
+} from "./Escritorio/Escritorio";
+import { carregarFontes } from "./Escritorio/theme";
+
+carregarFontes();
 
 // Each <Composition> is an entry in the sidebar!
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      <Composition
+        // Vídeo vertical do site Woner Protásio & Cândido
+        id="Escritorio"
+        component={Escritorio}
+        durationInFrames={ESCRITORIO_DURACAO}
+        fps={ESCRITORIO_FPS}
+        width={ESCRITORIO_W}
+        height={ESCRITORIO_H}
+        defaultProps={{ baseUrl: "" }}
+      />
       <Folder name="Elements">
         <Composition
           id="Logo"
@@ -50,7 +70,6 @@ export const RemotionRoot: React.FC = () => {
           titleColor: "#000000",
         }}
       />
-
     </>
   );
 };
