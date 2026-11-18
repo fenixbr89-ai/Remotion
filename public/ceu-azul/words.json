@@ -1,0 +1,1730 @@
+[
+ {
+  "palavra": "Por",
+  "inicio": 0.27,
+  "fim": 0.48,
+  "linha": 0
+ },
+ {
+  "palavra": "que",
+  "inicio": 0.48,
+  "fim": 0.746,
+  "linha": 0
+ },
+ {
+  "palavra": "o",
+  "inicio": 0.751,
+  "fim": 0.84,
+  "linha": 0
+ },
+ {
+  "palavra": "céu",
+  "inicio": 0.84,
+  "fim": 1.14,
+  "linha": 0
+ },
+ {
+  "palavra": "é",
+  "inicio": 1.14,
+  "fim": 1.23,
+  "linha": 0
+ },
+ {
+  "palavra": "azul?",
+  "inicio": 1.23,
+  "fim": 1.59,
+  "linha": 0
+ },
+ {
+  "palavra": "E",
+  "inicio": 2.01,
+  "fim": 2.13,
+  "linha": 1
+ },
+ {
+  "palavra": "por",
+  "inicio": 2.13,
+  "fim": 2.31,
+  "linha": 1
+ },
+ {
+  "palavra": "que",
+  "inicio": 2.31,
+  "fim": 2.52,
+  "linha": 1
+ },
+ {
+  "palavra": "no",
+  "inicio": 2.52,
+  "fim": 2.67,
+  "linha": 1
+ },
+ {
+  "palavra": "pôr",
+  "inicio": 2.67,
+  "fim": 2.85,
+  "linha": 1
+ },
+ {
+  "palavra": "do",
+  "inicio": 2.85,
+  "fim": 2.94,
+  "linha": 1
+ },
+ {
+  "palavra": "sol",
+  "inicio": 2.94,
+  "fim": 3.27,
+  "linha": 1
+ },
+ {
+  "palavra": "ele",
+  "inicio": 3.271,
+  "fim": 3.39,
+  "linha": 1
+ },
+ {
+  "palavra": "fica",
+  "inicio": 3.39,
+  "fim": 3.66,
+  "linha": 1
+ },
+ {
+  "palavra": "laranja?",
+  "inicio": 3.66,
+  "fim": 4.14,
+  "linha": 1
+ },
+ {
+  "palavra": "Tudo",
+  "inicio": 4.86,
+  "fim": 5.19,
+  "linha": 2
+ },
+ {
+  "palavra": "começa",
+  "inicio": 5.19,
+  "fim": 5.61,
+  "linha": 2
+ },
+ {
+  "palavra": "com",
+  "inicio": 5.61,
+  "fim": 5.79,
+  "linha": 2
+ },
+ {
+  "palavra": "a",
+  "inicio": 5.79,
+  "fim": 5.88,
+  "linha": 2
+ },
+ {
+  "palavra": "luz",
+  "inicio": 5.88,
+  "fim": 6.21,
+  "linha": 2
+ },
+ {
+  "palavra": "do",
+  "inicio": 6.21,
+  "fim": 6.33,
+  "linha": 2
+ },
+ {
+  "palavra": "Sol.",
+  "inicio": 6.33,
+  "fim": 6.66,
+  "linha": 2
+ },
+ {
+  "palavra": "Ela",
+  "inicio": 7.2,
+  "fim": 7.378,
+  "linha": 3
+ },
+ {
+  "palavra": "parece",
+  "inicio": 7.378,
+  "fim": 7.74,
+  "linha": 3
+ },
+ {
+  "palavra": "branca,",
+  "inicio": 7.74,
+  "fim": 8.16,
+  "linha": 3
+ },
+ {
+  "palavra": "mas",
+  "inicio": 8.31,
+  "fim": 8.58,
+  "linha": 4
+ },
+ {
+  "palavra": "na",
+  "inicio": 8.58,
+  "fim": 8.73,
+  "linha": 4
+ },
+ {
+  "palavra": "verdade",
+  "inicio": 8.73,
+  "fim": 9.298,
+  "linha": 4
+ },
+ {
+  "palavra": "é",
+  "inicio": 9.298,
+  "fim": 9.3,
+  "linha": 4
+ },
+ {
+  "palavra": "a",
+  "inicio": 9.3,
+  "fim": 9.36,
+  "linha": 4
+ },
+ {
+  "palavra": "mistura",
+  "inicio": 9.36,
+  "fim": 9.9,
+  "linha": 4
+ },
+ {
+  "palavra": "de",
+  "inicio": 9.9,
+  "fim": 10.05,
+  "linha": 4
+ },
+ {
+  "palavra": "todas",
+  "inicio": 10.17,
+  "fim": 10.62,
+  "linha": 4
+ },
+ {
+  "palavra": "as",
+  "inicio": 10.62,
+  "fim": 10.74,
+  "linha": 4
+ },
+ {
+  "palavra": "cores.",
+  "inicio": 10.74,
+  "fim": 11.16,
+  "linha": 4
+ },
+ {
+  "palavra": "Newton",
+  "inicio": 11.701,
+  "fim": 12.03,
+  "linha": 5
+ },
+ {
+  "palavra": "mostrou",
+  "inicio": 12.06,
+  "fim": 12.42,
+  "linha": 5
+ },
+ {
+  "palavra": "isso",
+  "inicio": 12.42,
+  "fim": 12.66,
+  "linha": 5
+ },
+ {
+  "palavra": "com",
+  "inicio": 12.66,
+  "fim": 12.814,
+  "linha": 5
+ },
+ {
+  "palavra": "um",
+  "inicio": 12.814,
+  "fim": 12.9,
+  "linha": 5
+ },
+ {
+  "palavra": "prisma:",
+  "inicio": 12.9,
+  "fim": 13.38,
+  "linha": 5
+ },
+ {
+  "palavra": "entra",
+  "inicio": 13.65,
+  "fim": 13.92,
+  "linha": 6
+ },
+ {
+  "palavra": "luz",
+  "inicio": 13.951,
+  "fim": 14.16,
+  "linha": 6
+ },
+ {
+  "palavra": "branca",
+  "inicio": 14.16,
+  "fim": 14.55,
+  "linha": 6
+ },
+ {
+  "palavra": "e",
+  "inicio": 14.76,
+  "fim": 14.88,
+  "linha": 6
+ },
+ {
+  "palavra": "sai",
+  "inicio": 14.88,
+  "fim": 15.149,
+  "linha": 6
+ },
+ {
+  "palavra": "um",
+  "inicio": 15.156,
+  "fim": 15.21,
+  "linha": 6
+ },
+ {
+  "palavra": "arco-íris.",
+  "inicio": 15.42,
+  "fim": 15.75,
+  "linha": 6
+ },
+ {
+  "palavra": "Cada",
+  "inicio": 16.38,
+  "fim": 16.74,
+  "linha": 7
+ },
+ {
+  "palavra": "cor",
+  "inicio": 16.77,
+  "fim": 17.04,
+  "linha": 7
+ },
+ {
+  "palavra": "é",
+  "inicio": 17.04,
+  "fim": 17.13,
+  "linha": 7
+ },
+ {
+  "palavra": "uma",
+  "inicio": 17.13,
+  "fim": 17.31,
+  "linha": 7
+ },
+ {
+  "palavra": "onda",
+  "inicio": 17.31,
+  "fim": 17.67,
+  "linha": 7
+ },
+ {
+  "palavra": "de",
+  "inicio": 17.67,
+  "fim": 17.79,
+  "linha": 7
+ },
+ {
+  "palavra": "tamanho",
+  "inicio": 17.79,
+  "fim": 18.27,
+  "linha": 7
+ },
+ {
+  "palavra": "diferente.",
+  "inicio": 18.27,
+  "fim": 18.78,
+  "linha": 7
+ },
+ {
+  "palavra": "O",
+  "inicio": 19.17,
+  "fim": 19.26,
+  "linha": 8
+ },
+ {
+  "palavra": "vermelho",
+  "inicio": 19.26,
+  "fim": 19.709,
+  "linha": 8
+ },
+ {
+  "palavra": "tem",
+  "inicio": 19.71,
+  "fim": 19.889,
+  "linha": 8
+ },
+ {
+  "palavra": "a",
+  "inicio": 19.889,
+  "fim": 20.025,
+  "linha": 8
+ },
+ {
+  "palavra": "onda",
+  "inicio": 20.025,
+  "fim": 20.16,
+  "linha": 8
+ },
+ {
+  "palavra": "mais",
+  "inicio": 20.16,
+  "fim": 20.34,
+  "linha": 8
+ },
+ {
+  "palavra": "longa,",
+  "inicio": 20.34,
+  "fim": 20.7,
+  "linha": 8
+ },
+ {
+  "palavra": "uns",
+  "inicio": 20.7,
+  "fim": 21.09,
+  "linha": 8
+ },
+ {
+  "palavra": "setecentos",
+  "inicio": 21.09,
+  "fim": 21.84,
+  "linha": 8
+ },
+ {
+  "palavra": "nanômetros.",
+  "inicio": 22.141,
+  "fim": 22.5,
+  "linha": 8
+ },
+ {
+  "palavra": "O",
+  "inicio": 22.5,
+  "fim": 23.04,
+  "linha": 9
+ },
+ {
+  "palavra": "azul",
+  "inicio": 23.04,
+  "fim": 23.311,
+  "linha": 9
+ },
+ {
+  "palavra": "é",
+  "inicio": 23.311,
+  "fim": 23.37,
+  "linha": 9
+ },
+ {
+  "palavra": "bem",
+  "inicio": 23.398,
+  "fim": 23.61,
+  "linha": 9
+ },
+ {
+  "palavra": "mais",
+  "inicio": 23.61,
+  "fim": 23.79,
+  "linha": 9
+ },
+ {
+  "palavra": "curto,",
+  "inicio": 23.79,
+  "fim": 24.12,
+  "linha": 9
+ },
+ {
+  "palavra": "uns",
+  "inicio": 24.12,
+  "fim": 24.48,
+  "linha": 9
+ },
+ {
+  "palavra": "quatrocentos",
+  "inicio": 24.48,
+  "fim": 25.08,
+  "linha": 9
+ },
+ {
+  "palavra": "e",
+  "inicio": 25.08,
+  "fim": 25.11,
+  "linha": 9
+ },
+ {
+  "palavra": "cinquenta.",
+  "inicio": 25.11,
+  "fim": 25.62,
+  "linha": 9
+ },
+ {
+  "palavra": "Agora",
+  "inicio": 26.16,
+  "fim": 26.61,
+  "linha": 10
+ },
+ {
+  "palavra": "essa",
+  "inicio": 26.88,
+  "fim": 27.09,
+  "linha": 10
+ },
+ {
+  "palavra": "luz",
+  "inicio": 27.09,
+  "fim": 27.39,
+  "linha": 10
+ },
+ {
+  "palavra": "entra",
+  "inicio": 27.39,
+  "fim": 27.69,
+  "linha": 10
+ },
+ {
+  "palavra": "na",
+  "inicio": 27.69,
+  "fim": 27.84,
+  "linha": 10
+ },
+ {
+  "palavra": "atmosfera.",
+  "inicio": 27.84,
+  "fim": 28.5,
+  "linha": 10
+ },
+ {
+  "palavra": "O",
+  "inicio": 28.92,
+  "fim": 29.04,
+  "linha": 11
+ },
+ {
+  "palavra": "ar",
+  "inicio": 29.04,
+  "fim": 29.19,
+  "linha": 11
+ },
+ {
+  "palavra": "é",
+  "inicio": 29.19,
+  "fim": 29.19,
+  "linha": 11
+ },
+ {
+  "palavra": "feito",
+  "inicio": 29.19,
+  "fim": 29.52,
+  "linha": 11
+ },
+ {
+  "palavra": "de",
+  "inicio": 29.52,
+  "fim": 29.61,
+  "linha": 11
+ },
+ {
+  "palavra": "moléculas",
+  "inicio": 29.61,
+  "fim": 30.12,
+  "linha": 11
+ },
+ {
+  "palavra": "de",
+  "inicio": 30.12,
+  "fim": 30.232,
+  "linha": 11
+ },
+ {
+  "palavra": "nitrogênio",
+  "inicio": 30.24,
+  "fim": 30.81,
+  "linha": 11
+ },
+ {
+  "palavra": "e",
+  "inicio": 30.81,
+  "fim": 30.87,
+  "linha": 11
+ },
+ {
+  "palavra": "oxigênio,",
+  "inicio": 30.87,
+  "fim": 31.44,
+  "linha": 11
+ },
+ {
+  "palavra": "muito",
+  "inicio": 31.86,
+  "fim": 32.19,
+  "linha": 12
+ },
+ {
+  "palavra": "menores",
+  "inicio": 32.19,
+  "fim": 32.76,
+  "linha": 12
+ },
+ {
+  "palavra": "que",
+  "inicio": 32.76,
+  "fim": 32.85,
+  "linha": 12
+ },
+ {
+  "palavra": "essas",
+  "inicio": 32.85,
+  "fim": 33.09,
+  "linha": 12
+ },
+ {
+  "palavra": "ondas.",
+  "inicio": 33.09,
+  "fim": 33.45,
+  "linha": 12
+ },
+ {
+  "palavra": "Quando",
+  "inicio": 33.84,
+  "fim": 34.108,
+  "linha": 13
+ },
+ {
+  "palavra": "a",
+  "inicio": 34.108,
+  "fim": 34.14,
+  "linha": 13
+ },
+ {
+  "palavra": "luz",
+  "inicio": 34.14,
+  "fim": 34.32,
+  "linha": 13
+ },
+ {
+  "palavra": "bate",
+  "inicio": 34.321,
+  "fim": 34.59,
+  "linha": 13
+ },
+ {
+  "palavra": "nelas,",
+  "inicio": 34.59,
+  "fim": 35.01,
+  "linha": 13
+ },
+ {
+  "palavra": "ela",
+  "inicio": 35.22,
+  "fim": 35.4,
+  "linha": 13
+ },
+ {
+  "palavra": "é",
+  "inicio": 35.4,
+  "fim": 35.41,
+  "linha": 13
+ },
+ {
+  "palavra": "espalhada",
+  "inicio": 35.41,
+  "fim": 36.09,
+  "linha": 13
+ },
+ {
+  "palavra": "para",
+  "inicio": 36.09,
+  "fim": 36.269,
+  "linha": 13
+ },
+ {
+  "palavra": "todos",
+  "inicio": 36.27,
+  "fim": 36.75,
+  "linha": 13
+ },
+ {
+  "palavra": "os",
+  "inicio": 36.75,
+  "fim": 36.9,
+  "linha": 13
+ },
+ {
+  "palavra": "lados.",
+  "inicio": 36.9,
+  "fim": 37.32,
+  "linha": 13
+ },
+ {
+  "palavra": "Só",
+  "inicio": 37.68,
+  "fim": 37.92,
+  "linha": 14
+ },
+ {
+  "palavra": "que",
+  "inicio": 37.92,
+  "fim": 38.071,
+  "linha": 14
+ },
+ {
+  "palavra": "esse",
+  "inicio": 38.071,
+  "fim": 38.196,
+  "linha": 14
+ },
+ {
+  "palavra": "espalhamento",
+  "inicio": 38.196,
+  "fim": 38.73,
+  "linha": 14
+ },
+ {
+  "palavra": "não",
+  "inicio": 38.73,
+  "fim": 38.82,
+  "linha": 14
+ },
+ {
+  "palavra": "é",
+  "inicio": 38.82,
+  "fim": 38.85,
+  "linha": 14
+ },
+ {
+  "palavra": "igual",
+  "inicio": 38.85,
+  "fim": 39.09,
+  "linha": 14
+ },
+ {
+  "palavra": "para",
+  "inicio": 39.09,
+  "fim": 39.27,
+  "linha": 14
+ },
+ {
+  "palavra": "todas",
+  "inicio": 39.27,
+  "fim": 39.63,
+  "linha": 14
+ },
+ {
+  "palavra": "as",
+  "inicio": 39.63,
+  "fim": 39.78,
+  "linha": 14
+ },
+ {
+  "palavra": "cores.",
+  "inicio": 39.78,
+  "fim": 40.14,
+  "linha": 14
+ },
+ {
+  "palavra": "Quanto",
+  "inicio": 40.56,
+  "fim": 40.83,
+  "linha": 15
+ },
+ {
+  "palavra": "mais",
+  "inicio": 40.83,
+  "fim": 41.07,
+  "linha": 15
+ },
+ {
+  "palavra": "curta",
+  "inicio": 41.07,
+  "fim": 41.52,
+  "linha": 15
+ },
+ {
+  "palavra": "a",
+  "inicio": 41.52,
+  "fim": 41.523,
+  "linha": 15
+ },
+ {
+  "palavra": "onda,",
+  "inicio": 41.523,
+  "fim": 41.94,
+  "linha": 15
+ },
+ {
+  "palavra": "mais",
+  "inicio": 42.03,
+  "fim": 42.45,
+  "linha": 15
+ },
+ {
+  "palavra": "ela",
+  "inicio": 42.45,
+  "fim": 42.6,
+  "linha": 15
+ },
+ {
+  "palavra": "espalha.",
+  "inicio": 42.604,
+  "fim": 43.05,
+  "linha": 15
+ },
+ {
+  "palavra": "O",
+  "inicio": 43.62,
+  "fim": 43.71,
+  "linha": 16
+ },
+ {
+  "palavra": "azul",
+  "inicio": 43.71,
+  "fim": 44.01,
+  "linha": 16
+ },
+ {
+  "palavra": "espalha",
+  "inicio": 44.012,
+  "fim": 44.43,
+  "linha": 16
+ },
+ {
+  "palavra": "quase",
+  "inicio": 44.43,
+  "fim": 44.73,
+  "linha": 16
+ },
+ {
+  "palavra": "seis",
+  "inicio": 44.73,
+  "fim": 45.15,
+  "linha": 16
+ },
+ {
+  "palavra": "vezes",
+  "inicio": 45.15,
+  "fim": 45.45,
+  "linha": 16
+ },
+ {
+  "palavra": "mais",
+  "inicio": 45.45,
+  "fim": 45.72,
+  "linha": 16
+ },
+ {
+  "palavra": "que",
+  "inicio": 45.72,
+  "fim": 45.81,
+  "linha": 16
+ },
+ {
+  "palavra": "o",
+  "inicio": 45.81,
+  "fim": 45.84,
+  "linha": 16
+ },
+ {
+  "palavra": "vermelho.",
+  "inicio": 45.84,
+  "fim": 46.26,
+  "linha": 16
+ },
+ {
+  "palavra": "Isso",
+  "inicio": 46.847,
+  "fim": 47.1,
+  "linha": 17
+ },
+ {
+  "palavra": "se",
+  "inicio": 47.1,
+  "fim": 47.25,
+  "linha": 17
+ },
+ {
+  "palavra": "chama",
+  "inicio": 47.25,
+  "fim": 47.55,
+  "linha": 17
+ },
+ {
+  "palavra": "espalhamento",
+  "inicio": 47.55,
+  "fim": 48.3,
+  "linha": 17
+ },
+ {
+  "palavra": "de",
+  "inicio": 48.3,
+  "fim": 48.42,
+  "linha": 17
+ },
+ {
+  "palavra": "Rayleigh,",
+  "inicio": 48.42,
+  "fim": 49.261,
+  "linha": 17
+ },
+ {
+  "palavra": "explicado",
+  "inicio": 49.261,
+  "fim": 49.74,
+  "linha": 18
+ },
+ {
+  "palavra": "pelo",
+  "inicio": 49.743,
+  "fim": 49.92,
+  "linha": 18
+ },
+ {
+  "palavra": "físico",
+  "inicio": 49.92,
+  "fim": 50.352,
+  "linha": 18
+ },
+ {
+  "palavra": "Lord",
+  "inicio": 50.352,
+  "fim": 51.426,
+  "linha": 18
+ },
+ {
+  "palavra": "Rayleigh",
+  "inicio": 51.426,
+  "fim": 52.5,
+  "linha": 18
+ },
+ {
+  "palavra": "em",
+  "inicio": 52.5,
+  "fim": 52.59,
+  "linha": 18
+ },
+ {
+  "palavra": "1871.",
+  "inicio": 52.59,
+  "fim": 53.43,
+  "linha": 18
+ },
+ {
+  "palavra": "Então,",
+  "inicio": 53.43,
+  "fim": 53.82,
+  "linha": 19
+ },
+ {
+  "palavra": "pra",
+  "inicio": 53.82,
+  "fim": 53.998,
+  "linha": 19
+ },
+ {
+  "palavra": "qualquer",
+  "inicio": 54,
+  "fim": 54.45,
+  "linha": 19
+ },
+ {
+  "palavra": "lado",
+  "inicio": 54.45,
+  "fim": 54.75,
+  "linha": 19
+ },
+ {
+  "palavra": "que",
+  "inicio": 54.752,
+  "fim": 54.87,
+  "linha": 19
+ },
+ {
+  "palavra": "você",
+  "inicio": 54.87,
+  "fim": 55.14,
+  "linha": 19
+ },
+ {
+  "palavra": "olhe,",
+  "inicio": 55.14,
+  "fim": 55.439,
+  "linha": 19
+ },
+ {
+  "palavra": "tem",
+  "inicio": 55.59,
+  "fim": 55.807,
+  "linha": 20
+ },
+ {
+  "palavra": "luz",
+  "inicio": 55.807,
+  "fim": 56.04,
+  "linha": 20
+ },
+ {
+  "palavra": "azul",
+  "inicio": 56.055,
+  "fim": 56.46,
+  "linha": 20
+ },
+ {
+  "palavra": "vindo",
+  "inicio": 56.46,
+  "fim": 56.76,
+  "linha": 20
+ },
+ {
+  "palavra": "do",
+  "inicio": 56.76,
+  "fim": 56.88,
+  "linha": 20
+ },
+ {
+  "palavra": "céu",
+  "inicio": 56.88,
+  "fim": 57.15,
+  "linha": 20
+ },
+ {
+  "palavra": "na",
+  "inicio": 57.15,
+  "fim": 57.27,
+  "linha": 20
+ },
+ {
+  "palavra": "sua",
+  "inicio": 57.27,
+  "fim": 57.45,
+  "linha": 20
+ },
+ {
+  "palavra": "direção.",
+  "inicio": 57.45,
+  "fim": 57.87,
+  "linha": 20
+ },
+ {
+  "palavra": "Mas",
+  "inicio": 58.65,
+  "fim": 58.852,
+  "linha": 21
+ },
+ {
+  "palavra": "espera:",
+  "inicio": 58.852,
+  "fim": 59.22,
+  "linha": 21
+ },
+ {
+  "palavra": "o",
+  "inicio": 59.61,
+  "fim": 59.7,
+  "linha": 22
+ },
+ {
+  "palavra": "violeta",
+  "inicio": 59.7,
+  "fim": 60.181,
+  "linha": 22
+ },
+ {
+  "palavra": "tem",
+  "inicio": 60.181,
+  "fim": 60.36,
+  "linha": 22
+ },
+ {
+  "palavra": "a",
+  "inicio": 60.36,
+  "fim": 60.381,
+  "linha": 22
+ },
+ {
+  "palavra": "onda",
+  "inicio": 60.381,
+  "fim": 60.63,
+  "linha": 22
+ },
+ {
+  "palavra": "ainda",
+  "inicio": 60.63,
+  "fim": 60.9,
+  "linha": 22
+ },
+ {
+  "palavra": "mais",
+  "inicio": 60.9,
+  "fim": 61.17,
+  "linha": 22
+ },
+ {
+  "palavra": "curta.",
+  "inicio": 61.17,
+  "fim": 61.62,
+  "linha": 22
+ },
+ {
+  "palavra": "Por",
+  "inicio": 61.62,
+  "fim": 62.07,
+  "linha": 23
+ },
+ {
+  "palavra": "que",
+  "inicio": 62.07,
+  "fim": 62.34,
+  "linha": 23
+ },
+ {
+  "palavra": "o",
+  "inicio": 62.34,
+  "fim": 62.401,
+  "linha": 23
+ },
+ {
+  "palavra": "céu",
+  "inicio": 62.401,
+  "fim": 62.581,
+  "linha": 23
+ },
+ {
+  "palavra": "não",
+  "inicio": 62.581,
+  "fim": 62.641,
+  "linha": 23
+ },
+ {
+  "palavra": "é",
+  "inicio": 62.641,
+  "fim": 62.7,
+  "linha": 23
+ },
+ {
+  "palavra": "violeta?",
+  "inicio": 62.7,
+  "fim": 63.21,
+  "linha": 23
+ },
+ {
+  "palavra": "Porque",
+  "inicio": 63.81,
+  "fim": 64.102,
+  "linha": 24
+ },
+ {
+  "palavra": "o",
+  "inicio": 64.11,
+  "fim": 64.17,
+  "linha": 24
+ },
+ {
+  "palavra": "Sol",
+  "inicio": 64.17,
+  "fim": 64.469,
+  "linha": 24
+ },
+ {
+  "palavra": "emite",
+  "inicio": 64.47,
+  "fim": 64.83,
+  "linha": 24
+ },
+ {
+  "palavra": "menos",
+  "inicio": 64.831,
+  "fim": 65.459,
+  "linha": 24
+ },
+ {
+  "palavra": "violeta,",
+  "inicio": 65.459,
+  "fim": 65.97,
+  "linha": 24
+ },
+ {
+  "palavra": "e",
+  "inicio": 66.27,
+  "fim": 66.36,
+  "linha": 25
+ },
+ {
+  "palavra": "os",
+  "inicio": 66.36,
+  "fim": 66.48,
+  "linha": 25
+ },
+ {
+  "palavra": "nossos",
+  "inicio": 66.48,
+  "fim": 66.78,
+  "linha": 25
+ },
+ {
+  "palavra": "olhos",
+  "inicio": 66.78,
+  "fim": 67.021,
+  "linha": 25
+ },
+ {
+  "palavra": "são",
+  "inicio": 67.021,
+  "fim": 67.23,
+  "linha": 25
+ },
+ {
+  "palavra": "bem",
+  "inicio": 67.26,
+  "fim": 67.47,
+  "linha": 25
+ },
+ {
+  "palavra": "menos",
+  "inicio": 67.47,
+  "fim": 67.8,
+  "linha": 25
+ },
+ {
+  "palavra": "sensíveis",
+  "inicio": 67.8,
+  "fim": 68.398,
+  "linha": 25
+ },
+ {
+  "palavra": "a",
+  "inicio": 68.398,
+  "fim": 68.402,
+  "linha": 25
+ },
+ {
+  "palavra": "essa",
+  "inicio": 68.402,
+  "fim": 68.639,
+  "linha": 25
+ },
+ {
+  "palavra": "cor.",
+  "inicio": 68.64,
+  "fim": 68.88,
+  "linha": 25
+ },
+ {
+  "palavra": "E",
+  "inicio": 69.54,
+  "fim": 69.63,
+  "linha": 26
+ },
+ {
+  "palavra": "o",
+  "inicio": 69.63,
+  "fim": 69.72,
+  "linha": 26
+ },
+ {
+  "palavra": "pôr",
+  "inicio": 69.72,
+  "fim": 69.87,
+  "linha": 26
+ },
+ {
+  "palavra": "do",
+  "inicio": 69.87,
+  "fim": 69.96,
+  "linha": 26
+ },
+ {
+  "palavra": "sol?",
+  "inicio": 69.96,
+  "fim": 70.26,
+  "linha": 26
+ },
+ {
+  "palavra": "No",
+  "inicio": 70.83,
+  "fim": 71.01,
+  "linha": 27
+ },
+ {
+  "palavra": "fim",
+  "inicio": 71.01,
+  "fim": 71.22,
+  "linha": 27
+ },
+ {
+  "palavra": "da",
+  "inicio": 71.22,
+  "fim": 71.34,
+  "linha": 27
+ },
+ {
+  "palavra": "tarde,",
+  "inicio": 71.34,
+  "fim": 71.759,
+  "linha": 27
+ },
+ {
+  "palavra": "a",
+  "inicio": 71.91,
+  "fim": 72.03,
+  "linha": 27
+ },
+ {
+  "palavra": "luz",
+  "inicio": 72.03,
+  "fim": 72.27,
+  "linha": 27
+ },
+ {
+  "palavra": "atravessa",
+  "inicio": 72.27,
+  "fim": 72.719,
+  "linha": 27
+ },
+ {
+  "palavra": "muito",
+  "inicio": 72.721,
+  "fim": 73.32,
+  "linha": 27
+ },
+ {
+  "palavra": "mais",
+  "inicio": 73.32,
+  "fim": 73.635,
+  "linha": 27
+ },
+ {
+  "palavra": "ar",
+  "inicio": 73.635,
+  "fim": 73.738,
+  "linha": 27
+ },
+ {
+  "palavra": "até",
+  "inicio": 73.738,
+  "fim": 74.01,
+  "linha": 27
+ },
+ {
+  "palavra": "chegar",
+  "inicio": 74.01,
+  "fim": 74.31,
+  "linha": 27
+ },
+ {
+  "palavra": "em",
+  "inicio": 74.31,
+  "fim": 74.315,
+  "linha": 27
+ },
+ {
+  "palavra": "você.",
+  "inicio": 74.315,
+  "fim": 74.64,
+  "linha": 27
+ },
+ {
+  "palavra": "No",
+  "inicio": 75.24,
+  "fim": 75.36,
+  "linha": 28
+ },
+ {
+  "palavra": "caminho,",
+  "inicio": 75.36,
+  "fim": 75.689,
+  "linha": 28
+ },
+ {
+  "palavra": "quase",
+  "inicio": 75.72,
+  "fim": 76.02,
+  "linha": 28
+ },
+ {
+  "palavra": "todo",
+  "inicio": 76.02,
+  "fim": 76.441,
+  "linha": 28
+ },
+ {
+  "palavra": "o",
+  "inicio": 76.441,
+  "fim": 76.5,
+  "linha": 28
+ },
+ {
+  "palavra": "azul",
+  "inicio": 76.5,
+  "fim": 76.801,
+  "linha": 28
+ },
+ {
+  "palavra": "é",
+  "inicio": 76.801,
+  "fim": 76.831,
+  "linha": 28
+ },
+ {
+  "palavra": "espalhado",
+  "inicio": 76.831,
+  "fim": 77.31,
+  "linha": 28
+ },
+ {
+  "palavra": "pra",
+  "inicio": 77.31,
+  "fim": 77.433,
+  "linha": 28
+ },
+ {
+  "palavra": "longe.",
+  "inicio": 77.433,
+  "fim": 77.728,
+  "linha": 28
+ },
+ {
+  "palavra": "Sobram",
+  "inicio": 78.09,
+  "fim": 78.42,
+  "linha": 29
+ },
+ {
+  "palavra": "o",
+  "inicio": 78.42,
+  "fim": 78.524,
+  "linha": 29
+ },
+ {
+  "palavra": "laranja",
+  "inicio": 78.524,
+  "fim": 79.02,
+  "linha": 29
+ },
+ {
+  "palavra": "e",
+  "inicio": 79.02,
+  "fim": 79.17,
+  "linha": 29
+ },
+ {
+  "palavra": "o",
+  "inicio": 79.17,
+  "fim": 79.32,
+  "linha": 29
+ },
+ {
+  "palavra": "vermelho.",
+  "inicio": 79.32,
+  "fim": 79.74,
+  "linha": 29
+ },
+ {
+  "palavra": "E",
+  "inicio": 80.399,
+  "fim": 80.459,
+  "linha": 30
+ },
+ {
+  "palavra": "sem",
+  "inicio": 80.459,
+  "fim": 80.834,
+  "linha": 30
+ },
+ {
+  "palavra": "ar,",
+  "inicio": 80.834,
+  "fim": 81.21,
+  "linha": 30
+ },
+ {
+  "palavra": "não",
+  "inicio": 81.21,
+  "fim": 81.39,
+  "linha": 30
+ },
+ {
+  "palavra": "tem",
+  "inicio": 81.39,
+  "fim": 81.6,
+  "linha": 30
+ },
+ {
+  "palavra": "nada",
+  "inicio": 81.604,
+  "fim": 81.93,
+  "linha": 30
+ },
+ {
+  "palavra": "pra",
+  "inicio": 81.93,
+  "fim": 82.078,
+  "linha": 30
+ },
+ {
+  "palavra": "espalhar.",
+  "inicio": 82.08,
+  "fim": 82.44,
+  "linha": 30
+ },
+ {
+  "palavra": "Por",
+  "inicio": 82.98,
+  "fim": 83.19,
+  "linha": 31
+ },
+ {
+  "palavra": "isso,",
+  "inicio": 83.19,
+  "fim": 83.43,
+  "linha": 31
+ },
+ {
+  "palavra": "no",
+  "inicio": 83.43,
+  "fim": 83.52,
+  "linha": 31
+ },
+ {
+  "palavra": "espaço",
+  "inicio": 83.55,
+  "fim": 84,
+  "linha": 31
+ },
+ {
+  "palavra": "e",
+  "inicio": 84,
+  "fim": 84.013,
+  "linha": 31
+ },
+ {
+  "palavra": "na",
+  "inicio": 84.013,
+  "fim": 84.15,
+  "linha": 31
+ },
+ {
+  "palavra": "Lua,",
+  "inicio": 84.15,
+  "fim": 84.42,
+  "linha": 31
+ },
+ {
+  "palavra": "o",
+  "inicio": 84.63,
+  "fim": 84.72,
+  "linha": 31
+ },
+ {
+  "palavra": "céu",
+  "inicio": 84.72,
+  "fim": 84.901,
+  "linha": 31
+ },
+ {
+  "palavra": "é",
+  "inicio": 84.901,
+  "fim": 84.96,
+  "linha": 31
+ },
+ {
+  "palavra": "preto,",
+  "inicio": 84.964,
+  "fim": 85.469,
+  "linha": 31
+ },
+ {
+  "palavra": "mesmo",
+  "inicio": 85.5,
+  "fim": 85.95,
+  "linha": 31
+ },
+ {
+  "palavra": "de",
+  "inicio": 85.95,
+  "fim": 85.964,
+  "linha": 31
+ },
+ {
+  "palavra": "dia.",
+  "inicio": 85.964,
+  "fim": 86.37,
+  "linha": 31
+ },
+ {
+  "palavra": "Em",
+  "inicio": 87,
+  "fim": 87.15,
+  "linha": 32
+ },
+ {
+  "palavra": "Marte",
+  "inicio": 87.15,
+  "fim": 87.45,
+  "linha": 32
+ },
+ {
+  "palavra": "é",
+  "inicio": 87.45,
+  "fim": 87.455,
+  "linha": 32
+ },
+ {
+  "palavra": "ao",
+  "inicio": 87.455,
+  "fim": 87.57,
+  "linha": 32
+ },
+ {
+  "palavra": "contrário:",
+  "inicio": 87.57,
+  "fim": 88.08,
+  "linha": 32
+ },
+ {
+  "palavra": "a",
+  "inicio": 88.44,
+  "fim": 88.53,
+  "linha": 33
+ },
+ {
+  "palavra": "poeira",
+  "inicio": 88.53,
+  "fim": 88.89,
+  "linha": 33
+ },
+ {
+  "palavra": "deixa",
+  "inicio": 88.89,
+  "fim": 89.13,
+  "linha": 33
+ },
+ {
+  "palavra": "o",
+  "inicio": 89.145,
+  "fim": 89.192,
+  "linha": 33
+ },
+ {
+  "palavra": "céu",
+  "inicio": 89.192,
+  "fim": 89.429,
+  "linha": 33
+ },
+ {
+  "palavra": "meio",
+  "inicio": 89.43,
+  "fim": 89.64,
+  "linha": 33
+ },
+ {
+  "palavra": "alaranjado",
+  "inicio": 89.64,
+  "fim": 90.33,
+  "linha": 33
+ },
+ {
+  "palavra": "de",
+  "inicio": 90.33,
+  "fim": 90.479,
+  "linha": 33
+ },
+ {
+  "palavra": "dia,",
+  "inicio": 90.479,
+  "fim": 90.78,
+  "linha": 33
+ },
+ {
+  "palavra": "e",
+  "inicio": 91.14,
+  "fim": 91.23,
+  "linha": 34
+ },
+ {
+  "palavra": "o",
+  "inicio": 91.23,
+  "fim": 91.32,
+  "linha": 34
+ },
+ {
+  "palavra": "pôr",
+  "inicio": 91.32,
+  "fim": 91.56,
+  "linha": 34
+ },
+ {
+  "palavra": "do",
+  "inicio": 91.56,
+  "fim": 91.68,
+  "linha": 34
+ },
+ {
+  "palavra": "sol",
+  "inicio": 91.68,
+  "fim": 92.073,
+  "linha": 34
+ },
+ {
+  "palavra": "lá",
+  "inicio": 92.1,
+  "fim": 92.28,
+  "linha": 34
+ },
+ {
+  "palavra": "é",
+  "inicio": 92.49,
+  "fim": 92.61,
+  "linha": 34
+ },
+ {
+  "palavra": "azulado.",
+  "inicio": 92.611,
+  "fim": 93.24,
+  "linha": 34
+ },
+ {
+  "palavra": "Qual",
+  "inicio": 93.24,
+  "fim": 94.135,
+  "linha": 35
+ },
+ {
+  "palavra": "a",
+  "inicio": 94.135,
+  "fim": 94.17,
+  "linha": 35
+ },
+ {
+  "palavra": "próxima",
+  "inicio": 94.17,
+  "fim": 94.519,
+  "linha": 35
+ },
+ {
+  "palavra": "curiosidade",
+  "inicio": 94.547,
+  "fim": 95.07,
+  "linha": 35
+ },
+ {
+  "palavra": "que",
+  "inicio": 95.07,
+  "fim": 95.134,
+  "linha": 35
+ },
+ {
+  "palavra": "eu",
+  "inicio": 95.134,
+  "fim": 95.19,
+  "linha": 35
+ },
+ {
+  "palavra": "explico?",
+  "inicio": 95.19,
+  "fim": 95.58,
+  "linha": 35
+ }
+]

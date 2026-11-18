@@ -8,3 +8,14 @@ import { Config } from "@remotion/cli/config";
 Config.setRspack(true);
 Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
+
+// Quebra Padrão: qualidade máxima (h264, CRF 14, AAC 320k)
+Config.setCodec("h264");
+Config.setCrf(14);
+Config.setAudioBitrate("320k");
+Config.setPixelFormat("yuv420p");
+
+// Em ambientes sem acesso ao download do Chrome Headless Shell, usa o Chromium local.
+import { existsSync } from "node:fs";
+const LOCAL_CHROMIUM = "/opt/pw-browsers/chromium-1243/chrome-linux64/chrome";
+if (existsSync(LOCAL_CHROMIUM)) Config.setBrowserExecutable(LOCAL_CHROMIUM);
