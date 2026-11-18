@@ -18,7 +18,8 @@ Leia também `QUEBRA.md` (fluxo e peças do motor de partículas em `src/quebra/
 - Tudo feito de partículas que se desmontam/remontam; nenhuma cena parada > ~4 s; cada cena entra na palavra falada.
 - Proibido girar/inclinar elementos (só zoom lento, pan, subir/descer; rotação só se for física).
 - Legenda estilo Pixora embaixo (Inter Display SemiBold 56 px, top ≈ 1540).
-- Fatos conferidos; sem personagens com direitos autorais nem pessoas reais; final com pergunta para comentar.
+- Fatos conferidos; sem personagens com direitos autorais nem pessoas reais.
+- **Final do vídeo = chamada para ação: "Comenta o tema do próximo vídeo."** (última frase do roteiro e última cena).
 - Mostrar stills de cada cena para aprovação antes de renderizar o vídeo inteiro.
 
 ## Ambiente (sessões na nuvem)
