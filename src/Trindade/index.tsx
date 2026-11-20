@@ -101,19 +101,7 @@ const Word: React.FC<{ t: Tok; delay: number }> = ({ t, delay }) => {
         transform: `translateX(${(1 - s) * 90}px)`,
         filter: `blur(${(1 - s) * 10}px)`,
         marginRight: 18,
-        ...(accent
-          ? {
-              fontFamily: serif,
-              fontStyle: "italic",
-              fontWeight: 400,
-              fontSize: 92,
-              color: G,
-              background: INK,
-              padding: "0 18px 4px",
-              borderRadius: 14,
-              lineHeight: 1.15,
-            }
-          : {}),
+
       }}
     >
       {accent ? t.a : t}
@@ -432,7 +420,7 @@ const S6: React.FC = () => {
           }}
         >
           <div style={{ fontFamily: inter, fontWeight: 600, fontSize: 42, color: "rgba(255,255,255,0.75)" }}>Hoje, tem gente</div>
-          <div style={{ fontFamily: serif, fontStyle: "italic", fontSize: 150, color: INK, background: G, borderRadius: 18, padding: "0 30px 6px", margin: "16px 0" }}>
+          <div style={{ fontFamily: "SFHeavy", fontSize: 140, color: "#fff", margin: "10px 0", letterSpacing: -3 }}>
             copiando
           </div>
           <div style={{ fontFamily: "SFHeavy", fontSize: 64, color: "#fff" }}>o Trindade Uai.</div>
@@ -556,7 +544,7 @@ const S10: React.FC = () => {
                 <div style={{ fontSize: 24, color: "#888" }}>Direct · online</div>
               </div>
             </div>
-            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 30 }}>
+            <div style={{ display: "flex", justifyContent: "flex-start", marginTop: 30 }}>
               <div
                 style={{
                   width: 420,
@@ -572,14 +560,14 @@ const S10: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div style={{ transform: `scale(${bubble})`, transformOrigin: "left", marginTop: 24 }}>
+            <div style={{ transform: `scale(${bubble})`, transformOrigin: "right", marginTop: 24, display: "flex", justifyContent: "flex-end" }}>
               <div style={{ display: "inline-block", background: INK, color: "#fff", fontSize: 32, fontWeight: 600, padding: "20px 28px", borderRadius: 30 }}>
                 {typed}
               </div>
             </div>
             <div style={{ marginTop: 26, background: "#f1f1f1", borderRadius: 40, padding: "22px 30px", fontSize: 30, color: n ? INK : "#999", display: "flex", justifyContent: "space-between" }}>
               <span>{bubble > 0.5 ? "Mensagem..." : typed.slice(0, n) || "Mensagem..."}</span>
-              <span style={{ width: 48, height: 48, borderRadius: "50%", background: G, display: "inline-block" }} />
+              <span style={{ display: "inline-block", margin: -8 }}><Logo size={64} /></span>
             </div>
           </Card>
         </Pop>
