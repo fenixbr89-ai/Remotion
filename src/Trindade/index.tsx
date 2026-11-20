@@ -181,6 +181,20 @@ const Card: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }>
   </div>
 );
 
+const ICONS: Record<string, string> = {
+  smile: "M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z",
+  book: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14zM20 17v4H6.5A2.5 2.5 0 0 1 4 19.5",
+  pin: "M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z",
+  chat: "M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z",
+  cam: "M23 7l-7 5 7 5V7zM3 5h11a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z",
+  cal: "M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6zM16 2v4M8 2v4M3 10h18",
+};
+const Icon: React.FC<{ n: string; size?: number; color?: string }> = ({ n, size = 44, color = G }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d={ICONS[n]} />
+  </svg>
+);
+
 const Notif: React.FC<{ icon: string; title: string; sub: string; delay: number }> = ({ icon, title, sub, delay }) => {
   const s = useSp(delay);
   return (
@@ -196,10 +210,9 @@ const Notif: React.FC<{ icon: string; title: string; sub: string; delay: number 
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: 44,
           }}
         >
-          {icon}
+          <Icon n={icon} />
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 26, color: "#8a8a8a", fontWeight: 600 }}>
@@ -281,9 +294,9 @@ const S2: React.FC = () => (
   <AbsoluteFill>
     <GreenBg />
     <Center top={300}>
-      <Notif icon="😂" title="Humor" sub="O jeito trindadense de rir" delay={2} />
-      <Notif icon="📜" title="Histórias antigas" sub="Memórias da cidade" delay={10} />
-      <Notif icon="📍" title="Lugares que todos conhecem" sub="Trindade (GO)" delay={18} />
+      <Notif icon="smile" title="Humor" sub="O jeito trindadense de rir" delay={2} />
+      <Notif icon="book" title="Histórias antigas" sub="Memórias da cidade" delay={10} />
+      <Notif icon="pin" title="Lugares que todos conhecem" sub="Trindade (GO)" delay={18} />
     </Center>
     <Caption
       main={["Começou", "com", "humor,", "histórias", "antigas", "e", "lugares", "que", { a: "todo trindadense" }, "conhece."]}
@@ -364,17 +377,14 @@ const Badge: React.FC<{ label: string; value: string; delay: number; style: Reac
 };
 
 const S5: React.FC = () => {
-  const f = useCurrentFrame();
   const s = useSp(0, 16);
-  const scroll = interpolate(f, [20, 80], [0, -90], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
     <AbsoluteFill>
       <GreenBg />
       <div style={{ position: "absolute", left: 540 - 230, top: 150, transform: `translateY(${(1 - s) * 600}px) rotate(${(1 - s) * 8}deg)` }}>
         <div style={{ width: 460, height: 960, borderRadius: 70, background: INK, padding: 16, boxShadow: "0 50px 120px rgba(0,60,0,0.45)" }}>
           <div style={{ width: "100%", height: "100%", borderRadius: 56, overflow: "hidden", background: "#fff", position: "relative" }}>
-            <Img src={staticFile("trindade/profile.jpg")} style={{ width: "100%", transform: `translateY(${scroll}px)` }} />
-            <div style={{ position: "absolute", top: 14, left: "50%", marginLeft: -70, width: 140, height: 40, borderRadius: 20, background: INK }} />
+            <Img src={staticFile("trindade/profile.jpg")} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
           </div>
         </div>
       </div>
@@ -515,9 +525,9 @@ const S9: React.FC = () => (
   <AbsoluteFill>
     <GreenBg />
     <Center top={300}>
-      <Notif icon="🗣️" title="Histórias" sub="Enviadas por vocês" delay={2} />
-      <Notif icon="🎥" title="Registros" sub="Direto do celular de quem viu" delay={10} />
-      <Notif icon="📅" title="Dia a dia" sub="Tudo que acontece na cidade" delay={18} />
+      <Notif icon="chat" title="Histórias" sub="Enviadas por vocês" delay={2} />
+      <Notif icon="cam" title="Registros" sub="Direto do celular de quem viu" delay={10} />
+      <Notif icon="cal" title="Dia a dia" sub="Tudo que acontece na cidade" delay={18} />
     </Center>
     <Caption
       kicker="E esse espaço também é feito por vocês."
@@ -556,7 +566,7 @@ const S10: React.FC = () => {
                   position: "relative",
                 }}
               >
-                <Img src={staticFile("trindade/p2.jpg")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <Img src={staticFile("trindade/raw.jpg")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <div style={{ width: 90, height: 90, borderRadius: "50%", background: "rgba(0,0,0,0.55)", color: "#fff", fontSize: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>▶</div>
                 </div>
@@ -591,16 +601,16 @@ const S11: React.FC = () => {
   return (
     <AbsoluteFill>
       <GreenBg />
-      <Center top={360}>
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 56 }}>
         <Pop>
-          <Logo size={380} />
+          <Logo size={360} />
         </Pop>
         <Pop delay={6}>
-          <div style={{ fontFamily: "SFHeavy", fontSize: 64, color: "#fff", marginTop: 50, textShadow: "0 4px 30px rgba(0,70,0,0.35)" }}>@trindadeuai.br</div>
+          <div style={{ fontFamily: "SFHeavy", fontSize: 60, color: "#fff", textShadow: "0 4px 30px rgba(0,70,0,0.35)" }}>@trindadeuai.br</div>
         </Pop>
-      </Center>
-      <Caption main={["O", "que", "acontece", "em", { a: "Trindade (GO)" }, "tá", "aqui."]} delay={12} top={1080} />
-      <div style={{ position: "absolute", top: 1450, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
+        <div style={{ position: "relative", width: 1080, height: 230 }}>
+          <Caption main={["O", "que", "acontece", "em", { a: "Trindade (GO)" }, "tá", "aqui."]} delay={12} top={0} />
+        </div>
         <Pop delay={30}>
           <div
             style={{
@@ -622,7 +632,7 @@ const S11: React.FC = () => {
             {following ? "Seguindo ✓" : "Seguir"}
           </div>
         </Pop>
-      </div>
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };
