@@ -32,14 +32,14 @@ const RINGS = [
 
 export const S01: FC<P> = ({ d }) => {
   const f = useCurrentFrame();
-  const pillIn = tw(f, 18, 42);
-  const contentO = tw(f, 28, 40) * (1 - tw(f, d - 10, d, 0, 1, EI));
+  const pillIn = tw(f, 14, 34);
+  const contentO = tw(f, 22, 34) * (1 - tw(f, d - 10, d, 0, 1, EI));
   const ringsOut = tw(f, d - 6, d + 16, 0, 1, EI);
   return (
     <AbsoluteFill>
-      <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, opacity: 1 - ringsOut, scale: String(lerp(0.86, 1, tw(f, 0, 34)) - ringsOut * 0.25), rotate: `${Math.sin(f / 18) * 2}deg`, transformOrigin: "540px 600px" }}>
+      <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, opacity: 1 - ringsOut, scale: String(lerp(1, 1, 1) - ringsOut * 0.25), rotate: `${Math.sin(f / 18) * 2}deg`, transformOrigin: "540px 600px" }}>
         {RINGS.map((ring, i) => {
-          const p = tw(f, 2 + i * 6, 44 + i * 6, 0, 1, EIO);
+          const p = tw(f, 4 + i * 4, 26 + i * 4, 0, 1, EIO);
           const C = 2 * Math.PI * ring.r;
           const len = (ring.span / 360) * C * p * (1 - tw(f, d - 8 + i * 2, d + 10 + i * 2, 0, 1, EI));
           const rot = -90 - (1 - p) * 70 + ringsOut * 120;
@@ -54,10 +54,10 @@ export const S01: FC<P> = ({ d }) => {
       {f < d ? (
         <Box rect={R.s1Pill} layers={[{ style: DARK_GLASS, o: 1 }]} shadow={SHADOW_DARK} shine={tw(f, 30, 56)}
           style={{ opacity: pillIn, translate: `0px ${(1 - pillIn) * 160}px`, scale: String(0.88 + 0.12 * pillIn), filter: `blur(${(1 - pillIn) * 14}px)` }}>
-          <NotifContent icon={<Dumbbell />} title="Treino concluído" sub="Mais um passo até o seu objetivo." o={contentO} iconO={contentO} slide={tw(f, 28, 44)} />
+          <NotifContent icon={<Dumbbell />} title="Treino concluído" sub="Mais um passo até o seu objetivo." o={contentO} iconO={contentO} slide={tw(f, 22, 38)} />
         </Box>
       ) : null}
-      <Kinetic start={30} end={d - 10} lines={[
+      <Kinetic start={20} end={d - 10} lines={[
         { y: 1532, size: 84, color: W, segs: [{ t: "Seu objetivo merece" }] },
         { y: 1625, size: 84, color: W, segs: [{ t: "um treinamento com" }, { t: "estratégia!", serif: true }] },
       ]} />

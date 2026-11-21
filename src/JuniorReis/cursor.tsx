@@ -15,9 +15,9 @@ export const T = {
 };
 
 const KFS: KF[] = [
-  { s: 12, f: 30, x: 960, y: 1360 },
-  { s: 12, f: T.follow, x: 400, y: 980, tap: true },
-  { s: 12, f: T.message, x: 790, y: 980, tap: true },
+  { s: 13, f: 30, x: 960, y: 1360 },
+  { s: 13, f: T.follow, x: 400, y: 980, tap: true },
+  { s: 13, f: T.message, x: 790, y: 980, tap: true },
 ];
 const ABS = KFS.map((k) => ({ ...k, F: START[k.s] + k.f }));
 

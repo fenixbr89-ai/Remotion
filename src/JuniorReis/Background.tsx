@@ -9,15 +9,15 @@ type Trans =
 
 // Transição de fundo ao ENTRAR em cada cena (índice da cena)
 const TRANS: Record<number, Trans> = {
-  4: { type: "circle", x: 250, y: 520, len: 28 }, // ícone de musculação abre a cena clara
-  5: { type: "fade", len: 22 },
-  7: { type: "circle", x: 540, y: 740, len: 26 }, // celular
-  8: { type: "circle", x: 540, y: 740, len: 26 },
-  9: { type: "lime", x: 666, y: 1085, len: 30 }, // botão "Presencial"
-  10: { type: "circle", x: 250, y: 360, len: 28 }, // primeiro nó do caminho
-  11: { type: "circle", x: 830, y: 1000, len: 28 }, // último nó do caminho
-  12: { type: "circle", x: 540, y: 810, len: 28 },
-  14: { type: "circle", x: 540, y: 858, len: 28 }, // botão do WhatsApp abre o logo
+  5: { type: "circle", x: 250, y: 520, len: 28 }, // ícone de musculação abre a cena clara
+  6: { type: "fade", len: 22 },
+  8: { type: "circle", x: 540, y: 740, len: 26 }, // celular
+  9: { type: "circle", x: 540, y: 740, len: 26 },
+  10: { type: "lime", x: 666, y: 1085, len: 30 }, // botão "Presencial"
+  11: { type: "circle", x: 250, y: 360, len: 28 }, // primeiro nó do caminho
+  12: { type: "circle", x: 830, y: 1000, len: 28 }, // último nó do caminho
+  13: { type: "circle", x: 540, y: 810, len: 28 },
+  15: { type: "circle", x: 540, y: 858, len: 28 }, // botão do WhatsApp abre o logo
 };
 
 const Layer: FC<{ theme: "d" | "l"; f: number; style?: CSSProperties }> = ({ theme, f, style }) => {

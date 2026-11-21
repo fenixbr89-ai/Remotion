@@ -3,13 +3,15 @@ import { AbsoluteFill, Sequence, random, useCurrentFrame } from "remotion";
 import { Background } from "./Background";
 import { RoundCursor } from "./cursor";
 import { DUR, EO, LIME, M, START, THEME, tw } from "./lib";
+import { SHook } from "./scenes/Hook";
 import { S01, S02, S03, S04 } from "./scenes/A";
 import { S05, S06, S07, S08 } from "./scenes/B";
 import { S09, S10, S11, S12 } from "./scenes/C";
 import { S13, S14, S15 } from "./scenes/D";
 
-const SCENES = [S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12, S13, S14, S15];
+const SCENES = [SHook, S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12, S13, S14, S15];
 const NAMES = [
+  "00 Gancho",
   "01 Treinamento com estratégia",
   "02 Olá, sou Júnior Reis",
   "03 Saúde e performance",
