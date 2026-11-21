@@ -42,7 +42,7 @@ export const S01: FC<P> = ({ d }) => {
       <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, opacity: 1 - ringsOut, scale: String(1 - ringsOut * 0.25 + done * 0.03), transformOrigin: "540px 600px" }}>
         {/* trilhos apagados ("sem resultado") */}
         {RINGS.map((ring, i) => (
-          <circle key={`t${i}`} cx={540} cy={600} r={ring.r} fill="none" stroke={ring.color} strokeWidth={ring.w} opacity={0.16 * (i === 0 ? 1 : tw(f, 0, 10))} />
+          <circle key={`t${i}`} cx={540} cy={600} r={ring.r} fill="none" stroke={ring.color} strokeWidth={ring.w} opacity={0.16 * tw(f, i * 3, 10 + i * 3)} style={{ scale: String(lerp(0.85, 1, tw(f, i * 3, 14 + i * 3))), transformOrigin: "540px 600px" }} />
         ))}
         {/* anéis enchendo (a virada) */}
         {RINGS.map((ring, i) => {
