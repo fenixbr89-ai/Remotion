@@ -25,10 +25,10 @@ export const FPS = 30;
 /** Duração da transição (morph) entre cenas, em frames */
 export const M = 24;
 /** Duração de cada cena (sem contar a sobreposição da transição) */
-export const DUR = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120];
+export const DUR = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120];
 export const START = DUR.map((_, i) => DUR.slice(0, i).reduce((a, b) => a + b, 0));
 export const TOTAL = DUR.reduce((a, b) => a + b, 0);
-export const THEME: ("d" | "l")[] = ["d", "d", "d", "d", "l", "d", "l", "d", "l", "l", "d", "d"];
+export const THEME: ("d" | "l")[] = ["d", "d", "d", "d", "l", "d", "d", "l", "d", "l", "d", "l", "d", "d", "l"];
 
 // ---------- Easing ----------
 export const EO = Easing.bezier(0.16, 1, 0.3, 1);
@@ -61,29 +61,42 @@ export const lerpRect = (A: Rect, B: Rect, p: number): Rect => ({
   r: lerp(A.r, B.r, p),
 });
 
+export const tile = (cx: number, cy: number, size = 190, r = 50): Rect => ({ x: cx - size / 2, y: cy - size / 2, w: size, h: size, r });
+export const circ = (cx: number, cy: number, d: number): Rect => ({ x: cx - d / 2, y: cy - d / 2, w: d, h: d, r: d / 2 });
+
+/** Centros dos 5 serviços (cena 4) */
+export const SERVICE_C: [number, number][] = [
+  [250, 520],
+  [540, 520],
+  [830, 520],
+  [395, 860],
+  [685, 860],
+];
+/** Nós do caminho (cena 11) */
+export const NODES: [number, number][] = [
+  [250, 360],
+  [830, 570],
+  [250, 790],
+  [830, 1000],
+];
+
 export const R = {
   s1Pill: { x: 100, y: 985, w: 880, h: 165, r: 82 },
   s2Card: { x: 172, y: 262, w: 736, h: 916, r: 62 },
-  s3Ghost: { x: 150, y: 520, w: 780, h: 150, r: 75 },
-  s3NotifA: { x: 100, y: 592, w: 880, h: 165, r: 82 },
-  s3NotifB: { x: 100, y: 785, w: 880, h: 165, r: 82 },
-  s3FlagIcon: { x: 138, y: 623, w: 104, h: 104, r: 26 },
-  s4Pill: { x: 132, y: 380, w: 816, h: 360, r: 180 },
-  s4Flag: { x: 838, y: 898, w: 104, h: 104, r: 26 },
-  s5Card: { x: 100, y: 500, w: 880, h: 500, r: 60 },
-  s5Icon1: { x: 146, y: 542, w: 84, h: 84, r: 20 },
-  s6Card: { x: 100, y: 440, w: 880, h: 620, r: 60 },
-  s7Pill: { x: 115, y: 170, w: 850, h: 270, r: 135 },
-  s7Phone: { x: 260, y: 490, w: 560, h: 920, r: 72 },
-  s8Card: { x: 204, y: 214, w: 672, h: 992, r: 64 },
-  s9Card: { x: 100, y: 390, w: 880, h: 725, r: 60 },
-  s10Dot: { x: 440, y: 560, w: 200, h: 200, r: 100 },
-  s10Logo: { x: 95, y: 430, w: 890, h: 460, r: 0 },
-  s11Avatar: { x: 171, y: 501, w: 192, h: 192, r: 96 },
-  s11Card: { x: 100, y: 430, w: 880, h: 662, r: 60 },
-  s11Btn: { x: 162, y: 920, w: 756, h: 115, r: 58 },
-  s12Notif: { x: 100, y: 588, w: 880, h: 165, r: 82 },
-  s12Btn: { x: 232, y: 805, w: 614, h: 107, r: 54 },
+  s3Notif0: { x: 100, y: 330, w: 880, h: 165, r: 82 },
+  bigCard: { x: 100, y: 300, w: 880, h: 850, r: 60 },
+  phone: { x: 260, y: 280, w: 560, h: 920, r: 72 },
+  s9Card: { x: 204, y: 214, w: 672, h: 992, r: 64 },
+  s10Card: { x: 100, y: 330, w: 880, h: 800, r: 60 },
+  s12Card1: { x: 100, y: 400, w: 880, h: 240, r: 60 },
+  s12Card2: { x: 100, y: 690, w: 880, h: 240, r: 60 },
+  s13Card: { x: 100, y: 430, w: 880, h: 662, r: 60 },
+  s13Follow: { x: 162, y: 920, w: 368, h: 115, r: 58 },
+  s13Msg: { x: 550, y: 920, w: 368, h: 115, r: 58 },
+  s14Notif: { x: 100, y: 588, w: 880, h: 165, r: 82 },
+  s14Btn: { x: 232, y: 805, w: 614, h: 107, r: 54 },
+  s15Dot: { x: 440, y: 560, w: 200, h: 200, r: 100 },
+  logo: { x: 95, y: 430, w: 890, h: 460, r: 0 },
 } satisfies Record<string, Rect>;
 
 // ---------- Superfícies ----------

@@ -3,24 +3,28 @@ import { AbsoluteFill, Sequence, random, useCurrentFrame } from "remotion";
 import { Background } from "./Background";
 import { RoundCursor } from "./cursor";
 import { DUR, EO, LIME, M, START, THEME, tw } from "./lib";
-import { S01, S02, S03, S04 } from "./scenes/S01_04";
-import { S05, S06, S07, S08 } from "./scenes/S05_08";
-import { S09, S10, S11, S12 } from "./scenes/S09_12";
+import { S01, S02, S03, S04 } from "./scenes/A";
+import { S05, S06, S07, S08 } from "./scenes/B";
+import { S09, S10, S11, S12 } from "./scenes/C";
+import { S13, S14, S15 } from "./scenes/D";
 
-const SCENES = [S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12];
+const SCENES = [S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12, S13, S14, S15];
 const NAMES = [
-  "01 Treino concluído",
-  "02 Eu sou Júnior Reis",
-  "03 Superar limites",
-  "04 Como a gente chega lá",
-  "05 Modalidades",
-  "06 Evolução do treino",
-  "07 Acompanhamento",
-  "08 Consultoria",
-  "09 Plano individual",
-  "10 Logo",
-  "11 Instagram",
-  "12 WhatsApp",
+  "01 Treinamento com estratégia",
+  "02 Olá, sou Júnior Reis",
+  "03 Saúde e performance",
+  "04 Meus serviços",
+  "05 Musculação",
+  "06 Corrida",
+  "07 Condicionamento",
+  "08 Consultoria online",
+  "09 Personal presencial",
+  "10 Compromisso com a evolução",
+  "11 Objetivo → Constância",
+  "12 Começando ou evoluindo",
+  "13 Instagram",
+  "14 WhatsApp",
+  "15 Logo",
 ];
 
 const sceneAt = (f: number) => {

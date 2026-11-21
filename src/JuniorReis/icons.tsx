@@ -71,3 +71,40 @@ export const WhatsApp: FC = () => (
     />
   </svg>
 );
+
+export const Heart: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z" /></Svg>
+);
+export const Bolt: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z" /></Svg>
+);
+export const Flame: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><path d="M12 21c-3.5 0-6-2.4-6-5.6 0-3.6 3-5.4 3.6-8.9 2 1.2 3 3 3 4.6 1-.6 1.6-1.8 1.7-3 2 1.6 3.7 4 3.7 7.3 0 3.2-2.5 5.6-6 5.6z" /></Svg>
+);
+export const PhoneIcon: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><rect x={7} y={3} width={10} height={18} rx={2.5} /><path d="M11 17.5h2" /></Svg>
+);
+export const UserCheck: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><circle cx={10} cy={8} r={3.5} /><path d="M3.5 20c.8-3.6 3.4-5.4 6.5-5.4 1.4 0 2.7.4 3.7 1.1 M15.5 18l2 2 4-4.5" /></Svg>
+);
+export const Target: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><circle cx={12} cy={12} r={8} /><circle cx={12} cy={12} r={4.2} /><circle cx={12} cy={12} r={0.8} /></Svg>
+);
+export const Calendar: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><rect x={4} y={5} width={16} height={15} rx={2.5} /><path d="M4 10h16 M8.5 3v4 M15.5 3v4" /></Svg>
+);
+export const Repeat: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><path d="M17 2.5l3 3-3 3 M4 11.5v-1a5 5 0 0 1 5-5h11 M7 21.5l-3-3 3-3 M20 12.5v1a5 5 0 0 1-5 5H4" /></Svg>
+);
+export const Sprout: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><path d="M12 21v-9 M12 12c0-4-3-6-7-6 0 4 3 6 7 6z M12 10c0-3.5 2.6-5.5 6.5-5.5 0 3.6-2.6 5.5-6.5 5.5z" /></Svg>
+);
+export const TrendUp: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><path d="M3 17l6-6 4 4 8-8 M15 7h6v6" /></Svg>
+);
+export const Message: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><path d="M4 5h16v11H9l-5 4z" /></Svg>
+);
+export const ArrowRight: FC<{ color?: string }> = ({ color }) => (
+  <Svg color={color}><path d="M4 12h15 M13 5.5 19.5 12 13 18.5" /></Svg>
+);

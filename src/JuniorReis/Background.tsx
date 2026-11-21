@@ -9,12 +9,15 @@ type Trans =
 
 // Transição de fundo ao ENTRAR em cada cena (índice da cena)
 const TRANS: Record<number, Trans> = {
-  4: { type: "circle", x: 170, y: 1220, len: 28 }, // ponto inicial do caminho abre a cena clara
+  4: { type: "circle", x: 250, y: 520, len: 28 }, // ícone de musculação abre a cena clara
   5: { type: "fade", len: 22 },
-  6: { type: "fade", len: 22 },
-  7: { type: "circle", x: 540, y: 950, len: 26 }, // celular abre a cena escura
-  8: { type: "lime", x: 666, y: 1085, len: 30 }, // botão "Presencial" abre a cena clara
-  10: { type: "circle", x: 267, y: 597, len: 28 }, // logo vira avatar
+  7: { type: "circle", x: 540, y: 740, len: 26 }, // celular
+  8: { type: "circle", x: 540, y: 740, len: 26 },
+  9: { type: "lime", x: 666, y: 1085, len: 30 }, // botão "Presencial"
+  10: { type: "circle", x: 250, y: 360, len: 28 }, // primeiro nó do caminho
+  11: { type: "circle", x: 830, y: 1000, len: 28 }, // último nó do caminho
+  12: { type: "circle", x: 540, y: 810, len: 28 },
+  14: { type: "circle", x: 540, y: 858, len: 28 }, // botão do WhatsApp abre o logo
 };
 
 const Layer: FC<{ theme: "d" | "l"; f: number; style?: CSSProperties }> = ({ theme, f, style }) => {

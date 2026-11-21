@@ -80,9 +80,15 @@ export const Kinetic: FC<{
   gap?: number;
 }> = ({ lines, start, end, gap = 7 }) => {
   const f = useCurrentFrame();
+  // encaixe automático: reduz o tamanho se a linha passar de 960px
+  const est = (l: KLine) =>
+    l.segs.reduce((a, sg, i) => a + (sg.t.length + (i > 0 ? 1 : 0)) * l.size * (sg.serif ? 0.47 : (l.weight ?? 800) >= 700 ? 0.55 : 0.52), 0);
+  const fit = Math.min(1, ...lines.filter((l) => l.size >= 60).map((l) => 960 / est(l)));
+  const fitSub = (l: KLine) => Math.min(1, 980 / est(l));
   return (
     <>
-      {lines.map((line, li) => {
+      {lines.map((l0, li) => {
+        const line = { ...l0, size: l0.size * (l0.size >= 60 ? fit : fitSub(l0)) };
         const d0 = start + li * gap;
         const p = tw(f, d0, d0 + 20);
         const e = tw(f, end + li * 3, end + li * 3 + 12, 0, 1, EI);

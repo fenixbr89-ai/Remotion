@@ -8,27 +8,16 @@ import { EIO, EO, START, tw } from "./lib";
  */
 type KF = { s: number; f: number; x: number; y: number; tap?: boolean; down?: boolean };
 
-// tempos de toque usados pelas cenas para reagir
+// tempos de toque (cena 13 — Instagram)
 export const T = {
-  s1Notif: 50,
-  s2Label: 56,
-  s3A: 42,
-  s3B: 62,
-  s4Dot: 26,
-  s4Flag: 66,
-  s5Checks: [30, 38, 46],
-  s6Drag: [24, 42, 60], // início de cada arraste (12 frames cada)
-  s7Send: 36,
-  s8Toggle: 44,
-  s9Bars: [44, 56],
-  s10Logo: 54,
-  s11Follow: 66,
-  s12Cta: 56,
+  follow: 46,
+  message: 68,
 };
 
 const KFS: KF[] = [
-  { s: 10, f: 46, x: 960, y: 1360 },
-  { s: 10, f: T.s11Follow, x: 705, y: 978, tap: true },
+  { s: 12, f: 30, x: 960, y: 1360 },
+  { s: 12, f: T.follow, x: 400, y: 980, tap: true },
+  { s: 12, f: T.message, x: 790, y: 980, tap: true },
 ];
 const ABS = KFS.map((k) => ({ ...k, F: START[k.s] + k.f }));
 
