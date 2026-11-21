@@ -22,6 +22,8 @@ import {
   tw,
 } from "../lib";
 import { Box, Kinetic } from "../ui";
+import { T } from "../cursor";
+import { bump } from "../lib";
 
 type P = { d: number };
 
@@ -47,6 +49,7 @@ export const S05: FC<P> = ({ d }) => {
           rect={R.s5Card}
           layers={[{ style: LIGHT_GLASS, o: 1 }]}
           shadow={SHADOW_LIGHT}
+          shine={tw(f, 14, 40)}
           style={{
             opacity: tw(f, 2, 14),
             scale: String(0.86 + 0.14 * cardIn),
@@ -55,7 +58,8 @@ export const S05: FC<P> = ({ d }) => {
         >
           {[0, 1, 2].map((i) => {
             const rowIn = tw(f, 14 + i * 6, 32 + i * 6) * contentOut;
-            const chk = spring({ frame: f - (30 + i * 8), fps, config: { damping: 11, stiffness: 180 } });
+            const tc = T.s5Checks[i];
+            const chk = spring({ frame: f - tc, fps, config: { damping: 9, stiffness: 220 } });
             return (
               <div key={i} style={{ position: "absolute", left: 0, right: 0, top: i * 167, height: 166 }}>
                 {i > 0 ? (
@@ -73,7 +77,7 @@ export const S05: FC<P> = ({ d }) => {
                 <div style={{
                   position: "absolute", left: 172, top: 50, fontFamily: SANS, fontWeight: 600, fontSize: 58,
                   letterSpacing: "-0.01em", color: INK, lineHeight: "70px", opacity: rowIn,
-                  translate: `${(1 - rowIn) * -40}px 0px`, filter: `blur(${(1 - rowIn) * 6}px)`,
+                  translate: `${(1 - rowIn) * -40 + bump(f, tc) * 12}px 0px`, filter: `blur(${(1 - rowIn) * 6}px)`,
                 }}>
                   {ROWS[i].label}
                 </div>
@@ -81,9 +85,10 @@ export const S05: FC<P> = ({ d }) => {
                   position: "absolute", left: 772, top: 52, width: 62, height: 62, borderRadius: 31, background: LIME,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   scale: String(Math.max(0, chk) * contentOut), opacity: contentOut,
+                  boxShadow: `0 0 ${36 * bump(f, tc)}px rgba(212,255,79,0.9)`,
                 }}>
                   <div style={{ width: 36, height: 36 }}>
-                    <Check p={tw(f, 34 + i * 8, 46 + i * 8)} />
+                    <Check p={tw(f, tc + 2, tc + 12)} />
                   </div>
                 </div>
               </div>
@@ -141,6 +146,7 @@ export const S06: FC<P> = ({ d }) => {
         <Box
           rect={rect}
           shadow={SHADOW_DARK}
+          shine={tw(f, 18, 44)}
           layers={[
             { style: LIGHT_GLASS, o: 1 - tw(f, 0, 18) },
             { style: DARK_GLASS, o: tw(f, 0, 18) },
@@ -154,7 +160,9 @@ export const S06: FC<P> = ({ d }) => {
           </div>
           {BARS.map((b, i) => {
             const rowIn = tw(f, 22 + i * 6, 38 + i * 6) * contentOut;
-            const fill = tw(f, 28 + i * 7, 60 + i * 7, 0, 1, EIO) * (1 - tw(f, d - 14, d, 0, 1, EI));
+            const ds = T.s6Drag[i];
+            const fill = tw(f, ds, ds + 12, 0, 1, EIO) * (1 - tw(f, d - 14, d, 0, 1, EI));
+            const done = bump(f, ds + 12);
             return (
               <div key={i} style={{ position: "absolute", left: 66, right: 66, top: 143 + i * 152 }}>
                 <div style={{
@@ -162,11 +170,14 @@ export const S06: FC<P> = ({ d }) => {
                   lineHeight: "60px", opacity: rowIn, translate: `${(1 - rowIn) * -30}px 0px`,
                 }}>
                   {b.label}
+                  <span style={{ position: "absolute", right: 0, top: 0, color: LIME, fontWeight: 700, fontVariantNumeric: "tabular-nums", scale: String(1 + 0.25 * done), transformOrigin: "100% 50%" }}>
+                    {Math.round(b.v * 100 * fill)}%
+                  </span>
                 </div>
                 <div style={{ position: "relative", marginTop: 34, height: 26, borderRadius: 13, background: "#3B3B3B", opacity: rowIn }}>
                   <div style={{
                     position: "absolute", left: 0, top: 0, bottom: 0, width: `${b.v * 100 * fill}%`, borderRadius: 13,
-                    background: LIME, boxShadow: `0 0 ${20 * fill}px rgba(212,255,79,0.35)`,
+                    background: LIME, boxShadow: `0 0 ${20 * fill + 30 * done}px rgba(212,255,79,${0.35 + 0.4 * done})`,
                   }} />
                 </div>
               </div>
@@ -191,7 +202,7 @@ export const S06: FC<P> = ({ d }) => {
 // ================= CENA 7 — Card vira a pílula; celular com conversa =================
 const PHONE_BORDER = 16;
 export const PhoneScreen: FC<{ f: number; o: number }> = ({ f, o }) => {
-  const b1 = tw(f, 40, 54);
+  const b1 = tw(f, T.s7Send + 2, T.s7Send + 14);
   const b2 = tw(f, 58, 72);
   return (
     <div style={{ position: "absolute", inset: 0, opacity: o, fontFamily: SANS }}>
@@ -227,7 +238,7 @@ export const PhoneScreen: FC<{ f: number; o: number }> = ({ f, o }) => {
       {/* input */}
       <div style={{ position: "absolute", left: 0, right: 0, top: 756, bottom: 0, background: "#fff" }} />
       <div style={{ position: "absolute", left: 24, top: 778, width: 392, height: 70, borderRadius: 35, background: "#EEEEE6", fontSize: 29, color: "#8f8f8a", lineHeight: "70px", paddingLeft: 28, boxSizing: "border-box" }}>Mensagem</div>
-      <div style={{ position: "absolute", left: 434, top: 778, width: 70, height: 70, borderRadius: 35, background: LIME, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ position: "absolute", left: 434, top: 778, width: 70, height: 70, borderRadius: 35, background: LIME, display: "flex", alignItems: "center", justifyContent: "center", scale: String(1 - 0.25 * bump(f, T.s7Send)), boxShadow: `0 0 ${30 * bump(f, T.s7Send)}px rgba(212,255,79,0.9)` }}>
         <div style={{ width: 36, height: 36, color: "#111" }}><ArrowUp /></div>
       </div>
     </div>
@@ -252,6 +263,7 @@ export const S07: FC<P> = ({ d }) => {
           { style: DARK_GLASS, o: 1 - tw(f, 0, 18) },
           { style: LIGHT_GLASS, o: tw(f, 0, 18) },
         ]}
+        shine={tw(f, 18, 44)}
         style={{ opacity: 1 - pillOut, translate: `0px ${-pillOut * 80}px` }}
       />
       <Kinetic
@@ -301,7 +313,7 @@ export const S08: FC<P> = ({ d }) => {
   const inset = lerp(PHONE_BORDER, 20, p);
   const out = tw(f, d, d + 14, 0, 1, EI);
   const box = tw(f, 20, 38);
-  const tg = tw(f, 46, 60, 0, 1, EIO); // Online -> Presencial
+  const tg = tw(f, T.s8Toggle + 1, T.s8Toggle + 14, 0, 1, EIO); // Online -> Presencial
 
   return (
     <AbsoluteFill>
@@ -313,6 +325,7 @@ export const S08: FC<P> = ({ d }) => {
           { style: OLIVE_FRAME, o: tw(f, 0, 16) },
         ]}
         style={{ opacity: 1 - out, scale: String(1 - out * 0.12) }}
+        shine={tw(f, 22, 48)}
       >
         <div style={{ position: "absolute", inset, borderRadius: rect.r - inset, overflow: "hidden", background: "#0c110c" }}>
           <div style={{ position: "absolute", inset: 0, background: "#fff", opacity: 1 - tw(f, 0, 14) }} />
@@ -333,6 +346,7 @@ export const S08: FC<P> = ({ d }) => {
                 position: "absolute", top: 8, height: 88, borderRadius: 44, background: LIME,
                 left: lerp(8, 262, tg), width: lerp(252, 254, tg),
                 scale: `${1 + Math.sin(Math.PI * tg) * 0.12} ${1 - Math.sin(Math.PI * tg) * 0.08}`,
+                boxShadow: `0 0 ${40 * tw(f, T.s8Toggle + 10, T.s8Toggle + 16) * (1 - tw(f, T.s8Toggle + 16, T.s8Toggle + 34))}px rgba(212,255,79,0.8)`,
               }} />
               {[
                 { t: "Online", c: 134, a: 1 - tg },

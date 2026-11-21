@@ -20,7 +20,9 @@ import {
   lerpRect,
   tw,
 } from "../lib";
-import { Box, Cursor, Kinetic, NotifContent, Ripple } from "../ui";
+import { Box, Kinetic, NotifContent, Ripple } from "../ui";
+import { T } from "../cursor";
+import { bump } from "../lib";
 
 type P = { d: number };
 
@@ -48,6 +50,7 @@ export const S09: FC<P> = ({ d }) => {
           rect={R.s9Card}
           layers={[{ style: LIGHT_GLASS, o: 1 }]}
           shadow={SHADOW_LIGHT}
+          shine={tw(f, 20, 46)}
           style={{ opacity: tw(f, 8, 18), scale: String(0.85 + 0.15 * cardIn), translate: `0px ${(1 - cardIn) * 90}px` }}
         >
           <div style={{ position: "absolute", left: 66, top: 60, fontFamily: SANS, fontWeight: 500, fontSize: 31, letterSpacing: `${lerp(0.5, 0.26, title)}em`, color: MUTED_LIGHT, opacity: title }}>
@@ -61,12 +64,14 @@ export const S09: FC<P> = ({ d }) => {
             const collapse = tw(f, d - 16 + i * 1.5, d - 2 + i * 1.5, 0, 1, EI);
             const h = Math.max(0, 84 + (c.h - 84) * g * (1 - collapse));
             const cx = 108 + i * 132.8;
+            const hit = i === 2 ? bump(f, T.s9Bars[0]) : i === 4 ? bump(f, T.s9Bars[1]) : 0;
             return (
               <div key={i}>
                 <div style={{
                   position: "absolute", left: cx - 42, top: 597 - h, width: 84, height: h, borderRadius: 42,
                   background: c.hi ? LIME : "#D6D6CF", opacity: tw(f, 22 + i * 4, 30 + i * 4) * contentOut,
-                  boxShadow: c.hi ? `0 0 ${24 * g}px rgba(190,240,60,0.35)` : "none",
+                  boxShadow: c.hi ? `0 0 ${24 * g + 40 * hit}px rgba(190,240,60,${0.35 + 0.5 * hit})` : "none",
+                  scale: `${1 + 0.12 * hit} ${1 + 0.08 * hit}`, transformOrigin: "50% 100%",
                 }} />
                 <div style={{
                   position: "absolute", left: cx - 30, width: 60, top: 622, textAlign: "center", fontFamily: SANS,
@@ -118,7 +123,7 @@ export const S10: FC<P> = ({ d }) => {
         <div style={{
           position: "absolute", left: R.s10Logo.x, top: R.s10Logo.y, width: R.s10Logo.w, height: R.s10Logo.h,
           clipPath: `circle(${reveal * 620}px at 445px 230px)`,
-          scale: String(lerp(1.12, 1, reveal)), filter: `blur(${(1 - reveal) * 8}px)`,
+          scale: String(lerp(1.12, 1, reveal) * (1 + 0.06 * bump(f, T.s10Logo))), filter: `blur(${(1 - reveal) * 8}px) drop-shadow(0 0 ${30 * bump(f, T.s10Logo)}px rgba(160,210,40,0.8))`,
         }}>
           <Logo />
         </div>
@@ -151,12 +156,8 @@ export const S11: FC<P> = ({ d }) => {
   const ring = tw(f, 18, 40, 0, 1, EIO);
   const btnIn = spring({ frame: f - 34, fps, config: { damping: 13, stiffness: 140 } });
 
-  // cursor
-  const cIn = tw(f, 44, 64, 0, 1, EIO);
-  const cx = lerp(980, 705, cIn);
-  const cy = lerp(1380, 935, cIn) + Math.sin(Math.PI * cIn) * 40;
-  const press = tw(f, 66, 70) * (1 - tw(f, 72, 80));
-  const rip = tw(f, 68, 90);
+  const press = bump(f, T.s11Follow);
+  const rip = tw(f, T.s11Follow, T.s11Follow + 22);
 
   const txt = (t: string, top: number, size: number, color: string, weight: number, delay: number) => {
     const o = tw(f, delay, delay + 14) * contentOut;
@@ -177,6 +178,7 @@ export const S11: FC<P> = ({ d }) => {
           rect={R.s11Card}
           layers={[{ style: DARK_GLASS, o: 1 }]}
           shadow={SHADOW_DARK}
+          shine={tw(f, 20, 46)}
           style={{ opacity: tw(f, 10, 22), scale: String(0.9 + 0.1 * cardIn) }}
         >
           {txt("Júnior Reis", 82, 54, "#fff", 800, 24)}
@@ -203,7 +205,7 @@ export const S11: FC<P> = ({ d }) => {
           layers={[{ style: { background: LIME }, o: 1 }]}
           style={{ scale: String(Math.max(0, btnIn) * (1 - press * 0.05)) }}
         >
-          <Ripple x={705 - R.s11Btn.x} y={935 - R.s11Btn.y} p={rip} color="#fff" />
+          <Ripple x={705 - R.s11Btn.x} y={978 - R.s11Btn.y} p={rip} color="#fff" />
           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: SANS, fontWeight: 600, fontSize: 47, color: "#0b0b0b", opacity: contentOut }}>
             Seguir
           </div>
@@ -233,7 +235,6 @@ export const S11: FC<P> = ({ d }) => {
         </>
       ) : null}
 
-      {f < d && f >= 44 ? <Cursor x={cx} y={cy} press={press} o={tw(f, 44, 50)} /> : null}
 
       <Kinetic
         start={24}
@@ -253,22 +254,28 @@ export const S12: FC<P> = ({ d }) => {
   const p = tw(f, 0, M, 0, 1, EIO);
   const notif = lerpRect(R.s11Card, R.s12Notif, p);
   const btn = lerpRect(R.s11Btn, R.s12Btn, p);
-  const cx = lerp(705, 610, p);
-  const cy = lerp(935, 905, p);
-  const press = tw(f, 56, 60) * (1 - tw(f, 62, 70));
-  const rip = tw(f, 58, 82);
-  const pulse = tw(f, 58, 90);
+  const press = bump(f, T.s12Cta);
+  const rip = tw(f, T.s12Cta, T.s12Cta + 24);
+  const pulse = tw(f, T.s12Cta + 2, T.s12Cta + 34);
+  const pulse2 = tw(f, T.s12Cta + 20, T.s12Cta + 52);
   const bio = tw(f, 30, 46);
   void d;
 
   return (
     <AbsoluteFill>
-      <Box rect={notif} layers={[{ style: DARK_GLASS, o: 1 }]} shadow={SHADOW_DARK}>
+      <Box rect={notif} layers={[{ style: DARK_GLASS, o: 1 }]} shadow={SHADOW_DARK} shine={tw(f, 22, 48)}
+        style={{ rotate: `${Math.sin(f * 1.8) * 1.8 * tw(f, 22, 25) * (1 - tw(f, 25, 42))}deg` }}>
         <NotifContent icon={<WhatsApp />} title="WhatsApp" sub="(62) 98118-8910"
           o={tw(f, 16, 30)} iconO={tw(f, 14, 26)} slide={tw(f, 16, 32)} />
       </Box>
 
       {/* anel de pulso no CTA após o clique */}
+      {pulse2 > 0 && pulse2 < 1 ? (
+        <div style={{
+          position: "absolute", left: R.s12Btn.x, top: R.s12Btn.y, width: R.s12Btn.w, height: R.s12Btn.h, borderRadius: 54,
+          boxShadow: `0 0 0 ${pulse2 * 30}px rgba(212,255,79,${0.3 * (1 - pulse2)})`,
+        }} />
+      ) : null}
       {pulse > 0 && pulse < 1 ? (
         <div style={{
           position: "absolute", left: R.s12Btn.x, top: R.s12Btn.y, width: R.s12Btn.w, height: R.s12Btn.h, borderRadius: 54,
@@ -276,8 +283,9 @@ export const S12: FC<P> = ({ d }) => {
         }} />
       ) : null}
 
-      <Box rect={btn} layers={[{ style: { background: LIME }, o: 1 }]} style={{ scale: String(1 - press * 0.05), boxShadow: `0 0 ${40 * tw(f, 20, 40)}px rgba(212,255,79,0.25)` }}>
-        <Ripple x={610 - R.s12Btn.x} y={905 - R.s12Btn.y} p={rip} color="#fff" />
+      <Box rect={btn} layers={[{ style: { background: LIME }, o: 1 }]} shine={tw(f, 60, 84)}
+        style={{ scale: String(1 - press * 0.06), boxShadow: `0 0 ${(40 + 20 * Math.sin(f / 6)) * tw(f, 20, 40)}px rgba(212,255,79,0.3)` }}>
+        <Ripple x={800 - R.s12Btn.x} y={884 - R.s12Btn.y} p={rip} color="#fff" />
         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: SANS, fontWeight: 600, fontSize: 47, color: "#0b0b0b", opacity: 1 - tw(f, 0, 8) }}>
           Seguir
         </div>
@@ -294,7 +302,6 @@ export const S12: FC<P> = ({ d }) => {
         ou clique no link da bio
       </div>
 
-      <Cursor x={cx} y={cy} press={press} />
 
       <Kinetic
         start={22}

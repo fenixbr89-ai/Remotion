@@ -11,12 +11,22 @@ export const RemotionRoot: React.FC = () => {
   return (
     <>
       <Composition
-        id="JuniorReis"
+        id="JuniorReis-Mascara"
         component={JuniorReis}
         durationInFrames={TOTAL}
         fps={FPS}
         width={1080}
         height={1920}
+        defaultProps={{ textStyle: "mask" as const }}
+      />
+      <Composition
+        id="JuniorReis-PalavraPorPalavra"
+        component={JuniorReis}
+        durationInFrames={TOTAL}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ textStyle: "beat" as const }}
       />
       <Folder name="Elements">
         <Composition

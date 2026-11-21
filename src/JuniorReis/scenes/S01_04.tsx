@@ -18,6 +18,8 @@ import {
   tw,
 } from "../lib";
 import { Box, Kinetic, NotifContent } from "../ui";
+import { T } from "../cursor";
+import { bump, PATH_DOTS } from "../lib";
 
 type P = { d: number };
 
@@ -43,7 +45,8 @@ export const S01: FC<P> = ({ d }) => {
           position: "absolute",
           inset: 0,
           opacity: 1 - ringsOut,
-          scale: String(lerp(0.86, 1, tw(f, 0, 34)) - ringsOut * 0.25),
+          scale: String(lerp(0.86, 1, tw(f, 0, 34)) - ringsOut * 0.25 + bump(f, T.s1Notif) * 0.04),
+          rotate: `${Math.sin(f / 18) * 2}deg`,
           transformOrigin: "540px 600px",
         }}
       >
@@ -75,9 +78,11 @@ export const S01: FC<P> = ({ d }) => {
           style={{
             opacity: pillIn,
             translate: `0px ${(1 - pillIn) * 160}px`,
-            scale: String(0.88 + 0.12 * pillIn),
+            scale: String((0.88 + 0.12 * pillIn) * (1 - 0.05 * bump(f, T.s1Notif))),
+            rotate: `${Math.sin(f * 1.7) * 2.2 * tw(f, 38, 42) * (1 - tw(f, 42, 58))}deg`,
             filter: `blur(${(1 - pillIn) * 14}px)`,
           }}
+          shine={tw(f, 30, 56)}
         >
           <NotifContent icon={<Dumbbell />} title="Treino concluído" sub="Mais um passo até o seu objetivo."
             o={contentO} iconO={contentO} slide={tw(f, 28, 44)} />
@@ -117,6 +122,7 @@ export const S02: FC<P> = ({ d }) => {
         <Box
           rect={rect}
           shadow={SHADOW_DARK}
+          shine={tw(f, 24, 50)}
           layers={[
             { style: DARK_GLASS, o: 1 - tw(f, 2, 16) },
             { style: OLIVE_FRAME, o: tw(f, 2, 16) },
@@ -142,6 +148,8 @@ export const S02: FC<P> = ({ d }) => {
               color: "#fff",
               opacity: label,
               translate: `0px ${(1 - label) * 40}px`,
+              scale: String(1 - 0.06 * bump(f, T.s2Label)),
+              boxShadow: `0 0 ${40 * bump(f, T.s2Label)}px rgba(212,255,79,0.6)`,
             }}
           >
             Personal Trainer
@@ -194,7 +202,12 @@ export const S03: FC<P> = ({ d }) => {
           rect={rectB}
           layers={[{ style: DARK_GLASS, o: 1 }]}
           shadow={SHADOW_DARK}
-          style={{ opacity: bIn }}
+          shine={tw(f, 34, 58)}
+          style={{
+            opacity: bIn,
+            scale: String(1 - 0.05 * bump(f, T.s3B)),
+            rotate: `${Math.sin(f * 1.8) * 1.8 * tw(f, 34, 37) * (1 - tw(f, 37, 52))}deg`,
+          }}
         >
           <NotifContent icon={<ArrowUp />} title="Superar limites" sub="Vá além, treino a treino."
             o={tw(f, 24, 38) * contentOut} slide={tw(f, 24, 40)} />
@@ -205,7 +218,8 @@ export const S03: FC<P> = ({ d }) => {
       <Box
         rect={rectA}
         shadow={SHADOW_DARK}
-        style={{ opacity: 1 - exitBody, scale: String(1 - exitBody * 0.06) }}
+        style={{ opacity: 1 - exitBody, scale: String((1 - exitBody * 0.06) * (1 - 0.05 * bump(f, T.s3A))) }}
+        shine={tw(f, 22, 46)}
         layers={[
           { style: OLIVE_FRAME, o: 1 - tw(f, 4, 18) },
           { style: DARK_GLASS, o: tw(f, 4, 18) },
@@ -232,35 +246,6 @@ export const S03: FC<P> = ({ d }) => {
 };
 
 // ================= CENA 4 — Notificação vira a pergunta; bandeira vira o destino =================
-type Pt = [number, number];
-const bez = (a: Pt, b: Pt, c: Pt, e: Pt, t: number): Pt => {
-  const u = 1 - t;
-  return [
-    u * u * u * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * c[0] + t * t * t * e[0],
-    u * u * u * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * c[1] + t * t * t * e[1],
-  ];
-};
-const PATH_DOTS: Pt[] = (() => {
-  const segs: [Pt, Pt, Pt, Pt][] = [
-    [[205, 1217], [330, 1180], [400, 1062], [520, 1024]],
-    [[520, 1024], [640, 1000], [770, 1062], [842, 992]],
-  ];
-  const pts: Pt[] = [];
-  segs.forEach((s) => {
-    for (let i = 0; i <= 400; i++) pts.push(bez(s[0], s[1], s[2], s[3], i / 400));
-  });
-  const out: Pt[] = [pts[0]];
-  let acc = 0;
-  for (let i = 1; i < pts.length; i++) {
-    acc += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
-    if (acc >= 29) {
-      out.push(pts[i]);
-      acc = 0;
-    }
-  }
-  return out;
-})();
-
 export const S04: FC<P> = ({ d }) => {
   const f = useCurrentFrame();
   const p = tw(f, 0, M, 0, 1, EIO);
@@ -279,6 +264,7 @@ export const S04: FC<P> = ({ d }) => {
         rect={pill}
         layers={[{ style: DARK_GLASS, o: 1 }]}
         shadow={SHADOW_DARK}
+        shine={tw(f, 22, 48)}
         style={{ opacity: 1 - out, scale: String(1 - out * 0.1) }}
       />
       <Kinetic
@@ -322,7 +308,7 @@ export const S04: FC<P> = ({ d }) => {
           height: 50,
           borderRadius: 25,
           background: LIME,
-          scale: String(dotIn),
+          scale: String(dotIn * (1 - 0.35 * bump(f, T.s4Dot))),
           boxShadow: `0 0 ${30 * dotIn}px rgba(212,255,79,0.5)`,
         }}
       />
@@ -341,8 +327,9 @@ export const S04: FC<P> = ({ d }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: `0 0 ${50 * glow}px rgba(212,255,79,${0.55 * glow})`,
-            rotate: `${Math.sin(Math.PI * flagP) * 14}deg`,
+            boxShadow: `0 0 ${(50 + 30 * bump(f, T.s4Flag) + 12 * Math.sin(f / 5)) * glow}px rgba(212,255,79,${0.55 * glow})`,
+            rotate: `${Math.sin(Math.PI * flagP) * 14 + bump(f, T.s4Flag) * 10}deg`,
+            scale: String(1 + 0.18 * bump(f, T.s4Flag)),
           }}
         >
           <div style={{ width: 54, height: 54, color: "#0b0b0b" }}>

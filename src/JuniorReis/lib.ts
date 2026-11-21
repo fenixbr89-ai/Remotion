@@ -102,3 +102,37 @@ export const OLIVE_FRAME: CSSProperties = {
 };
 export const SHADOW_DARK = "0 30px 70px rgba(0,0,0,0.55)";
 export const SHADOW_LIGHT = "0 40px 90px rgba(70,80,40,0.18)";
+
+// ---------- Caminho pontilhado (cena 4) ----------
+type Pt = [number, number];
+const bez = (a: Pt, b: Pt, c: Pt, e: Pt, t: number): Pt => {
+  const u = 1 - t;
+  return [
+    u * u * u * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * c[0] + t * t * t * e[0],
+    u * u * u * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * c[1] + t * t * t * e[1],
+  ];
+};
+export const PATH_DOTS: Pt[] = (() => {
+  const segs: [Pt, Pt, Pt, Pt][] = [
+    [[205, 1217], [330, 1180], [400, 1062], [520, 1024]],
+    [[520, 1024], [640, 1000], [770, 1062], [842, 992]],
+  ];
+  const pts: Pt[] = [];
+  segs.forEach((s) => {
+    for (let i = 0; i <= 400; i++) pts.push(bez(s[0], s[1], s[2], s[3], i / 400));
+  });
+  const out: Pt[] = [pts[0]];
+  let acc = 0;
+  for (let i = 1; i < pts.length; i++) {
+    acc += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+    if (acc >= 29) {
+      out.push(pts[i]);
+      acc = 0;
+    }
+  }
+  return out;
+})();
+export const pathAt = (u: number): Pt => PATH_DOTS[Math.round(Math.max(0, Math.min(1, u)) * (PATH_DOTS.length - 1))];
+
+/** "Toque": afunda e volta (0..1..0) */
+export const bump = (f: number, t: number) => tw(f, t, t + 3) * (1 - tw(f, t + 4, t + 15));
