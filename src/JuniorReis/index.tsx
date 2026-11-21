@@ -1,8 +1,9 @@
 import type { FC } from "react";
-import { AbsoluteFill, Sequence, random, useCurrentFrame } from "remotion";
+import { Audio } from "@remotion/media";
+import { AbsoluteFill, Sequence, random, staticFile, useCurrentFrame } from "remotion";
 import { Background } from "./Background";
 import { RoundCursor } from "./cursor";
-import { DUR, EO, LIME, M, START, THEME, tw } from "./lib";
+import { DUR, EO, LIME, M, SANS, START, THEME, tw } from "./lib";
 import { SHook } from "./scenes/Hook";
 import { S01, S02, S03, S04 } from "./scenes/A";
 import { S05, S06, S07, S08 } from "./scenes/B";
@@ -79,7 +80,31 @@ const Particles: FC = () => {
   );
 };
 
-export const JuniorReis: FC = () => {
+/** Marca d'água de prévia: discreta, mas visível em todo o vídeo */
+const Watermark: FC = () => {
+  const rows = new Array(9).fill(0);
+  const cols = new Array(3).fill(0);
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
+      <div style={{ position: "absolute", left: -500, top: -300, width: 2100, height: 2600, rotate: "-28deg", display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
+        {rows.map((_, r) => (
+          <div key={r} style={{ display: "flex", justifyContent: "space-around", translate: `${r % 2 ? 180 : 0}px 0px` }}>
+            {cols.map((__, c) => (
+              <span key={c} style={{ fontFamily: SANS, fontWeight: 800, fontSize: 64, letterSpacing: "-0.02em", color: "rgba(150,150,150,0.17)", whiteSpace: "nowrap" }}>
+                Kayke.hs
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div style={{ position: "absolute", right: 40, bottom: 48, padding: "10px 22px", borderRadius: 30, background: "rgba(0,0,0,0.35)", fontFamily: SANS, fontWeight: 700, fontSize: 30, color: "rgba(255,255,255,0.75)" }}>
+        PRÉVIA · Kayke.hs
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+export const JuniorReis: FC<{ watermark: boolean }> = ({ watermark }) => {
   const cam = useCamera();
   return (
     <>
@@ -102,6 +127,8 @@ export const JuniorReis: FC = () => {
           })}
           <RoundCursor />
         </AbsoluteFill>
+        <Audio src={staticFile("narracao.wav")} />
+        {watermark ? <Watermark /> : null}
       </AbsoluteFill>
     </>
   );

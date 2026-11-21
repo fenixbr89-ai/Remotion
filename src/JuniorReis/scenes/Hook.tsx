@@ -24,11 +24,11 @@ export const SHook: FC<P> = ({ d }) => {
   const f = useCurrentFrame();
   return (
     <AbsoluteFill>
-      <Punch f={f} at={2} out={d - 1} y={760} move={d - 16} dy={700} toScale={0.66}>
+      <Punch f={f} at={2} out={d - 1} y={760} move={d - 14} dy={700} toScale={0.66}>
         <span style={{ fontFamily: SANS, fontWeight: 800, fontSize: 120, letterSpacing: "-0.05em", color: "#fff" }}>Treina e não vê</span>
       </Punch>
-      <Punch f={f} at={11} out={d + 1} y={880} move={d - 16} dy={655} toScale={0.6}>
-        <span style={{ fontFamily: SERIF, fontStyle: "italic", fontWeight: 500, fontSize: 150, color: LIME, textShadow: `0 0 ${lerp(60, 24, tw(f, 11, 40))}px rgba(212,255,79,0.45)` }}>resultado?</span>
+      <Punch f={f} at={28} out={d + 1} y={880} move={d - 14} dy={655} toScale={0.6}>
+        <span style={{ fontFamily: SERIF, fontStyle: "italic", fontWeight: 500, fontSize: 150, color: LIME, textShadow: `0 0 ${lerp(60, 24, tw(f, 28, 50))}px rgba(212,255,79,0.45)` }}>resultado?</span>
       </Punch>
     </AbsoluteFill>
   );

@@ -16,8 +16,8 @@ export const S13: FC<P> = ({ d }) => {
   const p = tw(f, 0, M, 0, 1, EIO);
   const card = lerpRect(R.s12Card2, R.s13Card, p);
   const cOut = 1 - tw(f, d - 10, d, 0, 1, EI);
-  const av = spring({ frame: f - 14, fps, config: { damping: 13, stiffness: 140 } });
-  const ring = tw(f, 20, 42, 0, 1, EIO);
+  const av = spring({ frame: f - 10, fps, config: { damping: 13, stiffness: 140 } });
+  const ring = tw(f, 14, 36, 0, 1, EIO);
   const btn = (delay: number) => spring({ frame: f - delay, fps, config: { damping: 13, stiffness: 140 } });
   const followed = tw(f, T.follow + 2, T.follow + 8);
   const fOut = tw(f, d, d + 12, 0, 1, EI);
@@ -34,11 +34,11 @@ export const S13: FC<P> = ({ d }) => {
     <AbsoluteFill>
       {f < d ? (
         <Box rect={card} shadow={SHADOW_DARK} shine={tw(f, 20, 46)} layers={[{ style: LIGHT_GLASS, o: 1 - tw(f, 2, 16) }, { style: DARK_GLASS, o: tw(f, 2, 16) }]}>
-          {txt("Júnior Reis", 82, 54, "#fff", 800, 22)}
-          {txt("Personal Trainer", 152, 38, "#9C9C9C", 400, 26)}
-          {txt("@juniorreispersonal", 208, 35, LIME, 600, 30)}
+          {txt("Júnior Reis", 82, 54, "#fff", 800, 14)}
+          {txt("Personal Trainer", 152, 38, "#9C9C9C", 400, 18)}
+          {txt("@juniorreispersonal", 208, 35, LIME, 600, 22)}
           {["Musculação, corrida e crossfit", "Consultoria online e presencial"].map((t, i) => {
-            const o = tw(f, 32 + i * 5, 48 + i * 5) * cOut;
+            const o = tw(f, 24 + i * 5, 40 + i * 5) * cOut;
             return <div key={t} style={{ position: "absolute", left: 63, top: 324 + i * 62, fontFamily: SANS, fontSize: 39, color: "#E6E6E6", opacity: o, translate: `0px ${(1 - o) * 20}px` }}>{t}</div>;
           })}
         </Box>
@@ -55,19 +55,19 @@ export const S13: FC<P> = ({ d }) => {
       ) : null}
       {/* Seguir -> Seguindo */}
       <Box rect={R.s13Follow} layers={[{ style: { background: LIME }, o: 1 - followed }, { style: { background: "rgba(255,255,255,0.14)", boxShadow: "inset 0 0 0 2px rgba(255,255,255,0.18)" }, o: followed }]}
-        style={{ scale: String(Math.max(0, btn(32)) * (1 - fOut * 0.2)), opacity: 1 - fOut }}>
+        style={{ scale: String(Math.max(0, btn(16)) * (1 - fOut * 0.2)), opacity: 1 - fOut }}>
         <Ripple x={400 - R.s13Follow.x} y={980 - R.s13Follow.y} p={tw(f, T.follow, T.follow + 22)} color="#fff" />
         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: SANS, fontWeight: 600, fontSize: 44, color: "#0b0b0b", opacity: (1 - followed) * cOut }}>Seguir</div>
         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: SANS, fontWeight: 600, fontSize: 44, color: "#fff", opacity: followed * cOut }}>Seguindo ✓</div>
       </Box>
       {f < d ? (
         <Box rect={R.s13Msg} layers={[{ style: { background: "#2c2c2c", boxShadow: `inset 0 0 0 2px rgba(212,255,79,${0.15 + 0.7 * msgGlow})` }, o: 1 }]}
-          style={{ scale: String(Math.max(0, btn(38))), boxShadow: `0 0 ${36 * msgGlow}px rgba(212,255,79,0.5)` }}>
+          style={{ scale: String(Math.max(0, btn(20))), boxShadow: `0 0 ${36 * msgGlow}px rgba(212,255,79,0.5)` }}>
           <Ripple x={790 - R.s13Msg.x} y={980 - R.s13Msg.y} p={tw(f, T.message, T.message + 22)} color={LIME} />
           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: SANS, fontWeight: 600, fontSize: 44, color: "#fff", opacity: cOut }}>Mensagem</div>
         </Box>
       ) : null}
-      <Kinetic start={22} end={d - 10} lines={[
+      <Kinetic start={14} end={d - 10} lines={[
         { y: 1532, size: 84, color: W, segs: [{ t: "Fale comigo pelo" }, { t: "direct", serif: true }] },
         { y: 1625, size: 84, color: W, segs: [{ t: "ou clique no link da bio." }] },
       ]} />
@@ -82,8 +82,8 @@ export const S14: FC<P> = ({ d }) => {
   const notif = lerpRect(R.s13Card, R.s14Notif, p);
   const btn = lerpRect(R.s13Msg, R.s14Btn, p);
   const out = tw(f, d, d + 14, 0, 1, EI);
-  const pulse = tw(f, 50, 82);
-  const pulse2 = tw(f, 66, 98);
+  const pulse = tw(f, 40, 72);
+  const pulse2 = tw(f, 56, 88);
   const bio = tw(f, 30, 46) * (1 - out);
   return (
     <AbsoluteFill>
@@ -139,7 +139,7 @@ export const S15: FC<P> = () => {
         {layer(`inset(62% ${(1 - name) * 100}% 12% 0)`, { translate: `${(1 - name) * -20}px 0px` })}
         {layer(piece(86, 0), { opacity: sub, translate: `0px ${(1 - sub) * 16}px` })}
       </div>
-      <Kinetic start={40} end={10000} lines={[
+      <Kinetic start={14} end={10000} lines={[
         { y: 1532, size: 84, color: INK, segs: [{ t: "Júnior Reis" }] },
         { y: 1625, size: 84, color: INK, serifColor: OLIVE, segs: [{ t: "Treinamento com" }, { t: "estratégia.", serif: true }] },
       ]} />

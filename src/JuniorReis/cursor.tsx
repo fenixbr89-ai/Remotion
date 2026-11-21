@@ -10,12 +10,12 @@ type KF = { s: number; f: number; x: number; y: number; tap?: boolean; down?: bo
 
 // tempos de toque (cena 13 — Instagram)
 export const T = {
-  follow: 46,
-  message: 68,
+  follow: 32, // "me segue"
+  message: 50, // "me chama no direct"
 };
 
 const KFS: KF[] = [
-  { s: 13, f: 30, x: 960, y: 1360 },
+  { s: 13, f: 16, x: 960, y: 1360 },
   { s: 13, f: T.follow, x: 400, y: 980, tap: true },
   { s: 13, f: T.message, x: 790, y: 980, tap: true },
 ];

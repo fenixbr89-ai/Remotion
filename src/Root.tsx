@@ -17,6 +17,17 @@ export const RemotionRoot: React.FC = () => {
         fps={FPS}
         width={1080}
         height={1920}
+        defaultProps={{ watermark: true }}
+      />
+      {/* Versão final para o cliente, sem marca d'água */}
+      <Composition
+        id="JuniorReis-SemMarca"
+        component={JuniorReis}
+        durationInFrames={TOTAL}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ watermark: false }}
       />
       <Folder name="Elements">
         <Composition

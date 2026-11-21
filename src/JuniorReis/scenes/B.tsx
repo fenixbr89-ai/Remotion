@@ -85,7 +85,8 @@ export const S05: FC<P> = ({ d }) => {
           </div>
           <div style={{ position: "absolute", left: 0, right: 0, top: 560, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "18px 18px", padding: "0 80px" }}>
             {chips.map((c, i) => {
-              const cp = spring({ frame: f - (52 + i * 7), fps, config: { damping: 13, stiffness: 150 } });
+              const tc = [38, 64, 76][i];
+              const cp = spring({ frame: f - tc, fps, config: { damping: 13, stiffness: 150 } });
               return (
                 <div key={c} style={{
                   height: 84, borderRadius: 42, padding: "0 30px 0 14px", display: "flex", alignItems: "center", gap: 14, background: "#fff",
@@ -93,7 +94,7 @@ export const S05: FC<P> = ({ d }) => {
                   opacity: tw(cp, 0, 0.4) * cOut, scale: String(0.6 + 0.4 * cp),
                 }}>
                   <div style={{ width: 56, height: 56, borderRadius: 28, background: LIME, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <div style={{ width: 32, height: 32 }}><Check p={tw(f, 56 + i * 7, 66 + i * 7)} /></div>
+                    <div style={{ width: 32, height: 32 }}><Check p={tw(f, tc + 4, tc + 14)} /></div>
                   </div>
                   {c}
                 </div>
@@ -133,12 +134,12 @@ export const S06: FC<P> = ({ d }) => {
   const { fps } = useVideoConfig();
   const cOut = 1 - tw(f, d - 10, d, 0, 1, EI);
   const head = tw(f, 16, 30) * cOut;
-  const rp = tw(f, 22, 78, 0, 1, EIO);
+  const rp = tw(f, 22, 116, 0, 1, EIO);
   const n = Math.max(2, Math.round(rp * (ROUTE.length - 1)) + 1);
   const pts = ROUTE.slice(0, n);
   const [rx, ry] = pts[pts.length - 1];
   const line = pts.map((q) => q.join(",")).join(" ");
-  const medal = spring({ frame: f - 72, fps, config: { damping: 11, stiffness: 130 } });
+  const medal = spring({ frame: f - 68, fps, config: { damping: 11, stiffness: 130 } });
   const stat = tw(f, 26, 40) * cOut;
   const ring = ((f - 22) % 24) / 24;
   return (
@@ -233,8 +234,9 @@ export const S07: FC<P> = ({ d }) => {
             <polyline points={pts.join(" ")} fill="none" stroke={LIME} strokeWidth={5} strokeLinejoin="round" strokeLinecap="round" />
           </svg>
           {BARS7.map((b, i) => {
-            const rowIn = tw(f, 30 + i * 6, 44 + i * 6) * cOut;
-            const fill = tw(f, 36 + i * 8, 64 + i * 8, 0, 1, EIO) * (1 - tw(f, d - 14, d, 0, 1, EI));
+            const t7 = [52, 64, 92][i];
+            const rowIn = tw(f, t7 - 6, t7 + 8) * cOut;
+            const fill = tw(f, t7, t7 + 26, 0, 1, EIO) * (1 - tw(f, d - 14, d, 0, 1, EI));
             return (
               <div key={i} style={{ position: "absolute", left: 60, right: 60, top: 440 + i * 130, opacity: rowIn, translate: `${(1 - rowIn) * -30}px 0px` }}>
                 <div style={{ position: "relative", fontFamily: SANS, fontWeight: 600, fontSize: 42, color: "#fff", lineHeight: "54px" }}>
@@ -270,7 +272,7 @@ export const S08: FC<P> = ({ d }) => {
   const rect = lerpRect(R.bigCard, R.phone, p);
   const cOut = 1 - tw(f, d - 10, d, 0, 1, EI);
   const done = EX.filter((_, i) => f >= 34 + i * 9).length;
-  const toast = spring({ frame: f - 70, fps, config: { damping: 15, stiffness: 120 } });
+  const toast = spring({ frame: f - 80, fps, config: { damping: 15, stiffness: 120 } });
   return (
     <AbsoluteFill>
       {f < d ? (

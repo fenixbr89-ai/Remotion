@@ -32,8 +32,8 @@ const RINGS = [
 
 export const S01: FC<P> = ({ d }) => {
   const f = useCurrentFrame();
-  const pillIn = tw(f, 40, 60);
-  const contentO = tw(f, 46, 58) * (1 - tw(f, d - 10, d, 0, 1, EI));
+  const pillIn = tw(f, 26, 44);
+  const contentO = tw(f, 32, 44) * (1 - tw(f, d - 10, d, 0, 1, EI));
   const ringsOut = tw(f, d - 6, d + 16, 0, 1, EI);
   const pct = tw(f, 10, 44, 0, 100, EIO);
   const done = tw(f, 44, 50) * (1 - tw(f, 50, 66));
@@ -63,12 +63,12 @@ export const S01: FC<P> = ({ d }) => {
         </text>
       </svg>
       {f < d ? (
-        <Box rect={R.s1Pill} layers={[{ style: DARK_GLASS, o: 1 }]} shadow={SHADOW_DARK} shine={tw(f, 52, 78)}
+        <Box rect={R.s1Pill} layers={[{ style: DARK_GLASS, o: 1 }]} shadow={SHADOW_DARK} shine={tw(f, 38, 62)}
           style={{ opacity: pillIn, translate: `0px ${(1 - pillIn) * 160}px`, scale: String(0.88 + 0.12 * pillIn), filter: `blur(${(1 - pillIn) * 14}px)` }}>
-          <NotifContent icon={<Dumbbell />} title="Treino concluído" sub="Mais um passo até o seu objetivo." o={contentO} iconO={contentO} slide={tw(f, 46, 62)} />
+          <NotifContent icon={<Dumbbell />} title="Treino concluído" sub="Mais um passo até o seu objetivo." o={contentO} iconO={contentO} slide={tw(f, 32, 48)} />
         </Box>
       ) : null}
-      <Kinetic start={14} end={d - 10} lines={[
+      <Kinetic start={4} end={d - 10} lines={[
         { y: 1532, size: 84, color: W, segs: [{ t: "Seu objetivo merece" }] },
         { y: 1625, size: 84, color: W, segs: [{ t: "um treinamento com" }, { t: "estratégia!", serif: true }] },
       ]} />
@@ -109,12 +109,12 @@ export const S02: FC<P> = ({ d }) => {
     <AbsoluteFill>
       {f < d ? (
         <Box rect={rect} shadow={SHADOW_DARK} shine={tw(f, 24, 50)} layers={[{ style: DARK_GLASS, o: 1 - tw(f, 2, 16) }, { style: OLIVE_FRAME, o: tw(f, 2, 16) }]}>
-          <PhotoInner inset={20} radius={rect.r - 18} o={tw(f, 10, 26)} scale={lerp(1.25, 1.04, tw(f, 10, 90))} />
+          <PhotoInner inset={20} radius={rect.r - 18} o={tw(f, 10, 26)} scale={lerp(1.25, 1.04, tw(f, 10, 140))} />
         </Box>
       ) : null}
-      <Chip x={70} y={340} text="Educação Física" icon={<UserCheck />} p={chip(30)} out={out} />
-      <Chip x={630} y={700} text="Treinador" icon={<Dumbbell />} p={chip(38)} out={out} />
-      <Chip x={90} y={1030} text="Corredor de rua" icon={<Stopwatch />} p={chip(46)} out={out} />
+      <Chip x={70} y={340} text="Educação Física" icon={<UserCheck />} p={chip(44)} out={out} />
+      <Chip x={630} y={700} text="Treinador" icon={<Dumbbell />} p={chip(90)} out={out} />
+      <Chip x={90} y={1030} text="Corredor de rua" icon={<Stopwatch />} p={chip(112)} out={out} />
       <Kinetic start={18} end={d - 10} lines={[
         { y: 1532, size: 84, color: W, segs: [{ t: "Olá! Sou" }, { t: "Júnior Reis,", serif: true }] },
         { y: 1625, size: 84, color: W, segs: [{ t: "profissional de Educação Física." }] },
@@ -142,15 +142,16 @@ export const S03: FC<P> = ({ d }) => {
       {N3.map((n, i) => {
         const target = notifRect(i);
         const first = i === 0;
-        const inP = first ? p : tw(f, 8 + i * 9, 30 + i * 9);
+        const A = [24, 60, 80, 110][i];
+        const inP = first ? p : tw(f, A - 22, A);
         const rect = first ? lerpRect(R.s2Card, target, p) : { ...target, y: lerp(notifRect(i - 1).y, target.y, inP) };
-        const cIn = tw(f, 18 + i * 9, 32 + i * 9);
+        const cIn = first ? tw(f, 18, 32) : tw(f, A - 12, A + 2);
         return (
-          <Box key={i} rect={rect} shadow={SHADOW_DARK} shine={tw(f, 24 + i * 9, 48 + i * 9)}
-            style={{ opacity: (first ? 1 : tw(f, 8 + i * 9, 18 + i * 9)) * (1 - bodyOut), scale: String(1 - bodyOut * 0.06), zIndex: 10 - i }}
+          <Box key={i} rect={rect} shadow={SHADOW_DARK} shine={tw(f, A - 4, A + 20)}
+            style={{ opacity: (first ? 1 : tw(f, A - 22, A - 12)) * (1 - bodyOut), scale: String(1 - bodyOut * 0.06), zIndex: 10 - i }}
             layers={first ? [{ style: OLIVE_FRAME, o: 1 - tw(f, 4, 18) }, { style: DARK_GLASS, o: tw(f, 4, 18) }] : [{ style: DARK_GLASS, o: 1 }]}>
             {first ? <PhotoInner inset={lerp(20, 8, p)} radius={Math.max(rect.r - 18, 0)} o={1 - tw(f, 0, 12)} /> : null}
-            <NotifContent icon={n.icon} title={n.title} sub={n.sub} o={cIn * contentOut} iconO={f < d ? tw(f, 14 + i * 9, 26 + i * 9) : 0} slide={tw(f, 18 + i * 9, 34 + i * 9)} />
+            <NotifContent icon={n.icon} title={n.title} sub={n.sub} o={cIn * contentOut} iconO={f < d ? (first ? tw(f, 14, 26) : tw(f, A - 16, A - 4)) : 0} slide={first ? tw(f, 18, 34) : tw(f, A - 12, A + 4)} />
           </Box>
         );
       })}
@@ -177,20 +178,20 @@ export const S04: FC<P> = ({ d }) => {
   const out = tw(f, d, d + 14, 0, 1, EI);
   return (
     <AbsoluteFill>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 268, textAlign: "center", fontFamily: SANS, fontSize: 31, fontWeight: 500, letterSpacing: `${lerp(0.5, 0.3, tw(f, 16, 34))}em`, color: "#9a9a9a", opacity: tw(f, 16, 30) * (1 - out) }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 268, textAlign: "center", fontFamily: SANS, fontSize: 31, fontWeight: 500, letterSpacing: `${lerp(0.5, 0.3, tw(f, 8, 26))}em`, color: "#9a9a9a", opacity: tw(f, 8, 20) * (1 - out) }}>
         MEUS SERVIÇOS
       </div>
       {SERVICES.map((s, i) => {
         const [cx, cy] = SERVICE_C[i];
         const fromNotif = i < 4;
         const delay = i * 3;
-        const p = fromNotif ? tw(f, delay, M + delay, 0, 1, EIO) : spring({ frame: f - 22, fps, config: { damping: 13, stiffness: 140 } });
+        const p = fromNotif ? tw(f, delay, M + delay, 0, 1, EIO) : spring({ frame: f - 14, fps, config: { damping: 13, stiffness: 140 } });
         const src = fromNotif ? { x: 138, y: notifRect(i).y + 31, w: 104, h: 104, r: 26 } : tile(cx, cy, 10, 5);
         const rect = fromNotif ? lerpRect(src, tile(cx, cy), p) : tile(cx, cy);
         const arc = fromNotif ? Math.sin(Math.PI * p) * -70 : 0;
         const isFirst = i === 0;
         const hide = isFirst && f >= d; // Musculação abre a próxima cena
-        const lab = tw(f, 26 + i * 4, 40 + i * 4) * (1 - out);
+        const lab = tw(f, 16 + i * 3, 28 + i * 3) * (1 - out);
         return (
           <div key={i}>
             {!hide ? (
@@ -211,7 +212,7 @@ export const S04: FC<P> = ({ d }) => {
           </div>
         );
       })}
-      <Kinetic start={24} end={d - 10} lines={[
+      <Kinetic start={4} end={d - 8} lines={[
         { y: 1532, size: 84, color: W, segs: [{ t: "Conheça meus" }] },
         { y: 1625, size: 84, color: W, segs: [{ t: "serviços", serif: true }] },
       ]} />
