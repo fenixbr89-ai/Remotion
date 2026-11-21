@@ -25,7 +25,7 @@ export const FPS = 30;
 /** Duração da transição (morph) entre cenas, em frames */
 export const M = 24;
 /** Duração de cada cena (sem contar a sobreposição da transição) */
-export const DUR = [78, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120];
+export const DUR = [78, 110, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120];
 export const START = DUR.map((_, i) => DUR.slice(0, i).reduce((a, b) => a + b, 0));
 export const TOTAL = DUR.reduce((a, b) => a + b, 0);
 export const THEME: ("d" | "l")[] = ["d", "d", "d", "d", "d", "l", "d", "d", "l", "d", "l", "d", "l", "d", "d", "l"];

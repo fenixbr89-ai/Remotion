@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from "react";
 import { AbsoluteFill, Img, staticFile, useCurrentFrame } from "remotion";
 import { Check, Heart } from "../icons";
-import { EI, EIO, EO, LIME, M, OLIVE, SANS, SERIF, SHADOW_DARK, circ, lerp, lerpRect, tw } from "../lib";
+import { EI, EIO, EO, LIME, OLIVE, SANS, SERIF, SHADOW_DARK, circ, lerp, lerpRect, tw } from "../lib";
 import { Box } from "../ui";
 
 type P = { d: number };
@@ -58,13 +58,15 @@ const Medal: FC = () => (
 );
 const CUTS: ReactNode[] = [<Photo key="p" />, <Barbell key="b" />, <Route key="r" />, <Chart key="c" />, <Pulse key="h" />, <Checks key="k" />, <Medal key="m" />];
 
-const Punch: FC<{ f: number; at: number; out: number; y: number; children: ReactNode }> = ({ f, at, out, y, children }) => {
+const Punch: FC<{ f: number; at: number; out: number; y: number; move: number; dy: number; toScale: number; children: ReactNode }> = ({ f, at, out, y, move, dy, toScale, children }) => {
   const p = tw(f, at, at + 7, 0, 1, EO);
-  const e = tw(f, out, out + 8, 0, 1, EI);
+  const m = tw(f, move, move + 18, 0, 1, EIO);
+  const e = tw(f, out, out + 10, 0, 1, EI);
   return (
     <div style={{
       position: "absolute", left: 0, right: 0, top: y, textAlign: "center", whiteSpace: "nowrap",
-      opacity: tw(f, at, at + 3) * (1 - e), scale: String(lerp(1.4, 1, p) + e * 0.12), filter: `blur(${(1 - p) * 8 + e * 8}px)`,
+      opacity: tw(f, at, at + 3) * (1 - e), scale: String(lerp(1.4, 1, p) * lerp(1, toScale, m)),
+      translate: `0px ${m * dy - e * 30}px`, filter: `blur(${(1 - p) * 8 + e * 6}px)`,
     }}>
       {children}
     </div>
@@ -75,23 +77,22 @@ export const SHook: FC<P> = ({ d }) => {
   const f = useCurrentFrame();
   const cut = Math.min(CUTS.length - 1, Math.floor(f / CUT));
   const local = f - cut * CUT;
-  const mp = tw(f, d, d + M, 0, 1, EIO);
+  const mp = tw(f, d - 20, d + 4, 0, 1, EIO);
   const rect = lerpRect(CARD, circ(540, 600, 590), mp);
   return (
     <AbsoluteFill>
       <Box rect={rect} shadow={SHADOW_DARK}
-        layers={[{ style: { background: "transparent", boxShadow: `inset 0 0 0 ${lerp(0, 52, mp)}px ${LIME}` }, o: 1 }]}
-        style={{ opacity: tw(f, 0, 3) * (1 - tw(f, d + 12, d + 22)), scale: String(lerp(1.12, 1, tw(f, 0, 10, 0, 1, EO))) }}>
-        <div style={{ position: "absolute", inset: 0, opacity: 1 - tw(f, d - 2, d + 10), scale: String(lerp(1.1, 1, tw(local, 0, CUT, 0, 1, EO))) }}>
+        layers={[{ style: { background: "transparent", boxShadow: `inset 0 0 0 ${lerp(0, 52, mp)}px rgba(212,255,79,${lerp(0.9, 0.16, mp)})` }, o: 1 }]}
+        style={{ opacity: tw(f, 0, 3) * (1 - tw(f, d + 6, d + 14)), scale: String(lerp(1.12, 1, tw(f, 0, 10, 0, 1, EO))) }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 1 - tw(f, d - 22, d - 10), scale: String(lerp(1.1, 1, tw(local, 0, CUT, 0, 1, EO))) }}>
           {CUTS[cut]}
         </div>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.62) 45%, rgba(0,0,0,0.62) 70%, rgba(0,0,0,0.3) 100%)", opacity: 1 - tw(f, d - 2, d + 10) }} />
-        <div style={{ position: "absolute", inset: 0, boxShadow: `inset 0 0 0 52px ${LIME}`, borderRadius: rect.r, opacity: tw(f, d, d + 6) }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.62) 45%, rgba(0,0,0,0.62) 70%, rgba(0,0,0,0.3) 100%)", opacity: 1 - tw(f, d - 22, d - 10) }} />
       </Box>
-      <Punch f={f} at={2} out={d - 8} y={760}>
+      <Punch f={f} at={2} out={d - 1} y={760} move={d - 16} dy={700} toScale={0.66}>
         <span style={{ fontFamily: SANS, fontWeight: 800, fontSize: 120, letterSpacing: "-0.05em", color: "#fff", textShadow: "0 10px 40px rgba(0,0,0,0.6)" }}>Treina e não vê</span>
       </Punch>
-      <Punch f={f} at={11} out={d - 6} y={880}>
+      <Punch f={f} at={11} out={d + 1} y={880} move={d - 16} dy={655} toScale={0.6}>
         <span style={{ fontFamily: SERIF, fontStyle: "italic", fontWeight: 500, fontSize: 150, color: LIME, textShadow: "0 0 50px rgba(212,255,79,0.45), 0 10px 40px rgba(0,0,0,0.6)" }}>resultado?</span>
       </Punch>
     </AbsoluteFill>

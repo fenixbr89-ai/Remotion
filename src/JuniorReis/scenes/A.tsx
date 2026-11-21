@@ -32,32 +32,43 @@ const RINGS = [
 
 export const S01: FC<P> = ({ d }) => {
   const f = useCurrentFrame();
-  const pillIn = tw(f, 14, 34);
-  const contentO = tw(f, 22, 34) * (1 - tw(f, d - 10, d, 0, 1, EI));
+  const pillIn = tw(f, 40, 60);
+  const contentO = tw(f, 46, 58) * (1 - tw(f, d - 10, d, 0, 1, EI));
   const ringsOut = tw(f, d - 6, d + 16, 0, 1, EI);
+  const pct = tw(f, 10, 44, 0, 100, EIO);
+  const done = tw(f, 44, 50) * (1 - tw(f, 50, 66));
   return (
     <AbsoluteFill>
-      <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, opacity: 1 - ringsOut, scale: String(lerp(1, 1, 1) - ringsOut * 0.25), rotate: `${Math.sin(f / 18) * 2}deg`, transformOrigin: "540px 600px" }}>
+      <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, opacity: 1 - ringsOut, scale: String(1 - ringsOut * 0.25 + done * 0.03), transformOrigin: "540px 600px" }}>
+        {/* trilhos apagados ("sem resultado") */}
+        {RINGS.map((ring, i) => (
+          <circle key={`t${i}`} cx={540} cy={600} r={ring.r} fill="none" stroke={ring.color} strokeWidth={ring.w} opacity={0.16 * (i === 0 ? 1 : tw(f, 0, 10))} />
+        ))}
+        {/* anéis enchendo (a virada) */}
         {RINGS.map((ring, i) => {
-          const p = tw(f, 4 + i * 4, 26 + i * 4, 0, 1, EIO);
+          const p = tw(f, 10 + i * 3, 44 + i * 2, 0, 1, EIO);
           const C = 2 * Math.PI * ring.r;
           const len = (ring.span / 360) * C * p * (1 - tw(f, d - 8 + i * 2, d + 10 + i * 2, 0, 1, EI));
-          const rot = -90 - (1 - p) * 70 + ringsOut * 120;
+          const rot = -90 + ringsOut * 120;
           return (
             <g key={i} transform={`rotate(${rot} 540 600)`}>
               {i > 0 && len > 0.5 ? <circle cx={540} cy={600} r={ring.r} fill="none" stroke="#0b0b0b" strokeWidth={ring.w + 12} strokeLinecap="round" strokeDasharray={`${len} ${C}`} /> : null}
-              {len > 0.5 ? <circle cx={540} cy={600} r={ring.r} fill="none" stroke={ring.color} strokeWidth={ring.w} strokeLinecap="round" strokeDasharray={`${len} ${C}`} /> : null}
+              {len > 0.5 ? <circle cx={540} cy={600} r={ring.r} fill="none" stroke={ring.color} strokeWidth={ring.w} strokeLinecap="round" strokeDasharray={`${len} ${C}`} style={{ filter: `drop-shadow(0 0 ${18 * done}px ${ring.color})` }} /> : null}
             </g>
           );
         })}
+        <text x={540} y={600} textAnchor="middle" dominantBaseline="central" fill="#fff" style={{ fontFamily: SANS, fontWeight: 800, fontSize: 54, letterSpacing: "-0.04em" }}
+          opacity={tw(f, 6, 14) * (1 - tw(f, d - 10, d))}>
+          {Math.round(pct)}%
+        </text>
       </svg>
       {f < d ? (
-        <Box rect={R.s1Pill} layers={[{ style: DARK_GLASS, o: 1 }]} shadow={SHADOW_DARK} shine={tw(f, 30, 56)}
+        <Box rect={R.s1Pill} layers={[{ style: DARK_GLASS, o: 1 }]} shadow={SHADOW_DARK} shine={tw(f, 52, 78)}
           style={{ opacity: pillIn, translate: `0px ${(1 - pillIn) * 160}px`, scale: String(0.88 + 0.12 * pillIn), filter: `blur(${(1 - pillIn) * 14}px)` }}>
-          <NotifContent icon={<Dumbbell />} title="Treino concluído" sub="Mais um passo até o seu objetivo." o={contentO} iconO={contentO} slide={tw(f, 22, 38)} />
+          <NotifContent icon={<Dumbbell />} title="Treino concluído" sub="Mais um passo até o seu objetivo." o={contentO} iconO={contentO} slide={tw(f, 46, 62)} />
         </Box>
       ) : null}
-      <Kinetic start={20} end={d - 10} lines={[
+      <Kinetic start={14} end={d - 10} lines={[
         { y: 1532, size: 84, color: W, segs: [{ t: "Seu objetivo merece" }] },
         { y: 1625, size: 84, color: W, segs: [{ t: "um treinamento com" }, { t: "estratégia!", serif: true }] },
       ]} />
