@@ -8,7 +8,6 @@ import {
   LIME,
   LIME_DEEP,
   M,
-  MUTED_DARK,
   OLIVE_FRAME,
   R,
   SANS,
@@ -45,7 +44,7 @@ export const S01: FC<P> = ({ d }) => {
           position: "absolute",
           inset: 0,
           opacity: 1 - ringsOut,
-          scale: String(lerp(0.86, 1, tw(f, 0, 34)) - ringsOut * 0.25 + bump(f, T.s1Notif) * 0.04),
+          scale: String(lerp(0.86, 1, tw(f, 0, 34)) - ringsOut * 0.25),
           rotate: `${Math.sin(f / 18) * 2}deg`,
           transformOrigin: "540px 600px",
         }}
@@ -78,8 +77,7 @@ export const S01: FC<P> = ({ d }) => {
           style={{
             opacity: pillIn,
             translate: `0px ${(1 - pillIn) * 160}px`,
-            scale: String((0.88 + 0.12 * pillIn) * (1 - 0.05 * bump(f, T.s1Notif))),
-            rotate: `${Math.sin(f * 1.7) * 2.2 * tw(f, 38, 42) * (1 - tw(f, 42, 58))}deg`,
+            scale: String(0.88 + 0.12 * pillIn),
             filter: `blur(${(1 - pillIn) * 14}px)`,
           }}
           shine={tw(f, 30, 56)}
@@ -93,9 +91,8 @@ export const S01: FC<P> = ({ d }) => {
         start={32}
         end={d - 10}
         lines={[
-          { y: 1438, size: 40, weight: 500, color: MUTED_DARK, segs: [{ t: "Seu objetivo merece" }] },
-          { y: 1532, size: 88, color: "#fff", segs: [{ t: "um treinamento" }, { t: "com", serif: true }] },
-          { y: 1625, size: 88, color: "#fff", segs: [{ t: "estratégia!", serif: true }] },
+          { y: 1532, size: 84, color: "#fff", segs: [{ t: "Seu objetivo merece" }] },
+          { y: 1625, size: 84, color: "#fff", segs: [{ t: "treino com" }, { t: "estratégia!", serif: true }] },
         ]}
       />
     </AbsoluteFill>
@@ -148,7 +145,6 @@ export const S02: FC<P> = ({ d }) => {
               color: "#fff",
               opacity: label,
               translate: `0px ${(1 - label) * 40}px`,
-              scale: String(1 - 0.06 * bump(f, T.s2Label)),
               boxShadow: `0 0 ${40 * bump(f, T.s2Label)}px rgba(212,255,79,0.6)`,
             }}
           >
@@ -161,9 +157,8 @@ export const S02: FC<P> = ({ d }) => {
         start={18}
         end={d - 10}
         lines={[
-          { y: 1440, size: 40, weight: 500, color: MUTED_DARK, segs: [{ t: "Eu sou" }] },
-          { y: 1532, size: 88, color: "#fff", segs: [{ t: "Júnior Reis,", serif: true }] },
-          { y: 1622, size: 88, color: "#fff", segs: [{ t: "Personal Trainer." }] },
+          { y: 1532, size: 84, color: "#fff", segs: [{ t: "Eu sou" }, { t: "Júnior Reis,", serif: true }] },
+          { y: 1625, size: 84, color: "#fff", segs: [{ t: "Personal Trainer." }] },
         ]}
       />
     </AbsoluteFill>
@@ -205,8 +200,6 @@ export const S03: FC<P> = ({ d }) => {
           shine={tw(f, 34, 58)}
           style={{
             opacity: bIn,
-            scale: String(1 - 0.05 * bump(f, T.s3B)),
-            rotate: `${Math.sin(f * 1.8) * 1.8 * tw(f, 34, 37) * (1 - tw(f, 37, 52))}deg`,
           }}
         >
           <NotifContent icon={<ArrowUp />} title="Superar limites" sub="Vá além, treino a treino."
@@ -218,7 +211,7 @@ export const S03: FC<P> = ({ d }) => {
       <Box
         rect={rectA}
         shadow={SHADOW_DARK}
-        style={{ opacity: 1 - exitBody, scale: String((1 - exitBody * 0.06) * (1 - 0.05 * bump(f, T.s3A))) }}
+        style={{ opacity: 1 - exitBody, scale: String((1 - exitBody * 0.06)) }}
         shine={tw(f, 22, 46)}
         layers={[
           { style: OLIVE_FRAME, o: 1 - tw(f, 4, 18) },
@@ -233,12 +226,9 @@ export const S03: FC<P> = ({ d }) => {
       <Kinetic
         start={18}
         end={d - 10}
-        stagger={2.2}
         lines={[
-          { y: 1347, size: 40, weight: 500, color: MUTED_DARK, segs: [{ t: "E o meu trabalho é ajudar você a" }] },
-          { y: 1440, size: 88, color: "#fff", segs: [{ t: "superar" }, { t: "limites", serif: true }] },
-          { y: 1532, size: 88, color: "#fff", segs: [{ t: "e alcançar seus" }] },
-          { y: 1622, size: 88, color: "#fff", segs: [{ t: "objetivos.", serif: true }] },
+          { y: 1532, size: 84, color: "#fff", segs: [{ t: "Superar" }, { t: "limites", serif: true }, { t: "e" }] },
+          { y: 1625, size: 84, color: "#fff", segs: [{ t: "alcançar seus" }, { t: "objetivos.", serif: true }] },
         ]}
       />
     </AbsoluteFill>
@@ -308,7 +298,7 @@ export const S04: FC<P> = ({ d }) => {
           height: 50,
           borderRadius: 25,
           background: LIME,
-          scale: String(dotIn * (1 - 0.35 * bump(f, T.s4Dot))),
+          scale: String(dotIn),
           boxShadow: `0 0 ${30 * dotIn}px rgba(212,255,79,0.5)`,
         }}
       />
@@ -328,8 +318,7 @@ export const S04: FC<P> = ({ d }) => {
             alignItems: "center",
             justifyContent: "center",
             boxShadow: `0 0 ${(50 + 30 * bump(f, T.s4Flag) + 12 * Math.sin(f / 5)) * glow}px rgba(212,255,79,${0.55 * glow})`,
-            rotate: `${Math.sin(Math.PI * flagP) * 14 + bump(f, T.s4Flag) * 10}deg`,
-            scale: String(1 + 0.18 * bump(f, T.s4Flag)),
+            rotate: `${Math.sin(Math.PI * flagP) * 14}deg`,
           }}
         >
           <div style={{ width: 54, height: 54, color: "#0b0b0b" }}>
@@ -342,8 +331,8 @@ export const S04: FC<P> = ({ d }) => {
         start={34}
         end={d - 10}
         lines={[
-          { y: 1482, size: 88, color: "#fff", segs: [{ t: "Com um treino feito" }] },
-          { y: 1578, size: 88, color: "#fff", segs: [{ t: "sob medida", serif: true }, { t: "pra você." }] },
+          { y: 1482, size: 84, color: "#fff", segs: [{ t: "Com um treino feito" }] },
+          { y: 1578, size: 84, color: "#fff", segs: [{ t: "sob medida", serif: true }, { t: "pra você." }] },
         ]}
       />
     </AbsoluteFill>

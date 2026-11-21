@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { useCurrentFrame } from "remotion";
-import { EIO, EO, START, pathAt, tw } from "./lib";
+import { EIO, EO, START, tw } from "./lib";
 
 /**
  * Roteiro do cursor redondo.
@@ -26,44 +26,18 @@ export const T = {
   s12Cta: 56,
 };
 
-const path4: KF[] = [0.2, 0.4, 0.6, 0.8].map((u, i) => {
-  const [x, y] = pathAt(u);
-  return { s: 3, f: 32 + i * 8, x, y };
-});
-
 const KFS: KF[] = [
-  { s: 0, f: 30, x: 900, y: 1500 },
-  { s: 0, f: T.s1Notif, x: 610, y: 1070, tap: true },
-  { s: 1, f: T.s2Label, x: 560, y: 1080, tap: true },
-  { s: 2, f: T.s3A, x: 600, y: 676, tap: true },
-  { s: 2, f: T.s3B, x: 600, y: 868, tap: true },
-  { s: 3, f: T.s4Dot, x: 170, y: 1220, tap: true },
-  ...path4,
-  { s: 3, f: T.s4Flag, x: 890, y: 950, tap: true },
-  { s: 4, f: T.s5Checks[0], x: 903, y: 584, tap: true },
-  { s: 4, f: T.s5Checks[1], x: 903, y: 750, tap: true },
-  { s: 4, f: T.s5Checks[2], x: 903, y: 917, tap: true },
-  { s: 5, f: T.s6Drag[0], x: 184, y: 676, down: true },
-  { s: 5, f: T.s6Drag[0] + 12, x: 809, y: 676 },
-  { s: 5, f: T.s6Drag[1], x: 184, y: 828, down: true },
-  { s: 5, f: T.s6Drag[1] + 12, x: 705, y: 828 },
-  { s: 5, f: T.s6Drag[2], x: 184, y: 980, down: true },
-  { s: 5, f: T.s6Drag[2] + 12, x: 869, y: 980 },
-  { s: 6, f: T.s7Send, x: 745, y: 1319, tap: true },
-  { s: 7, f: T.s8Toggle, x: 668, y: 1085, tap: true },
-  { s: 8, f: T.s9Bars[0], x: 474, y: 860, tap: true },
-  { s: 8, f: T.s9Bars[1], x: 739, y: 820, tap: true },
-  { s: 9, f: T.s10Logo, x: 560, y: 600, tap: true },
+  { s: 10, f: 46, x: 960, y: 1360 },
   { s: 10, f: T.s11Follow, x: 705, y: 978, tap: true },
-  { s: 11, f: 22, x: 800, y: 884 },
-  { s: 11, f: T.s12Cta, x: 800, y: 884, tap: true },
 ];
 const ABS = KFS.map((k) => ({ ...k, F: START[k.s] + k.f }));
 
 export const RoundCursor: FC = () => {
   const F = useCurrentFrame();
   const first = ABS[0];
-  if (F < first.F - 16) return null;
+  const last = ABS[ABS.length - 1];
+  if (F < first.F - 16 || F > last.F + 30) return null;
+  const vanish = 1 - tw(F, last.F + 14, last.F + 26);
 
   let i = 0;
   while (i + 1 < ABS.length && F >= ABS[i + 1].F) i++;
@@ -135,7 +109,7 @@ export const RoundCursor: FC = () => {
           border: "3px solid rgba(20,20,20,0.35)",
           boxShadow: "0 10px 24px rgba(0,0,0,0.35), inset 0 0 0 6px rgba(255,255,255,0.35)",
           backdropFilter: "blur(4px)",
-          opacity: appear,
+          opacity: appear * vanish,
           scale: String((0.6 + 0.4 * appear) * (1 - press * 0.28)),
         }}
       />

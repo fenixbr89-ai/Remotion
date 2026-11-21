@@ -1,5 +1,5 @@
-import { createContext, useContext, type CSSProperties, type FC, type ReactNode } from "react";
-import { spring, useCurrentFrame, useVideoConfig } from "remotion";
+import type { CSSProperties, FC, ReactNode } from "react";
+import { useCurrentFrame } from "remotion";
 import { EI, LIME, SANS, SERIF, lerp, tw, type Rect } from "./lib";
 
 // ---------- Caixa que pode "morphar" entre retângulos ----------
@@ -61,10 +61,7 @@ export const Box: FC<{
   </div>
 );
 
-// ---------- Tipografia cinética ----------
-export type TextStyle = "mask" | "beat";
-export const TextStyleCtx = createContext<TextStyle>("mask");
-
+// ---------- Tipografia: linha suave ----------
 export type Seg = { t: string; serif?: boolean; color?: string };
 export type KLine = {
   y: number; // centro vertical da linha
@@ -72,197 +69,61 @@ export type KLine = {
   color: string;
   weight?: number;
   serifColor?: string;
-  chars?: boolean; // anima letra a letra (estilo máscara)
   segs: Seg[];
 };
 
-type Unit = { key: string; text: string; style: CSSProperties; serif: boolean; size: number; kicker: boolean; line: number };
-
-const buildUnits = (lines: KLine[], splitChars: boolean) => {
-  const perLine: (Unit | " ")[][] = [];
-  lines.forEach((line, li) => {
-    const row: (Unit | " ")[] = [];
-    const kicker = line.size < 50;
-    line.segs.forEach((seg, si) => {
-      const parts = seg.t.split(" ").filter((w) => w.length > 0);
-      parts.forEach((w, wi) => {
-        const serif = !!seg.serif;
-        const style: CSSProperties = serif
-          ? { fontFamily: SERIF, fontStyle: "italic", fontWeight: 500, fontSize: line.size * 1.1, letterSpacing: "-0.01em", color: seg.color ?? line.serifColor ?? LIME }
-          : {
-              fontFamily: SANS,
-              fontWeight: line.weight ?? 800,
-              fontSize: line.size,
-              letterSpacing: line.weight && line.weight < 600 ? "-0.01em" : "-0.045em",
-              color: seg.color ?? line.color,
-            };
-        const key = `${li}-${si}-${wi}`;
-        if (splitChars && line.chars && !serif) {
-          [...w].forEach((ch, ci) => row.push({ key: `${key}-${ci}`, text: ch, style, serif, size: line.size, kicker, line: li }));
-        } else {
-          row.push({ key, text: w, style, serif, size: line.size, kicker, line: li });
-        }
-        const last = si === line.segs.length - 1 && wi === parts.length - 1;
-        if (!last && !(splitChars && line.chars && !serif)) row.push(" ");
-        else if (!last) row.push(" ");
-      });
-    });
-    perLine.push(row);
-  });
-  return perLine;
-};
-
-const LineBox: FC<{ line: KLine; children: ReactNode }> = ({ line, children }) => (
-  <div
-    style={{
-      position: "absolute",
-      left: 0,
-      right: 0,
-      top: line.y - line.size * 0.7,
-      height: line.size * 1.4,
-      lineHeight: `${line.size * 1.4}px`,
-      fontSize: line.size,
-      fontFamily: SANS,
-      textAlign: "center",
-      whiteSpace: "nowrap",
-    }}
-  >
-    {children}
-  </div>
-);
-
-/** Palavra que sobe por trás de uma máscara (sans) ou entra com impacto (serifada) */
-const MaskWord: FC<{ u: Unit; delay: number; ex: number; pop?: boolean }> = ({ u, delay, ex, pop }) => {
-  const f = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const e = tw(f, ex, ex + 9, 0, 1, EI);
-  if (u.serif || pop) {
-    const p = spring({ frame: f - delay, fps, config: { damping: 9, stiffness: 190, mass: 0.6 } });
-    const o = tw(f, delay, delay + 4);
-    const g = tw(f, delay, delay + 20);
-    const from = pop ? 1.15 : 1.9;
-    return (
-      <span
-        style={{
-          display: "inline-block",
-          whiteSpace: "pre",
-          opacity: o * (1 - e),
-          scale: String((from + (1 - from) * p) * (1 - e * 0.25)),
-          rotate: pop ? "0deg" : `${(1 - p) * -10}deg`,
-          translate: `0px ${-e * 0.4 * u.size}px`,
-          textShadow: u.serif ? `0 0 ${36 * (1 - g)}px rgba(212,255,79,${0.95 * (1 - g)})` : undefined,
-          filter: `blur(${e * 8}px)`,
-          ...u.style,
-        }}
-      >
-        {u.text}
-      </span>
-    );
-  }
-  const p = spring({ frame: f - delay, fps, config: { damping: 12, stiffness: 210, mass: 0.6 } });
-  const h = u.size * 1.4;
-  const m = u.size * 0.08;
-  return (
-    <span style={{ display: "inline-block", whiteSpace: "pre", clipPath: `inset(-${m}px -${u.size * 0.3}px -${m}px -${u.size * 0.3}px)` }}>
-      <span
-        style={{
-          display: "inline-block",
-          whiteSpace: "pre",
-          translate: `0px ${(1 - p) * h - e * h}px`,
-          rotate: `${(1 - p) * 7}deg`,
-          transformOrigin: "0% 100%",
-          ...u.style,
-        }}
-      >
-        {u.text}
-      </span>
-    </span>
-  );
-};
-
+/** Cada linha inteira sobe poucos pixels e aparece com fade. Sem quique, sem giro. */
 export const Kinetic: FC<{
   lines: KLine[];
   start: number;
   end: number;
-  stagger?: number;
-}> = ({ lines, start, end, stagger = 2.6 }) => {
-  const mode = useContext(TextStyleCtx);
+  gap?: number;
+}> = ({ lines, start, end, gap = 7 }) => {
   const f = useCurrentFrame();
-  const rows = buildUnits(lines, mode === "mask");
-
-  if (mode === "mask") {
-    let k = 0;
-    return (
-      <>
-        {lines.map((line, li) => (
-          <LineBox key={li} line={line}>
-            {rows[li].map((u, i) => {
-              if (u === " ") return <span key={`sp${i}`}>{" "}</span>;
-              const step = line.chars ? 0.9 : stagger;
-              const delay = start + k * step;
-              const ex = end + Math.min(k, 10) * 0.5;
-              k++;
-              return <MaskWord key={u.key} u={u} delay={delay} ex={ex} />;
-            })}
-          </LineBox>
-        ))}
-      </>
-    );
-  }
-
-  // ---- palavra por palavra ----
-  const B = 5;
-  const head = rows.flatMap((r) => r.filter((u): u is Unit => u !== " " && !u.kicker));
-  const beatStart = start + (rows.some((r) => r.some((u) => u !== " " && u.kicker)) ? 6 : 0);
-  const assemble = beatStart + head.length * B;
-  const headLines = lines.filter((l) => l.size >= 50);
-  const cy = headLines.reduce((a, l) => a + l.y, 0) / Math.max(1, headLines.length);
-  const idx = Math.floor((f - beatStart) / B);
-  const cur = f >= beatStart && f < assemble + 3 ? head[Math.min(idx, head.length - 1)] : null;
-
-  let big: ReactNode = null;
-  if (cur) {
-    const t = f - (beatStart + Math.min(idx, head.length - 1) * B);
-    const base = cur.size * (cur.serif ? 1.1 : 1) * 1.5;
-    const estW = cur.text.length * base * (cur.serif ? 0.46 : 0.58);
-    const size = estW > 980 ? base * (980 / estW) : base;
-    const leaving = tw(f, assemble, assemble + 3);
-    big = (
-      <div style={{ position: "absolute", left: 0, right: 0, top: cy - size * 0.7, height: size * 1.4, lineHeight: `${size * 1.4}px`, textAlign: "center", whiteSpace: "nowrap" }}>
-        <span
-          style={{
-            display: "inline-block",
-            ...cur.style,
-            fontSize: size,
-            scale: String(lerp(1.45, 1, tw(t, 0, 4)) * (1 - leaving * 0.5)),
-            opacity: tw(t, 0, 1.5) * (1 - leaving),
-            textShadow: cur.serif ? `0 0 ${30 * (1 - tw(t, 0, 5))}px rgba(212,255,79,0.9)` : undefined,
-          }}
-        >
-          {cur.text}
-        </span>
-      </div>
-    );
-  }
-
-  let k = 0;
-  let h = 0;
   return (
     <>
-      {lines.map((line, li) => (
-        <LineBox key={li} line={line}>
-          {rows[li].map((u, i) => {
-            if (u === " ") return <span key={`sp${i}`}>{" "}</span>;
-            const ex = end + Math.min(k, 10) * 0.5;
-            k++;
-            if (u.kicker) return <MaskWord key={u.key} u={u} delay={start + i} ex={ex} />;
-            const delay = assemble + h * 1.2;
-            h++;
-            return <MaskWord key={u.key} u={u} delay={delay} ex={ex} pop />;
-          })}
-        </LineBox>
-      ))}
-      {big}
+      {lines.map((line, li) => {
+        const d0 = start + li * gap;
+        const p = tw(f, d0, d0 + 20);
+        const e = tw(f, end + li * 3, end + li * 3 + 12, 0, 1, EI);
+        return (
+          <div
+            key={li}
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              top: line.y - line.size * 0.7,
+              height: line.size * 1.4,
+              lineHeight: `${line.size * 1.4}px`,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              opacity: p * (1 - e),
+              translate: `0px ${(1 - p) * 34 - e * 20}px`,
+            }}
+          >
+            {line.segs.map((seg, si) => (
+              <span
+                key={si}
+                style={
+                  seg.serif
+                    ? { fontFamily: SERIF, fontStyle: "italic", fontWeight: 500, fontSize: line.size * 1.1, letterSpacing: "-0.01em", color: seg.color ?? line.serifColor ?? LIME }
+                    : {
+                        fontFamily: SANS,
+                        fontWeight: line.weight ?? 800,
+                        fontSize: line.size,
+                        letterSpacing: line.weight && line.weight < 600 ? "-0.01em" : "-0.045em",
+                        color: seg.color ?? line.color,
+                      }
+                }
+              >
+                {si > 0 ? " " : ""}
+                {seg.t}
+              </span>
+            ))}
+          </div>
+        );
+      })}
     </>
   );
 };

@@ -6,7 +6,6 @@ import { DUR, EO, LIME, M, START, THEME, tw } from "./lib";
 import { S01, S02, S03, S04 } from "./scenes/S01_04";
 import { S05, S06, S07, S08 } from "./scenes/S05_08";
 import { S09, S10, S11, S12 } from "./scenes/S09_12";
-import { TextStyleCtx, type TextStyle } from "./ui";
 
 const SCENES = [S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12];
 const NAMES = [
@@ -38,10 +37,9 @@ const useCamera = () => {
   const punch = i === 0 ? 0 : tw(t, 0, 5) * (1 - tw(t, 5, 26));
   const intro = 1 - tw(f, 0, 40, 0, 1, EO);
   return {
-    scale: 1.035 + Math.sin(f / 46) * 0.012 + punch * 0.045 + intro * 0.08,
+    scale: 1.02 + Math.sin(f / 46) * 0.01 + punch * 0.045 + intro * 0.08,
     x: Math.sin(f / 61) * 10,
     y: Math.cos(f / 53) * 12,
-    rot: Math.sin(f / 77) * 0.35 + punch * (i % 2 ? 0.6 : -0.6),
   };
 };
 
@@ -97,16 +95,15 @@ const Flash: FC = () => {
   );
 };
 
-export const JuniorReis: FC<{ textStyle: TextStyle }> = ({ textStyle }) => {
+export const JuniorReis: FC = () => {
   const cam = useCamera();
   return (
-    <TextStyleCtx.Provider value={textStyle}>
+    <>
       <AbsoluteFill style={{ backgroundColor: "#050505", overflow: "hidden" }}>
         <AbsoluteFill
           style={{
             scale: String(cam.scale),
             translate: `${cam.x}px ${cam.y}px`,
-            rotate: `${cam.rot}deg`,
           }}
         >
           <Background />
@@ -123,6 +120,6 @@ export const JuniorReis: FC<{ textStyle: TextStyle }> = ({ textStyle }) => {
         </AbsoluteFill>
         <Flash />
       </AbsoluteFill>
-    </TextStyleCtx.Provider>
+    </>
   );
 };

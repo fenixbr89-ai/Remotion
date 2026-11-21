@@ -9,8 +9,6 @@ import {
   LIGHT_GLASS,
   LIME,
   M,
-  MUTED_DARK,
-  MUTED_LIGHT,
   OLIVE,
   OLIVE_FRAME,
   R,
@@ -77,7 +75,7 @@ export const S05: FC<P> = ({ d }) => {
                 <div style={{
                   position: "absolute", left: 172, top: 50, fontFamily: SANS, fontWeight: 600, fontSize: 58,
                   letterSpacing: "-0.01em", color: INK, lineHeight: "70px", opacity: rowIn,
-                  translate: `${(1 - rowIn) * -40 + bump(f, tc) * 12}px 0px`, filter: `blur(${(1 - rowIn) * 6}px)`,
+                  translate: `${(1 - rowIn) * -40}px 0px`, filter: `blur(${(1 - rowIn) * 6}px)`,
                 }}>
                   {ROWS[i].label}
                 </div>
@@ -117,9 +115,8 @@ export const S05: FC<P> = ({ d }) => {
         start={22}
         end={d - 10}
         lines={[
-          { y: 1440, size: 40, weight: 500, color: MUTED_LIGHT, segs: [{ t: "E pra isso, a gente treina" }] },
-          { y: 1532, size: 88, color: INK, segs: [{ t: "musculação, corrida," }] },
-          { y: 1622, size: 88, color: INK, serifColor: OLIVE, segs: [{ t: "cross", serif: true }, { t: "e vários outros." }] },
+          { y: 1532, size: 84, color: INK, segs: [{ t: "Musculação, corrida," }] },
+          { y: 1625, size: 84, color: INK, serifColor: OLIVE, segs: [{ t: "cross", serif: true }, { t: "e muito mais." }] },
         ]}
       />
     </AbsoluteFill>
@@ -190,9 +187,8 @@ export const S06: FC<P> = ({ d }) => {
         start={20}
         end={d - 10}
         lines={[
-          { y: 1438, size: 40, weight: 500, color: MUTED_DARK, segs: [{ t: "Tudo pra desenvolver" }] },
-          { y: 1530, size: 88, color: "#fff", segs: [{ t: "força, resistência", serif: true }] },
-          { y: 1622, size: 88, color: "#fff", segs: [{ t: "e" }, { t: "performance.", serif: true }] },
+          { y: 1532, size: 84, color: "#fff", segs: [{ t: "Força, resistência", serif: true }] },
+          { y: 1625, size: 84, color: "#fff", segs: [{ t: "e" }, { t: "performance.", serif: true }] },
         ]}
       />
     </AbsoluteFill>
@@ -238,7 +234,7 @@ export const PhoneScreen: FC<{ f: number; o: number }> = ({ f, o }) => {
       {/* input */}
       <div style={{ position: "absolute", left: 0, right: 0, top: 756, bottom: 0, background: "#fff" }} />
       <div style={{ position: "absolute", left: 24, top: 778, width: 392, height: 70, borderRadius: 35, background: "#EEEEE6", fontSize: 29, color: "#8f8f8a", lineHeight: "70px", paddingLeft: 28, boxSizing: "border-box" }}>Mensagem</div>
-      <div style={{ position: "absolute", left: 434, top: 778, width: 70, height: 70, borderRadius: 35, background: LIME, display: "flex", alignItems: "center", justifyContent: "center", scale: String(1 - 0.25 * bump(f, T.s7Send)), boxShadow: `0 0 ${30 * bump(f, T.s7Send)}px rgba(212,255,79,0.9)` }}>
+      <div style={{ position: "absolute", left: 434, top: 778, width: 70, height: 70, borderRadius: 35, background: LIME, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 0 ${30 * bump(f, T.s7Send)}px rgba(212,255,79,0.9)` }}>
         <div style={{ width: 36, height: 36, color: "#111" }}><ArrowUp /></div>
       </div>
     </div>
@@ -270,7 +266,7 @@ export const S07: FC<P> = ({ d }) => {
         start={12}
         end={d - 12}
         lines={[
-          { y: 262, size: 88, color: INK, segs: [{ t: "Mas treino bom" }] },
+          { y: 262, size: 84, color: INK, segs: [{ t: "Mas treino bom" }] },
           { y: 352, size: 82, color: INK, serifColor: OLIVE, segs: [{ t: "não anda sozinho.", serif: true }] },
         ]}
       />
@@ -296,9 +292,8 @@ export const S07: FC<P> = ({ d }) => {
         start={30}
         end={d - 10}
         lines={[
-          { y: 1500, size: 88, color: INK, segs: [{ t: "Por isso," }] },
-          { y: 1594, size: 88, color: INK, serifColor: OLIVE, segs: [{ t: "acompanhamento", serif: true }] },
-          { y: 1688, size: 88, color: INK, segs: [{ t: "de perto." }] },
+          { y: 1540, size: 84, color: INK, serifColor: OLIVE, segs: [{ t: "Acompanhamento", serif: true }] },
+          { y: 1633, size: 84, color: INK, segs: [{ t: "de perto." }] },
         ]}
       />
     </AbsoluteFill>
@@ -369,8 +364,8 @@ export const S08: FC<P> = ({ d }) => {
         start={22}
         end={d - 10}
         lines={[
-          { y: 1532, size: 40, weight: 500, color: MUTED_DARK, segs: [{ t: "Com consultoria online e" }] },
-          { y: 1625, size: 88, color: "#fff", segs: [{ t: "personal" }, { t: "presencial,", serif: true }] },
+          { y: 1532, size: 84, color: "#fff", segs: [{ t: "Consultoria" }, { t: "online", serif: true }] },
+          { y: 1625, size: 84, color: "#fff", segs: [{ t: "e personal" }, { t: "presencial.", serif: true }] },
         ]}
       />
     </AbsoluteFill>

@@ -71,7 +71,6 @@ export const S09: FC<P> = ({ d }) => {
                   position: "absolute", left: cx - 42, top: 597 - h, width: 84, height: h, borderRadius: 42,
                   background: c.hi ? LIME : "#D6D6CF", opacity: tw(f, 22 + i * 4, 30 + i * 4) * contentOut,
                   boxShadow: c.hi ? `0 0 ${24 * g + 40 * hit}px rgba(190,240,60,${0.35 + 0.5 * hit})` : "none",
-                  scale: `${1 + 0.12 * hit} ${1 + 0.08 * hit}`, transformOrigin: "50% 100%",
                 }} />
                 <div style={{
                   position: "absolute", left: cx - 30, width: 60, top: 622, textAlign: "center", fontFamily: SANS,
@@ -89,8 +88,8 @@ export const S09: FC<P> = ({ d }) => {
         start={20}
         end={d - 10}
         lines={[
-          { y: 1532, size: 42, weight: 500, color: MUTED_LIGHT, serifColor: OLIVE, segs: [{ t: "com planejamento" }, { t: "individualizado", serif: true }] },
-          { y: 1625, size: 88, color: INK, serifColor: OLIVE, segs: [{ t: "para sua" }, { t: "evolução.", serif: true }] },
+          { y: 1532, size: 84, color: INK, serifColor: OLIVE, segs: [{ t: "Plano" }, { t: "individual", serif: true }] },
+          { y: 1625, size: 84, color: INK, serifColor: OLIVE, segs: [{ t: "para sua" }, { t: "evolução.", serif: true }] },
         ]}
       />
     </AbsoluteFill>
@@ -123,7 +122,7 @@ export const S10: FC<P> = ({ d }) => {
         <div style={{
           position: "absolute", left: R.s10Logo.x, top: R.s10Logo.y, width: R.s10Logo.w, height: R.s10Logo.h,
           clipPath: `circle(${reveal * 620}px at 445px 230px)`,
-          scale: String(lerp(1.12, 1, reveal) * (1 + 0.06 * bump(f, T.s10Logo))), filter: `blur(${(1 - reveal) * 8}px) drop-shadow(0 0 ${30 * bump(f, T.s10Logo)}px rgba(160,210,40,0.8))`,
+          scale: String(lerp(1.12, 1, reveal)), filter: `blur(${(1 - reveal) * 8}px) drop-shadow(0 0 ${30 * bump(f, T.s10Logo)}px rgba(160,210,40,0.8))`,
         }}>
           <Logo />
         </div>
@@ -132,11 +131,9 @@ export const S10: FC<P> = ({ d }) => {
       <Kinetic
         start={22}
         end={d - 10}
-        stagger={2}
         lines={[
-          { y: 1440, size: 40, weight: 500, color: MUTED_LIGHT, segs: [{ t: "Júnior Reis. Treinamento com estratégia." }] },
-          { y: 1532, size: 88, color: INK, segs: [{ t: "Coloque seu corpo" }] },
-          { y: 1622, size: 88, color: INK, serifColor: OLIVE, segs: [{ t: "em movimento!", serif: true }] },
+          { y: 1532, size: 84, color: INK, segs: [{ t: "Coloque seu corpo" }] },
+          { y: 1625, size: 84, color: INK, serifColor: OLIVE, segs: [{ t: "em movimento!", serif: true }] },
         ]}
       />
     </AbsoluteFill>
@@ -241,7 +238,7 @@ export const S11: FC<P> = ({ d }) => {
         end={d - 10}
         lines={[
           { y: 1532, size: 40, weight: 500, color: MUTED_DARK, segs: [{ t: "Acompanhe no Instagram" }] },
-          { y: 1625, size: 88, color: "#fff", chars: true, segs: [{ t: "@juniorreispersonal" }] },
+          { y: 1625, size: 84, color: "#fff", segs: [{ t: "@juniorreispersonal" }] },
         ]}
       />
     </AbsoluteFill>
@@ -254,8 +251,6 @@ export const S12: FC<P> = ({ d }) => {
   const p = tw(f, 0, M, 0, 1, EIO);
   const notif = lerpRect(R.s11Card, R.s12Notif, p);
   const btn = lerpRect(R.s11Btn, R.s12Btn, p);
-  const press = bump(f, T.s12Cta);
-  const rip = tw(f, T.s12Cta, T.s12Cta + 24);
   const pulse = tw(f, T.s12Cta + 2, T.s12Cta + 34);
   const pulse2 = tw(f, T.s12Cta + 20, T.s12Cta + 52);
   const bio = tw(f, 30, 46);
@@ -264,7 +259,7 @@ export const S12: FC<P> = ({ d }) => {
   return (
     <AbsoluteFill>
       <Box rect={notif} layers={[{ style: DARK_GLASS, o: 1 }]} shadow={SHADOW_DARK} shine={tw(f, 22, 48)}
-        style={{ rotate: `${Math.sin(f * 1.8) * 1.8 * tw(f, 22, 25) * (1 - tw(f, 25, 42))}deg` }}>
+>
         <NotifContent icon={<WhatsApp />} title="WhatsApp" sub="(62) 98118-8910"
           o={tw(f, 16, 30)} iconO={tw(f, 14, 26)} slide={tw(f, 16, 32)} />
       </Box>
@@ -284,9 +279,8 @@ export const S12: FC<P> = ({ d }) => {
       ) : null}
 
       <Box rect={btn} layers={[{ style: { background: LIME }, o: 1 }]} shine={tw(f, 60, 84)}
-        style={{ scale: String(1 - press * 0.06), boxShadow: `0 0 ${(40 + 20 * Math.sin(f / 6)) * tw(f, 20, 40)}px rgba(212,255,79,0.3)` }}>
-        <Ripple x={800 - R.s12Btn.x} y={884 - R.s12Btn.y} p={rip} color="#fff" />
-        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: SANS, fontWeight: 600, fontSize: 47, color: "#0b0b0b", opacity: 1 - tw(f, 0, 8) }}>
+        style={{ boxShadow: `0 0 ${(40 + 20 * Math.sin(f / 6)) * tw(f, 20, 40)}px rgba(212,255,79,0.3)` }}>
+                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: SANS, fontWeight: 600, fontSize: 47, color: "#0b0b0b", opacity: 1 - tw(f, 0, 8) }}>
           Seguir
         </div>
         <div style={{
@@ -308,7 +302,7 @@ export const S12: FC<P> = ({ d }) => {
         end={10000}
         lines={[
           { y: 1532, size: 40, weight: 500, color: MUTED_DARK, segs: [{ t: "Entre em contato e" }] },
-          { y: 1625, size: 88, color: "#fff", segs: [{ t: "comece sua" }, { t: "evolução!", serif: true }] },
+          { y: 1625, size: 84, color: "#fff", segs: [{ t: "comece sua" }, { t: "evolução!", serif: true }] },
         ]}
       />
     </AbsoluteFill>
