@@ -38,12 +38,9 @@ const sceneAt = (f: number) => {
 /** Câmera viva: drift contínuo + punch-in a cada corte */
 const useCamera = () => {
   const f = useCurrentFrame();
-  const i = sceneAt(f);
-  const t = f - START[i];
-  const punch = i === 0 ? 0 : tw(t, 0, 5) * (1 - tw(t, 5, 26));
   const intro = 1 - tw(f, 0, 40, 0, 1, EO);
   return {
-    scale: 1.02 + Math.sin(f / 46) * 0.01 + punch * 0.045 + intro * 0.08,
+    scale: 1.02 + Math.sin(f / 46) * 0.01 + intro * 0.08,
     x: Math.sin(f / 61) * 10,
     y: Math.cos(f / 53) * 12,
   };
@@ -82,25 +79,6 @@ const Particles: FC = () => {
   );
 };
 
-/** Flash verde nos cortes */
-const Flash: FC = () => {
-  const f = useCurrentFrame();
-  const i = sceneAt(f);
-  if (i === 0) return null;
-  const t = f - START[i];
-  const o = tw(t, 0, 4) * (1 - tw(t, 4, 18));
-  if (o <= 0) return null;
-  return (
-    <AbsoluteFill
-      style={{
-        background: `radial-gradient(ellipse 80% 55% at 50% 45%, rgba(212,255,79,${0.32 * o}) 0%, rgba(212,255,79,0) 70%)`,
-        mixBlendMode: "screen",
-        pointerEvents: "none",
-      }}
-    />
-  );
-};
-
 export const JuniorReis: FC = () => {
   const cam = useCamera();
   return (
@@ -124,7 +102,6 @@ export const JuniorReis: FC = () => {
           })}
           <RoundCursor />
         </AbsoluteFill>
-        <Flash />
       </AbsoluteFill>
     </>
   );
