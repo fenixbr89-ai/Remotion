@@ -8,6 +8,7 @@ import {
 } from "remotion";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
+import { SoundEffects } from "./HelloWorld/SoundEffects";
 
 export type HelloWorldProps = {
   readonly titleText: string;
@@ -23,6 +24,7 @@ export const HelloWorld: React.FC<HelloWorldProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: "white" }}>
+      <SoundEffects titleText={titleText} />
       <Interactive.Div
         name="Content fade"
         premountFor={fps}
