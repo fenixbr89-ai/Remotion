@@ -55,7 +55,15 @@
     .nav.scrolled { border-bottom-color: var(--linha); }
     .nav .container { display: flex; align-items: center; justify-content: space-between; height: 56px; }
     .logo { font-weight: 600; font-size: 1.15rem; letter-spacing: -0.02em; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo img { width: 34px; height: 34px; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
     .logo span { color: var(--rosa-forte); }
+    .hero-logo {
+      width: clamp(130px, 20vw, 180px); margin: 0 auto 24px; border-radius: 50%;
+      box-shadow: 0 20px 50px rgba(217,138,160,.35);
+      animation: subir 1s var(--ease) forwards, boiar 6s ease-in-out 1s infinite;
+    }
+    @keyframes boiar { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     .nav-links { display: flex; gap: 8px; }
     .nav-links a {
       display: grid; place-items: center;
@@ -286,7 +294,7 @@
   <!-- ================= NAV ================= -->
   <nav class="nav" id="nav">
     <div class="container">
-      <a href="#" class="logo">Delícias <span>da Val</span></a>
+      <a href="#" class="logo"><img src="img/logo.png" alt=""><b style="font-weight:600">Delícias <span>da Val</span></b></a>
       <div class="nav-links">
         <a href="#" class="link-insta" aria-label="Instagram" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
@@ -303,9 +311,10 @@
     <div class="blob b1"></div>
     <div class="blob b2"></div>
     <div class="container">
-      <span class="eyebrow fade-up d1">✨ Bolos · Doces · Decoração</span>
+      <img src="img/logo.png" alt="Delícias da Val Confeitaria" class="hero-logo fade-up">
+      <span class="eyebrow fade-up d1">✨ Bolos · Doces · Flores · Decoração</span>
       <h1 class="fade-up d2">Delícias da Val.<br><em>Feito com carinho.</em></h1>
-      <p class="fade-up d3">Bolos personalizados, doces finos e decoração para a sua festa. Escolha no catálogo e peça direto pelo WhatsApp.</p>
+      <p class="fade-up d3">Especialista em bolos de casamento, flores realistas e chocolate — e decoração completa para a sua festa. Escolha no catálogo e peça direto pelo WhatsApp.</p>
       <div class="hero-ctas fade-up d4">
         <a href="#produtos" class="btn btn-dark">Ver produtos</a>
         <a href="#" class="btn btn-rosa link-insta" target="_blank" rel="noopener">Siga no Instagram</a>
@@ -381,8 +390,8 @@
        CONFIGURAÇÃO — edite só esta parte
        ========================================================= */
     const CONFIG = {
-      whatsapp: "5511999999999",          // DDI + DDD + número, só dígitos
-      instagram: "seuperfil",             // sem o @
+      whatsapp: "5562993021721",          // DDI + DDD + número, só dígitos
+      instagram: "deliciasd_val",             // sem o @
     };
 
     // Coloque as fotos na pasta "img/" ao lado deste arquivo.
@@ -391,18 +400,31 @@
       { nome: "Bolo Romântico com Laços",   categoria: "Bolos",      preco: null, img: "img/foto-02.jpg", desc: "Bolo vintage em chantininho branco, rosas confeitadas e laços de cetim rosa.", tag: "Queridinho" },
       { nome: "Bolo Unicórnio",             categoria: "Bolos",      preco: null, img: "img/foto-16.jpg", desc: "Massa colorida em degradê, topo de unicórnio com arco-íris, borboletas e nome personalizado." },
       { nome: "Bolo Aranha (2 andares)",    categoria: "Bolos",      preco: null, img: "img/foto-03.jpg", desc: "Bolo de dois andares em vermelho e azul, com teias e topo personalizado com idade." },
-      { nome: "Bolo Ouriço Azul (2 andares)", categoria: "Bolos",    preco: null, img: "img/foto-15.jpg", desc: "Andar superior com glitter azul, argolas douradas e personagens personalizados." },
+      { nome: "Bolo Ouriço Azul (2 andares)", categoria: "Bolos",      preco: null, img: "img/foto-15.jpg", desc: "Bolo de dois andares em tons de azul, argolas douradas e personagens personalizados." },
+      { nome: "Bolo Floral Verde",          categoria: "Bolos",      preco: null, img: "img/novo-06.jpg", desc: "Cobertura verde com florzinhas brancas pintadas à mão e base dourada.", tag: "Novo" },
+      { nome: "Bolo Rosas & Dourado",       categoria: "Bolos",      preco: null, img: "img/novo-11.jpg", desc: "Bolo branco com rosas de chantininho, pérolas e borda dourada." },
+      { nome: "Bolo Tropical Personalizado", categoria: "Bolos",     preco: null, img: "img/novo-07.jpg", desc: "Pinceladas coloridas, flores de papel e nome em topo espelhado dourado." },
+      { nome: "Bolo Arco-íris",             categoria: "Bolos",      preco: null, img: "img/novo-14.jpg", desc: "Massa em tons pastel, drip branco, marshmallows e topo arco-íris com nome e idade." },
+      { nome: "Bolo Azul e Rosa",           categoria: "Bolos",      preco: null, img: "img/novo-08.jpg", desc: "Dois tons em chantininho, corações e topo personalizado com nome e idade." },
+      { nome: "Bolo Aranha Clássico",       categoria: "Bolos",      preco: null, img: "img/novo-09.jpg", desc: "Bolo azul com rosetas vermelhas, teias e topo de cidade." },
+      { nome: "Bolo Aranha Personalizado (2 andares)", categoria: "Bolos", preco: null, img: "img/novo-12.jpg", desc: "Dois andares em vermelho e azul, cenário de cidade e nome do aniversariante." },
+      { nome: "Bolo Boteco",                categoria: "Bolos",      preco: null, img: "img/novo-03.jpg", desc: "Tema boteco com rosetas de chocolate, topo personalizado e plaquinha de feliz aniversário." },
       { nome: "Bombons Trufados",           categoria: "Doces finos", preco: null, img: "img/foto-06.jpg", desc: "Mix de bombons ao leite e brancos com fios de chocolate, em forminhas de papel." },
       { nome: "Bombom Branco Rendado",      categoria: "Doces finos", preco: null, img: "img/foto-09.jpg", desc: "Bombom de chocolate branco com fios decorativos, em forminha verde." },
       { nome: "Coração com Pérolas Prata",  categoria: "Doces finos", preco: null, img: "img/foto-08.jpg", desc: "Casquinha de chocolate branco em coração, recheio cremoso e pérolas prateadas.", tag: "Novo" },
       { nome: "Doce com Monograma",         categoria: "Doces finos", preco: null, img: "img/foto-07.jpg", desc: "Doce de coco com as iniciais do casal ou aniversariante em dourado." },
       { nome: "Corações e Conchas",         categoria: "Doces finos", preco: null, img: "img/foto-10.jpg", desc: "Coração com goiabada e pérolas, e conchinhas de chocolate branco — ideal para casamentos." },
-      { nome: "Rosas de Açúcar",            categoria: "Doces finos", preco: null, img: "img/foto-11.jpg", desc: "Rosas modeladas à mão em rosa e branco para decorar bolos e mesas." },
+      { nome: "Flores Realistas",            categoria: "Doces finos", preco: null, img: "img/foto-11.jpg", desc: "Rosas realistas modeladas à mão, em rosa e branco, para decorar bolos e mesas." },
       { nome: "Decoração Floral Rosé",      categoria: "Decoração",  preco: null, img: "img/foto-01.jpg", desc: "Painel redondo glitter, painel arco floral, trio de cilindros e arranjos.", tag: "Mais pedido" },
       { nome: "Decoração Borboletas",       categoria: "Decoração",  preco: null, img: "img/foto-04.jpg", desc: "Painel de borboletas, mesa de madeira, mesinhas laterais, vasos e boleiras." },
       { nome: "Decoração Jardim Encantado", categoria: "Decoração",  preco: null, img: "img/foto-12.jpg", desc: "Painel jardim com passarinhos, arco rosa, cilindros temáticos e boleiras." },
       { nome: "Decoração Carros",           categoria: "Decoração",  preco: null, img: "img/foto-05.jpg", desc: "Painel redondo temático e trio de cilindros em preto, vermelho e laranja." },
       { nome: "Decoração Fórmula 1",        categoria: "Decoração",  preco: null, img: "img/foto-13.jpg", desc: "Painel redondo de corrida e trio de cilindros em preto, vermelho e laranja." },
+      { nome: "Decoração Safári",           categoria: "Decoração",  preco: null, img: "img/novo-10.jpg", desc: "Painel safári, arco verde-água, cilindro, mesinhas douradas, escada e maletas." },
+      { nome: "Decoração Sereia",           categoria: "Decoração",  preco: null, img: "img/novo-04.jpg", desc: "Painel redondo fundo do mar, trio de mesinhas, arranjos e acessórios de sereia." },
+      { nome: "Decoração Pântano Encantado", categoria: "Decoração", preco: null, img: "img/novo-05.jpg", desc: "Arco lilás, arco de balões, mesa rústica, flores e lembrancinhas temáticas." },
+      { nome: "Decoração Aranha Completa",  categoria: "Decoração",  preco: null, img: "img/novo-13.jpg", desc: "Painéis redondo e arco, cilindros temáticos, arco de balões e mesa de doces." },
+      { nome: "Decoração Natal",            categoria: "Decoração",  preco: null, img: "img/novo-02.jpg", desc: "Painel Feliz Natal, cilindros vermelhos, mesa dourada e arranjos de rosas." },
     ];
 
     /* ========================================================= */
