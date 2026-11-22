@@ -767,6 +767,7 @@
     // Coloque as fotos na pasta "img/" ao lado deste arquivo.
     const PRODUTOS = [
       // preco: número (ex.: 89.90) ou null para mostrar "Sob consulta"
+      { nome: "Bolo de Casamento (3 andares)", categoria: "Bolos",  preco: null, img: "img/bolo-casamento.jpg", desc: "Três andares com acabamento liso, renda e rosas vermelhas e brancas. Topo dos noivos com as iniciais do casal.", tag: "Casamento" },
       { nome: "Bolo Romântico com Laços",   categoria: "Bolos",      preco: null, img: "img/foto-02.jpg", desc: "Bolo vintage em chantininho branco, rosas confeitadas e laços de cetim rosa.", tag: "Queridinho" },
       { nome: "Bolo Unicórnio",             categoria: "Bolos",      preco: null, img: "img/foto-16.jpg", desc: "Massa colorida em degradê, topo de unicórnio com arco-íris, borboletas e nome personalizado." },
       { nome: "Bolo Aranha (2 andares)",    categoria: "Bolos",      preco: null, img: "img/foto-03.jpg", desc: "Bolo de dois andares em vermelho e azul, com teias e topo personalizado com idade." },
@@ -782,13 +783,14 @@
       { nome: "Bombons Trufados",           categoria: "Bombons", preco: null, img: "img/foto-06.jpg", desc: "Mix de bombons ao leite e brancos com fios de chocolate, em forminhas de papel." },
       { nome: "Bombom Branco Rendado",      categoria: "Bombons", preco: null, img: "img/foto-09.jpg", desc: "Bombom de chocolate branco com fios decorativos, em forminha verde." },
       { nome: "Coração com Pérolas Prata",  categoria: "Bombons", preco: null, img: "img/foto-08.jpg", desc: "Casquinha de chocolate branco em coração, recheio cremoso e pérolas prateadas.", tag: "Novo" },
-      { nome: "Doce com Monograma",         categoria: "Docinhos", preco: null, img: "img/foto-07.jpg", desc: "Doce de coco com as iniciais do casal ou aniversariante em dourado." },
+      { nome: "Doce com Monograma",         categoria: "Docinhos", preco: 180, img: "img/foto-07.jpg", desc: "Doce de coco com as iniciais do casal ou aniversariante em dourado." },
       { nome: "Corações e Conchas",         categoria: "Bombons", preco: null, img: "img/foto-10.jpg", desc: "Coração com goiabada e pérolas, e conchinhas de chocolate branco, ideal para casamentos." },
       { nome: "Flores Realistas",            categoria: "Docinhos", preco: null, img: "img/foto-11.jpg", desc: "Rosas realistas modeladas à mão, em rosa e branco, para decorar bolos e mesas." },
-      { nome: "Decoração Floral Rosé",      categoria: "Decorações",  preco: null, img: "img/foto-01.jpg", desc: "Painel redondo glitter, painel arco floral, trio de cilindros e arranjos.", tag: "Mais pedido" },
-      { nome: "Decoração Borboletas",       categoria: "Decorações",  preco: null, img: "img/foto-04.jpg", desc: "Painel de borboletas, mesa de madeira, mesinhas laterais, vasos e boleiras." },
+      { nome: "Decoração Floral Rosé",      categoria: "Decorações",  preco: 230, img: "img/foto-01.jpg", desc: "Painel redondo glitter, painel arco floral, trio de cilindros e arranjos.", tag: "Mais pedido" },
+      { nome: "Decoração Borboletas com Mesa", categoria: "Decorações", preco: 350, img: "img/foto-04.jpg", desc: "Painel de borboletas, mesa de madeira, mesinhas laterais, vasos e boleiras." },
+      { nome: "Decoração Borboletas com Cilindros", categoria: "Decorações", preco: null, img: "img/decor-borboletas-cilindros.jpg", desc: "Painel redondo de borboletas e rosas, trio de cilindros temáticos, arranjos e bandejas.", tag: "Novo" },
       { nome: "Decoração Jardim Encantado", categoria: "Decorações",  preco: null, img: "img/foto-12.jpg", desc: "Painel jardim com passarinhos, arco rosa, cilindros temáticos e boleiras." },
-      { nome: "Decoração Carros",           categoria: "Decorações",  preco: null, img: "img/foto-05.jpg", desc: "Painel redondo temático e trio de cilindros em preto, vermelho e laranja." },
+      { nome: "Decoração Carros",           categoria: "Decorações",  preco: 180, img: "img/foto-05.jpg", desc: "Painel redondo temático e trio de cilindros em preto, vermelho e laranja." },
       { nome: "Decoração Fórmula 1",        categoria: "Decorações",  preco: null, img: "img/foto-13.jpg", desc: "Painel redondo de corrida e trio de cilindros em preto, vermelho e laranja." },
       { nome: "Decoração Safári",           categoria: "Decorações",  preco: null, img: "img/novo-10.jpg", desc: "Painel safári, arco verde-água, cilindro, mesinhas douradas, escada e maletas." },
       { nome: "Decoração Sereia",           categoria: "Decorações",  preco: null, img: "img/novo-04.jpg", desc: "Painel redondo fundo do mar, trio de mesinhas, arranjos e acessórios de sereia." },
@@ -848,7 +850,7 @@
           <h3>${p.nome}</h3>
           <p class="desc">${p.desc}</p>
           <div class="card-rodape">
-            <div class="preco">${porKg(p) ? `<small class="apartir">a partir de</small><span class="kg-preco">${brl(menorKg)}<em>/kg</em></span>` : p.preco ? brl(p.preco) + `<small>ou 3x de ${brl(p.preco / 3)}</small>` : `<span class="consulta">Sob consulta</span><small>Peça seu orçamento</small>`}</div>
+            <div class="preco">${porKg(p) ? `<small class="apartir">a partir de</small><span class="kg-preco">${brl(menorKg)}<em>/kg</em></span>` : p.preco ? brl(p.preco) : `<span class="consulta">Sob consulta</span><small>Peça seu orçamento</small>`}</div>
             <button class="btn-mini" data-add="${i}" aria-label="Adicionar ${p.nome} ao carrinho">
               <svg class="mais" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
               <i data-ico="check" class="ok"></i>
