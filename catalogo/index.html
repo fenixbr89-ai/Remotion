@@ -480,6 +480,7 @@
     @keyframes entrarItem { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: none; } }
     .item img { width: 68px; height: 68px; border-radius: 14px; object-fit: cover; flex-shrink: 0; }
     .item-info { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; padding-right: 22px; }
+    .qtd b { white-space: nowrap; padding: 0 4px; }
     .item-info strong { font-size: .92rem; font-weight: 600; line-height: 1.25; }
     .item-info span { font-size: .8rem; color: #c27a8f; font-weight: 500; }
     .qtd { display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; background: var(--offwhite); border-radius: 999px; padding: 3px; align-self: flex-start; }
@@ -727,6 +728,14 @@
             <button type="button" id="m-mais" aria-label="Aumentar peso">+</button>
           </div>
         </div>
+        <div class="opcoes" id="m-qtd-box">
+          <div class="opcao-titulo">Quantidade</div>
+          <div class="peso">
+            <button type="button" id="m-qmenos" aria-label="Diminuir quantidade">−</button>
+            <b id="m-qtd">1 cento</b>
+            <button type="button" id="m-qmais" aria-label="Aumentar quantidade">+</button>
+          </div>
+        </div>
         <div class="preco" id="m-preco"></div>
         <div class="modal-acoes">
           <button class="btn btn-dark" id="m-add"><i data-ico="sacola"></i><span id="m-add-txt">Adicionar ao carrinho</span></button>
@@ -764,6 +773,7 @@
       ],
     };
 
+    // Produtos vendidos por unidade de medida (ex.: cento): use  unidade: "cento", unidades: "centos"
     // Coloque as fotos na pasta "img/" ao lado deste arquivo.
     const PRODUTOS = [
       // preco: número (ex.: 89.90) ou null para mostrar "Sob consulta"
@@ -783,7 +793,7 @@
       { nome: "Bombons Trufados",           categoria: "Bombons", preco: null, img: "img/foto-06.jpg", desc: "Mix de bombons ao leite e brancos com fios de chocolate, em forminhas de papel." },
       { nome: "Bombom Branco Rendado",      categoria: "Bombons", preco: null, img: "img/foto-09.jpg", desc: "Bombom de chocolate branco com fios decorativos, em forminha verde." },
       { nome: "Coração com Pérolas Prata",  categoria: "Bombons", preco: null, img: "img/foto-08.jpg", desc: "Casquinha de chocolate branco em coração, recheio cremoso e pérolas prateadas.", tag: "Novo" },
-      { nome: "Doce com Monograma",         categoria: "Docinhos", preco: 180, img: "img/foto-07.jpg", desc: "Doce de coco com as iniciais do casal ou aniversariante em dourado." },
+      { nome: "Doce com Monograma",         categoria: "Docinhos", preco: 180, unidade: "cento", unidades: "centos", img: "img/foto-07.jpg", desc: "Doce de coco com as iniciais do casal ou aniversariante em dourado." },
       { nome: "Corações e Conchas",         categoria: "Bombons", preco: null, img: "img/foto-10.jpg", desc: "Coração com goiabada e pérolas, e conchinhas de chocolate branco, ideal para casamentos." },
       { nome: "Flores Realistas",            categoria: "Docinhos", preco: null, img: "img/foto-11.jpg", desc: "Rosas realistas modeladas à mão, em rosa e branco, para decorar bolos e mesas." },
       { nome: "Decoração Floral Rosé",      categoria: "Decorações",  preco: 230, img: "img/foto-01.jpg", desc: "Painel redondo glitter, painel arco floral, trio de cilindros e arranjos.", tag: "Mais pedido" },
@@ -837,6 +847,7 @@
     const porKg = p => p.categoria === "Bolos";
     const menorKg = Math.min(...BOLO.sabores.map(s => s.precoKg));
     const kgTxt = kg => kg.toLocaleString("pt-BR") + " kg";
+    const unTxt = (p, n) => `${n} ${n === 1 ? p.unidade : p.unidades}`;
 
     // ---------- Cards ----------
     const grid = document.getElementById("grid");
@@ -850,7 +861,7 @@
           <h3>${p.nome}</h3>
           <p class="desc">${p.desc}</p>
           <div class="card-rodape">
-            <div class="preco">${porKg(p) ? `<small class="apartir">a partir de</small><span class="kg-preco">${brl(menorKg)}<em>/kg</em></span>` : p.preco ? brl(p.preco) : `<span class="consulta">Sob consulta</span><small>Peça seu orçamento</small>`}</div>
+            <div class="preco">${porKg(p) ? `<small class="apartir">a partir de</small><span class="kg-preco">${brl(menorKg)}<em>/kg</em></span>` : p.preco && p.unidade ? `<span class="kg-preco">${brl(p.preco)}<em>/${p.unidade}</em></span>` : p.preco ? brl(p.preco) : `<span class="consulta">Sob consulta</span><small>Peça seu orçamento</small>`}</div>
             <button class="btn-mini" data-add="${i}" aria-label="Adicionar ${p.nome} ao carrinho">
               <svg class="mais" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
               <i data-ico="check" class="ok"></i>
@@ -954,6 +965,13 @@
         $("m-preco").innerHTML = `${brl(s.precoKg * escolha.kg)}<small>${kgTxt(escolha.kg)} × ${brl(s.precoKg)} o kg</small>`;
         $("m-add-txt").textContent = `Adicionar · ${brl(s.precoKg * escolha.kg)}`;
         $("m-whats").href = linkWhats(`${MSG_PADRAO}: *${p.nome}*, sabor ${s.nome}, ${kgTxt(escolha.kg)} (${brl(s.precoKg * escolha.kg)})`);
+      } else if (p.unidade && p.preco) {
+        const total = p.preco * escolha.qtd;
+        $("m-qtd").textContent = unTxt(p, escolha.qtd);
+        $("m-qmenos").disabled = escolha.qtd <= 1;
+        $("m-preco").innerHTML = `${brl(total)}<small>${unTxt(p, escolha.qtd)} × ${brl(p.preco)} o ${p.unidade}</small>`;
+        $("m-add-txt").textContent = `Adicionar · ${brl(total)}`;
+        $("m-whats").href = linkWhats(`${MSG_PADRAO}: *${p.nome}*, ${unTxt(p, escolha.qtd)} (${brl(total)})`);
       } else {
         $("m-preco").textContent = p.preco ? brl(p.preco) : "Sob consulta";
         $("m-add-txt").textContent = "Adicionar ao carrinho";
@@ -965,7 +983,7 @@
     const abrirModal = (i, destacarOpcoes) => {
       const p = atual = PRODUTOS[i];
       const card = grid.querySelector(`.card[data-i="${i}"]`);
-      escolha = { sabor: 0, kg: BOLO.kgMinimo };
+      escolha = { sabor: 0, kg: BOLO.kgMinimo, qtd: 1 };
       $("m-img").src = card.querySelector("img").src;
       $("m-img").alt = p.nome;
       $("m-cat").textContent = p.categoria;
@@ -973,6 +991,7 @@
       $("m-desc").textContent = p.desc;
       $("m-opcoes").style.display = porKg(p) ? "" : "none";
       $("m-opcoes").classList.toggle("destaque", !!destacarOpcoes && porKg(p));
+      $("m-qtd-box").style.display = p.unidade && p.preco ? "" : "none";
       atualizarModal(false);
       modal.classList.add("aberto");
       modal.setAttribute("aria-hidden", "false");
@@ -992,6 +1011,8 @@
       escolha.sabor = +b.dataset.sabor; atualizarModal(true);
     });
     $("m-menos").addEventListener("click", () => { escolha.kg = Math.max(BOLO.kgMinimo, escolha.kg - BOLO.passo); atualizarModal(true); });
+    $("m-qmenos").addEventListener("click", () => { escolha.qtd = Math.max(1, escolha.qtd - 1); atualizarModal(true); });
+    $("m-qmais").addEventListener("click", () => { escolha.qtd++; atualizarModal(true); });
     $("m-mais").addEventListener("click", () => { escolha.kg = Math.min(BOLO.kgMaximo, escolha.kg + BOLO.passo); atualizarModal(true); });
 
     const fecharModal = () => {
@@ -1014,6 +1035,7 @@
     const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify(carrinho)); } catch (e) {} };
     const mesmo = (a, b) => a.nome === b.nome && a.sabor === b.sabor && a.kg === b.kg;
     const descricao = it => it.sabor ? `${it.nome} (${it.sabor}, ${kgTxt(it.kg)})` : it.nome;
+    const qtdTxt = it => { const p = porNome(it.nome); return p.unidade ? unTxt(p, it.q) : `${it.q}x`; };
 
     const gaveta = $("gaveta"), fundo = $("gaveta-fundo"), lista = $("gaveta-lista");
     const flutuante = $("carrinho-flutuante");
@@ -1026,7 +1048,7 @@
       let msg = `${MSG_PADRAO}:\n\n`;
       carrinho.forEach(it => {
         const v = valorUnit(it);
-        msg += `• ${it.q}x ${it.nome}${it.sabor ? `\n   Sabor: ${it.sabor}\n   Peso: ${kgTxt(it.kg)}` : ""}${v ? `\n   Valor: ${brl(v * it.q)}` : ""}\n`;
+        msg += `• ${qtdTxt(it)}${porNome(it.nome).unidade ? " de" : ""} ${it.nome}${it.sabor ? `\n   Sabor: ${it.sabor}\n   Peso: ${kgTxt(it.kg)}` : ""}${v ? `\n   Valor: ${brl(v * it.q)}` : ""}\n`;
       });
       const total = calcularTotal();
       const parcial = carrinho.reduce((s, it) => s + (valorUnit(it) || 0) * it.q, 0);
@@ -1056,7 +1078,7 @@
             ${it.sabor ? `<small>${it.sabor} · ${kgTxt(it.kg)}</small>` : ""}
             <span>${v ? brl(v * it.q) : "Sob consulta"}</span>
             <div class="qtd">
-              <button data-q="-1" aria-label="Diminuir">−</button><b>${it.q}</b><button data-q="1" aria-label="Aumentar">+</button>
+              <button data-q="-1" aria-label="Diminuir">−</button><b>${porNome(it.nome).unidade ? qtdTxt(it) : it.q}</b><button data-q="1" aria-label="Aumentar">+</button>
             </div>
           </div>
           <button class="remover" aria-label="Remover">
@@ -1099,16 +1121,17 @@
       anim.onfinish = () => { bola.remove(); pularContador(); };
     };
 
-    const adicionar = (novo, botao) => {
+    const adicionar = (novo, botao, qtd = 1) => {
       const existente = carrinho.find(it => mesmo(it, novo));
-      if (existente) existente.q++; else carrinho.push({ ...novo, q: 1 });
+      if (existente) existente.q += qtd; else carrinho.push({ ...novo, q: qtd });
       salvar(); desenharCarrinho();
       if (botao) {
         botao.classList.add("adicionado");
         setTimeout(() => botao.classList.remove("adicionado"), 1200);
         voar(botao, porNome(novo.nome).img);
       } else pularContador();
-      avisar(`${descricao(novo)} adicionado`);
+      const p = porNome(novo.nome);
+      avisar(p.unidade ? `${unTxt(p, qtd)} de ${p.nome} adicionado` : `${descricao(novo)} adicionado`);
     };
 
     lista.addEventListener("click", e => {
@@ -1140,7 +1163,7 @@
     addEventListener("keydown", e => { if (e.key === "Escape") fecharGaveta(); });
     $("m-add").addEventListener("click", () => {
       const p = atual;
-      adicionar(porKg(p) ? { nome: p.nome, sabor: BOLO.sabores[escolha.sabor].nome, kg: escolha.kg } : { nome: p.nome }, null);
+      adicionar(porKg(p) ? { nome: p.nome, sabor: BOLO.sabores[escolha.sabor].nome, kg: escolha.kg } : { nome: p.nome }, null, p.unidade ? escolha.qtd : 1);
       fecharModal();
     });
 
