@@ -29,6 +29,7 @@ export const SAnatomia: React.FC = () => (
       <Title lines={["As 3 partes", "do *implante*"]} size={104} />
     </Top>
     <svg viewBox="0 0 1000 1300" width={1080} height={1404} style={{ position: "absolute", top: 560, left: 0, overflow: "visible" }}>
+      <g transform="translate(-120 0)">
       <path d="M380 270 L380 1180" stroke={C.ink} strokeOpacity={0.15} strokeWidth={4} strokeDasharray="10 14" />
       <g transform="translate(240 10) scale(1.4)">
         <ToothG crownOnly mood="happy" />
@@ -39,18 +40,10 @@ export const SAnatomia: React.FC = () => (
       <g transform="translate(380 560) scale(1.15)">
         <Screw len={420} phase={0.3} />
       </g>
-      <SvgLabel x={500} y={120} tx={620} ty={120} text="Coroa" />
-      <text x={620} y={200} fontFamily={fontFamily} fontWeight={500} fontSize={30} fill={C.ink} opacity={0.65}>
-        o "dente" que aparece
-      </text>
-      <SvgLabel x={450} y={390} tx={620} ty={390} text="Pilar" />
-      <text x={620} y={470} fontFamily={fontFamily} fontWeight={500} fontSize={30} fill={C.ink} opacity={0.65}>
-        liga a coroa ao pino
-      </text>
-      <SvgLabel x={450} y={760} tx={600} ty={760} text="Pino de titânio" />
-      <text x={600} y={840} fontFamily={fontFamily} fontWeight={500} fontSize={30} fill={C.ink} opacity={0.65}>
-        fica no osso, como a raiz
-      </text>
+      <SvgLabel x={500} y={120} tx={620} ty={120} text="Coroa" sub={'o "dente" que aparece'} />
+      <SvgLabel x={450} y={390} tx={620} ty={390} text="Pilar" sub="liga a coroa ao pino" />
+      <SvgLabel x={450} y={760} tx={560} ty={760} text="Pino de titânio" sub="fica no osso, como a raiz" />
+      </g>
     </svg>
   </Scene>
 );

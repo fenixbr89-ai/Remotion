@@ -131,7 +131,7 @@ export const S04Numero: React.FC = () => (
       <Ridge after />
       <div style={{ fontWeight: 700, fontSize: 36, marginTop: 10 }}>1 ano depois</div>
     </Card>
-    <Small style={{ position: "absolute", bottom: 90, left: 0, right: 0, fontSize: 26 }}>Fonte: Schropp et al., 2003</Small>
+    <Small style={{ position: "absolute", bottom: 90, left: 0, right: 0, margin: "0 auto", width: "fit-content", fontSize: 26, padding: "12px 28px" }}>Fonte: Schropp et al., 2003</Small>
   </Scene>
 );
 

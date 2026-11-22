@@ -161,8 +161,12 @@ export const Small: React.FC<{ children: React.ReactNode; style?: React.CSSPrope
       fontSize: 38,
       lineHeight: 1.35,
       textAlign: "center",
-      color: C.inkSoft,
+      color: C.ink,
       whiteSpace: "pre-line",
+      background: "rgba(255,255,255,0.92)",
+      borderRadius: 34,
+      padding: "22px 40px",
+      boxShadow: "0 16px 40px rgba(170,70,110,0.14)",
       ...style,
     }}
   >

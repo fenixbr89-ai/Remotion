@@ -81,19 +81,35 @@ export const SvgLabel: React.FC<{
   dark?: boolean;
   size?: number;
   center?: boolean;
-}> = ({ x, y, tx, ty, text, dark, size = 34, center }) => {
-  const w = text.length * size * 0.58 + 56;
-  const h = size * 1.9;
+  sub?: string;
+}> = ({ x, y, tx, ty, text, dark, size = 34, center, sub }) => {
+  const subSize = size * 0.8;
+  const w = Math.max(text.length * size * 0.62, (sub?.length ?? 0) * subSize * 0.56) + 64;
+  const h = sub ? size * 3.3 : size * 1.9;
   const left = tx >= x;
   const px = center ? tx - w / 2 : left ? tx : tx - w;
   return (
     <g>
       <path d={`M${x} ${y} L${tx} ${ty}`} stroke={dark ? "#ffffff" : C.ink} strokeOpacity={0.55} strokeWidth={4} strokeLinecap="round" />
       <circle cx={x} cy={y} r={10} fill={C.accent} stroke="#fff" strokeWidth={4} />
-      <rect x={px} y={ty - h / 2} width={w} height={h} rx={h / 2} fill={dark ? "#ffffff" : C.ink} />
+      <rect x={px} y={ty - h / 2} width={w} height={h} rx={sub ? 30 : h / 2} fill={dark ? "#ffffff" : C.ink} />
+      {sub ? (
+        <text
+          x={px + w / 2}
+          y={ty + size * 1.05}
+          textAnchor="middle"
+          fontFamily={fontFamily}
+          fontWeight={500}
+          fontSize={subSize}
+          fill={dark ? C.ink : "#fff"}
+          opacity={0.85}
+        >
+          {sub}
+        </text>
+      ) : null}
       <text
         x={px + w / 2}
-        y={ty + size * 0.36}
+        y={ty + size * (sub ? -0.25 : 0.36)}
         textAnchor="middle"
         fontFamily={fontFamily}
         fontWeight={700}
