@@ -1,6 +1,6 @@
 import React from "react";
 import { ThreeCanvas } from "@remotion/three";
-import { useCurrentFrame, useVideoConfig } from "remotion";
+import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { Cam, Floor, Jaw, Lights, Screw, Stage } from "./Models";
 import { Caption, Dust, Frame, Header, Tag } from "./Overlay";
 import { HeadBust, Mannequin } from "./People";
@@ -52,7 +52,7 @@ export const SPECS: SceneSpec[] = [
     floorY: -1.68,
     world: (t) => (
       <group rotation={[0, -0.45 + t * 0.35, 0]}>
-        <HeadBust glow={t} glowSide={0.5} />
+        <HeadBust glow={0.55 + 0.45 * Math.sin(t * 12)} glowSide={0.5} />
       </group>
     ),
     tags: () => <Tag text="UM DENTE A MENOS" x={790} y={600} neon />,
@@ -66,7 +66,7 @@ export const SPECS: SceneSpec[] = [
     floorY: -1.68,
     world: (t) => (
       <group rotation={[0, -0.1 + t * 0.2, 0]}>
-        <HeadBust xray={1} jaw={{ middle: "none" }} />
+        <HeadBust xray={Math.min(1, t * 3)} jaw={{ middle: "none" }} />
       </group>
     ),
     tags: () => <Tag text="O BURACO" x={800} y={700} neon />,
@@ -243,22 +243,29 @@ export const SPECS: SceneSpec[] = [
 ];
 
 /** One scene. `t` (0..1) is how far into the scene we are; captions follow it. */
-export const EscuroScene: React.FC<{ index: number; still?: number }> = ({ index, still }) => {
+export const EscuroScene: React.FC<{ index: number; still?: number; dur?: number }> = ({ index, still, dur }) => {
   const s = SPECS[index];
   const f = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
-  const t = still ?? Math.min(1, f / durationInFrames);
+  const t = still ?? Math.min(1, f / (dur ?? durationInFrames));
   const spoken = Math.ceil(s.words.length * Math.min(1, t * 1.15));
+  const k = 1.05 - 0.09 * Easing.bezier(0.33, 0, 0.2, 1)(t);
+  const camPos: V3 = [s.cam.pos[0] + (t - 0.5) * 1.2, s.cam.pos[1], s.cam.pos[2] * k];
+  const tagP = interpolate(f, [8, 20], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.bezier(0.34, 1.4, 0.64, 1) });
   return (
     <Frame>
       <Dust />
       <ThreeCanvas width={1080} height={1920} shadows>
-        <Cam pos={s.cam.pos} target={s.cam.target} />
+        <Cam pos={still === undefined ? camPos : s.cam.pos} target={s.cam.target} />
         <Lights />
         <Floor y={s.floorY ?? (s.cam === STAGE_CAM ? -1.42 : -4.2)} />
         {s.world(t, f)}
       </ThreeCanvas>
-      {s.tags ? s.tags(t) : null}
+      {s.tags ? (
+        <div style={{ position: "absolute", inset: 0, opacity: still === undefined ? Math.min(1, tagP) : 1, scale: still === undefined ? `${0.7 + 0.3 * tagP}` : "1" }}>
+          {s.tags(t)}
+        </div>
+      ) : null}
       <Header section={s.section} />
       <Caption words={s.words} spoken={spoken} strong={s.strong} />
     </Frame>
