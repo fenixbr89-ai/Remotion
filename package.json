@@ -11,13 +11,18 @@
   "repository": {},
   "license": "UNLICENSED",
   "dependencies": {
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
     "@remotion/cli": "^4.0.0",
     "@remotion/fonts": "^4.0.545",
+    "@remotion/three": "^4.0.545",
     "@remotion/transitions": "^4.0.545",
     "@remotion/zod-types": "^4.0.0",
+    "@types/three": "^0.187.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "remotion": "^4.0.0",
+    "three": "^0.187.0",
     "zod": "4.6.7"
   },
   "devDependencies": {
