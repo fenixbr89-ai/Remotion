@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from "react";
-import { AbsoluteFill } from "remotion";
+import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+import { easeBack, prog, useDur } from "./anim";
 import { Bg, C, fontFamily } from "./theme";
 
 const BgCtx = createContext<Bg>("white");
@@ -44,9 +45,17 @@ export const SeriesTag: React.FC = () => (
   </div>
 );
 
-export const Chip: React.FC<{ n: number }> = ({ n }) => (
+const usePop = (delay: number) => {
+  const f = useCurrentFrame();
+  const p = prog(f, delay, 20, easeBack);
+  const o = prog(f, delay, 10);
+  return { opacity: o, scale: interpolate(p, [0, 1], [0.6, 1]) };
+};
+
+export const Chip: React.FC<{ n: number; delay?: number }> = ({ n, delay = 4 }) => (
   <div
     style={{
+      ...usePop(delay),
       display: "inline-flex",
       alignItems: "center",
       gap: 14,
@@ -78,9 +87,10 @@ export const Chip: React.FC<{ n: number }> = ({ n }) => (
   </div>
 );
 
-export const StepChip: React.FC<{ n: number; total?: number }> = ({ n, total = 6 }) => (
+export const StepChip: React.FC<{ n: number; total?: number; delay?: number }> = ({ n, total = 6, delay = 4 }) => (
   <div
     style={{
+      ...usePop(delay),
       display: "inline-flex",
       alignItems: "center",
       gap: 14,
@@ -110,9 +120,31 @@ export const StepChip: React.FC<{ n: number; total?: number }> = ({ n, total = 6
   </div>
 );
 
-/** Title: lines of text, words wrapped in *asterisks* get a marker underline. */
-export const Title: React.FC<{ lines: string[]; size?: number }> = ({ lines, size = 96 }) => {
+type Tok = { w: string; hl: boolean; tail?: string; hlNext?: boolean };
+const tokenize = (line: string): Tok[] => {
+  const out: Tok[] = [];
+  line.split(/(\*[^*]+\*)/).forEach((part) => {
+    const hl = part.startsWith("*");
+    (hl ? part.slice(1, -1) : part)
+      .split(" ")
+      .filter(Boolean)
+      .forEach((w) => {
+        if (/^[.,!?:;]+$/.test(w) && out.length) out[out.length - 1].tail = w;
+        else out.push({ w, hl });
+      });
+  });
+  out.forEach((t, i) => (t.hlNext = t.hl && !!out[i + 1]?.hl));
+  return out;
+};
+
+export const WORD_GAP = 4;
+export const wordCount = (lines: string[]) => lines.reduce((n, l) => n + tokenize(l).length, 0);
+
+/** Kinetic title: one word at a time, marker sweeps under *keywords*. */
+export const Title: React.FC<{ lines: string[]; size?: number; delay?: number }> = ({ lines, size = 96, delay = 10 }) => {
   const bg = useBg();
+  const f = useCurrentFrame();
+  let k = 0;
   return (
     <div
       style={{
@@ -127,57 +159,111 @@ export const Title: React.FC<{ lines: string[]; size?: number }> = ({ lines, siz
     >
       {lines.map((line, i) => (
         <div key={i}>
-          {line.split(/(\*[^*]+\*)/).map((part, j) =>
-            part.startsWith("*") ? (
-              <span key={j} style={{ position: "relative", display: "inline-block" }}>
+          {tokenize(line).map((t, j) => {
+            const d = delay + k++ * WORD_GAP;
+            const p = prog(f, d, 16);
+            const m = prog(f, d + 8, 16);
+            return (
+              <React.Fragment key={j}>
+                {j > 0 ? " " : null}
                 <span
                   style={{
-                    position: "absolute",
-                    left: -10,
-                    right: -10,
-                    bottom: size * 0.05,
-                    height: size * 0.45,
-                    background: MARK[bg],
-                    borderRadius: 14,
+                    display: "inline-block",
+                    position: "relative",
+                    opacity: p,
+                    translate: `0px ${(1 - p) * 44}px`,
+                    scale: interpolate(p, [0, 1], [0.9, 1]),
+                    filter: `blur(${(1 - p) * 12}px)`,
                   }}
-                />
-                <span style={{ position: "relative" }}>{part.slice(1, -1)}</span>
-              </span>
-            ) : (
-              <span key={j}>{part}</span>
-            ),
-          )}
+                >
+                  {t.hl ? (
+                    <span
+                      style={{
+                        position: "absolute",
+                        left: -10,
+                        right: t.hlNext ? -size * 0.3 : -10,
+                        bottom: size * 0.05,
+                        height: size * 0.45,
+                        background: MARK[bg],
+                        borderRadius: 14,
+                        scale: `${m} 1`,
+                        transformOrigin: "0% 50%",
+                      }}
+                    />
+                  ) : null}
+                  <span style={{ position: "relative" }}>{t.w}</span>
+                  {t.tail}
+                </span>
+              </React.Fragment>
+            );
+          })}
         </div>
       ))}
     </div>
   );
 };
 
-export const Small: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({ children, style }) => (
-  <div
-    style={{
-      fontFamily,
-      fontWeight: 500,
-      fontSize: 38,
-      lineHeight: 1.35,
-      textAlign: "center",
-      color: C.ink,
-      whiteSpace: "pre-line",
-      background: "rgba(255,255,255,0.92)",
-      borderRadius: 34,
-      padding: "22px 40px",
-      boxShadow: "0 16px 40px rgba(170,70,110,0.14)",
-      ...style,
-    }}
-  >
-    {children}
-  </div>
-);
+export const Small: React.FC<{ children: string; style?: React.CSSProperties; delay?: number }> = ({
+  children,
+  style,
+  delay = 40,
+}) => {
+  const f = useCurrentFrame();
+  const box = prog(f, delay, 18);
+  let k = 0;
+  return (
+    <div
+      style={{
+        fontFamily,
+        fontWeight: 500,
+        fontSize: 38,
+        lineHeight: 1.35,
+        textAlign: "center",
+        color: C.ink,
+        background: "rgba(255,255,255,0.92)",
+        borderRadius: 34,
+        padding: "22px 40px",
+        boxShadow: "0 16px 40px rgba(170,70,110,0.14)",
+        opacity: box,
+        scale: interpolate(box, [0, 1], [0.92, 1]),
+        translate: `0px ${(1 - box) * 24}px`,
+        ...style,
+      }}
+    >
+      {children.split("\n").map((line, i) => (
+        <div key={i}>
+          {line
+            .split(" ")
+            .filter(Boolean)
+            .map((w, j) => {
+              const p = prog(f, delay + 6 + k++ * 2.2, 12);
+              return (
+                <React.Fragment key={j}>
+                  {j > 0 ? " " : null}
+                  <span style={{ display: "inline-block", opacity: p, translate: `0px ${(1 - p) * 14}px`, filter: `blur(${(1 - p) * 6}px)` }}>
+                    {w}
+                  </span>
+                </React.Fragment>
+              );
+            })}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/** Gentle camera "breath": zooms in and back so it is 1 at both ends (keeps connected cuts seamless). */
+const Drift: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const f = useCurrentFrame();
+  const dur = useDur();
+  const s = 1 + 0.035 * Math.sin((Math.PI * Math.min(f, dur)) / dur);
+  return <AbsoluteFill style={{ scale: s }}>{children}</AbsoluteFill>;
+};
 
 export const Scene: React.FC<{ bg: Bg; children: React.ReactNode }> = ({ bg, children }) => (
   <BgCtx.Provider value={bg}>
     <AbsoluteFill style={{ overflow: "hidden", background: BG[bg] }}>
-      {children}
+      <Drift>{children}</Drift>
       <SeriesTag />
     </AbsoluteFill>
   </BgCtx.Provider>
@@ -203,6 +289,7 @@ export const Top: React.FC<{ children: React.ReactNode; top?: number }> = ({ chi
 export const Card: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({ children, style }) => (
   <div
     style={{
+      boxSizing: "border-box",
       position: "absolute",
       background: "#fff",
       borderRadius: 36,

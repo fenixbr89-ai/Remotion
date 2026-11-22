@@ -2,6 +2,7 @@ import React, { useId } from "react";
 import { random } from "remotion";
 import { C, cleanId } from "./theme";
 import { ToothG } from "./Tooth";
+import { blinking } from "./anim";
 
 const BoneDots: React.FC<{ y0: number; y1: number; seed: string; n?: number }> = ({ y0, y1, seed, n = 40 }) => (
   <g>
@@ -46,7 +47,7 @@ const Grads: React.FC<{ id: string }> = ({ id }) => (
 );
 
 /** Upper + lower jaw: the upper tooth over the gap "descends" (extrusion). */
-export const Jaws: React.FC<{ extrude?: number; children?: React.ReactNode }> = ({ extrude = 80, children }) => {
+export const Jaws: React.FC<{ extrude?: number; t?: number; children?: React.ReactNode }> = ({ extrude = 80, t = 0, children }) => {
   const id = cleanId(useId());
   const s = 1.3;
   const R = 180;
@@ -60,7 +61,7 @@ export const Jaws: React.FC<{ extrude?: number; children?: React.ReactNode }> = 
       <BoneDots y0={190} y1={420} seed="up" n={25} />
       {[220, 500, 780].map((cx) => (
         <g key={cx} transform={`translate(${cx - 100 * s} ${upTy + (cx === 500 ? extrude : 0)}) scale(${s})`}>
-          <ToothG flip rootLen={R} mood={cx === 500 ? "wow" : "calm"} look={cx === 500 ? 0 : cx < 500 ? 5 : -5} />
+          <ToothG flip rootLen={R} mood={cx === 500 ? "wow" : "calm"} look={cx === 500 ? 0 : cx < 500 ? 5 : -5} blink={blinking(t, cx)} />
         </g>
       ))}
       <path d="M0 400 L1000 400 L1000 470 Q890 490 780 478 Q640 466 500 478 Q360 466 220 478 Q110 490 0 470 Z" fill={`url(#${id}-gumU)`} opacity={0.95} />
@@ -71,7 +72,7 @@ export const Jaws: React.FC<{ extrude?: number; children?: React.ReactNode }> = 
       <BoneDots y0={960} y1={1400} seed="low" />
       {[220, 780].map((cx) => (
         <g key={cx} transform={`translate(${cx - 100 * s} ${lowTy}) scale(${s})`}>
-          <ToothG rootLen={R} mood="worried" look={cx < 500 ? 6 : -6} />
+          <ToothG rootLen={R} mood="worried" look={cx < 500 ? 6 : -6} blink={blinking(t, cx + 3)} />
         </g>
       ))}
       <path
@@ -85,7 +86,7 @@ export const Jaws: React.FC<{ extrude?: number; children?: React.ReactNode }> = 
 };
 
 /** Upper jaw with the maxillary sinus dropping into the gap (pneumatisation). */
-export const Sinus: React.FC<{ drop?: number; children?: React.ReactNode }> = ({ drop = 1, children }) => {
+export const Sinus: React.FC<{ drop?: number; t?: number; children?: React.ReactNode }> = ({ drop = 1, t = 0, children }) => {
   const id = cleanId(useId());
   const s = 1.3;
   const R = 180;
@@ -103,10 +104,10 @@ export const Sinus: React.FC<{ drop?: number; children?: React.ReactNode }> = ({
         stroke={C.sinusDeep}
         strokeWidth={6}
       />
-      <path d="M310 292 Q500 300 690 292" stroke={C.accentDeep} strokeWidth={5} strokeDasharray="14 12" fill="none" strokeLinecap="round" />
+      <path d="M310 292 Q500 300 690 292" stroke={C.accentDeep} strokeWidth={5} strokeDasharray="14 12" fill="none" strokeLinecap="round" opacity={drop} />
       {[220, 780].map((cx) => (
         <g key={cx} transform={`translate(${cx - 100 * s} ${ty}) scale(${s})`}>
-          <ToothG flip rootLen={R} mood="worried" look={cx < 500 ? 6 : -6} />
+          <ToothG flip rootLen={R} mood="worried" look={cx < 500 ? 6 : -6} blink={blinking(t, cx)} />
         </g>
       ))}
       <path
@@ -119,29 +120,26 @@ export const Sinus: React.FC<{ drop?: number; children?: React.ReactNode }> = ({
   );
 };
 
-/** Small bone-ridge cross-section (no tooth): before vs after resorption. */
-export const Ridge: React.FC<{ after?: boolean }> = ({ after }) => {
+/** Small bone-ridge cross-section; p morphs from wide (0) to resorbed (1). */
+export const Ridge: React.FC<{ after?: boolean; p?: number; ghost?: boolean }> = ({ after, p, ghost = true }) => {
   const id = cleanId(useId());
-  const wide = "M40 440 L40 170 Q40 70 200 70 Q360 70 360 170 L360 440 Z";
-  const thin = "M120 440 L126 260 Q134 190 200 190 Q266 190 274 260 L280 440 Z";
+  const q = p ?? (after ? 1 : 0);
+  const shape = (w: number, top: number, open = false) =>
+    `M${200 - w} 440 L${200 - w} ${top + 100} Q${200 - w} ${top} 200 ${top} Q${200 + w} ${top} ${200 + w} ${top + 100} L${200 + w} 440${open ? "" : " Z"}`;
+  const w = 160 - q * 80;
+  const top = 70 + q * 120;
   return (
     <svg viewBox="0 0 400 460" width={400} height={460}>
       <Grads id={id} />
       <clipPath id={`${id}-rc`}>
-        <path d={after ? thin : wide} />
+        <path d={shape(w, top)} />
       </clipPath>
-      <path d={after ? thin : wide} fill={`url(#${id}-bone)`} stroke={C.boneDeep} strokeWidth={5} />
+      <path d={shape(w, top)} fill={`url(#${id}-bone)`} stroke={C.boneDeep} strokeWidth={5} />
       <g opacity={0.9} clipPath={`url(#${id}-rc)`}>
-        <BoneDots y0={200} y1={430} seed={after ? "ra" : "rb"} n={after ? 120 : 120} />
+        <BoneDots y0={60} y1={430} seed="rr" n={120} />
       </g>
-      <path
-        d={after ? "M104 440 L108 250 Q118 166 200 166 Q282 166 292 250 L296 440" : "M20 440 L20 165 Q20 46 200 46 Q380 46 380 165 L380 440"}
-        stroke={`url(#${id}-gum)`}
-        strokeWidth={30}
-        fill="none"
-        strokeLinecap="round"
-      />
-      {after ? <path d={wide} fill="none" stroke={C.accentDeep} strokeWidth={5} strokeDasharray="14 12" /> : null}
+      <path d={shape(w + 20, top - 24, true)} stroke={`url(#${id}-gum)`} strokeWidth={30} fill="none" strokeLinecap="round" />
+      {ghost ? <path d={shape(160, 70)} fill="none" stroke={C.accentDeep} strokeWidth={5} strokeDasharray="14 12" opacity={q} /> : null}
     </svg>
   );
 };

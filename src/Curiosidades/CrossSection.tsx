@@ -1,5 +1,6 @@
 import React, { useId } from "react";
 import { random } from "remotion";
+import { blinking, bob } from "./anim";
 import { C, cleanId } from "./theme";
 import { ToothG, Mood, Sparkle } from "./Tooth";
 import { Abutment, Screw } from "./Parts";
@@ -16,6 +17,12 @@ export type CrossProps = {
   abutment?: number | null; // 0 = far above, 1 = seated
   crown?: { drop: number; mood: Mood } | null;
   middleTooth?: Mood | null; // natural tooth in the middle (no gap)
+  middleLift?: number; // 0..1 the middle tooth leaves
+  drillOpacity?: number;
+  screwOpacity?: number;
+  drillSpin?: number;
+  /** frame for blinking / idle bounce */
+  t?: number;
   children?: React.ReactNode; // overlays in the 1000x1100 space
 };
 
@@ -34,6 +41,11 @@ export const CrossSection: React.FC<CrossProps & { width?: number }> = ({
   abutment = null,
   crown = null,
   middleTooth = null,
+  middleLift = 0,
+  drillOpacity = 1,
+  screwOpacity = 1,
+  drillSpin = 0,
+  t = 0,
   children,
   width = 1080,
 }) => {
@@ -112,19 +124,19 @@ export const CrossSection: React.FC<CrossProps & { width?: number }> = ({
 
       {/* neighbor teeth */}
       <g transform={`rotate(${tilt} 220 820)`}>
-        <g transform="translate(80 186) scale(1.4)">
-          <ToothG mood={neighborMood} rootLen={300} look={look} />
+        <g transform={`translate(80 ${186 + bob(t, 1, 2.5)}) scale(1.4)`}>
+          <ToothG mood={neighborMood} rootLen={300} look={look} blink={blinking(t, 1)} />
         </g>
       </g>
       <g transform={`rotate(${-tilt} 780 820)`}>
-        <g transform="translate(640 186) scale(1.4)">
-          <ToothG mood={neighborMood} rootLen={300} look={-look} />
+        <g transform={`translate(640 ${186 + bob(t, 4, 2.5)}) scale(1.4)`}>
+          <ToothG mood={neighborMood} rootLen={300} look={-look} blink={blinking(t, 4)} />
         </g>
       </g>
 
       {middleTooth ? (
-        <g transform="translate(360 186) scale(1.4)">
-          <ToothG mood={middleTooth} rootLen={300} />
+        <g transform={`translate(360 ${186 - middleLift * 340 + bob(t, 2, 2.5)}) scale(1.4)`} opacity={1 - middleLift}>
+          <ToothG mood={middleTooth} rootLen={300} blink={blinking(t, 2)} />
         </g>
       ) : null}
 
@@ -147,7 +159,7 @@ export const CrossSection: React.FC<CrossProps & { width?: number }> = ({
 
       {/* implant screw */}
       {screw ? (
-        <g transform={`translate(${GAP} ${screwTop})`}>
+        <g transform={`translate(${GAP} ${screwTop})`} opacity={screwOpacity}>
           <Screw len={390} phase={screw.phase} />
         </g>
       ) : null}
@@ -180,7 +192,7 @@ export const CrossSection: React.FC<CrossProps & { width?: number }> = ({
       {/* crown */}
       {crown ? (
         <g transform={`translate(360 ${186 - (1 - crown.drop) * 300}) scale(1.4)`}>
-          <ToothG crownOnly mood={crown.mood} />
+          <ToothG crownOnly mood={crown.mood} blink={crown.drop >= 1 && blinking(t, 2)} />
         </g>
       ) : null}
 
@@ -193,10 +205,10 @@ export const CrossSection: React.FC<CrossProps & { width?: number }> = ({
 
       {/* drill */}
       {drill !== null ? (
-        <g transform={`translate(${GAP} ${BONE_TOP - 40 + drill * 380})`}>
+        <g transform={`translate(${GAP} ${BONE_TOP - 40 + drill * 380})`} opacity={drillOpacity}>
           <rect x={-16} y={-420} width={32} height={420} rx={14} fill="#cbd5e1" />
           {new Array(10).fill(0).map((_, i) => (
-            <path key={i} d={`M-16 ${-30 - i * 36} L16 ${-12 - i * 36}`} stroke="#64748b" strokeWidth={6} strokeLinecap="round" />
+            <path key={i} d={`M-16 ${-30 - i * 36 + (drillSpin % 1) * 36} L16 ${-12 - i * 36 + (drillSpin % 1) * 36}`} stroke="#64748b" strokeWidth={6} strokeLinecap="round" />
           ))}
           <path d="M-16 -10 L16 -10 L0 26 Z" fill="#94a3b8" />
           <rect x={-58} y={-640} width={116} height={240} rx={40} fill="#f8fafc" />

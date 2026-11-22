@@ -40,7 +40,7 @@ const Eye: React.FC<{ x: number; y: number; wink?: boolean; look?: number }> = (
   );
 };
 
-const Face: React.FC<{ mood: Mood; look?: number; id: string }> = ({ mood, look = 0, id }) => {
+const Face: React.FC<{ mood: Mood; look?: number; id: string; blink?: boolean }> = ({ mood, look = 0, id, blink }) => {
   const mouth = (() => {
     switch (mood) {
       case "happy":
@@ -90,8 +90,8 @@ const Face: React.FC<{ mood: Mood; look?: number; id: string }> = ({ mood, look 
       <ellipse cx={60} cy={104} rx={13} ry={8} fill="#ff8fa3" opacity={0.55} filter={`url(#${id}-soft)`} />
       <ellipse cx={140} cy={104} rx={13} ry={8} fill="#ff8fa3" opacity={0.55} filter={`url(#${id}-soft)`} />
       {brows}
-      <Eye x={77} y={80} look={look} wink={mood === "wink"} />
-      <Eye x={123} y={80} look={look} />
+      <Eye x={77} y={80} look={look} wink={mood === "wink" || blink} />
+      <Eye x={123} y={80} look={look} wink={blink} />
       {mouth}
       {mood === "sad" ? <path d="M136 96 Q142 108 136 112 Q130 108 136 96 Z" fill="#7cc4ff" /> : null}
     </g>
@@ -108,7 +108,8 @@ export const ToothG: React.FC<{
   xray?: boolean;
   /** upper-jaw tooth: body flipped (roots up), face stays upright */
   flip?: boolean;
-}> = ({ mood = "happy", rootLen = 100, crownOnly, face = true, look = 0, xray, flip }) => {
+  blink?: boolean;
+}> = ({ mood = "happy", rootLen = 100, crownOnly, face = true, look = 0, xray, flip, blink }) => {
   const id = cleanId(useId());
   const d = crownOnly ? crownPath : toothPath(rootLen);
   if (xray) {
@@ -171,7 +172,7 @@ export const ToothG: React.FC<{
       </g>
       {face ? (
         <g transform={flip ? `translate(0 ${rootLen - 15})` : undefined}>
-          <Face mood={mood} look={look} id={id} />
+          <Face mood={mood} look={look} id={id} blink={blink} />
         </g>
       ) : null}
     </g>
@@ -188,6 +189,7 @@ export const Tooth: React.FC<{
   look?: number;
   style?: React.CSSProperties;
   shadow?: boolean;
+  blink?: boolean;
 }> = ({ size, rootLen = 100, crownOnly, shadow = true, style, ...rest }) => {
   const h = crownOnly ? 200 : 150 + rootLen + 30;
   return (
