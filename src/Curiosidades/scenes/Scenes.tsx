@@ -302,7 +302,7 @@ export const S11Final: React.FC = () => (
       >
         Segue pra mais!
       </div>
-      <div style={{ fontFamily, fontWeight: 700, fontSize: 38, color: C.ink, marginTop: 6 }}>@seuperfil</div>
+      <div style={{ fontFamily, fontWeight: 700, fontSize: 38, color: C.ink, marginTop: 6 }}>@yasminsr09</div>
     </AbsoluteFill>
   </Scene>
 );
