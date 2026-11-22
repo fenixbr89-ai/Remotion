@@ -269,6 +269,157 @@
     }
     @keyframes pulso { from { transform: scale(1); opacity: .8; } to { transform: scale(1.6); opacity: 0; } }
 
+
+    /* =========================================================
+       ANIMAÇÕES EXTRAS
+       ========================================================= */
+    i[data-ico] { display: inline-grid; place-items: center; font-style: normal; }
+    i[data-ico] svg { width: 18px; height: 18px; }
+
+    /* Barra de progresso ao rolar */
+    .progresso {
+      position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 70;
+      background: linear-gradient(90deg, var(--rosa-forte), #f6c1cf, var(--rosa-forte));
+      background-size: 200% 100%; animation: correr 3s linear infinite;
+      transform-origin: 0 50%; transform: scaleX(0);
+    }
+    @keyframes correr { to { background-position: -200% 0; } }
+
+    /* Ponto pulsante no selo */
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; }
+    .pulse-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--rosa-forte); position: relative;
+    }
+    .pulse-dot::after {
+      content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--rosa-forte);
+      animation: pulso 1.8s ease-out infinite;
+    }
+
+    /* Brilhos (estrelinhas em CSS) flutuando no topo */
+    .brilho {
+      position: absolute; width: 14px; height: 14px; background: var(--rosa-forte); z-index: -1;
+      clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+      animation: cintilar 4s ease-in-out infinite;
+    }
+    .brilho.s1 { top: 22%; left: 16%; }
+    .brilho.s2 { top: 30%; right: 14%; width: 20px; height: 20px; animation-delay: -1s; }
+    .brilho.s3 { bottom: 24%; left: 22%; width: 10px; height: 10px; animation-delay: -2s; background: #e6c27a; }
+    .brilho.s4 { bottom: 30%; right: 22%; width: 12px; height: 12px; animation-delay: -3s; background: #e6c27a; }
+    .brilho.s5 { top: 14%; left: 60%; width: 9px; height: 9px; animation-delay: -1.6s; }
+    @keyframes cintilar {
+      0%, 100% { transform: scale(.4) rotate(0deg); opacity: .2; }
+      50%      { transform: scale(1.1) rotate(90deg); opacity: 1; }
+    }
+
+    /* Botões: reflexo que atravessa + ícone que balança */
+    .btn { position: relative; overflow: hidden; isolation: isolate; }
+    .btn::after {
+      content: ""; position: absolute; top: 0; left: -75%; width: 50%; height: 100%; z-index: -1;
+      background: linear-gradient(110deg, transparent, rgba(255,255,255,.45), transparent);
+      transform: skewX(-20deg); transition: left .8s var(--ease);
+    }
+    .btn:hover::after { left: 130%; }
+    .btn-whats::after, .btn-insta::after { animation: varrer 4.5s ease-in-out infinite; }
+    .btn-insta::after { animation-delay: 1.2s; }
+    @keyframes varrer { 0%, 70% { left: -75%; } 100% { left: 130%; } }
+    .btn:hover svg { animation: balancar .6s var(--ease); }
+    @keyframes balancar {
+      0%, 100% { transform: rotate(0); } 25% { transform: rotate(-14deg) scale(1.15); } 60% { transform: rotate(10deg) scale(1.1); }
+    }
+    .btn-insta { background-size: 200% 200%; animation: gradiente 6s ease infinite; }
+    @keyframes gradiente { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+    .ico-seta svg { width: 16px; height: 16px; animation: descer 1.6s ease-in-out infinite; }
+    @keyframes descer { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
+
+    /* Ícones redondos (menu e rodapé) com cor da marca no hover */
+    .icone-redondo { position: relative; transition: color .3s var(--ease), transform .3s var(--ease); }
+    .icone-redondo::before {
+      content: ""; position: absolute; inset: 0; border-radius: 50%; z-index: -1;
+      transform: scale(0); transition: transform .4s var(--ease);
+    }
+    .icone-redondo.insta::before { background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7); }
+    .icone-redondo.whats::before { background: var(--whats); }
+    .icone-redondo:hover { color: #fff; background: transparent !important; transform: translateY(-2px) rotate(-6deg) !important; }
+    .icone-redondo:hover::before { transform: scale(1); }
+    .nav-links a { isolation: isolate; }
+
+    /* Título da seção com traço que se desenha */
+    .secao-topo h2 { position: relative; display: inline-block; }
+    .secao-topo h2::after {
+      content: ""; position: absolute; left: 50%; bottom: -6px; height: 4px; width: 60%; border-radius: 4px;
+      background: linear-gradient(90deg, var(--rosa-forte), #e6c27a);
+      transform: translateX(-50%) scaleX(0); transition: transform 1s var(--ease) .3s;
+    }
+    .secao-topo.visivel h2::after { transform: translateX(-50%) scaleX(1); }
+
+    /* Filtros: pílula que desliza até a categoria escolhida */
+    .filtros { position: relative; width: max-content; max-width: 100%; margin-inline: auto;
+      background: var(--branco); padding: 6px; border-radius: 999px; gap: 4px; flex-wrap: nowrap;
+      box-shadow: 0 6px 20px rgba(0,0,0,.05); }
+    .chip { background: transparent; border: none; position: relative; z-index: 1; white-space: nowrap; }
+    .chip:hover { background: transparent; color: var(--rosa-forte); }
+    .chip.ativo { background: transparent; color: #fff; border: none; }
+    .chip.ativo:hover { color: #fff; }
+    .indicador {
+      position: absolute; top: 6px; bottom: 6px; left: 0; border-radius: 999px; background: var(--texto);
+      transition: transform .5s var(--ease), width .5s var(--ease); z-index: 0;
+    }
+
+    /* Cards: inclinação 3D, reflexo na foto, botão vira WhatsApp */
+    .grid { perspective: 1200px; }
+    .card { transform-style: preserve-3d; }
+    .card.reveal { transform: translateY(40px) scale(.96) rotateX(8deg); }
+    .card.reveal.visivel { transform: none; }
+    .card.reveal.visivel:hover { transform: translateY(-8px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition-duration: .25s; }
+    .reflexo {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.55) 48%, transparent 66%);
+      transform: translateX(-120%); transition: transform 1s var(--ease);
+    }
+    .card:hover .reflexo { transform: translateX(120%); }
+    .card-img img { animation: respirar 12s ease-in-out infinite; }
+    @keyframes respirar { 0%, 100% { scale: 1; } 50% { scale: 1.04; } }
+    .btn-mini { position: relative; overflow: hidden; }
+    .btn-mini .mais, .btn-mini .zap { position: absolute; transition: transform .45s var(--ease), opacity .45s var(--ease); }
+    .btn-mini .zap { transform: translateY(120%) rotate(-30deg); opacity: 0; }
+    .btn-mini .zap svg { width: 20px; height: 20px; }
+    .card:hover .btn-mini .mais { transform: translateY(-120%) rotate(90deg); opacity: 0; }
+    .card:hover .btn-mini .zap { transform: none; opacity: 1; }
+    .tag { animation: flutuarTag 3s ease-in-out infinite; z-index: 2; }
+    @keyframes flutuarTag { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+    /* Modal: conteúdo entra em sequência */
+    .modal-info > * { opacity: 0; transform: translateY(14px); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+    .modal.aberto .modal-info > * { opacity: 1; transform: none; }
+    .modal.aberto .modal-info > *:nth-child(2) { transition-delay: .08s; }
+    .modal.aberto .modal-info > *:nth-child(3) { transition-delay: .16s; }
+    .modal.aberto .modal-info > *:nth-child(4) { transition-delay: .24s; }
+    .modal.aberto .modal-info > *:nth-child(5) { transition-delay: .32s; }
+    .modal-img img { transform: scale(1.08); transition: transform 1.2s var(--ease); }
+    .modal.aberto .modal-img img { transform: none; }
+
+    /* Botão flutuante: pulinho periódico e balão */
+    .whats-flutuante { animation: pular 4s var(--ease) infinite; }
+    @keyframes pular { 0%, 80%, 100% { transform: translateY(0); } 85% { transform: translateY(-12px); } 90% { transform: translateY(0); } 95% { transform: translateY(-5px); } }
+    .balao {
+      position: absolute; right: 72px; white-space: nowrap; background: var(--texto); color: #fff;
+      font-size: .82rem; font-weight: 500; padding: 8px 14px; border-radius: 999px;
+      animation: balao 8s var(--ease) 2s infinite; opacity: 0; pointer-events: none;
+    }
+    @keyframes balao { 0%, 100% { opacity: 0; transform: translateX(10px); } 8%, 45% { opacity: 1; transform: none; } 55% { opacity: 0; transform: translateX(10px); } }
+
+    /* Rodapé */
+    .rodape { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .rodape-icones { display: flex; gap: 12px; }
+    .rodape-icones a {
+      width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--branco); color: var(--texto); box-shadow: 0 6px 18px rgba(0,0,0,.06); isolation: isolate;
+    }
+    .rodape-icones svg { width: 20px; height: 20px; }
+
+    /* CTA final: fundo com gradiente em movimento */
+    .cta-final { background: linear-gradient(120deg, var(--rosa), #fbe7ec, var(--rosa)); background-size: 200% 200%; animation: gradiente 10s ease infinite; }
+
     /* ================= RESPONSIVO ================= */
     @media (max-width: 720px) {
       .modal-box { grid-template-columns: 1fr; }
@@ -281,6 +432,9 @@
       .card-info h3 { font-size: .95rem; }
       .preco { font-size: 1rem; }
       .btn-mini { width: 36px; height: 36px; }
+      .chip { padding: 9px 13px; font-size: .84rem; }
+      .preco small { display: none; }
+      .hero-ctas .btn { padding: 13px 20px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -292,14 +446,15 @@
 <body>
 
   <!-- ================= NAV ================= -->
+  <div class="progresso" id="progresso"></div>
   <nav class="nav" id="nav">
     <div class="container">
       <a href="#" class="logo"><img src="img/logo.png" alt=""><b style="font-weight:600">Delícias <span>da Val</span></b></a>
       <div class="nav-links">
-        <a href="#" class="link-insta" aria-label="Instagram" target="_blank" rel="noopener">
+        <a href="#" class="link-insta icone-redondo insta" aria-label="Instagram" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
         </a>
-        <a href="#" class="link-whats" aria-label="WhatsApp" target="_blank" rel="noopener">
+        <a href="#" class="link-whats icone-redondo whats" aria-label="WhatsApp" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2c2.6 0 5.1 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.9 0 5.4-4.4 9.8-9.8 9.8zm8.4-18.2C18.1 1.3 15.1 0 12 0 5.4 0 .1 5.3.1 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.7 1.4 5.7 1.4 6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.4z"/></svg>
         </a>
       </div>
@@ -310,14 +465,16 @@
   <header class="hero">
     <div class="blob b1"></div>
     <div class="blob b2"></div>
+    <span class="brilho s1"></span><span class="brilho s2"></span><span class="brilho s3"></span><span class="brilho s4"></span><span class="brilho s5"></span>
     <div class="container">
       <img src="img/logo.png" alt="Delícias da Val Confeitaria" class="hero-logo fade-up">
-      <span class="eyebrow fade-up d1">✨ Bolos · Docinhos · Bombons · Decorações</span>
+      <span class="eyebrow fade-up d1"><i class="pulse-dot"></i>Bolos · Docinhos · Bombons · Decorações</span>
       <h1 class="fade-up d2">Delícias da Val.<br><em>Feito com carinho.</em></h1>
       <p class="fade-up d3">Especialista em bolos de casamento, flores realistas e chocolate — e decoração completa para a sua festa. Escolha no catálogo e peça direto pelo WhatsApp.</p>
       <div class="hero-ctas fade-up d4">
-        <a href="#produtos" class="btn btn-dark">Ver produtos</a>
-        <a href="#" class="btn btn-rosa link-insta" target="_blank" rel="noopener">Siga no Instagram</a>
+        <a href="#produtos" class="btn btn-dark">Ver produtos <i data-ico="seta" class="ico-seta"></i></a>
+        <a href="#" class="btn btn-whats link-whats" target="_blank" rel="noopener"><i data-ico="whats"></i>WhatsApp</a>
+        <a href="#" class="btn btn-insta link-insta" target="_blank" rel="noopener"><i data-ico="insta"></i>Instagram</a>
       </div>
     </div>
   </header>
@@ -354,11 +511,18 @@
   </section>
 
   <footer>
-    <div class="container">© <span id="ano"></span> Delícias da Val · Todos os direitos reservados</div>
+    <div class="container rodape">
+      <div class="rodape-icones">
+        <a href="#" class="icone-redondo insta link-insta" aria-label="Instagram" target="_blank" rel="noopener"><i data-ico="insta"></i></a>
+        <a href="#" class="icone-redondo whats link-whats" aria-label="WhatsApp" target="_blank" rel="noopener"><i data-ico="whats"></i></a>
+      </div>
+      <div>© <span id="ano"></span> Delícias da Val · Todos os direitos reservados</div>
+    </div>
   </footer>
 
   <!-- Botão flutuante -->
   <a href="#" class="whats-flutuante link-whats" aria-label="Falar no WhatsApp" target="_blank" rel="noopener">
+    <span class="balao">Faça seu pedido</span>
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2c2.6 0 5.1 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.9 0 5.4-4.4 9.8-9.8 9.8zm8.4-18.2C18.1 1.3 15.1 0 12 0 5.4 0 .1 5.3.1 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.7 1.4 5.7 1.4 6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.4z"/></svg>
   </a>
 
@@ -379,7 +543,7 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2c2.6 0 5.1 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.9 0 5.4-4.4 9.8-9.8 9.8zm8.4-18.2C18.1 1.3 15.1 0 12 0 5.4 0 .1 5.3.1 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.7 1.4 5.7 1.4 6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.4z"/></svg>
             Pedir pelo WhatsApp
           </a>
-          <a class="btn btn-rosa link-insta" target="_blank" rel="noopener">Ver no Instagram</a>
+          <a class="btn btn-insta link-insta" target="_blank" rel="noopener"><i data-ico="insta"></i>Ver no Instagram</a>
         </div>
       </div>
     </div>
@@ -439,6 +603,16 @@
       `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#f7d9e1'/><stop offset='1' stop-color='#faf7f2'/></linearGradient></defs><rect width='400' height='400' fill='url(#g)'/><text x='200' y='210' text-anchor='middle' font-family='-apple-system,Helvetica,sans-serif' font-size='22' fill='#c9909f'>${n}</text></svg>`
     );
 
+    // Ícones (SVG) usados nos botões
+    const ICONES = {
+      whats: document.querySelector(".whats-flutuante svg").outerHTML,
+      insta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
+      seta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>',
+    };
+    const pintarIcones = (raiz = document) =>
+      raiz.querySelectorAll("i[data-ico]:empty").forEach(i => i.innerHTML = ICONES[i.dataset.ico]);
+    pintarIcones();
+
     document.querySelectorAll(".link-whats").forEach(a => a.href = linkWhats());
     document.querySelectorAll(".link-insta").forEach(a => a.href = linkInsta);
     document.getElementById("ano").textContent = new Date().getFullYear();
@@ -453,7 +627,7 @@
     const grid = document.getElementById("grid");
     grid.innerHTML = PRODUTOS.map((p, i) => `
       <article class="card reveal" data-i="${i}" data-cat="${p.categoria}">
-        <div class="card-img">
+        <div class="card-img"><span class="reflexo"></span>
           <img src="${p.img}" alt="${p.nome}" loading="lazy">
           ${p.tag ? `<span class="tag">${p.tag}</span>` : ""}
         </div>
@@ -463,11 +637,25 @@
           <div class="card-rodape">
             <div class="preco">${p.preco ? brl(p.preco) + `<small>ou 3x de ${brl(p.preco / 3)}</small>` : `<span class="consulta">Sob consulta</span><small>Peça seu orçamento</small>`}</div>
             <span class="btn-mini" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              <svg class="mais" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              <i data-ico="whats" class="zap"></i>
             </span>
           </div>
         </div>
       </article>`).join("");
+
+    pintarIcones(grid);
+
+    // Inclinação 3D do card acompanhando o mouse
+    grid.querySelectorAll(".card").forEach(card => {
+      card.addEventListener("mousemove", e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        card.style.setProperty("--ry", `${x * 8}deg`);
+        card.style.setProperty("--rx", `${-y * 8}deg`);
+      });
+      card.addEventListener("mouseleave", () => { card.style.setProperty("--rx", "0deg"); card.style.setProperty("--ry", "0deg"); });
+    });
 
     grid.querySelectorAll(".card img").forEach((img, i) => {
       const trocar = () => { img.onerror = null; img.src = placeholder(PRODUTOS[i].nome); };
@@ -476,8 +664,20 @@
     });
 
     // Mostra só a categoria escolhida (começa em "Bolos")
+    const indicador = document.createElement("span");
+    indicador.className = "indicador";
+    filtros.prepend(indicador);
+    const moverIndicador = () => {
+      const ativo = filtros.querySelector(".chip.ativo"); if (!ativo) return;
+      indicador.style.width = ativo.offsetWidth + "px";
+      indicador.style.transform = `translateX(${ativo.offsetLeft}px)`;
+    };
+    addEventListener("resize", moverIndicador);
+    document.fonts && document.fonts.ready.then(moverIndicador);
+
     const filtrar = (cat, animar) => {
       filtros.querySelectorAll(".chip").forEach(c => c.classList.toggle("ativo", c.dataset.cat === cat));
+      moverIndicador();
       let n = 0;
       grid.querySelectorAll(".card").forEach(card => {
         const mostra = card.dataset.cat === cat;
@@ -501,7 +701,12 @@
 
     // ---------- Nav com borda ao rolar ----------
     const nav = document.getElementById("nav");
-    addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 10), { passive: true });
+    const progresso = document.getElementById("progresso");
+    addEventListener("scroll", () => {
+      nav.classList.toggle("scrolled", scrollY > 10);
+      const total = document.documentElement.scrollHeight - innerHeight;
+      progresso.style.transform = `scaleX(${total > 0 ? scrollY / total : 0})`;
+    }, { passive: true });
 
     // ---------- Modal ----------
     const modal = document.getElementById("modal");
