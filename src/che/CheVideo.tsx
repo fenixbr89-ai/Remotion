@@ -6,16 +6,50 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { SCENES } from "./Scenes";
+import * as A from "./Scenes";
+import * as B from "./Scenes2";
+import { Scraps } from "./Art";
 import { FilmLook, clamp, easeInOut, loadFonts, tornPath } from "./lib";
 
 loadFonts();
 
 /** Seconds per scene, matched to the narration sentence it covers. */
-export const SCENE_SECONDS = [
-  2.8, 3.4, 3.8, 4.4, 4.4, 4.4, 6.2, 5.2, 5.4, 2.8, 5.0, 5.0, 5.0, 4.6, 4.6,
-  6.2, 6.0, 3.8, 5.6,
+const SCENES = [
+  A.S01,
+  A.S02,
+  A.S03,
+  A.S04,
+  B.N_Family,
+  A.S05,
+  A.S06,
+  A.S07,
+  B.N_Guatemala,
+  B.N_Armas,
+  A.S08,
+  A.S09,
+  B.N_Sierra,
+  A.S10,
+  B.N_SantaClara,
+  B.N_Batista,
+  A.S12,
+  A.S13,
+  A.S14,
+  A.S15,
+  B.N_Congo,
+  B.N_Bolivia,
+  B.N_Captured,
+  B.N_1997,
+  A.S18,
+  A.S19,
+  B.N_CTA,
 ];
+/** Seconds per scene, matched to the narration sentence it covers. */
+export const SCENE_SECONDS = [
+  2.8, 3.4, 3.8, 4.4, 4.2, 4.4, 4.4, 6.2, 5.6, 3.4, 5.2, 5.4, 5.6, 2.8, 5.0,
+  4.6, 5.0, 5.0, 4.6, 4.6, 6.4, 6.0, 8.0, 4.6, 3.8, 5.6, 8.0,
+];
+/** Scenes that get blurred foreground scraps for depth. */
+const SCRAPS = new Set([1, 4, 5, 10, 16, 19, 21]);
 
 type T = "fade" | "zoom" | "whipL" | "whipU" | "tear" | "flash";
 /** Transition INTO scene i+1 (index i = between scene i and i+1). */
@@ -24,20 +58,28 @@ const TRANS: T[] = [
   "tear",
   "whipL",
   "tear",
+  "whipU",
   "zoom",
   "fade",
   "tear",
-  "whipU",
   "flash",
   "zoom",
+  "whipU",
+  "fade",
+  "flash",
+  "zoom",
+  "whipL",
   "tear",
   "whipL",
   "fade",
   "flash",
   "zoom",
   "tear",
+  "fade",
+  "fade",
   "whipU",
   "fade",
+  "tear",
 ];
 const TF = 16; // transition length in frames
 
@@ -165,6 +207,7 @@ export const CheVideo: React.FC = () => {
           tout={i < SCENES.length - 1 ? TRANS[i] : undefined}
         >
           <Scene d={len} />
+          {SCRAPS.has(i) ? <Scraps seed={i} /> : null}
         </Wrap>
       </Sequence>
     );

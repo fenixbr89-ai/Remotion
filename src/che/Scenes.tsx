@@ -1317,7 +1317,6 @@ export const S18: React.FC<S> = ({ d }) => {
 export const S19: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
   const z = interpolate(f, [0, 70], [2.6, 1], { ...clamp, easing: easeInOut });
-  const fadeOut = interpolate(f, [d - 26, d - 2], [0, 1], clamp);
   return (
     <Paper>
       <Camera dur={d} from={1} to={1.06}>
@@ -1348,29 +1347,6 @@ export const S19: React.FC<S> = ({ d }) => {
           />
         </div>
       </Camera>
-      <AbsoluteFill style={{ background: "#000", opacity: fadeOut }} />
     </Paper>
   );
 };
-
-export const SCENES = [
-  S01,
-  S02,
-  S03,
-  S04,
-  S05,
-  S06,
-  S07,
-  S08,
-  S09,
-  S10,
-  S11,
-  S12,
-  S13,
-  S14,
-  S15,
-  S16,
-  S17,
-  S18,
-  S19,
-];

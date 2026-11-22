@@ -1,5 +1,5 @@
 import React from "react";
-import { Img, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Img, staticFile, useCurrentFrame } from "remotion";
 import { PHOTOS } from "./assets";
 import { C, SERIF, TYPE, cutoutFilter, ease, easeInOut } from "./lib";
 
@@ -26,7 +26,12 @@ export const Photo: React.FC<{
   style,
   fallback,
 }) => {
+  const fr = useCurrentFrame();
   const p = PHOTOS[k];
+  const sway = border
+    ? `perspective(1400px) rotateY(${Math.sin(fr / 38 + w) * 7}deg) rotateX(${Math.cos(fr / 45 + h) * 4}deg)`
+    : undefined;
+  const kb = 1.04 + fr * 0.0006;
   const filter =
     tint === "bw"
       ? "grayscale(1) contrast(1.15) brightness(1.02)"
@@ -44,9 +49,16 @@ export const Photo: React.FC<{
         background: border ? "#f4f1ea" : undefined,
         boxShadow: border ? "8px 16px 26px rgba(0,0,0,0.35)" : undefined,
         position: "relative",
+        transform: sway,
         ...style,
       }}
     >
+      {border ? (
+        <>
+          <Tape style={{ left: -30, top: -14, rotate: "-32deg" }} />
+          <Tape style={{ right: -30, top: -14, rotate: "30deg" }} />
+        </>
+      ) : null}
       {p ? (
         <div
           style={{
@@ -64,6 +76,7 @@ export const Photo: React.FC<{
               objectFit: "cover",
               objectPosition: pos,
               filter,
+              scale: String(kb),
             }}
           />
           {tint === "red" ? (
@@ -508,6 +521,361 @@ export const Label: React.FC<{
       }}
     >
       {text.slice(0, n)}
+    </div>
+  );
+};
+
+/* ---------- richer collage pieces ---------- */
+export const Tape: React.FC<{ style?: React.CSSProperties; w?: number }> = ({
+  style,
+  w = 150,
+}) => (
+  <div
+    style={{
+      position: "absolute",
+      width: w,
+      height: 44,
+      background: "rgba(236,228,204,0.78)",
+      boxShadow: "0 2px 6px rgba(0,0,0,.18)",
+      zIndex: 3,
+      clipPath:
+        "polygon(0 8%, 4% 0, 9% 10%, 14% 0, 100% 0, 96% 50%, 100% 100%, 8% 100%, 3% 88%, 0 100%, 4% 50%)",
+      ...style,
+    }}
+  />
+);
+
+/** Newspaper clipping with headline, fake text columns and optional photo. */
+export const Clipping: React.FC<{
+  w: number;
+  paper?: string;
+  kicker: string;
+  headline: string;
+  photo?: string;
+  start?: number;
+  style?: React.CSSProperties;
+}> = ({ w, kicker, headline, photo, start = 0, paper = "#ece4d0", style }) => {
+  const f = useCurrentFrame();
+  const lines = 14;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        width: w,
+        background: paper,
+        padding: 30,
+        boxShadow: "10px 18px 30px rgba(0,0,0,.35)",
+        clipPath:
+          "polygon(0 1%, 6% 0, 13% 1.5%, 22% 0, 31% 1%, 44% 0, 58% 1.2%, 70% 0, 83% 1%, 100% 0, 99% 30%, 100% 62%, 99% 100%, 86% 99%, 71% 100%, 55% 98.8%, 40% 100%, 24% 99%, 10% 100%, 0 99%, 1% 60%, 0 28%)",
+        ...style,
+      }}
+    >
+      <div
+        style={{
+          fontFamily: TYPE,
+          fontSize: 24,
+          color: "#5a4f3c",
+          borderBottom: "2px solid #5a4f3c",
+          paddingBottom: 6,
+        }}
+      >
+        {kicker}
+      </div>
+      <div
+        style={{
+          fontFamily: SERIF,
+          fontWeight: 800,
+          fontSize: w * 0.085,
+          lineHeight: 1.0,
+          letterSpacing: -2,
+          color: "#141414",
+          margin: "14px 0 18px",
+        }}
+      >
+        {headline.slice(0, Math.max(0, Math.floor((f - start) * 1.4)))}
+      </div>
+      <div style={{ display: "flex", gap: 20 }}>
+        {photo ? <Photo k={photo} w={w * 0.46} h={w * 0.5} /> : null}
+        <div style={{ flex: 1 }}>
+          {Array.from({ length: lines }).map((_, i) => (
+            <div
+              key={i}
+              style={{
+                height: 9,
+                margin: "0 0 11px",
+                background: "#8a7f6a",
+                opacity: 0.45,
+                width: `${70 + ((i * 37) % 30)}%`,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/** Out-of-focus foreground scraps drifting for depth. */
+export const Scraps: React.FC<{ seed?: number; dark?: boolean }> = ({
+  seed = 1,
+  dark,
+}) => {
+  const f = useCurrentFrame();
+  const items = [
+    {
+      x: -80,
+      y: 120,
+      w: 300,
+      h: 180,
+      r: -18,
+      c: dark ? "#2a2522" : "#d8cfbb",
+      v: 0.5,
+    },
+    {
+      x: 860,
+      y: 1500,
+      w: 320,
+      h: 220,
+      r: 22,
+      c: dark ? "#3a1715" : "#c9b994",
+      v: -0.6,
+    },
+    { x: 900, y: 80, w: 120, h: 120, r: 10, c: C.red, v: 0.8, star: true },
+  ];
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none" }}>
+      {items.map((it, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            left: it.x + ((seed * 53) % 40),
+            top: it.y + f * it.v,
+            width: it.w,
+            height: it.h,
+            rotate: `${it.r + f * 0.05 * it.v}deg`,
+            filter: "blur(9px)",
+            opacity: 0.85,
+          }}
+        >
+          {it.star ? (
+            <Star size={it.w} color={it.c} />
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                background: it.c,
+                boxShadow: "0 20px 40px rgba(0,0,0,.4)",
+              }}
+            />
+          )}
+        </div>
+      ))}
+    </AbsoluteFill>
+  );
+};
+
+/** Diary page with handwritten-looking lines drawing in. */
+export const Diary: React.FC<{ w: number; start?: number }> = ({
+  w,
+  start = 0,
+}) => {
+  const f = useCurrentFrame();
+  const rows = 9;
+  return (
+    <svg
+      width={w}
+      height={w * 1.25}
+      viewBox="0 0 400 500"
+      style={{ filter: "drop-shadow(10px 16px 14px rgba(0,0,0,.35))" }}
+    >
+      <rect width={400} height={500} fill="#efe7cf" />
+      {Array.from({ length: rows + 3 }).map((_, i) => (
+        <line
+          key={i}
+          x1={20}
+          x2={380}
+          y1={90 + i * 34}
+          y2={90 + i * 34}
+          stroke="#9fb4c8"
+          strokeWidth={1}
+        />
+      ))}
+      <line x1={60} x2={60} y1={0} y2={500} stroke="#d9827a" strokeWidth={2} />
+      <text x={70} y={60} fontFamily={TYPE} fontSize={22} fill="#3b3326">
+        7 de noviembre de 1966
+      </text>
+      {Array.from({ length: rows }).map((_, i) => {
+        const p = ease(f, start + i * 6, start + i * 6 + 14, 0, 1, easeInOut);
+        const len = 260 + ((i * 47) % 60);
+        let d = `M70 ${118 + i * 34}`;
+        for (let x = 0; x < len; x += 14) d += ` q7 ${-8 - ((x + i) % 5)} 14 0`;
+        return (
+          <path
+            key={i}
+            d={d}
+            fill="none"
+            stroke="#2b2f4a"
+            strokeWidth={2}
+            strokeDasharray={900}
+            strokeDashoffset={900 - 900 * p * (len / 330)}
+          />
+        );
+      })}
+    </svg>
+  );
+};
+
+/* ---------- final CTA pieces ---------- */
+export const CommentCard: React.FC<{
+  start: number;
+  text: string;
+  name: string;
+  likes: string;
+}> = ({ start, text, name, likes }) => {
+  const f = useCurrentFrame();
+  const n = Math.max(0, Math.floor((f - start - 8) * 1.1));
+  return (
+    <div
+      style={{
+        width: 860,
+        background: "#ffffff",
+        borderRadius: 34,
+        padding: "28px 34px",
+        display: "flex",
+        gap: 24,
+        alignItems: "flex-start",
+        boxShadow: "0 24px 50px rgba(0,0,0,.35)",
+      }}
+    >
+      <div
+        style={{
+          width: 84,
+          height: 84,
+          borderRadius: 42,
+          background: "linear-gradient(135deg,#c8302c,#5a1512)",
+          flexShrink: 0,
+        }}
+      />
+      <div style={{ flex: 1 }}>
+        <div
+          style={{
+            fontFamily: SERIF,
+            fontWeight: 800,
+            fontSize: 30,
+            color: "#777",
+          }}
+        >
+          {name}
+        </div>
+        <div
+          style={{
+            fontFamily: SERIF,
+            fontWeight: 600,
+            fontSize: 44,
+            color: "#111",
+            minHeight: 54,
+          }}
+        >
+          {text.slice(0, n)}
+          <span style={{ opacity: n < text.length ? 1 : 0, color: C.red }}>
+            |
+          </span>
+        </div>
+        <div
+          style={{
+            fontFamily: SERIF,
+            fontWeight: 600,
+            fontSize: 28,
+            color: "#999",
+            marginTop: 6,
+          }}
+        >
+          Responder
+        </div>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 4,
+        }}
+      >
+        <svg width={44} height={40} viewBox="0 0 24 22">
+          <path
+            d="M12 21 C 5 15, 1 11, 1 6.5 A5 5 0 0 1 12 4 A5 5 0 0 1 23 6.5 C 23 11, 19 15, 12 21 Z"
+            fill={f > start + 40 ? C.red : "none"}
+            stroke={f > start + 40 ? C.red : "#999"}
+            strokeWidth={2}
+          />
+        </svg>
+        <div
+          style={{
+            fontFamily: SERIF,
+            fontWeight: 600,
+            fontSize: 24,
+            color: "#999",
+          }}
+        >
+          {likes}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const FollowButton: React.FC<{ start: number; pressAt: number }> = ({
+  start,
+  pressAt,
+}) => {
+  const f = useCurrentFrame();
+  const pressed = f >= pressAt;
+  const squash = 1 - 0.06 * Math.max(0, 1 - Math.abs(f - pressAt) / 5);
+  return (
+    <div
+      style={{
+        opacity: ease(f, start, start + 10),
+        scale: String(squash * (0.85 + 0.15 * ease(f, start, start + 14))),
+        background: pressed ? "#1d1d1d" : C.red,
+        color: "#fff",
+        borderRadius: 999,
+        padding: "30px 80px",
+        fontFamily: SERIF,
+        fontWeight: 800,
+        fontSize: 56,
+        letterSpacing: 1,
+        display: "flex",
+        alignItems: "center",
+        gap: 20,
+        boxShadow: pressed
+          ? "0 10px 24px rgba(0,0,0,.3)"
+          : "0 18px 40px rgba(200,48,44,.45)",
+      }}
+    >
+      {pressed ? (
+        <svg width={54} height={54} viewBox="0 0 24 24">
+          <path
+            d="M4 12.5 L10 18 L20 6"
+            fill="none"
+            stroke="#fff"
+            strokeWidth={3.2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ) : (
+        <svg width={54} height={54} viewBox="0 0 24 24">
+          <path
+            d="M12 4 V20 M4 12 H20"
+            stroke="#fff"
+            strokeWidth={3.2}
+            strokeLinecap="round"
+          />
+        </svg>
+      )}
+      {pressed ? "SEGUINDO" : "SEGUIR"}
     </div>
   );
 };

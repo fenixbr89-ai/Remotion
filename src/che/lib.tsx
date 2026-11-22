@@ -76,11 +76,50 @@ export const ease = (
 ) => interpolate(f, [a, b], [from, to], { ...clamp, easing: e });
 
 /* ---------- backgrounds & overlays ---------- */
-export const Paper: React.FC<{ tone?: string; children?: React.ReactNode }> = ({
-  tone = C.paper,
-  children,
+/** Faint typewritten archive document behind paper scenes. */
+const DOC_LINES = [
+  "INFORME CONFIDENCIAL — ARCHIVO 1959 — EXPEDIENTE Nº 0471",
+  "el comandante ernesto guevara de la serna, nacido en rosario,",
+  "argentina, el 14 de junio de 1928. médico. sierra maestra.",
+  "columna 8 ciro redondo — las villas — santa clara — 1958",
+  "observaciones: asma crónica. lector. viajes por sudamérica",
+  "1952 — chile — perú — colombia — venezuela — 8.000 km aprox.",
+  "méxico, d.f., 1955 — contacto con el movimiento 26 de julio",
+  "granma — 2 de diciembre de 1956 — playa las coloradas",
+];
+export const DocText: React.FC<{ opacity?: number; seed?: number }> = ({
+  opacity = 0.09,
+  seed = 0,
 }) => (
-  <AbsoluteFill style={{ background: tone }}>
+  <div
+    style={{
+      position: "absolute",
+      left: -60,
+      top: -40,
+      width: 1300,
+      rotate: `${-3 + (seed % 3)}deg`,
+      fontFamily: TYPE,
+      fontSize: 30,
+      lineHeight: "54px",
+      color: "#2a2418",
+      opacity,
+      whiteSpace: "nowrap",
+    }}
+  >
+    {Array.from({ length: 38 }).map((_, i) => (
+      <div key={i}>{DOC_LINES[(i + seed) % DOC_LINES.length]}</div>
+    ))}
+  </div>
+);
+
+export const Paper: React.FC<{
+  tone?: string;
+  doc?: boolean;
+  seed?: number;
+  children?: React.ReactNode;
+}> = ({ tone = C.paper, doc = true, seed = 0, children }) => (
+  <AbsoluteFill style={{ background: tone, overflow: "hidden" }}>
+    {doc ? <DocText seed={seed} /> : null}
     <AbsoluteFill
       style={{
         background:
@@ -170,6 +209,36 @@ export const FilmLook: React.FC = () => {
             "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.42) 100%)",
         }}
       />
+      <svg
+        width="100%"
+        height="100%"
+        style={{ position: "absolute", inset: 0 }}
+      >
+        {Array.from({ length: 5 }).map((_, i) => {
+          const k = `${Math.floor(frame / 2)}-${i}`;
+          return (
+            <circle
+              key={i}
+              cx={random(`dx${k}`) * 1080}
+              cy={random(`dy${k}`) * 1920}
+              r={1 + random(`dr${k}`) * 3}
+              fill={random(`dc${k}`) > 0.5 ? "#000" : "#fff"}
+              opacity={0.35}
+            />
+          );
+        })}
+        {random(`sc${Math.floor(frame / 3)}`) > 0.72 ? (
+          <line
+            x1={random(`sx${Math.floor(frame / 3)}`) * 1080}
+            x2={random(`sx${Math.floor(frame / 3)}`) * 1080 + 6}
+            y1={0}
+            y2={1920}
+            stroke="#fff"
+            strokeOpacity={0.12}
+            strokeWidth={1.5}
+          />
+        ) : null}
+      </svg>
       <AbsoluteFill
         style={{
           background: flicker > 0 ? "#fff" : "#000",
