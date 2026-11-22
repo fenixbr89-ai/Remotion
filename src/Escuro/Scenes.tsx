@@ -1,8 +1,9 @@
 import React from "react";
 import { ThreeCanvas } from "@remotion/three";
 import { useCurrentFrame, useVideoConfig } from "remotion";
-import { Cam, Floor, Jaw, Lights, Molar, Screw, Stage } from "./Models";
+import { Cam, Floor, Jaw, Lights, Screw, Stage } from "./Models";
 import { Caption, Dust, Frame, Header, Tag } from "./Overlay";
+import { HeadBust, Mannequin } from "./People";
 import { K } from "./theme";
 
 type V3 = [number, number, number];
@@ -22,23 +23,9 @@ const Rings: React.FC<{ x: number; y?: number; t: number }> = ({ x, y = -0.9, t 
   </group>
 );
 
-const Food: React.FC = () => (
-  <group>
-    {[
-      [-0.75, 0.55, 0.5],
-      [-0.6, 0.7, 0.45],
-      [0.7, 0.6, 0.5],
-    ].map((p, i) => (
-      <mesh key={i} position={p as V3} castShadow>
-        <sphereGeometry args={[0.1 + (i % 2) * 0.04, 16, 16]} />
-        <meshStandardMaterial color="#e9c79b" roughness={0.9} />
-      </mesh>
-    ))}
-  </group>
-);
-
 const JAW_CAM = { pos: [0, 4, 28] as V3, target: [0, -1.6, 0] as V3 };
 const JAWS_CAM = { pos: [0, 3, 33] as V3, target: [0, -1.2, 0] as V3 };
+const HEAD_CAM = { pos: [1.5, 0.9, 15] as V3, target: [0, -1.3, 0] as V3 };
 const STAGE_CAM = { pos: [0, 2.2, 15] as V3, target: [0, -0.6, 0] as V3 };
 
 export type SceneSpec = {
@@ -48,6 +35,7 @@ export type SceneSpec = {
   strong?: number[];
   sec: number;
   cam: { pos: V3; target: V3 };
+  floorY?: number;
   world: (t: number, f: number) => React.ReactNode;
   tags?: (t: number) => React.ReactNode;
 };
@@ -60,28 +48,28 @@ export const SPECS: SceneSpec[] = [
     section: "O DENTE",
     words: ["Perdeu", "um", "dente?"],
     sec: 2,
-    cam: STAGE_CAM,
-    world: (t, f) => (
-      <>
-        <Stage />
-        <group position={[0, 0.2 + Math.sin(f / 15) * 0.06, 0]} rotation={[0.18, -0.5 + t * 0.8, 0]}>
-          <Molar />
-        </group>
-      </>
+    cam: HEAD_CAM,
+    floorY: -1.68,
+    world: (t) => (
+      <group rotation={[0, -0.45 + t * 0.35, 0]}>
+        <HeadBust glow={t} glowSide={0.5} />
+      </group>
     ),
+    tags: () => <Tag text="UM DENTE A MENOS" x={790} y={600} neon />,
   },
   {
     id: "E02-Buraco",
     section: "O PROBLEMA",
     words: ["O", "problema", "não", "é", "só", "o", "buraco."],
     sec: 2.6,
-    cam: JAW_CAM,
-    world: () => (
-      <group position={[0, jawGroupY, 0]} rotation={[0.12, -0.25, 0]}>
-        <Jaw middle="none" />
+    cam: HEAD_CAM,
+    floorY: -1.68,
+    world: (t) => (
+      <group rotation={[0, -0.1 + t * 0.2, 0]}>
+        <HeadBust xray={1} jaw={{ middle: "none" }} />
       </group>
     ),
-    tags: () => <Tag text="O BURACO" x={540} y={400} neon />,
+    tags: () => <Tag text="O BURACO" x={800} y={700} neon />,
   },
   {
     id: "E03-Estimulo",
@@ -146,21 +134,17 @@ export const SPECS: SceneSpec[] = [
   {
     id: "E07-Mordida",
     section: "A MORDIDA",
-    words: ["A", "mordida", "desencaixa", "e", "a", "comida", "fica", "presa."],
-    sec: 3,
-    cam: JAWS_CAM,
-    world: () => (
-      <group rotation={[0.1, -0.25, 0]}>
-        <group position={[0, -1.7, 0]}>
-          <Jaw middle="none" boneLoss={1} tilt={0.22} />
-          <Food />
-        </group>
-        <group position={[0, 1.9, 0]}>
-          <Jaw upper extrude={0.9} />
-        </group>
+    words: ["A", "mordida", "desencaixa", "e", "você", "mastiga", "de", "um", "lado", "só."],
+    strong: [4],
+    sec: 3.2,
+    cam: HEAD_CAM,
+    floorY: -1.68,
+    world: (t) => (
+      <group rotation={[0, 0.5 - t * 0.2, 0]}>
+        <HeadBust glow={1} glowSide={-1} />
       </group>
     ),
-    tags: () => <Tag text="COMIDA PRESA" x={330} y={1000} />,
+    tags: () => <Tag text="UM LADO SÓ" x={270} y={720} />,
   },
   {
     id: "E08-Virada",
@@ -229,14 +213,14 @@ export const SPECS: SceneSpec[] = [
     section: "O RESULTADO",
     words: ["e", "a", "mordida", "volta", "a", "estimular", "o", "osso."],
     sec: 3,
-    cam: JAW_CAM,
+    cam: HEAD_CAM,
+    floorY: -1.68,
     world: (t) => (
-      <group position={[0, jawGroupY, 0]} rotation={[0.12, -0.25, 0]}>
-        <Jaw middle="implant" implant={{ insert: 1, spin: 0, abutment: 1, crown: 1, glow: 0 }} />
-        <Rings x={0} y={-1} t={t} />
+      <group rotation={[0, -0.1 + t * 0.2, 0]}>
+        <HeadBust xray={1} jaw={{ middle: "implant", implant: { insert: 1, spin: 0, abutment: 1, crown: 1, glow: 0.5 } }} />
       </group>
     ),
-    tags: () => <Tag text="DENTE NOVO" x={540} y={380} neon />,
+    tags: () => <Tag text="DENTE NOVO" x={800} y={700} neon />,
   },
   {
     id: "E13-Siga",
@@ -247,12 +231,14 @@ export const SPECS: SceneSpec[] = [
     world: (t, f) => (
       <>
         <Stage />
-        <group position={[0, 0.2 + Math.sin(f / 15) * 0.06, 0]} rotation={[0.18, -0.6 + t * 1.2, 0]}>
-          <Molar />
+        <group position={[0, -1.35, 0]} scale={1.05} rotation={[0, -0.3, 0]}>
+          <group position={[0, 0.55, 0]}>
+            <Mannequin wave={0.95 + Math.sin(f / 5) * 0.08} />
+          </group>
         </group>
       </>
     ),
-    tags: () => <Tag text="SEGUE @YASMINSR09" x={540} y={400} neon />,
+    tags: () => <Tag text="SEGUE @YASMINSR09" x={540} y={360} neon />,
   },
 ];
 
@@ -269,7 +255,7 @@ export const EscuroScene: React.FC<{ index: number; still?: number }> = ({ index
       <ThreeCanvas width={1080} height={1920} shadows>
         <Cam pos={s.cam.pos} target={s.cam.target} />
         <Lights />
-        <Floor y={s.cam === STAGE_CAM ? -1.42 : -4.2} />
+        <Floor y={s.floorY ?? (s.cam === STAGE_CAM ? -1.42 : -4.2)} />
         {s.world(t, f)}
       </ThreeCanvas>
       {s.tags ? s.tags(t) : null}
