@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Delícias da Val</title>
-  <meta name="description" content="Bolos, doces finos e decoração de festas — Delícias da Val" />
+  <meta name="description" content="Delícias da Val Confeitaria: bolos, docinhos, bombons e decorações" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -27,7 +27,7 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Helvetica Neue", sans-serif;
@@ -196,7 +196,8 @@
       background: var(--rosa); transition: all .35s var(--ease);
     }
     .btn-mini svg { width: 20px; height: 20px; }
-    .card:hover .btn-mini { background: var(--whats); color: #fff; transform: rotate(-8deg) scale(1.08); }
+    .btn-mini:hover { background: var(--rosa-forte); transform: rotate(90deg) scale(1.1); }
+    .btn-mini:active { scale: .9; }
 
     /* Card escondido pelo filtro */
     .card.oculto { display: none; }
@@ -380,11 +381,13 @@
     .card-img img { animation: respirar 12s ease-in-out infinite; }
     @keyframes respirar { 0%, 100% { scale: 1; } 50% { scale: 1.04; } }
     .btn-mini { position: relative; overflow: hidden; }
-    .btn-mini .mais, .btn-mini .zap { position: absolute; transition: transform .45s var(--ease), opacity .45s var(--ease); }
-    .btn-mini .zap { transform: translateY(120%) rotate(-30deg); opacity: 0; }
-    .btn-mini .zap svg { width: 20px; height: 20px; }
-    .card:hover .btn-mini .mais { transform: translateY(-120%) rotate(90deg); opacity: 0; }
-    .card:hover .btn-mini .zap { transform: none; opacity: 1; }
+    .btn-mini .mais, .btn-mini .ok { position: absolute; transition: transform .45s var(--ease), opacity .45s var(--ease); }
+    .btn-mini .ok { transform: scale(0) rotate(-45deg); opacity: 0; }
+    .btn-mini .ok svg { width: 20px; height: 20px; }
+    .btn-mini.adicionado { background: var(--texto) !important; color: #fff; animation: estalo .5s var(--ease); }
+    .btn-mini.adicionado .mais { transform: scale(0) rotate(90deg); opacity: 0; }
+    .btn-mini.adicionado .ok { transform: none; opacity: 1; }
+    @keyframes estalo { 0% { scale: 1; } 40% { scale: 1.25; } 100% { scale: 1; } }
     .tag { animation: flutuarTag 3s ease-in-out infinite; z-index: 2; }
     @keyframes flutuarTag { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
 
@@ -420,6 +423,109 @@
     /* CTA final: fundo com gradiente em movimento */
     .cta-final { background: linear-gradient(120deg, var(--rosa), #fbe7ec, var(--rosa)); background-size: 200% 200%; animation: gradiente 10s ease infinite; }
 
+
+    /* ================= CARRINHO ================= */
+    .btn-carrinho {
+      position: relative; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+      transition: background .3s var(--ease), transform .3s var(--ease);
+    }
+    .btn-carrinho:hover { background: var(--rosa); transform: scale(1.08); }
+    .btn-carrinho i svg { width: 21px; height: 21px; }
+    .contador {
+      position: absolute; top: -2px; right: -4px; min-width: 18px; height: 18px; padding: 0 5px;
+      border-radius: 999px; background: var(--rosa-forte); color: #fff; font-size: .68rem; font-weight: 700;
+      display: grid; place-items: center; transform: scale(0); transition: transform .4s var(--ease);
+    }
+    .contador.tem { transform: scale(1); }
+    .contador.pulo { animation: pulo .5s var(--ease); }
+    @keyframes pulo { 0% { transform: scale(1); } 40% { transform: scale(1.6); } 100% { transform: scale(1); } }
+
+    .carrinho-flutuante {
+      position: fixed; left: 50%; bottom: 24px; z-index: 60;
+      display: flex; align-items: center; gap: 10px; padding: 14px 22px 14px 18px; border-radius: 999px;
+      background: var(--texto); color: #fff; font-weight: 500; font-size: .95rem;
+      box-shadow: 0 14px 40px rgba(0,0,0,.25);
+      transform: translate(-50%, 140%); opacity: 0; pointer-events: none;
+      transition: transform .6s var(--ease), opacity .4s var(--ease);
+    }
+    .carrinho-flutuante.visivel { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+    .carrinho-flutuante:hover { box-shadow: 0 18px 50px rgba(217,138,160,.5); }
+    .carrinho-flutuante i svg { width: 20px; height: 20px; }
+    .carrinho-flutuante .contador { position: static; transform: scale(1); background: var(--rosa); color: var(--texto); height: 22px; min-width: 22px; font-size: .78rem; }
+
+    .gaveta-fundo {
+      position: fixed; inset: 0; z-index: 110; background: rgba(29,29,31,.3);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      opacity: 0; pointer-events: none; transition: opacity .45s var(--ease);
+    }
+    .gaveta-fundo.aberta { opacity: 1; pointer-events: auto; }
+    .gaveta {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 120; width: min(420px, 100%);
+      background: var(--offwhite); display: flex; flex-direction: column;
+      border-radius: 28px 0 0 28px; box-shadow: -20px 0 60px rgba(0,0,0,.12);
+      transform: translateX(105%); transition: transform .6s var(--ease);
+    }
+    .gaveta.aberta { transform: none; }
+    .gaveta-topo { display: flex; align-items: center; justify-content: space-between; padding: 26px 24px 14px; }
+    .gaveta-topo h3 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.03em; }
+    .fechar-gaveta { position: static; }
+    .gaveta-lista { list-style: none; flex: 1; overflow-y: auto; padding: 4px 20px; display: flex; flex-direction: column; gap: 12px; }
+    .item {
+      display: flex; gap: 14px; align-items: center; background: var(--branco); padding: 10px; border-radius: 20px;
+      box-shadow: 0 4px 14px rgba(0,0,0,.04); position: relative; animation: entrarItem .5s var(--ease) both;
+    }
+    .gaveta.aberta .item:nth-child(2) { animation-delay: .05s; }
+    .gaveta.aberta .item:nth-child(3) { animation-delay: .1s; }
+    .gaveta.aberta .item:nth-child(4) { animation-delay: .15s; }
+    @keyframes entrarItem { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: none; } }
+    .item img { width: 68px; height: 68px; border-radius: 14px; object-fit: cover; flex-shrink: 0; }
+    .item-info { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; padding-right: 22px; }
+    .item-info strong { font-size: .92rem; font-weight: 600; line-height: 1.25; }
+    .item-info span { font-size: .8rem; color: #c27a8f; font-weight: 500; }
+    .qtd { display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; background: var(--offwhite); border-radius: 999px; padding: 3px; align-self: flex-start; }
+    .qtd button { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 1rem; transition: background .25s; }
+    .qtd button:hover { background: var(--rosa); }
+    .qtd b { min-width: 22px; text-align: center; font-size: .88rem; }
+    .remover { position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; color: var(--texto-suave); transition: all .3s var(--ease); }
+    .remover:hover { background: var(--rosa); color: var(--texto); transform: rotate(90deg); }
+    .gaveta-vazia { flex: 1; display: grid; place-content: center; justify-items: center; gap: 14px; text-align: center; color: var(--texto-suave); padding: 24px; }
+    .gaveta-vazia i { width: 72px; height: 72px; border-radius: 50%; background: var(--rosa); color: var(--texto); animation: boiar 3s ease-in-out infinite; }
+    .gaveta-vazia i svg { width: 30px; height: 30px; }
+    .gaveta-rodape { padding: 16px 20px 24px; border-top: 1px solid var(--linha); display: flex; flex-direction: column; gap: 10px; }
+    .gaveta-rodape label { font-size: .8rem; font-weight: 600; color: var(--texto-suave); }
+    .gaveta-rodape textarea {
+      font: inherit; font-size: .9rem; border: 1px solid var(--linha); border-radius: 16px; padding: 10px 14px;
+      background: var(--branco); resize: none; outline: none; transition: border-color .3s, box-shadow .3s;
+    }
+    .gaveta-rodape textarea:focus { border-color: var(--rosa-forte); box-shadow: 0 0 0 4px rgba(247,217,225,.7); }
+    .gaveta-total { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 2px; }
+    .gaveta-total span { color: var(--texto-suave); }
+    .gaveta-total strong { font-size: 1.25rem; letter-spacing: -0.02em; }
+    .limpar { font-size: .82rem; color: var(--texto-suave); padding: 4px; transition: color .3s; }
+    .limpar:hover { color: #c0392b; }
+
+    .aviso {
+      position: fixed; top: 72px; left: 50%; z-index: 130; display: flex; align-items: center; gap: 8px;
+      background: var(--texto); color: #fff; padding: 11px 18px; border-radius: 999px; font-size: .88rem; font-weight: 500;
+      transform: translate(-50%, -30px); opacity: 0; pointer-events: none; transition: all .5s var(--ease);
+      max-width: calc(100% - 32px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .aviso.visivel { transform: translate(-50%, 0); opacity: 1; }
+    .aviso i { width: 22px; height: 22px; border-radius: 50%; background: var(--whats); flex-shrink: 0; }
+    .aviso i svg { width: 14px; height: 14px; }
+    .voando { position: fixed; z-index: 140; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; pointer-events: none; box-shadow: 0 8px 24px rgba(0,0,0,.2); border: 3px solid #fff; }
+
+    body.com-carrinho .balao { display: none; }
+
+    /* Em celular/touch não deixa o efeito de hover "grudado" */
+    @media (hover: none) {
+      .card.reveal.visivel:hover { transform: none; }
+      .card:hover { box-shadow: 0 1px 2px rgba(0,0,0,.03), 0 8px 24px rgba(0,0,0,.04); }
+      .card:hover .reflexo { transform: translateX(-120%); }
+      .card:hover .card-img img { transform: none; }
+      .btn-mini:hover { background: var(--rosa); transform: none; }
+    }
+
     /* ================= RESPONSIVO ================= */
     @media (max-width: 720px) {
       .modal-box { grid-template-columns: 1fr; }
@@ -434,6 +540,9 @@
       .btn-mini { width: 36px; height: 36px; }
       .chip { padding: 9px 13px; font-size: .84rem; }
       .preco small { display: none; }
+      .carrinho-flutuante { bottom: 24px; left: 20px; transform: translate(0, 140%); }
+      .carrinho-flutuante.visivel { transform: none; }
+      .gaveta { border-radius: 0; }
       .hero-ctas .btn { padding: 13px 20px; }
     }
 
@@ -451,6 +560,9 @@
     <div class="container">
       <a href="#" class="logo"><img src="img/logo.png" alt=""><b style="font-weight:600">Delícias <span>da Val</span></b></a>
       <div class="nav-links">
+        <button class="btn-carrinho" id="abrir-carrinho" aria-label="Abrir carrinho">
+          <i data-ico="sacola"></i><span class="contador" id="contador-nav">0</span>
+        </button>
         <a href="#" class="link-insta icone-redondo insta" aria-label="Instagram" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
         </a>
@@ -470,7 +582,7 @@
       <img src="img/logo.png" alt="Delícias da Val Confeitaria" class="hero-logo fade-up">
       <span class="eyebrow fade-up d1"><i class="pulse-dot"></i>Bolos · Docinhos · Bombons · Decorações</span>
       <h1 class="fade-up d2">Delícias da Val.<br><em>Feito com carinho.</em></h1>
-      <p class="fade-up d3">Especialista em bolos de casamento, flores realistas e chocolate — e decoração completa para a sua festa. Escolha no catálogo e peça direto pelo WhatsApp.</p>
+      <p class="fade-up d3">Especialista em bolos de casamento, flores realistas e chocolate, além de decoração completa para a sua festa. Escolha no catálogo e peça direto pelo WhatsApp.</p>
       <div class="hero-ctas fade-up d4">
         <a href="#produtos" class="btn btn-dark">Ver produtos <i data-ico="seta" class="ico-seta"></i></a>
         <a href="#" class="btn btn-whats link-whats" target="_blank" rel="noopener"><i data-ico="whats"></i>WhatsApp</a>
@@ -526,6 +638,36 @@
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2c2.6 0 5.1 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.9 0 5.4-4.4 9.8-9.8 9.8zm8.4-18.2C18.1 1.3 15.1 0 12 0 5.4 0 .1 5.3.1 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.7 1.4 5.7 1.4 6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.4z"/></svg>
   </a>
 
+  <!-- Carrinho flutuante (aparece quando tem item) -->
+  <button class="carrinho-flutuante" id="carrinho-flutuante" aria-label="Ver carrinho">
+    <i data-ico="sacola"></i><span>Ver carrinho</span><b class="contador" id="contador-flut">0</b>
+  </button>
+
+  <!-- ================= CARRINHO ================= -->
+  <div class="gaveta-fundo" id="gaveta-fundo"></div>
+  <aside class="gaveta" id="gaveta" aria-label="Carrinho" aria-hidden="true">
+    <div class="gaveta-topo">
+      <h3>Seu pedido</h3>
+      <button class="fechar fechar-gaveta" id="fechar-gaveta" aria-label="Fechar carrinho">
+        <svg width="14" height="14" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l12 12M13 1L1 13"/></svg>
+      </button>
+    </div>
+    <ul class="gaveta-lista" id="gaveta-lista"></ul>
+    <div class="gaveta-vazia" id="gaveta-vazia">
+      <i data-ico="sacola"></i>
+      <p>Seu carrinho está vazio.<br>Toque no <b>+</b> dos produtos para adicionar.</p>
+    </div>
+    <div class="gaveta-rodape" id="gaveta-rodape">
+      <label for="obs">Observações</label>
+      <textarea id="obs" rows="2" placeholder="Sabor, tema, nome, data da festa..."></textarea>
+      <div class="gaveta-total"><span>Total</span><strong id="total">A combinar</strong></div>
+      <a class="btn btn-whats" id="enviar-pedido" target="_blank" rel="noopener"><i data-ico="whats"></i>Enviar pedido pelo WhatsApp</a>
+      <button class="limpar" id="limpar">Limpar carrinho</button>
+    </div>
+  </aside>
+
+  <div class="aviso" id="aviso"><i data-ico="check"></i><span id="aviso-txt">Adicionado ao carrinho</span></div>
+
   <!-- ================= MODAL ================= -->
   <div class="modal" id="modal" aria-hidden="true">
     <div class="modal-box" role="dialog" aria-modal="true">
@@ -539,6 +681,7 @@
         <p id="m-desc"></p>
         <div class="preco" id="m-preco"></div>
         <div class="modal-acoes">
+          <button class="btn btn-dark" id="m-add"><i data-ico="sacola"></i>Adicionar ao carrinho</button>
           <a class="btn btn-whats" id="m-whats" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2c2.6 0 5.1 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.9 0 5.4-4.4 9.8-9.8 9.8zm8.4-18.2C18.1 1.3 15.1 0 12 0 5.4 0 .1 5.3.1 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.7 1.4 5.7 1.4 6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.4z"/></svg>
             Pedir pelo WhatsApp
@@ -577,7 +720,7 @@
       { nome: "Bombom Branco Rendado",      categoria: "Bombons", preco: null, img: "img/foto-09.jpg", desc: "Bombom de chocolate branco com fios decorativos, em forminha verde." },
       { nome: "Coração com Pérolas Prata",  categoria: "Bombons", preco: null, img: "img/foto-08.jpg", desc: "Casquinha de chocolate branco em coração, recheio cremoso e pérolas prateadas.", tag: "Novo" },
       { nome: "Doce com Monograma",         categoria: "Docinhos", preco: null, img: "img/foto-07.jpg", desc: "Doce de coco com as iniciais do casal ou aniversariante em dourado." },
-      { nome: "Corações e Conchas",         categoria: "Bombons", preco: null, img: "img/foto-10.jpg", desc: "Coração com goiabada e pérolas, e conchinhas de chocolate branco — ideal para casamentos." },
+      { nome: "Corações e Conchas",         categoria: "Bombons", preco: null, img: "img/foto-10.jpg", desc: "Coração com goiabada e pérolas, e conchinhas de chocolate branco, ideal para casamentos." },
       { nome: "Flores Realistas",            categoria: "Docinhos", preco: null, img: "img/foto-11.jpg", desc: "Rosas realistas modeladas à mão, em rosa e branco, para decorar bolos e mesas." },
       { nome: "Decoração Floral Rosé",      categoria: "Decorações",  preco: null, img: "img/foto-01.jpg", desc: "Painel redondo glitter, painel arco floral, trio de cilindros e arranjos.", tag: "Mais pedido" },
       { nome: "Decoração Borboletas",       categoria: "Decorações",  preco: null, img: "img/foto-04.jpg", desc: "Painel de borboletas, mesa de madeira, mesinhas laterais, vasos e boleiras." },
@@ -594,7 +737,8 @@
     /* ========================================================= */
 
     const brl = v => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-    const linkWhats = (msg = "Olá, Val! Vi o catálogo e gostaria de fazer um pedido.") =>
+    const MSG_PADRAO = "Olá, estava olhando no seu catálogo e gostaria de fazer uma encomenda";
+    const linkWhats = (msg = MSG_PADRAO) =>
       `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
     const linkInsta = `https://instagram.com/${CONFIG.instagram}`;
 
@@ -607,6 +751,8 @@
     const ICONES = {
       whats: document.querySelector(".whats-flutuante svg").outerHTML,
       insta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
+      sacola: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>',
+      check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
       seta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>',
     };
     const pintarIcones = (raiz = document) =>
@@ -636,10 +782,10 @@
           <p class="desc">${p.desc}</p>
           <div class="card-rodape">
             <div class="preco">${p.preco ? brl(p.preco) + `<small>ou 3x de ${brl(p.preco / 3)}</small>` : `<span class="consulta">Sob consulta</span><small>Peça seu orçamento</small>`}</div>
-            <span class="btn-mini" aria-hidden="true">
+            <button class="btn-mini" data-add="${i}" aria-label="Adicionar ${p.nome} ao carrinho">
               <svg class="mais" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-              <i data-ico="whats" class="zap"></i>
-            </span>
+              <i data-ico="check" class="ok"></i>
+            </button>
           </div>
         </div>
       </article>`).join("");
@@ -712,6 +858,8 @@
     const modal = document.getElementById("modal");
     const $ = id => document.getElementById(id);
     grid.addEventListener("click", e => {
+      const add = e.target.closest("[data-add]");
+      if (add) { adicionar(+add.dataset.add, add); return; }
       const card = e.target.closest(".card"); if (!card) return;
       const p = PRODUTOS[card.dataset.i];
       $("m-img").src = card.querySelector("img").src;
@@ -720,7 +868,8 @@
       $("m-nome").textContent = p.nome;
       $("m-desc").textContent = p.desc;
       $("m-preco").textContent = p.preco ? brl(p.preco) : "Sob consulta";
-      $("m-whats").href = linkWhats(p.preco ? `Olá, Val! Tenho interesse no produto *${p.nome}* (${brl(p.preco)}). Ainda está disponível?` : `Olá, Val! Vi no catálogo o produto *${p.nome}* e gostaria de um orçamento.`);
+      $("m-whats").href = linkWhats(`${MSG_PADRAO}: *${p.nome}*`);
+      $("m-add").dataset.add = card.dataset.i;
       modal.classList.add("aberto");
       modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
@@ -733,6 +882,142 @@
     $("fechar").addEventListener("click", fecharModal);
     modal.addEventListener("click", e => { if (e.target === modal) fecharModal(); });
     addEventListener("keydown", e => { if (e.key === "Escape") fecharModal(); });
+
+    // ---------- Carrinho ----------
+    const CHAVE = "delicias-da-val-carrinho";
+    let carrinho = {};               // { "Nome do produto": quantidade }
+    try { carrinho = JSON.parse(localStorage.getItem(CHAVE)) || {}; } catch (e) { carrinho = {}; }
+    const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify(carrinho)); } catch (e) {} };
+    const porNome = nome => PRODUTOS.find(p => p.nome === nome);
+    Object.keys(carrinho).forEach(n => { if (!porNome(n)) delete carrinho[n]; });
+
+    const gaveta = $("gaveta"), fundo = $("gaveta-fundo"), lista = $("gaveta-lista");
+    const flutuante = $("carrinho-flutuante");
+
+    const mensagemPedido = () => {
+      const itens = Object.entries(carrinho);
+      let msg = `${MSG_PADRAO}:\n\n`;
+      itens.forEach(([n, q]) => {
+        const p = porNome(n);
+        msg += `• ${q}x ${n}${p.preco ? ` (${brl(p.preco * q)})` : ""}\n`;
+      });
+      const total = calcularTotal();
+      if (total !== null) msg += `\n*Total: ${brl(total)}*\n`;
+      const obs = $("obs").value.trim();
+      if (obs) msg += `\nObservações: ${obs}\n`;
+      return msg.trim();
+    };
+    const calcularTotal = () => {
+      const itens = Object.entries(carrinho);
+      if (!itens.length || itens.some(([n]) => !porNome(n).preco)) return null;
+      return itens.reduce((s, [n, q]) => s + porNome(n).preco * q, 0);
+    };
+
+    const desenharCarrinho = () => {
+      const itens = Object.entries(carrinho);
+      const qtd = itens.reduce((s, [, q]) => s + q, 0);
+      ["contador-nav", "contador-flut"].forEach(id => {
+        const el = $(id); el.textContent = qtd;
+        el.classList.toggle("tem", qtd > 0);
+      });
+      flutuante.classList.toggle("visivel", qtd > 0);
+      document.body.classList.toggle("com-carrinho", qtd > 0);
+      $("gaveta-vazia").style.display = qtd ? "none" : "";
+      $("gaveta-rodape").style.display = qtd ? "" : "none";
+      lista.innerHTML = itens.map(([n, q]) => {
+        const p = porNome(n);
+        return `<li class="item" data-nome="${n}">
+          <img src="${p.img}" alt="">
+          <div class="item-info">
+            <strong>${n}</strong>
+            <span>${p.preco ? brl(p.preco * q) : "Sob consulta"}</span>
+            <div class="qtd">
+              <button data-q="-1" aria-label="Diminuir">−</button><b>${q}</b><button data-q="1" aria-label="Aumentar">+</button>
+            </div>
+          </div>
+          <button class="remover" aria-label="Remover">
+            <svg width="12" height="12" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l12 12M13 1L1 13"/></svg>
+          </button>
+        </li>`;
+      }).join("");
+      const total = calcularTotal();
+      $("total").textContent = total === null ? "A combinar" : brl(total);
+      $("enviar-pedido").href = linkWhats(mensagemPedido());
+    };
+
+    const pularContador = () => ["contador-nav", "contador-flut"].forEach(id => {
+      const el = $(id); el.classList.remove("pulo"); void el.offsetWidth; el.classList.add("pulo");
+    });
+
+    let avisoTimer;
+    const avisar = txt => {
+      $("aviso-txt").textContent = txt;
+      $("aviso").classList.add("visivel");
+      clearTimeout(avisoTimer);
+      avisoTimer = setTimeout(() => $("aviso").classList.remove("visivel"), 2000);
+    };
+
+    // Foto do produto "voa" até o carrinho
+    const voar = (origem, src) => {
+      const destino = flutuante.classList.contains("visivel") ? flutuante : $("abrir-carrinho");
+      const a = origem.getBoundingClientRect(), b = destino.getBoundingClientRect();
+      const bola = document.createElement("img");
+      bola.src = src; bola.className = "voando";
+      bola.style.left = a.left + a.width / 2 - 28 + "px";
+      bola.style.top = a.top + a.height / 2 - 28 + "px";
+      document.body.appendChild(bola);
+      const dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2);
+      const anim = bola.animate([
+        { transform: "translate(0,0) scale(1)", opacity: 1 },
+        { transform: `translate(${dx * .5}px, ${dy * .5 - 80}px) scale(.8)`, opacity: 1, offset: .5 },
+        { transform: `translate(${dx}px, ${dy}px) scale(.2)`, opacity: .3 }
+      ], { duration: 750, easing: "cubic-bezier(.5,0,.3,1)" });
+      anim.onfinish = () => { bola.remove(); pularContador(); };
+    };
+
+    const adicionar = (i, botao) => {
+      const p = PRODUTOS[i];
+      carrinho[p.nome] = (carrinho[p.nome] || 0) + 1;
+      salvar(); desenharCarrinho();
+      if (botao) {
+        botao.classList.add("adicionado");
+        setTimeout(() => botao.classList.remove("adicionado"), 1200);
+        voar(botao, p.img);
+      } else pularContador();
+      avisar(`${p.nome} adicionado`);
+    };
+
+    lista.addEventListener("click", e => {
+      const li = e.target.closest(".item"); if (!li) return;
+      const n = li.dataset.nome;
+      if (e.target.closest(".remover")) delete carrinho[n];
+      const q = e.target.closest("[data-q]");
+      if (q) { carrinho[n] += +q.dataset.q; if (carrinho[n] <= 0) delete carrinho[n]; }
+      salvar(); desenharCarrinho();
+    });
+    $("obs").addEventListener("input", () => $("enviar-pedido").href = linkWhats(mensagemPedido()));
+    $("limpar").addEventListener("click", () => { carrinho = {}; salvar(); desenharCarrinho(); });
+
+    const abrirGaveta = () => {
+      fecharModal();
+      gaveta.classList.add("aberta"); fundo.classList.add("aberta");
+      gaveta.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    };
+    const fecharGaveta = () => {
+      gaveta.classList.remove("aberta"); fundo.classList.remove("aberta");
+      gaveta.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    };
+    $("abrir-carrinho").addEventListener("click", abrirGaveta);
+    flutuante.addEventListener("click", abrirGaveta);
+    $("fechar-gaveta").addEventListener("click", fecharGaveta);
+    fundo.addEventListener("click", fecharGaveta);
+    addEventListener("keydown", e => { if (e.key === "Escape") fecharGaveta(); });
+    $("m-add").addEventListener("click", e => { adicionar(+e.currentTarget.dataset.add, null); fecharModal(); });
+
+    pintarIcones();
+    desenharCarrinho();
   </script>
 </body>
 </html>
