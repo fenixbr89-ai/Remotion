@@ -6,6 +6,19 @@ import { Sparkle, Tooth } from "../Tooth";
 import { CrossSection } from "../CrossSection";
 import { ForceArrow, Osteoclast, Pulses, SvgLabel } from "../Parts";
 import { Jaws, Ridge, Sinus } from "../Jaws";
+import {
+  SAnatomia,
+  SBranemark,
+  SComoFaz,
+  SCoroa,
+  SEnxerto,
+  SEstimuloVolta,
+  SOsseo,
+  SPilar,
+  SPino,
+  SPlanejamento,
+  SPreparo,
+} from "./Implante";
 
 /** Row of tooth characters standing in a gum "floor". */
 const SmileRow: React.FC<{ missing?: boolean; happy?: boolean; top?: number }> = ({ missing, happy, top = 900 }) => {
@@ -235,21 +248,6 @@ export const S08Domino: React.FC = () => (
   </Scene>
 );
 
-export const S09Implante: React.FC = () => (
-  <Scene bg="white">
-    <Top>
-      <Title lines={["E o *implante*?"]} size={110} />
-      <Small>O pino de titânio faz o papel da raiz{"\n"}e volta a passar estímulo pro osso.</Small>
-    </Top>
-    <div style={{ position: "absolute", left: 0, top: 760 }}>
-      <CrossSection screw={{ insert: 1, phase: 0.4 }} abutment={1} crown={{ drop: 1, mood: "happy" }} neighborMood="happy" look={6}>
-        <Pulses x={500} y={660} rx={85} ry={160} />
-        <ForceArrow x={500} y={185} />
-      </CrossSection>
-    </div>
-  </Scene>
-);
-
 export const S10Recado: React.FC = () => (
   <Scene bg="pink">
     <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", gap: 60 }}>
@@ -309,16 +307,27 @@ export const S11Final: React.FC = () => (
   </Scene>
 );
 
-export const SCENES = [
-  { id: "Cena01-Gancho", C: S01Gancho },
-  { id: "Cena02-Estimulo", C: S02Estimulo },
-  { id: "Cena03-Reabsorcao", C: S03Reabsorcao },
-  { id: "Cena04-Numero", C: S04Numero },
-  { id: "Cena05-Vizinhos", C: S05Vizinhos },
-  { id: "Cena06-Extrusao", C: S06Extrusao },
-  { id: "Cena07-SeioMaxilar", C: S07Seio },
-  { id: "Cena08-Domino", C: S08Domino },
-  { id: "Cena09-Implante", C: S09Implante },
-  { id: "Cena10-Recado", C: S10Recado },
-  { id: "Cena11-Final", C: S11Final },
+/** sec = how long each scene stays on screen (narration pace) */
+export const SCENES: { id: string; C: React.FC; sec: number }[] = [
+  { id: "Cena01-Gancho", C: S01Gancho, sec: 3.5 },
+  { id: "Cena02-Estimulo", C: S02Estimulo, sec: 5 },
+  { id: "Cena03-Reabsorcao", C: S03Reabsorcao, sec: 5 },
+  { id: "Cena04-Numero", C: S04Numero, sec: 5 },
+  { id: "Cena05-Vizinhos", C: S05Vizinhos, sec: 3.5 },
+  { id: "Cena06-Extrusao", C: S06Extrusao, sec: 4.5 },
+  { id: "Cena07-SeioMaxilar", C: S07Seio, sec: 4.5 },
+  { id: "Cena08-Domino", C: S08Domino, sec: 5.5 },
+  { id: "Cena09-ComoFaz", C: SComoFaz, sec: 2.5 },
+  { id: "Cena10-Anatomia", C: SAnatomia, sec: 5 },
+  { id: "Cena11-Planejamento", C: SPlanejamento, sec: 4.5 },
+  { id: "Cena12-Enxerto", C: SEnxerto, sec: 4 },
+  { id: "Cena13-Preparo", C: SPreparo, sec: 4 },
+  { id: "Cena14-Pino", C: SPino, sec: 3.5 },
+  { id: "Cena15-Osseointegracao", C: SOsseo, sec: 5 },
+  { id: "Cena16-Branemark", C: SBranemark, sec: 6 },
+  { id: "Cena17-Pilar", C: SPilar, sec: 3 },
+  { id: "Cena18-Coroa", C: SCoroa, sec: 3.5 },
+  { id: "Cena19-EstimuloVolta", C: SEstimuloVolta, sec: 4.5 },
+  { id: "Cena20-Recado", C: S10Recado, sec: 3.5 },
+  { id: "Cena21-Final", C: S11Final, sec: 3.5 },
 ];

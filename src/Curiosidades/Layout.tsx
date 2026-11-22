@@ -78,6 +78,38 @@ export const Chip: React.FC<{ n: number }> = ({ n }) => (
   </div>
 );
 
+export const StepChip: React.FC<{ n: number; total?: number }> = ({ n, total = 6 }) => (
+  <div
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 14,
+      padding: "12px 30px 12px 14px",
+      borderRadius: 999,
+      background: C.ink,
+      fontFamily,
+      fontWeight: 700,
+      fontSize: 30,
+      color: "#fff",
+    }}
+  >
+    <span
+      style={{
+        width: 48,
+        height: 48,
+        borderRadius: 999,
+        background: C.accent,
+        display: "grid",
+        placeItems: "center",
+        fontSize: 26,
+      }}
+    >
+      {n}
+    </span>
+    PASSO {n} DE {total}
+  </div>
+);
+
 /** Title: lines of text, words wrapped in *asterisks* get a marker underline. */
 export const Title: React.FC<{ lines: string[]; size?: number }> = ({ lines, size = 96 }) => {
   const bg = useBg();
