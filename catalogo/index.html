@@ -515,6 +515,34 @@
     .aviso i svg { width: 14px; height: 14px; }
     .voando { position: fixed; z-index: 140; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; pointer-events: none; box-shadow: 0 8px 24px rgba(0,0,0,.2); border: 3px solid #fff; }
 
+
+    /* ================= BOLO: sabor e peso ================= */
+    .kg-preco { color: #c27a8f; }
+    .kg-preco em { font-style: normal; font-size: .8em; font-weight: 500; }
+    .preco .apartir { display: block; font-size: .72rem; font-weight: 400; color: var(--texto-suave); margin-bottom: -2px; }
+    .opcoes { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 20px; background: var(--branco); transition: box-shadow .6s var(--ease); }
+    .opcoes.destaque { animation: destacar 1.4s var(--ease) .4s; }
+    @keyframes destacar { 0%, 100% { box-shadow: 0 0 0 0 rgba(233,169,187,0); } 30% { box-shadow: 0 0 0 6px rgba(233,169,187,.55); } }
+    .opcao-titulo { font-size: .78rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--texto-suave); }
+    .sabores { display: flex; flex-direction: column; gap: 10px; }
+    .grupo { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .grupo-preco { width: 100%; font-size: .78rem; font-weight: 600; color: #c27a8f; }
+    .sabor {
+      padding: 8px 14px; border-radius: 999px; font-size: .84rem; background: var(--offwhite);
+      border: 1.5px solid transparent; transition: all .35s var(--ease);
+    }
+    .sabor:hover { border-color: var(--rosa-forte); }
+    .sabor.ativo { background: var(--texto); color: #fff; transform: scale(1.04); }
+    .peso { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; background: var(--offwhite); border-radius: 999px; padding: 4px; }
+    .peso button { width: 36px; height: 36px; border-radius: 50%; font-size: 1.2rem; display: grid; place-items: center; transition: all .3s var(--ease); }
+    .peso button:hover:not(:disabled) { background: var(--rosa); transform: scale(1.08); }
+    .peso button:disabled { opacity: .3; cursor: default; }
+    .peso b { min-width: 70px; text-align: center; font-size: 1.05rem; }
+    #m-preco small { display: block; font-size: .8rem; font-weight: 400; color: var(--texto-suave); margin-top: 2px; letter-spacing: 0; }
+    .pulo-preco { animation: puloPreco .45s var(--ease); }
+    @keyframes puloPreco { 0% { transform: scale(1); } 40% { transform: scale(1.08); color: #c27a8f; } 100% { transform: scale(1); } }
+    .item-info small { font-size: .76rem; color: var(--texto-suave); line-height: 1.3; }
+
     body.com-carrinho .balao { display: none; }
 
     /* Em celular/touch não deixa o efeito de hover "grudado" */
@@ -531,6 +559,16 @@
       .modal-box { grid-template-columns: 1fr; }
       .modal-info { padding: 8px 24px 28px; }
       .modal-info h3 { font-size: 1.6rem; }
+      .modal-img img { aspect-ratio: 4 / 3; }
+      .modal { padding: 12px; align-items: end; }
+      .modal-box { max-height: 92vh; }
+      .modal-img img { aspect-ratio: 16 / 10; }
+      .fechar { background: rgba(255,255,255,.9); box-shadow: 0 4px 14px rgba(0,0,0,.15); top: 22px; right: 22px; }
+      .modal-acoes {
+        position: sticky; bottom: 0; z-index: 3; margin: 0 -24px -28px; padding: 12px 24px 20px;
+        background: linear-gradient(to top, var(--offwhite) 80%, rgba(250,247,242,0));
+      }
+      .modal-acoes .btn-insta { display: none; }
       .grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
       .card-img { margin: 8px; }
       .card-info { padding: 4px 14px 16px; }
@@ -679,9 +717,19 @@
         <span class="tag" id="m-cat"></span>
         <h3 id="m-nome"></h3>
         <p id="m-desc"></p>
+        <div class="opcoes" id="m-opcoes">
+          <div class="opcao-titulo">Escolha o sabor</div>
+          <div class="sabores" id="m-sabores"></div>
+          <div class="opcao-titulo">Peso</div>
+          <div class="peso">
+            <button type="button" id="m-menos" aria-label="Diminuir peso">−</button>
+            <b id="m-kg">1 kg</b>
+            <button type="button" id="m-mais" aria-label="Aumentar peso">+</button>
+          </div>
+        </div>
         <div class="preco" id="m-preco"></div>
         <div class="modal-acoes">
-          <button class="btn btn-dark" id="m-add"><i data-ico="sacola"></i>Adicionar ao carrinho</button>
+          <button class="btn btn-dark" id="m-add"><i data-ico="sacola"></i><span id="m-add-txt">Adicionar ao carrinho</span></button>
           <a class="btn btn-whats" id="m-whats" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2c2.6 0 5.1 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.9 0 5.4-4.4 9.8-9.8 9.8zm8.4-18.2C18.1 1.3 15.1 0 12 0 5.4 0 .1 5.3.1 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.7 1.4 5.7 1.4 6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.4z"/></svg>
             Pedir pelo WhatsApp
@@ -699,6 +747,21 @@
     const CONFIG = {
       whatsapp: "5562993247743",          // DDI + DDD + número, só dígitos
       instagram: "deliciasd_val",             // sem o @
+    };
+
+    // BOLOS: o preço é por kg e depende do sabor.
+    const BOLO = {
+      kgMinimo: 1,        // menor peso que pode ser pedido
+      kgMaximo: 10,       // maior peso
+      passo: 0.5,         // de quanto em quanto aumenta (0,5 kg)
+      sabores: [
+        { nome: "Prestígio e brigadeiro",               precoKg: 90 },
+        { nome: "Brigadeiro e maracujá",                precoKg: 90 },
+        { nome: "Ninho com abacaxi",                    precoKg: 90 },
+        { nome: "Ninho com morango",                    precoKg: 100 },
+        { nome: "Ninho com geleia de frutas vermelhas", precoKg: 100 },
+        { nome: "Ninho com Nutella",                    precoKg: 100 },
+      ],
     };
 
     // Coloque as fotos na pasta "img/" ao lado deste arquivo.
@@ -769,6 +832,10 @@
     filtros.innerHTML = categorias.map((c, i) =>
       `<button class="chip ${i === 0 ? "ativo" : ""}" data-cat="${c}">${c}</button>`).join("");
 
+    const porKg = p => p.categoria === "Bolos";
+    const menorKg = Math.min(...BOLO.sabores.map(s => s.precoKg));
+    const kgTxt = kg => kg.toLocaleString("pt-BR") + " kg";
+
     // ---------- Cards ----------
     const grid = document.getElementById("grid");
     grid.innerHTML = PRODUTOS.map((p, i) => `
@@ -781,7 +848,7 @@
           <h3>${p.nome}</h3>
           <p class="desc">${p.desc}</p>
           <div class="card-rodape">
-            <div class="preco">${p.preco ? brl(p.preco) + `<small>ou 3x de ${brl(p.preco / 3)}</small>` : `<span class="consulta">Sob consulta</span><small>Peça seu orçamento</small>`}</div>
+            <div class="preco">${porKg(p) ? `<small class="apartir">a partir de</small><span class="kg-preco">${brl(menorKg)}<em>/kg</em></span>` : p.preco ? brl(p.preco) + `<small>ou 3x de ${brl(p.preco / 3)}</small>` : `<span class="consulta">Sob consulta</span><small>Peça seu orçamento</small>`}</div>
             <button class="btn-mini" data-add="${i}" aria-label="Adicionar ${p.nome} ao carrinho">
               <svg class="mais" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
               <i data-ico="check" class="ok"></i>
@@ -857,23 +924,74 @@
     // ---------- Modal ----------
     const modal = document.getElementById("modal");
     const $ = id => document.getElementById(id);
-    grid.addEventListener("click", e => {
-      const add = e.target.closest("[data-add]");
-      if (add) { adicionar(+add.dataset.add, add); return; }
-      const card = e.target.closest(".card"); if (!card) return;
-      const p = PRODUTOS[card.dataset.i];
+    let atual = null;                         // produto aberto no modal
+    let escolha = { sabor: 0, kg: BOLO.kgMinimo };
+
+    // Monta os botões de sabor, agrupados por preço
+    const grupos = [...new Set(BOLO.sabores.map(s => s.precoKg))].sort((a, b) => a - b);
+    $("m-sabores").innerHTML = grupos.map(preco => `
+      <div class="grupo">
+        <span class="grupo-preco">${brl(preco)} o kg</span>
+        ${BOLO.sabores.map((s, i) => s.precoKg === preco ? `<button type="button" class="sabor" data-sabor="${i}">${s.nome}</button>` : "").join("")}
+      </div>`).join("");
+
+    const valorUnit = item => {
+      const p = porNome(item.nome);
+      if (porKg(p)) { const s = BOLO.sabores.find(x => x.nome === item.sabor); return s ? s.precoKg * item.kg : null; }
+      return p.preco || null;
+    };
+
+    const atualizarModal = (animar) => {
+      const p = atual; if (!p) return;
+      if (porKg(p)) {
+        const s = BOLO.sabores[escolha.sabor];
+        $("m-sabores").querySelectorAll(".sabor").forEach(b => b.classList.toggle("ativo", +b.dataset.sabor === escolha.sabor));
+        $("m-kg").textContent = kgTxt(escolha.kg);
+        $("m-menos").disabled = escolha.kg <= BOLO.kgMinimo;
+        $("m-mais").disabled = escolha.kg >= BOLO.kgMaximo;
+        $("m-preco").innerHTML = `${brl(s.precoKg * escolha.kg)}<small>${kgTxt(escolha.kg)} × ${brl(s.precoKg)} o kg</small>`;
+        $("m-add-txt").textContent = `Adicionar · ${brl(s.precoKg * escolha.kg)}`;
+        $("m-whats").href = linkWhats(`${MSG_PADRAO}: *${p.nome}*, sabor ${s.nome}, ${kgTxt(escolha.kg)} (${brl(s.precoKg * escolha.kg)})`);
+      } else {
+        $("m-preco").textContent = p.preco ? brl(p.preco) : "Sob consulta";
+        $("m-add-txt").textContent = "Adicionar ao carrinho";
+        $("m-whats").href = linkWhats(`${MSG_PADRAO}: *${p.nome}*`);
+      }
+      if (animar) { const el = $("m-preco"); el.classList.remove("pulo-preco"); void el.offsetWidth; el.classList.add("pulo-preco"); }
+    };
+
+    const abrirModal = (i, destacarOpcoes) => {
+      const p = atual = PRODUTOS[i];
+      const card = grid.querySelector(`.card[data-i="${i}"]`);
+      escolha = { sabor: 0, kg: BOLO.kgMinimo };
       $("m-img").src = card.querySelector("img").src;
       $("m-img").alt = p.nome;
       $("m-cat").textContent = p.categoria;
       $("m-nome").textContent = p.nome;
       $("m-desc").textContent = p.desc;
-      $("m-preco").textContent = p.preco ? brl(p.preco) : "Sob consulta";
-      $("m-whats").href = linkWhats(`${MSG_PADRAO}: *${p.nome}*`);
-      $("m-add").dataset.add = card.dataset.i;
+      $("m-opcoes").style.display = porKg(p) ? "" : "none";
+      $("m-opcoes").classList.toggle("destaque", !!destacarOpcoes && porKg(p));
+      atualizarModal(false);
       modal.classList.add("aberto");
       modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
+    };
+
+    grid.addEventListener("click", e => {
+      const card = e.target.closest(".card"); if (!card) return;
+      const i = +card.dataset.i;
+      const add = e.target.closest("[data-add]");
+      // Bolo precisa de sabor e peso: o + abre a escolha
+      if (add && !porKg(PRODUTOS[i])) { adicionar({ nome: PRODUTOS[i].nome }, add); return; }
+      abrirModal(i, !!add);
     });
+    $("m-sabores").addEventListener("click", e => {
+      const b = e.target.closest(".sabor"); if (!b) return;
+      escolha.sabor = +b.dataset.sabor; atualizarModal(true);
+    });
+    $("m-menos").addEventListener("click", () => { escolha.kg = Math.max(BOLO.kgMinimo, escolha.kg - BOLO.passo); atualizarModal(true); });
+    $("m-mais").addEventListener("click", () => { escolha.kg = Math.min(BOLO.kgMaximo, escolha.kg + BOLO.passo); atualizarModal(true); });
+
     const fecharModal = () => {
       modal.classList.remove("aberto");
       modal.setAttribute("aria-hidden", "true");
@@ -884,38 +1002,41 @@
     addEventListener("keydown", e => { if (e.key === "Escape") fecharModal(); });
 
     // ---------- Carrinho ----------
-    const CHAVE = "delicias-da-val-carrinho";
-    let carrinho = {};               // { "Nome do produto": quantidade }
-    try { carrinho = JSON.parse(localStorage.getItem(CHAVE)) || {}; } catch (e) { carrinho = {}; }
-    const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify(carrinho)); } catch (e) {} };
+    // Cada item: { nome, sabor?, kg?, q }
+    const CHAVE = "delicias-da-val-carrinho-v2";
     const porNome = nome => PRODUTOS.find(p => p.nome === nome);
-    Object.keys(carrinho).forEach(n => { if (!porNome(n)) delete carrinho[n]; });
+    let carrinho = [];
+    try { carrinho = JSON.parse(localStorage.getItem(CHAVE)) || []; } catch (e) { carrinho = []; }
+    if (!Array.isArray(carrinho)) carrinho = [];
+    carrinho = carrinho.filter(it => porNome(it.nome) && it.q > 0);
+    const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify(carrinho)); } catch (e) {} };
+    const mesmo = (a, b) => a.nome === b.nome && a.sabor === b.sabor && a.kg === b.kg;
+    const descricao = it => it.sabor ? `${it.nome} (${it.sabor}, ${kgTxt(it.kg)})` : it.nome;
 
     const gaveta = $("gaveta"), fundo = $("gaveta-fundo"), lista = $("gaveta-lista");
     const flutuante = $("carrinho-flutuante");
 
+    const calcularTotal = () => {
+      if (!carrinho.length || carrinho.some(it => valorUnit(it) === null)) return null;
+      return carrinho.reduce((s, it) => s + valorUnit(it) * it.q, 0);
+    };
     const mensagemPedido = () => {
-      const itens = Object.entries(carrinho);
       let msg = `${MSG_PADRAO}:\n\n`;
-      itens.forEach(([n, q]) => {
-        const p = porNome(n);
-        msg += `• ${q}x ${n}${p.preco ? ` (${brl(p.preco * q)})` : ""}\n`;
+      carrinho.forEach(it => {
+        const v = valorUnit(it);
+        msg += `• ${it.q}x ${it.nome}${it.sabor ? `\n   Sabor: ${it.sabor}\n   Peso: ${kgTxt(it.kg)}` : ""}${v ? `\n   Valor: ${brl(v * it.q)}` : ""}\n`;
       });
       const total = calcularTotal();
+      const parcial = carrinho.reduce((s, it) => s + (valorUnit(it) || 0) * it.q, 0);
       if (total !== null) msg += `\n*Total: ${brl(total)}*\n`;
+      else if (parcial > 0) msg += `\n*Subtotal dos itens com preço: ${brl(parcial)}*\n`;
       const obs = $("obs").value.trim();
       if (obs) msg += `\nObservações: ${obs}\n`;
       return msg.trim();
     };
-    const calcularTotal = () => {
-      const itens = Object.entries(carrinho);
-      if (!itens.length || itens.some(([n]) => !porNome(n).preco)) return null;
-      return itens.reduce((s, [n, q]) => s + porNome(n).preco * q, 0);
-    };
 
     const desenharCarrinho = () => {
-      const itens = Object.entries(carrinho);
-      const qtd = itens.reduce((s, [, q]) => s + q, 0);
+      const qtd = carrinho.reduce((s, it) => s + it.q, 0);
       ["contador-nav", "contador-flut"].forEach(id => {
         const el = $(id); el.textContent = qtd;
         el.classList.toggle("tem", qtd > 0);
@@ -924,15 +1045,16 @@
       document.body.classList.toggle("com-carrinho", qtd > 0);
       $("gaveta-vazia").style.display = qtd ? "none" : "";
       $("gaveta-rodape").style.display = qtd ? "" : "none";
-      lista.innerHTML = itens.map(([n, q]) => {
-        const p = porNome(n);
-        return `<li class="item" data-nome="${n}">
+      lista.innerHTML = carrinho.map((it, idx) => {
+        const p = porNome(it.nome), v = valorUnit(it);
+        return `<li class="item" data-idx="${idx}">
           <img src="${p.img}" alt="">
           <div class="item-info">
-            <strong>${n}</strong>
-            <span>${p.preco ? brl(p.preco * q) : "Sob consulta"}</span>
+            <strong>${it.nome}</strong>
+            ${it.sabor ? `<small>${it.sabor} · ${kgTxt(it.kg)}</small>` : ""}
+            <span>${v ? brl(v * it.q) : "Sob consulta"}</span>
             <div class="qtd">
-              <button data-q="-1" aria-label="Diminuir">−</button><b>${q}</b><button data-q="1" aria-label="Aumentar">+</button>
+              <button data-q="-1" aria-label="Diminuir">−</button><b>${it.q}</b><button data-q="1" aria-label="Aumentar">+</button>
             </div>
           </div>
           <button class="remover" aria-label="Remover">
@@ -954,7 +1076,7 @@
       $("aviso-txt").textContent = txt;
       $("aviso").classList.add("visivel");
       clearTimeout(avisoTimer);
-      avisoTimer = setTimeout(() => $("aviso").classList.remove("visivel"), 2000);
+      avisoTimer = setTimeout(() => $("aviso").classList.remove("visivel"), 2200);
     };
 
     // Foto do produto "voa" até o carrinho
@@ -975,28 +1097,28 @@
       anim.onfinish = () => { bola.remove(); pularContador(); };
     };
 
-    const adicionar = (i, botao) => {
-      const p = PRODUTOS[i];
-      carrinho[p.nome] = (carrinho[p.nome] || 0) + 1;
+    const adicionar = (novo, botao) => {
+      const existente = carrinho.find(it => mesmo(it, novo));
+      if (existente) existente.q++; else carrinho.push({ ...novo, q: 1 });
       salvar(); desenharCarrinho();
       if (botao) {
         botao.classList.add("adicionado");
         setTimeout(() => botao.classList.remove("adicionado"), 1200);
-        voar(botao, p.img);
+        voar(botao, porNome(novo.nome).img);
       } else pularContador();
-      avisar(`${p.nome} adicionado`);
+      avisar(`${descricao(novo)} adicionado`);
     };
 
     lista.addEventListener("click", e => {
       const li = e.target.closest(".item"); if (!li) return;
-      const n = li.dataset.nome;
-      if (e.target.closest(".remover")) delete carrinho[n];
+      const idx = +li.dataset.idx;
+      if (e.target.closest(".remover")) carrinho.splice(idx, 1);
       const q = e.target.closest("[data-q]");
-      if (q) { carrinho[n] += +q.dataset.q; if (carrinho[n] <= 0) delete carrinho[n]; }
+      if (q) { carrinho[idx].q += +q.dataset.q; if (carrinho[idx].q <= 0) carrinho.splice(idx, 1); }
       salvar(); desenharCarrinho();
     });
     $("obs").addEventListener("input", () => $("enviar-pedido").href = linkWhats(mensagemPedido()));
-    $("limpar").addEventListener("click", () => { carrinho = {}; salvar(); desenharCarrinho(); });
+    $("limpar").addEventListener("click", () => { carrinho = []; salvar(); desenharCarrinho(); });
 
     const abrirGaveta = () => {
       fecharModal();
@@ -1014,7 +1136,11 @@
     $("fechar-gaveta").addEventListener("click", fecharGaveta);
     fundo.addEventListener("click", fecharGaveta);
     addEventListener("keydown", e => { if (e.key === "Escape") fecharGaveta(); });
-    $("m-add").addEventListener("click", e => { adicionar(+e.currentTarget.dataset.add, null); fecharModal(); });
+    $("m-add").addEventListener("click", () => {
+      const p = atual;
+      adicionar(porKg(p) ? { nome: p.nome, sabor: BOLO.sabores[escolha.sabor].nome, kg: escolha.kg } : { nome: p.nome }, null);
+      fecharModal();
+    });
 
     pintarIcones();
     desenharCarrinho();
