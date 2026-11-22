@@ -365,6 +365,7 @@ export const S05: React.FC<S> = ({ d }) => {
                   alignItems: "center",
                   justifyContent: "center",
                   fontFamily: SERIF,
+                  fontWeight: 800,
                   fontSize: 200,
                   color: C.red,
                 }}
@@ -611,7 +612,9 @@ export const S08: React.FC<S> = ({ d }) => {
           <div
             style={{
               fontFamily: SERIF,
-              fontSize: 150,
+              fontWeight: 800,
+              fontSize: 120,
+              letterSpacing: -3,
               color: C.red,
               opacity: ease(f, 66, 80),
               filter: `blur(${(1 - ease(f, 66, 80)) * 10}px)`,
@@ -1237,8 +1240,9 @@ export const S17: React.FC<S> = ({ d }) => {
           <div
             style={{
               fontFamily: SERIF,
-              fontStyle: "italic",
-              fontSize: 92,
+              fontWeight: 800,
+              fontSize: 74,
+              letterSpacing: -2,
               color: "#f1ede4",
             }}
           >

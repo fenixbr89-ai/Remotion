@@ -11,7 +11,7 @@ import {
 } from "remotion";
 
 /* ---------- fonts ---------- */
-export const SERIF = "'Instrument Serif', Georgia, serif";
+export const SERIF = "'Inter', Helvetica, Arial, sans-serif"; // heavy upright sans (user preference)
 export const SANS = "'Inter', Helvetica, Arial, sans-serif";
 export const TYPE = "'Special Elite', 'Courier New', monospace";
 
@@ -206,7 +206,7 @@ export const Camera: React.FC<{
 };
 
 /* ---------- text ---------- */
-/** Serif italic words appearing one by one with blur (reference style). */
+/** Heavy sans words appearing one by one with blur. */
 export const SerifWords: React.FC<{
   text: string;
   start?: number;
@@ -224,7 +224,7 @@ export const SerifWords: React.FC<{
   every = 5,
   size = 64,
   color = C.ink,
-  italic = true,
+  italic = false,
   style,
   highlight = [],
   hlColor = C.red,
@@ -237,11 +237,12 @@ export const SerifWords: React.FC<{
       style={{
         fontFamily: SERIF,
         fontStyle: italic ? "italic" : "normal",
-        fontSize: size,
+        fontWeight: 800,
+        fontSize: size * 0.8,
         lineHeight: 1.05,
         color,
         textAlign: align,
-        letterSpacing: -0.5,
+        letterSpacing: -size * 0.025,
         ...style,
       }}
     >
@@ -254,7 +255,7 @@ export const SerifWords: React.FC<{
             key={i}
             style={{
               display: "inline-block",
-              marginRight: size * 0.22,
+              marginRight: size * 0.2,
               opacity: p,
               filter: `blur(${(1 - p) * 8}px)`,
               translate: `0px ${(1 - p) * 14}px`,
