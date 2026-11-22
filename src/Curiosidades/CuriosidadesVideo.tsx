@@ -2,7 +2,7 @@ import React from "react";
 import { Series, useVideoConfig } from "remotion";
 import { SCENES } from "./scenes/Scenes";
 
-export const ImplanteVideo: React.FC = () => {
+export const CuriosidadesVideo: React.FC = () => {
   const { fps } = useVideoConfig();
   return (
     <Series>

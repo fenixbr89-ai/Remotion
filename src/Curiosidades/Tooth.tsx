@@ -106,7 +106,9 @@ export const ToothG: React.FC<{
   face?: boolean;
   look?: number;
   xray?: boolean;
-}> = ({ mood = "happy", rootLen = 100, crownOnly, face = true, look = 0, xray }) => {
+  /** upper-jaw tooth: body flipped (roots up), face stays upright */
+  flip?: boolean;
+}> = ({ mood = "happy", rootLen = 100, crownOnly, face = true, look = 0, xray, flip }) => {
   const id = cleanId(useId());
   const d = crownOnly ? crownPath : toothPath(rootLen);
   if (xray) {
@@ -147,6 +149,7 @@ export const ToothG: React.FC<{
           <path d={d} />
         </clipPath>
       </defs>
+      <g transform={flip ? `translate(0 ${155 + rootLen}) scale(1 -1)` : undefined}>
       <path d={d} fill={`url(#${id}-g)`} />
       <path d={d} fill={`url(#${id}-r)`} />
       <g clipPath={`url(#${id}-clip)`}>
@@ -165,7 +168,12 @@ export const ToothG: React.FC<{
         filter={`url(#${id}-soft)`}
       />
       <ellipse cx={142} cy={30} rx={9} ry={5} transform="rotate(20 142 30)" fill="#fff" opacity={0.8} />
-      {face ? <Face mood={mood} look={look} id={id} /> : null}
+      </g>
+      {face ? (
+        <g transform={flip ? `translate(0 ${rootLen - 15})` : undefined}>
+          <Face mood={mood} look={look} id={id} />
+        </g>
+      ) : null}
     </g>
   );
 };

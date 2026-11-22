@@ -15,6 +15,7 @@ export type CrossProps = {
   boneGrow?: number; // 0..1
   abutment?: number | null; // 0 = far above, 1 = seated
   crown?: { drop: number; mood: Mood } | null;
+  middleTooth?: Mood | null; // natural tooth in the middle (no gap)
   children?: React.ReactNode; // overlays in the 1000x1100 space
 };
 
@@ -32,6 +33,7 @@ export const CrossSection: React.FC<CrossProps & { width?: number }> = ({
   boneGrow = 0,
   abutment = null,
   crown = null,
+  middleTooth = null,
   children,
   width = 1080,
 }) => {
@@ -62,8 +64,8 @@ export const CrossSection: React.FC<CrossProps & { width?: number }> = ({
           <stop offset="1" stopColor="#a87a40" />
         </linearGradient>
         <radialGradient id={`${id}-grow`} cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stopColor={C.green} stopOpacity={0.55} />
-          <stop offset="1" stopColor={C.green} stopOpacity={0} />
+          <stop offset="0" stopColor={C.accent} stopOpacity={0.55} />
+          <stop offset="1" stopColor={C.accent} stopOpacity={0} />
         </radialGradient>
         <filter id={`${id}-sh`} x="-30%" y="-30%" width="160%" height="160%">
           <feDropShadow dx={0} dy={14} stdDeviation={14} floodColor="#3b1d10" floodOpacity={0.28} />
@@ -120,6 +122,12 @@ export const CrossSection: React.FC<CrossProps & { width?: number }> = ({
         </g>
       </g>
 
+      {middleTooth ? (
+        <g transform="translate(360 186) scale(1.4)">
+          <ToothG mood={middleTooth} rootLen={300} />
+        </g>
+      ) : null}
+
       {/* gum */}
       <path
         d={`M0 400 Q110 362 220 372 Q360 380 ${GAP} ${372 + dip * 0.8} Q640 380 780 372 Q890 362 1000 400 L1000 488 Q${GAP} ${500 + dip * 1.7} 0 488 Z`}
@@ -156,9 +164,9 @@ export const CrossSection: React.FC<CrossProps & { width?: number }> = ({
               </g>
             );
           })}
-          <Sparkle x={GAP - 120} y={BONE_TOP + 90} s={1.1} color={C.green} opacity={boneGrow} />
-          <Sparkle x={GAP + 125} y={BONE_TOP + 250} s={0.9} color={C.green} opacity={boneGrow} />
-          <Sparkle x={GAP - 105} y={BONE_TOP + 330} s={0.7} color={C.green} opacity={boneGrow} />
+          <Sparkle x={GAP - 120} y={BONE_TOP + 90} s={1.1} color={C.accent} opacity={boneGrow} />
+          <Sparkle x={GAP + 125} y={BONE_TOP + 250} s={0.9} color={C.accent} opacity={boneGrow} />
+          <Sparkle x={GAP - 105} y={BONE_TOP + 330} s={0.7} color={C.accent} opacity={boneGrow} />
         </g>
       ) : null}
 
@@ -193,7 +201,7 @@ export const CrossSection: React.FC<CrossProps & { width?: number }> = ({
           <path d="M-16 -10 L16 -10 L0 26 Z" fill="#94a3b8" />
           <rect x={-58} y={-640} width={116} height={240} rx={40} fill="#f8fafc" />
           <rect x={-58} y={-640} width={116} height={240} rx={40} fill="none" stroke="#cbd5e1" strokeWidth={4} />
-          <rect x={-58} y={-560} width={116} height={40} fill={C.green} />
+          <rect x={-58} y={-560} width={116} height={40} fill={C.accent} />
           <rect x={-36} y={-630} width={14} height={200} rx={7} fill="#fff" opacity={0.9} />
           {[0, 1, 2].map((i) => (
             <path

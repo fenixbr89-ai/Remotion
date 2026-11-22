@@ -1,13 +1,13 @@
 import { Composition, Folder } from "remotion";
-import { ImplanteVideo } from "./Implante/ImplanteVideo";
-import { SCENES } from "./Implante/scenes/Scenes";
+import { CuriosidadesVideo } from "./Curiosidades/CuriosidadesVideo";
+import { SCENES } from "./Curiosidades/scenes/Scenes";
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
       <Composition
-        id="ImplanteDentario"
-        component={ImplanteVideo}
+        id="OssoSemDente"
+        component={CuriosidadesVideo}
         durationInFrames={SCENES.length * 90}
         fps={30}
         width={1080}

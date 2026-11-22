@@ -1,23 +1,21 @@
-# Implante dentário — um dente novo de verdade
+# Curiosidades de odonto: quando um dente cai, o que acontece com o osso?
 
-Vídeo vertical 1080x1920, 30fps, estilo animação 3D fofinha (dentes-personagem).
+Vídeo vertical 1080x1920, 30fps, estilo animação 3D fofinha (dentes-personagem), tons pastéis: rosa, amarelo claro e branco.
 
 ## Cenas
 
-1. **Abertura** — fileira de dentinhos na gengiva com um buraco no meio; os vizinhos olham tristes pro espaço vazio. "Perdeu um dente?"
-2. **O problema** — corte da gengiva e do osso: sem a raiz, o osso afunda e os vizinhos tombam pro espaço. "Sem a raiz, o osso enfraquece"
-3. **A virada** — só tipografia, com um dentinho brilhando. "Existe um dente novo de verdade."
-4. **Conheça o implante** — vista explodida: coroa, pilar e pino de titânio (que funciona como a raiz).
-5. **Passo 1: planejamento** — tela de tomografia 3D com o ponto do implante marcado.
-6. **Passo 2: preparo** — com anestesia, a broca prepara o leito no osso.
-7. **Passo 3: pino de titânio** — o pino é rosqueado no osso.
-8. **Passo 4: osseointegração** — o osso cresce e abraça o pino (de 3 a 6 meses, varia em cada caso).
-9. **Passo 5: pilar** — o pilar é encaixado no pino.
-10. **Passo 6: coroa** — a coroa feita sob medida desce e encaixa.
-11. **Resultado** — sorriso completo, todos os dentinhos felizes.
-12. **Benefícios** — mastiga com firmeza, aparência natural, dura muitos anos.
-13. **Chamada** — "Agende sua avaliação" + botão + contato.
+1. **Gancho** — sorriso com um buraco; os vizinhos olham surpresos. "Quando um dente cai, o que acontece com o osso?"
+2. **Curiosidade 1: o osso vive de estímulo** — setas de mordida descem pelos dentes e ondas se espalham no osso em volta das raízes.
+3. **Curiosidade 2: sem dente, o osso é reabsorvido** — osteoclastos (células fofinhas) "comendo" o osso no espaço vazio.
+4. **Curiosidade 3: até metade da largura do osso some no 1º ano** — corte do rebordo "logo após a perda" x "1 ano depois" (Schropp et al., 2003).
+5. **Curiosidade 4: os vizinhos tombam** — os dentes do lado se inclinam pro espaço.
+6. **Curiosidade 5: o dente de cima desce** — extrusão do dente antagonista, que não tem mais par pra morder.
+7. **Curiosidade 6: o seio maxilar desce** — na arcada de cima, o seio cresce pra baixo e sobra pouco osso.
+8. **Efeito dominó** — mordida desalinha, comida fica presa, mastiga de um lado só, pode precisar de enxerto depois.
+9. **E o implante?** — o pino de titânio faz o papel da raiz e volta a passar estímulo pro osso.
+10. **Recado** — "Perdeu um dente? Quanto antes cuidar, melhor pro osso."
+11. **Final** — "Curtiu a curiosidade?" + "Segue pra mais!" + @ do perfil.
 
 ## Narração (texto corrido)
 
-Perdeu um dente? Os vizinhos sentem falta dele. Sem a raiz, o osso daquela região vai enfraquecendo e os dentes do lado começam a se mexer. Mas existe um dente novo de verdade: o implante. Ele tem três partes: um pino de titânio, que funciona como a raiz, o pilar e a coroa. Primeiro vem o planejamento, com tomografia, pra medir o osso e escolher o ponto exato. Depois, com anestesia, o osso é preparado com cuidado. Então o pino de titânio é instalado. Com o tempo, o osso cresce e abraça o implante. Aí o pilar é encaixado e, por fim, a coroa feita sob medida pra você. Pronto: sorriso completo de novo. Você mastiga com firmeza, a aparência é natural e o implante dura muitos anos com os cuidados certos. Agende sua avaliação.
+Quando um dente cai, o que acontece com o osso? O osso que segura o dente vive de estímulo: cada mordida avisa que ele ainda é necessário. Sem o dente, esse estímulo some, e células chamadas osteoclastos começam a desmontar o osso que ficou sem uso. E é rápido: até metade da largura do osso pode sumir no primeiro ano, a maior parte logo nos primeiros meses. Os dentes vizinhos começam a tombar pro espaço vazio. O dente de cima, sem um par pra morder, vai descendo: é a extrusão. E na arcada de cima, o seio maxilar pode crescer pra baixo, sobrando pouco osso. É um efeito dominó: a mordida desalinha, a comida fica presa, você passa a mastigar de um lado só e, lá na frente, pode precisar de enxerto. E o implante? O pino de titânio faz o papel da raiz e volta a passar estímulo pro osso. Então, perdeu um dente? Quanto antes cuidar, melhor pro osso. Curtiu a curiosidade? Salva e manda pra quem precisa saber disso.
