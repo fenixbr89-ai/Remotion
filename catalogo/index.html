@@ -540,6 +540,19 @@
     .peso button:disabled { opacity: .3; cursor: default; }
     .peso b { min-width: 70px; text-align: center; font-size: 1.05rem; }
     #m-preco small { display: block; font-size: .8rem; font-weight: 400; color: var(--texto-suave); margin-top: 2px; letter-spacing: 0; }
+    .opcional { text-transform: none; letter-spacing: 0; font-weight: 400; margin-left: 4px; padding: 2px 8px; border-radius: 999px; background: var(--offwhite); }
+    .adicionais { display: flex; flex-direction: column; gap: 8px; }
+    .adicional {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 8px 8px 8px 14px; border-radius: 16px; background: var(--offwhite);
+      border: 1.5px solid transparent; transition: border-color .35s var(--ease), background .35s var(--ease);
+    }
+    .adicional.ativo { border-color: var(--rosa-forte); background: #fdf1f4; }
+    .adicional strong { display: block; font-size: .88rem; font-weight: 600; }
+    .adicional small { font-size: .76rem; color: #c27a8f; }
+    .peso.mini { background: var(--branco); padding: 3px; }
+    .peso.mini button { width: 30px; height: 30px; font-size: 1rem; }
+    .peso.mini b { min-width: 28px; font-size: .95rem; }
     .pulo-preco { animation: puloPreco .45s var(--ease); }
     @keyframes puloPreco { 0% { transform: scale(1); } 40% { transform: scale(1.08); color: #c27a8f; } 100% { transform: scale(1); } }
     .item-info small { font-size: .76rem; color: var(--texto-suave); line-height: 1.3; }
@@ -727,6 +740,8 @@
             <b id="m-kg">1 kg</b>
             <button type="button" id="m-mais" aria-label="Aumentar peso">+</button>
           </div>
+          <div class="opcao-titulo">Adicionais <span class="opcional">opcional</span></div>
+          <div class="adicionais" id="m-adicionais"></div>
         </div>
         <div class="opcoes" id="m-qtd-box">
           <div class="opcao-titulo">Quantidade</div>
@@ -771,6 +786,10 @@
         { nome: "Ninho com geleia de frutas vermelhas", precoKg: 100 },
         { nome: "Ninho com Nutella",                    precoKg: 100 },
       ],
+      // Adicionais opcionais do bolo (preço por unidade)
+      adicionais: [
+        { nome: "Flor realista Amélia", preco: 5 },
+      ],
     };
 
     // Produtos vendidos por unidade de medida (ex.: cento): use  unidade: "cento", unidades: "centos"
@@ -795,7 +814,7 @@
       { nome: "Coração com Pérolas Prata",  categoria: "Bombons", preco: null, img: "img/foto-08.jpg", desc: "Casquinha de chocolate branco em coração, recheio cremoso e pérolas prateadas.", tag: "Novo" },
       { nome: "Doce com Monograma",         categoria: "Docinhos", preco: 180, unidade: "cento", unidades: "centos", img: "img/foto-07.jpg", desc: "Doce de coco com as iniciais do casal ou aniversariante em dourado." },
       { nome: "Corações e Conchas",         categoria: "Bombons", preco: null, img: "img/foto-10.jpg", desc: "Coração com goiabada e pérolas, e conchinhas de chocolate branco, ideal para casamentos." },
-      { nome: "Flores Realistas",            categoria: "Docinhos", preco: null, img: "img/foto-11.jpg", desc: "Rosas realistas modeladas à mão, em rosa e branco, para decorar bolos e mesas." },
+      { nome: "Flores Realistas",            categoria: "Docinhos", preco: 5, unidade: "unidade", unidades: "unidades", img: "img/foto-11.jpg", desc: "Rosas realistas modeladas à mão, em rosa e branco, para decorar bolos e mesas." },
       { nome: "Decoração Floral Rosé",      categoria: "Decorações",  preco: 230, img: "img/foto-01.jpg", desc: "Painel redondo glitter, painel arco floral, trio de cilindros e arranjos.", tag: "Mais pedido" },
       { nome: "Decoração Borboletas com Mesa", categoria: "Decorações", preco: 350, img: "img/foto-04.jpg", desc: "Painel de borboletas, mesa de madeira, mesinhas laterais, vasos e boleiras." },
       { nome: "Decoração Borboletas com Cilindros", categoria: "Decorações", preco: null, img: "img/decor-borboletas-cilindros.jpg", desc: "Painel redondo de borboletas e rosas, trio de cilindros temáticos, arranjos e bandejas.", tag: "Novo" },
@@ -938,7 +957,7 @@
     const modal = document.getElementById("modal");
     const $ = id => document.getElementById(id);
     let atual = null;                         // produto aberto no modal
-    let escolha = { sabor: 0, kg: BOLO.kgMinimo };
+    let escolha = { sabor: 0, kg: BOLO.kgMinimo, qtd: 1, ad: BOLO.adicionais.map(() => 0) };
 
     // Monta os botões de sabor, agrupados por preço
     const grupos = [...new Set(BOLO.sabores.map(s => s.precoKg))].sort((a, b) => a - b);
@@ -948,9 +967,24 @@
         ${BOLO.sabores.map((s, i) => s.precoKg === preco ? `<button type="button" class="sabor" data-sabor="${i}">${s.nome}</button>` : "").join("")}
       </div>`).join("");
 
+    $("m-adicionais").innerHTML = BOLO.adicionais.map((a, i) => `
+      <div class="adicional" data-a="${i}">
+        <div><strong>${a.nome}</strong><small>${brl(a.preco)} cada</small></div>
+        <div class="peso mini">
+          <button type="button" data-ad="-1" aria-label="Menos">−</button><b>0</b><button type="button" data-ad="1" aria-label="Mais">+</button>
+        </div>
+      </div>`).join("");
+    const precoAdicionais = ad => Object.entries(ad || {}).reduce((t, [n, q]) => {
+      const a = BOLO.adicionais.find(x => x.nome === n); return t + (a ? a.preco * q : 0);
+    }, 0);
+    const adicionaisTxt = ad => Object.entries(ad || {}).map(([n, q]) => `${q}x ${n}`).join(", ");
+    const adicionaisEscolhidos = () => {
+      const o = {}; escolha.ad.forEach((q, i) => { if (q > 0) o[BOLO.adicionais[i].nome] = q; }); return o;
+    };
+
     const valorUnit = item => {
       const p = porNome(item.nome);
-      if (porKg(p)) { const s = BOLO.sabores.find(x => x.nome === item.sabor); return s ? s.precoKg * item.kg : null; }
+      if (porKg(p)) { const s = BOLO.sabores.find(x => x.nome === item.sabor); return s ? s.precoKg * item.kg + precoAdicionais(item.ad) : null; }
       return p.preco || null;
     };
 
@@ -962,9 +996,16 @@
         $("m-kg").textContent = kgTxt(escolha.kg);
         $("m-menos").disabled = escolha.kg <= BOLO.kgMinimo;
         $("m-mais").disabled = escolha.kg >= BOLO.kgMaximo;
-        $("m-preco").innerHTML = `${brl(s.precoKg * escolha.kg)}<small>${kgTxt(escolha.kg)} × ${brl(s.precoKg)} o kg</small>`;
-        $("m-add-txt").textContent = `Adicionar · ${brl(s.precoKg * escolha.kg)}`;
-        $("m-whats").href = linkWhats(`${MSG_PADRAO}: *${p.nome}*, sabor ${s.nome}, ${kgTxt(escolha.kg)} (${brl(s.precoKg * escolha.kg)})`);
+        const ad = adicionaisEscolhidos(), extra = precoAdicionais(ad), total = s.precoKg * escolha.kg + extra;
+        $("m-adicionais").querySelectorAll(".adicional").forEach(row => {
+          const q = escolha.ad[+row.dataset.a];
+          row.querySelector("b").textContent = q;
+          row.querySelector('[data-ad="-1"]').disabled = q <= 0;
+          row.classList.toggle("ativo", q > 0);
+        });
+        $("m-preco").innerHTML = `${brl(total)}<small>${kgTxt(escolha.kg)} × ${brl(s.precoKg)} o kg${extra ? ` + adicionais ${brl(extra)}` : ""}</small>`;
+        $("m-add-txt").textContent = `Adicionar · ${brl(total)}`;
+        $("m-whats").href = linkWhats(`${MSG_PADRAO}: *${p.nome}*, sabor ${s.nome}, ${kgTxt(escolha.kg)}${extra ? `, adicionais: ${adicionaisTxt(ad)}` : ""} (${brl(total)})`);
       } else if (p.unidade && p.preco) {
         const total = p.preco * escolha.qtd;
         $("m-qtd").textContent = unTxt(p, escolha.qtd);
@@ -983,7 +1024,7 @@
     const abrirModal = (i, destacarOpcoes) => {
       const p = atual = PRODUTOS[i];
       const card = grid.querySelector(`.card[data-i="${i}"]`);
-      escolha = { sabor: 0, kg: BOLO.kgMinimo, qtd: 1 };
+      escolha = { sabor: 0, kg: BOLO.kgMinimo, qtd: 1, ad: BOLO.adicionais.map(() => 0) };
       $("m-img").src = card.querySelector("img").src;
       $("m-img").alt = p.nome;
       $("m-cat").textContent = p.categoria;
@@ -1011,6 +1052,11 @@
       escolha.sabor = +b.dataset.sabor; atualizarModal(true);
     });
     $("m-menos").addEventListener("click", () => { escolha.kg = Math.max(BOLO.kgMinimo, escolha.kg - BOLO.passo); atualizarModal(true); });
+    $("m-adicionais").addEventListener("click", e => {
+      const b = e.target.closest("[data-ad]"); if (!b) return;
+      const i = +b.closest(".adicional").dataset.a;
+      escolha.ad[i] = Math.max(0, escolha.ad[i] + +b.dataset.ad); atualizarModal(true);
+    });
     $("m-qmenos").addEventListener("click", () => { escolha.qtd = Math.max(1, escolha.qtd - 1); atualizarModal(true); });
     $("m-qmais").addEventListener("click", () => { escolha.qtd++; atualizarModal(true); });
     $("m-mais").addEventListener("click", () => { escolha.kg = Math.min(BOLO.kgMaximo, escolha.kg + BOLO.passo); atualizarModal(true); });
@@ -1033,7 +1079,7 @@
     if (!Array.isArray(carrinho)) carrinho = [];
     carrinho = carrinho.filter(it => porNome(it.nome) && it.q > 0);
     const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify(carrinho)); } catch (e) {} };
-    const mesmo = (a, b) => a.nome === b.nome && a.sabor === b.sabor && a.kg === b.kg;
+    const mesmo = (a, b) => a.nome === b.nome && a.sabor === b.sabor && a.kg === b.kg && JSON.stringify(a.ad || {}) === JSON.stringify(b.ad || {});
     const descricao = it => it.sabor ? `${it.nome} (${it.sabor}, ${kgTxt(it.kg)})` : it.nome;
     const qtdTxt = it => { const p = porNome(it.nome); return p.unidade ? unTxt(p, it.q) : `${it.q}x`; };
 
@@ -1048,7 +1094,7 @@
       let msg = `${MSG_PADRAO}:\n\n`;
       carrinho.forEach(it => {
         const v = valorUnit(it);
-        msg += `• ${qtdTxt(it)}${porNome(it.nome).unidade ? " de" : ""} ${it.nome}${it.sabor ? `\n   Sabor: ${it.sabor}\n   Peso: ${kgTxt(it.kg)}` : ""}${v ? `\n   Valor: ${brl(v * it.q)}` : ""}\n`;
+        msg += `• ${qtdTxt(it)}${porNome(it.nome).unidade ? " de" : ""} ${it.nome}${it.sabor ? `\n   Sabor: ${it.sabor}\n   Peso: ${kgTxt(it.kg)}` : ""}${it.ad && Object.keys(it.ad).length ? `\n   Adicionais: ${adicionaisTxt(it.ad)}` : ""}${v ? `\n   Valor: ${brl(v * it.q)}` : ""}\n`;
       });
       const total = calcularTotal();
       const parcial = carrinho.reduce((s, it) => s + (valorUnit(it) || 0) * it.q, 0);
@@ -1076,6 +1122,7 @@
           <div class="item-info">
             <strong>${it.nome}</strong>
             ${it.sabor ? `<small>${it.sabor} · ${kgTxt(it.kg)}</small>` : ""}
+            ${it.ad && Object.keys(it.ad).length ? `<small>+ ${adicionaisTxt(it.ad)}</small>` : ""}
             <span>${v ? brl(v * it.q) : "Sob consulta"}</span>
             <div class="qtd">
               <button data-q="-1" aria-label="Diminuir">−</button><b>${porNome(it.nome).unidade ? qtdTxt(it) : it.q}</b><button data-q="1" aria-label="Aumentar">+</button>
@@ -1163,7 +1210,7 @@
     addEventListener("keydown", e => { if (e.key === "Escape") fecharGaveta(); });
     $("m-add").addEventListener("click", () => {
       const p = atual;
-      adicionar(porKg(p) ? { nome: p.nome, sabor: BOLO.sabores[escolha.sabor].nome, kg: escolha.kg } : { nome: p.nome }, null, p.unidade ? escolha.qtd : 1);
+      adicionar(porKg(p) ? { nome: p.nome, sabor: BOLO.sabores[escolha.sabor].nome, kg: escolha.kg, ad: adicionaisEscolhidos() } : { nome: p.nome }, null, p.unidade ? escolha.qtd : 1);
       fecharModal();
     });
 
