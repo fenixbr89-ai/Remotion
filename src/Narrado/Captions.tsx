@@ -44,8 +44,6 @@ export const NarrationCaptions: React.FC = () => {
         style={{
           padding: "0 10px",
           fontFamily: sans,
-          // no box: a soft white halo keeps the words readable over anything
-          textShadow: "0 0 18px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.9), 0 3px 10px rgba(200,90,140,0.18)",
           fontWeight: 800,
           fontSize: 76,
           letterSpacing: -1.5,

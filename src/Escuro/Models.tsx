@@ -1,26 +1,23 @@
 import React from "react";
 import { RoundedBox } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
-import { DoubleSide, Vector2 } from "three";
+import { Color, Vector2 } from "three";
 import { K } from "./theme";
 import { Face3D, Mood } from "./Face3D";
 
 type V3 = [number, number, number];
 
-const Clay: React.FC<{ color?: string; emissive?: string; glow?: number; opacity?: number }> = ({
+const Clay: React.FC<{ color?: string; glow?: number; opacity?: number }> = ({
   color = K.clay,
-  emissive = K.pink,
   glow = 0,
   opacity = 1,
 }) => (
   <meshPhysicalMaterial
     key={opacity < 1 ? "t" : "o"}
-    color={color}
+    color={glow > 0 ? new Color(color).lerp(new Color(K.pink), Math.min(1, glow)).getStyle() : color}
     roughness={0.42}
     clearcoat={0.6}
     clearcoatRoughness={0.35}
-    emissive={emissive}
-    emissiveIntensity={glow}
     transparent={opacity < 1}
     opacity={opacity}
   />
@@ -151,11 +148,12 @@ export const Arch: React.FC<{
 /** Titanium implant screw. Origin = top centre, extends down by len. */
 export const Screw: React.FC<{ len?: number; spin?: number; glow?: number }> = ({ len = 1.4, spin = 0, glow = 0 }) => {
   const threads = Math.floor(len / 0.16);
+  const tint = new Color(K.titanium).lerp(new Color("#e98fb5"), Math.min(1, glow * 1.4)).getStyle();
   return (
     <group rotation={[0, spin, 0]}>
       <mesh position={[0, -len / 2, 0]} castShadow>
         <cylinderGeometry args={[0.24, 0.17, len, 32]} />
-        <meshStandardMaterial color={K.titanium} metalness={0.55} roughness={0.35} emissive={K.pink} emissiveIntensity={glow} />
+        <meshStandardMaterial color={tint} metalness={0.55} roughness={0.35} />
       </mesh>
       {new Array(threads).fill(0).map((_, i) => {
         const y = -0.12 - i * 0.16;
@@ -163,7 +161,7 @@ export const Screw: React.FC<{ len?: number; spin?: number; glow?: number }> = (
         return (
           <mesh key={i} position={[0, y, 0]} rotation={[Math.PI / 2, 0.12, 0]} castShadow>
             <torusGeometry args={[r, 0.035, 12, 40]} />
-            <meshStandardMaterial color={K.titanium} metalness={0.6} roughness={0.3} emissive={K.pink} emissiveIntensity={glow} />
+            <meshStandardMaterial color={tint} metalness={0.6} roughness={0.3} />
           </mesh>
         );
       })}
@@ -317,22 +315,12 @@ export const Jaw: React.FC<{
   );
 };
 
-/** Spotlight cone + glowing platform. */
+/** Soft pink floor disc (no neon rim, no light cone). */
 export const Stage: React.FC<{ y?: number; radius?: number; on?: number }> = ({ y = -1.4, radius = 1.8, on = 1 }) => (
-  <group>
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, y, 0]}>
-      <circleGeometry args={[radius, 64]} />
-      <meshBasicMaterial color={K.pink} transparent opacity={0.22 * on} />
-    </mesh>
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, y + 0.01, 0]}>
-      <ringGeometry args={[radius - 0.05, radius + 0.04, 128]} />
-      <meshBasicMaterial color={K.pink} transparent opacity={on} />
-    </mesh>
-    <mesh position={[0, y + 5, 0]}>
-      <coneGeometry args={[radius, 10, 64, 1, true]} />
-      <meshBasicMaterial color={K.pink} transparent opacity={0.1 * on} depthWrite={false} side={DoubleSide} />
-    </mesh>
-  </group>
+  <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, y, 0]} receiveShadow>
+    <circleGeometry args={[radius, 64]} />
+    <meshStandardMaterial color="#f6dde6" roughness={1} transparent opacity={0.9 * on} />
+  </mesh>
 );
 
 export const Floor: React.FC<{ y?: number }> = ({ y = -1.42 }) => (

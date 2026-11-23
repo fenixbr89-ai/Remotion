@@ -71,7 +71,7 @@ const Check: React.FC<{ label: string; p: number; y: number }> = ({ label, p, y 
       padding: "26px 34px",
       borderRadius: 30,
       background: "#fff",
-      boxShadow: "0 18px 40px rgba(200,90,140,0.16)",
+      boxShadow: "0 10px 24px rgba(120,60,80,0.10)",
       opacity: Math.min(1, p * 3),
       translate: `${(1 - Math.min(1, p * 1.4)) * 160}px 0px`,
       fontFamily: sans,
@@ -100,43 +100,48 @@ const Check: React.FC<{ label: string; p: number; y: number }> = ({ label, p, y 
 
 export const NSCENES: NScene[] = [
   {
-    // "Perder um dente, quando ele sai,"
+    // "Perder um dente, [pausa] quando ele sai, fica um espaço vazio," — one calm shot
     id: "N01-DenteSai",
     start: 0,
-    end: 2.4,
+    end: 3.8,
     cam: JAW_CAM,
     world: (s, t, f) => {
-      const wig = s > 0.2 && s < 1.6 ? Math.sin(s * 28) * 0.13 * P(s, 0.2, 0.8) : 0;
-      const lift = P(s, 1.5, 0.9, Easing.bezier(0.5, 0, 0.75, 0));
+      // wiggles on "Perder um dente", slowly leaves on "quando ele sai", gap shows on "espaço vazio"
+      const wig = s > 0.15 && s < 1.75 ? Math.sin(s * 22) * 0.11 * P(s, 0.15, 0.7) * (1 - P(s, 1.45, 0.3)) : 0;
+      const lift = P(s, 1.6, 1.3, Easing.bezier(0.45, 0, 0.55, 1));
       return JAW(
-        <Jaw
-          middle="tooth"
-          middleLift={lift}
-          middleRot={wig}
-          mood={s < 1.6 ? "happy" : "wow"}
-          middleMood={s < 0.5 ? "happy" : "wow"}
-          look={s < 1.6 ? 0 : 1}
-          t={f}
-        />,
-        -0.2 + t * 0.1,
+        <>
+          <Jaw
+            middle="tooth"
+            middleLift={lift}
+            middleRot={wig}
+            mood={s < 1.8 ? "happy" : "wow"}
+            middleMood={s < 0.4 ? "happy" : "wow"}
+            look={s < 2.4 ? 0 : 1}
+            t={f}
+          />
+          <GapGlow f={f} on={P(s, 2.7, 0.5)} />
+        </>,
+        -0.22 + t * 0.12,
       );
     },
+    tags: (s) => (s > 2.75 ? <Tag text="ESPAÇO VAZIO" x={540} y={1170} neon /> : null),
   },
   {
-    // "fica um espaço vazio, e os dentes vizinhos logo percebem essa mudança."
+    // "e os dentes vizinhos logo percebem essa mudança."
     id: "N02-Espaco",
-    start: 2.4,
+    start: 3.8,
     end: 7.0,
     cam: JAW_CAM,
     world: (s, t, f) =>
       JAW(
         <>
-          <Jaw middle="none" mood={s < 1.4 ? "wow" : "worried"} look={s < 1.4 ? 0 : 1} t={f} />
-          <GapGlow f={f} on={P(s, 0.1, 0.4)} />
+          <Jaw middle="none" mood={s < 0.9 ? "wow" : "worried"} look={1} t={f} />
+          <GapGlow f={f} />
         </>,
-        -0.3 + t * 0.2,
+        -0.1 - t * 0.2,
       ),
-    tags: (s) => (s > 0.3 ? <Tag text="ESPAÇO VAZIO" x={540} y={1170} neon /> : null),
+    tags: () => <Tag text="OS VIZINHOS PERCEBEM" x={540} y={1170} />,
   },
   {
     // "Sem a raiz para receber estímulo, o osso daquela região começa a ser reabsorvido."

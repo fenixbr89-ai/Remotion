@@ -9,11 +9,11 @@ export const Arrow3D: React.FC<{ x: number; y: number; press: number; on?: numbe
   <group position={[x, y - press * 0.35, 0.3]}>
     <mesh position={[0, 0.45, 0]}>
       <cylinderGeometry args={[0.09, 0.09, 0.6, 16]} />
-      <meshStandardMaterial color={K.pink} emissive={K.pink} emissiveIntensity={0.35} transparent opacity={on} />
+      <meshStandardMaterial color={K.pink} transparent opacity={on} />
     </mesh>
     <mesh rotation={[Math.PI, 0, 0]}>
       <coneGeometry args={[0.22, 0.32, 24]} />
-      <meshStandardMaterial color={K.pink} emissive={K.pink} emissiveIntensity={0.35} transparent opacity={on} />
+      <meshStandardMaterial color={K.pink} transparent opacity={on} />
     </mesh>
   </group>
 );
@@ -49,7 +49,7 @@ export const BoneCells: React.FC<{ p: number }> = ({ p }) => (
       return (
         <mesh key={i} position={[side * (0.33 + random(`bx${i}`) * 0.05), y, 0.2]} scale={s}>
           <sphereGeometry args={[0.085, 16, 16]} />
-          <meshStandardMaterial color="#fff6ea" emissive={K.pink} emissiveIntensity={0.25} />
+          <meshStandardMaterial color="#fff6ea" />
         </mesh>
       );
     })}
@@ -66,7 +66,7 @@ export const Burst: React.FC<{ at: V3; p: number }> = ({ at, p }) =>
         return (
           <mesh key={i} position={[Math.cos(a) * r, Math.sin(a) * r * 0.7 + 0.3, 0.4]} rotation={[0, 0, a + p * 3]} scale={(1 - p) * 0.9}>
             <octahedronGeometry args={[0.12, 0]} />
-            <meshStandardMaterial color={i % 2 ? "#ffffff" : K.pink} emissive={K.pink} emissiveIntensity={0.4} />
+            <meshStandardMaterial color={i % 2 ? "#ffffff" : K.pink} />
           </mesh>
         );
       })}

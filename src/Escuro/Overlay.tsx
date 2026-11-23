@@ -55,7 +55,7 @@ export const Header: React.FC<{ section: string }> = ({ section }) => (
         color: "#fff",
       }}
     >
-      <span style={{ width: 22, height: 22, borderRadius: 99, background: K.pink, boxShadow: `0 0 14px ${K.pink}` }} />
+      <span style={{ width: 22, height: 22, borderRadius: 99, background: K.pink }} />
       {section}
     </div>
     <div style={{ position: "absolute", top: 206, right: 70, fontFamily: mono, fontWeight: 500, fontSize: 24, letterSpacing: 2, color: "rgba(255,255,255,0.45)" }}>
@@ -69,10 +69,7 @@ export const Caption: React.FC<{ words: string[]; spoken: number; strong?: numbe
   <div style={{ position: "absolute", left: 60, right: 60, top: 1430, display: "flex", justifyContent: "center" }}>
     <div
       style={{
-        padding: "18px 34px",
-        borderRadius: 22,
-        background: "rgba(255,255,255,0.88)",
-        boxShadow: "0 18px 40px rgba(200,90,140,0.14)",
+        padding: "0 10px",
         fontFamily: sans,
         fontWeight: 800,
         fontSize: 74,
@@ -98,10 +95,10 @@ export const Tag: React.FC<{ text: string; sub?: string; x: number; y: number; n
       style={{
         display: "inline-block",
         padding: big ? "10px 26px" : "10px 24px",
-        borderRadius: 10,
-        background: neon ? "rgba(255,255,255,0.9)" : "#ffffff",
+        borderRadius: 12,
+        background: "#ffffff",
         border: neon ? `3px solid ${K.pink}` : "none",
-        boxShadow: neon ? `0 0 26px rgba(242,124,176,0.45)` : "0 10px 24px rgba(200,90,140,0.16)",
+        boxShadow: "0 8px 20px rgba(120,60,80,0.10)",
         fontFamily: sans,
         fontWeight: 800,
         fontSize: big ? 84 : 42,

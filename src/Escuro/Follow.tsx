@@ -51,7 +51,7 @@ export const FollowButton: React.FC<{ t: number; tap?: number }> = ({ t, tap = 0
             background: followed ? "#ffffff" : K.pink,
             color: followed ? K.ink : "#ffffff",
             border: followed ? `4px solid ${K.pink}` : "4px solid transparent",
-            boxShadow: followed ? "0 16px 40px rgba(200,90,140,0.16)" : "0 22px 50px rgba(242,124,176,0.5)",
+            boxShadow: "0 10px 24px rgba(120,60,80,0.12)",
           }}
         >
           {followed ? (
