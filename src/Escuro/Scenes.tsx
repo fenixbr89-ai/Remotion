@@ -3,7 +3,7 @@ import { ThreeCanvas } from "@remotion/three";
 import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { Cam, Floor, Jaw, Lights, Screw, Stage } from "./Models";
 import { Caption, Dust, Frame, Tag } from "./Overlay";
-import { HeadBust, Mannequin } from "./People";
+import { HeadBust } from "./People";
 import { K } from "./theme";
 
 type V3 = [number, number, number];
@@ -227,18 +227,17 @@ export const SPECS: SceneSpec[] = [
     section: "SIGA",
     words: ["Segue", "que", "eu", "te", "ensino", "muito", "mais."],
     sec: 3,
-    cam: STAGE_CAM,
-    world: (t, f) => (
+    cam: HEAD_CAM,
+    floorY: -1.68,
+    world: (t) => (
       <>
-        <Stage />
-        <group position={[0, -1.35, 0]} scale={1.05} rotation={[0, -0.3, 0]}>
-          <group position={[0, 0.55, 0]}>
-            <Mannequin wave={0.95 + Math.sin(f / 5) * 0.08} />
-          </group>
+        <Stage y={-1.66} radius={2.3} />
+        <group rotation={[0, -0.55 + t * 0.9, 0]}>
+          <HeadBust />
         </group>
       </>
     ),
-    tags: () => <Tag text="SEGUE @YASMINSR09" x={540} y={360} neon />,
+    tags: () => <Tag text="SEGUE @YASMINSR09" x={540} y={250} neon />,
   },
 ];
 

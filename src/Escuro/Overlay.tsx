@@ -66,7 +66,7 @@ export const Header: React.FC<{ section: string }> = ({ section }) => (
 
 /** Karaoke caption: spoken words in pink, the rest grey. */
 export const Caption: React.FC<{ words: string[]; spoken: number; strong?: number[] }> = ({ words, spoken, strong = [] }) => (
-  <div style={{ position: "absolute", left: 60, right: 60, top: 1250, display: "flex", justifyContent: "center" }}>
+  <div style={{ position: "absolute", left: 60, right: 60, top: 1430, display: "flex", justifyContent: "center" }}>
     <div
       style={{
         padding: "18px 34px",
