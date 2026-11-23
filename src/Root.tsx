@@ -4,6 +4,11 @@ import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
 import { KronicVPS, SCENES, TOTAL_DURATION } from "./Kronic/KronicVPS";
 import { FPS, H, W } from "./Kronic/theme";
+import {
+  KronicVPS as KronicApple,
+  SCENES as APPLE_SCENES,
+  TOTAL_DURATION as APPLE_DURATION,
+} from "./KronicApple/KronicVPS";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -44,6 +49,27 @@ export const RemotionRoot: React.FC = () => {
         width={W}
         height={H}
       />
+      <Composition
+        id="KronicVPS-Apple"
+        component={KronicApple}
+        durationInFrames={APPLE_DURATION}
+        fps={FPS}
+        width={W}
+        height={H}
+      />
+      <Folder name="KronicApple-Scenes">
+        {APPLE_SCENES.map((s) => (
+          <Composition
+            key={s.id}
+            id={`A-${s.id}`}
+            component={s.component}
+            durationInFrames={s.durationInFrames}
+            fps={FPS}
+            width={W}
+            height={H}
+          />
+        ))}
+      </Folder>
       <Folder name="KronicVPS-Scenes">
         {SCENES.map((s) => (
           <Composition
