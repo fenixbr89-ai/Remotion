@@ -5,8 +5,8 @@ import { HANDLE, K, sans } from "./theme";
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 /** "Seguir" button that gets tapped and turns into "Seguindo". t = scene progress 0..1. */
-export const FollowButton: React.FC<{ t: number }> = ({ t }) => {
-  const TAP = 0.5;
+export const FollowButton: React.FC<{ t: number; tap?: number }> = ({ t, tap = 0.5 }) => {
+  const TAP = tap;
   const followed = t >= TAP;
   // press: shrink a bit right before the tap, spring back after
   const press =
@@ -15,7 +15,7 @@ export const FollowButton: React.FC<{ t: number }> = ({ t }) => {
       : interpolate(t, [TAP, TAP + 0.12], [0.92, 1], { ...clamp, easing: Easing.bezier(0.34, 1.5, 0.64, 1) });
   const ripple = interpolate(t, [TAP, TAP + 0.25], [0, 1], clamp);
   // finger comes in, taps, leaves
-  const fingerIn = interpolate(t, [0.2, TAP - 0.05], [0, 1], { ...clamp, easing: Easing.bezier(0.22, 1, 0.36, 1) });
+  const fingerIn = interpolate(t, [Math.max(0, TAP - 0.25), TAP - 0.04], [0, 1], { ...clamp, easing: Easing.bezier(0.22, 1, 0.36, 1) });
   const fingerOut = interpolate(t, [TAP + 0.1, TAP + 0.3], [0, 1], clamp);
   const tapDip = interpolate(t, [TAP - 0.05, TAP, TAP + 0.08], [0, 18, 0], clamp);
   return (

@@ -37,6 +37,11 @@ Inspirado num vídeo de referência que ela enviou. Siga o estilo e o ritmo, sem
 2. Mandar as **telas estáticas** de cada cena pra ela aprovar antes de animar.
 3. Animar e mandar o vídeo. Ela grava a narração; quando mandar o áudio, sincronizar cada palavra da legenda e a duração das cenas com a voz.
 
+### Sincronizar com a narração
+- Vídeo narrado atual: `src/Narrado/` (composição `ImplanteNarrado`), áudio em `public/audio/narracao-implante.wav`.
+- Transcrever com `faster-whisper` (modelo `small`, `word_timestamps=True`, idioma pt), passando o áudio já decodificado pelo ffmpeg como array 16 kHz (o `av` instalado não aceita o arquivo direto). Corrigir erros da transcrição à mão (ex.: "titânia" → "titânio é", "ósseo e integração" → "osseointegração").
+- Cada cena começa no início da frase dela (`start`/`end` em segundos); as ações acontecem no tempo das palavras. Legenda global em pedaços de até 4 palavras, palavra acende no tempo exato.
+
 ### Renderização (ambiente na nuvem)
 - 3D precisa de WebGL: usar `chromiumOptions: { gl: "swangle" }` e o Chrome em `/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell`.
 - Fontes locais em `public/fonts/` (o proxy bloqueia Google Fonts no render).
