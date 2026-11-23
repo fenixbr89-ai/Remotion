@@ -3,6 +3,7 @@ import { ThreeCanvas } from "@remotion/three";
 import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { Cam, Floor, Jaw, Lights, Screw, Stage } from "./Models";
 import { Caption, Dust, Frame, Tag } from "./Overlay";
+import { FollowButton } from "./Follow";
 import { K } from "./theme";
 
 type V3 = [number, number, number];
@@ -232,12 +233,12 @@ export const SPECS: SceneSpec[] = [
   {
     id: "E13-Siga",
     section: "SIGA",
-    words: ["Segue", "que", "eu", "te", "ensino", "muito", "mais."],
-    sec: 3,
+    words: ["Siga", "o", "perfil", "pra", "não", "perder", "nenhum", "vídeo!"],
+    sec: 3.6,
     cam: STAGE_CAM,
     floorY: -30,
     world: () => null,
-    tags: () => <Tag text="SEGUE @YASMINSR09" x={540} y={820} neon big />,
+    tags: (t) => <FollowButton t={t} />,
   },
 ];
 
