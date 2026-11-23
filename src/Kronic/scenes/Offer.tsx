@@ -79,8 +79,9 @@ export const Offer: React.FC = () => {
               style={{
                 fontSize: 330,
                 fontWeight: 800,
-                letterSpacing: "-0.07em",
+                letterSpacing: "-0.05em",
                 lineHeight: 1,
+                paddingRight: "0.06em",
                 backgroundImage: "linear-gradient(180deg, #FFFFFF 30%, #C8BBFF 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",

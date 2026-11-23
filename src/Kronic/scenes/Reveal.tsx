@@ -16,8 +16,6 @@ export const Reveal: React.FC = () => {
   const pop = interpolate(frame, [20, 48], [0, 1], { ...clamp, easing: Easing.spring({ damping: 12 }) });
   const slide = interpolate(frame, [42, 70], [1, 0], { ...clamp, easing: EASE_IN_OUT });
   const text = interpolate(frame, [46, 76], [0, 1], { ...clamp, easing: EASE_OUT });
-  const rays = interpolate(frame, [22, 58], [0, 1], { ...clamp, easing: EASE_OUT });
-  const raysFade = interpolate(frame, [50, 70], [1, 0], clamp);
 
   return (
     <AbsoluteFill>
@@ -26,28 +24,6 @@ export const Reveal: React.FC = () => {
         <AbsoluteFill style={{ alignItems: "center", paddingTop: 560 }}>
           <Words text="Conheça a" start={10} size={80} weight={500} color={C.inkSoft} />
         </AbsoluteFill>
-
-        {/* Rays */}
-        <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, opacity: raysFade }}>
-          {Array.from({ length: 14 }).map((_, i) => {
-            const a = (i / 14) * Math.PI * 2;
-            const r0 = 190;
-            const r1 = 190 + 360 * rays;
-            return (
-              <line
-                key={i}
-                x1={540 + Math.cos(a) * r0}
-                y1={960 + Math.sin(a) * r0}
-                x2={540 + Math.cos(a) * r1}
-                y2={960 + Math.sin(a) * r1}
-                stroke={C.purple}
-                strokeOpacity={0.35}
-                strokeWidth={3}
-                strokeLinecap="round"
-              />
-            );
-          })}
-        </svg>
 
         {/* Glow */}
         <AbsoluteFill
