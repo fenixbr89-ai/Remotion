@@ -63,10 +63,10 @@ export const SPECS: SceneSpec[] = [
     words: ["O", "problema", "não", "é", "só", "o", "buraco."],
     sec: 2.6,
     cam: HEAD_CAM,
-    floorY: -1.68,
+    floorY: -30,
     world: (t) => (
-      <group rotation={[0, -0.1 + t * 0.2, 0]}>
-        <HeadBust xray={Math.min(1, t * 3)} jaw={{ middle: "none" }} />
+      <group rotation={[0, -0.5 + t * 0.15, 0]}>
+        <HeadBust xray={Math.min(1, t * 3)} />
       </group>
     ),
     tags: () => <Tag text="O BURACO" x={800} y={700} neon />,
@@ -214,10 +214,10 @@ export const SPECS: SceneSpec[] = [
     words: ["e", "a", "mordida", "volta", "a", "estimular", "o", "osso."],
     sec: 3,
     cam: HEAD_CAM,
-    floorY: -1.68,
+    floorY: -30,
     world: (t) => (
-      <group rotation={[0, -0.1 + t * 0.2, 0]}>
-        <HeadBust xray={1} jaw={{ middle: "implant", implant: { insert: 1, spin: 0, abutment: 1, crown: 1, glow: 0.5 } }} />
+      <group rotation={[0, -0.5 + t * 0.15, 0]}>
+        <HeadBust xray={1} implant={8} implantGlow={0.6} />
       </group>
     ),
     tags: () => <Tag text="DENTE NOVO" x={800} y={700} neon />,

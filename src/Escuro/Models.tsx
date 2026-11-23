@@ -1,7 +1,7 @@
 import React from "react";
 import { RoundedBox } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
-import { DoubleSide } from "three";
+import { DoubleSide, Vector2 } from "three";
 import { K } from "./theme";
 
 type V3 = [number, number, number];
@@ -22,33 +22,102 @@ const Clay: React.FC<{ color?: string; emissive?: string; glow?: number; opacity
   />
 );
 
-/** Molar: rounded crown with 4 cusps and two conical roots. Origin = crown bottom centre. */
-export const Molar: React.FC<{ glow?: number; roots?: boolean; opacity?: number }> = ({ glow = 0, roots = true, opacity = 1 }) => (
-  <group>
-    <RoundedBox args={[1.3, 0.85, 1.1]} radius={0.16} smoothness={6} position={[0, 0.42, 0]} castShadow receiveShadow>
-      <Clay glow={glow} opacity={opacity} />
-    </RoundedBox>
-    {[
-      [-0.3, -0.24],
-      [0.3, -0.24],
-      [-0.3, 0.24],
-      [0.3, 0.24],
-    ].map(([x, z], i) => (
-      <mesh key={i} position={[x, 0.86, z]} scale={[1, 0.55, 1]} castShadow>
-        <sphereGeometry args={[0.3, 32, 32]} />
-        <Clay glow={glow} opacity={opacity} />
+const V2 = (x: number, y: number) => new Vector2(x, y);
+const CROWN = [V2(0.43, 0), V2(0.55, 0.1), V2(0.65, 0.3), V2(0.67, 0.52), V2(0.6, 0.7), V2(0.46, 0.8), V2(0.25, 0.84), V2(0.001, 0.82)];
+const ROOT = [V2(0.001, -1.12), V2(0.07, -1.09), V2(0.12, -0.98), V2(0.16, -0.7), V2(0.2, -0.3), V2(0.23, 0)];
+const TRUNK = [V2(0.36, -0.32), V2(0.4, -0.15), V2(0.43, 0)];
+
+/**
+ * Anatomical-ish molar: bulging crown with 4 soft cusps, narrow neck, two tapered roots
+ * with rounded tips. Origin = neck (crown bottom) centre.
+ */
+export const Molar: React.FC<{ glow?: number; roots?: boolean; opacity?: number; shape?: "molar" | "incisor" }> = ({
+  glow = 0,
+  roots = true,
+  opacity = 1,
+  shape = "molar",
+}) => {
+  const mat = <Clay glow={glow} opacity={opacity} />;
+  const incisor = shape === "incisor";
+  return (
+    <group scale={incisor ? [0.62, 1.05, 0.55] : [1, 1, 0.86]}>
+      <mesh castShadow receiveShadow>
+        <latheGeometry args={[CROWN, 48]} />
+        {mat}
       </mesh>
-    ))}
-    {roots
-      ? [-0.34, 0.34].map((x, i) => (
-          <mesh key={i} position={[x, -0.62, 0]} rotation={[0, 0, Math.PI + (x > 0 ? -0.08 : 0.08)]} castShadow>
-            <coneGeometry args={[0.22, 1.3, 32]} />
-            <Clay glow={glow} opacity={opacity} />
+      {incisor
+        ? null
+        : [
+            [-0.24, -0.2],
+            [0.24, -0.2],
+            [-0.24, 0.2],
+            [0.24, 0.2],
+          ].map(([x, z], i) => (
+            <mesh key={i} position={[x, 0.74, z]} scale={[1, 0.5, 1]} castShadow>
+              <sphereGeometry args={[0.25, 32, 24]} />
+              {mat}
+            </mesh>
+          ))}
+      {roots ? (
+        <>
+          <mesh castShadow>
+            <latheGeometry args={[TRUNK, 40]} />
+            {mat}
           </mesh>
-        ))
-      : null}
-  </group>
-);
+          {(incisor ? [0] : [-0.2, 0.2]).map((x) => (
+            <mesh key={x} position={[x, -0.28, 0]} rotation={[0, 0, x === 0 ? 0 : x > 0 ? -0.1 : 0.1]} scale={[1, 1, 1.25]} castShadow>
+              <latheGeometry args={[ROOT, 32]} />
+              {mat}
+            </mesh>
+          ))}
+        </>
+      ) : null}
+    </group>
+  );
+};
+
+/** U-shaped dental arch (crowns only), for inside the head. `missing` = index of a lost tooth. */
+export const Arch: React.FC<{
+  upper?: boolean;
+  missing?: number | null;
+  implant?: number | null; // index rendered as a new crown (glowing)
+  glow?: number;
+}> = ({ upper, missing = null, implant = null, glow = 0 }) => {
+  const n = 12;
+  const W = 2.3;
+  const D = 2.6;
+  return (
+    <group rotation={[0, 0, upper ? Math.PI : 0]}>
+      {/* gum arch */}
+      {new Array(n).fill(0).map((_, i) => {
+        const u = (i / (n - 1)) * 2 - 1;
+        const x = W * u;
+        const z = -D * u * u;
+        const slope = Math.atan2(-2 * D * u, W);
+        const front = Math.abs(u) < 0.4;
+        if (i === missing) {
+          return (
+            <group key={i} position={[x, 0.35, z]}>
+              <mesh>
+                <sphereGeometry args={[0.42, 32, 32]} />
+                <meshBasicMaterial color={K.pink} transparent opacity={0.55} depthWrite={false} />
+              </mesh>
+              <mesh>
+                <sphereGeometry args={[0.7, 32, 32]} />
+                <meshBasicMaterial color={K.pink} transparent opacity={0.18} depthWrite={false} />
+              </mesh>
+            </group>
+          );
+        }
+        return (
+          <group key={i} position={[x, 0, z]} rotation={[0, -slope, 0]}>
+            <Molar roots={false} shape={front ? "incisor" : "molar"} glow={i === implant ? glow : 0} />
+          </group>
+        );
+      })}
+    </group>
+  );
+};
 
 /** Titanium implant screw. Origin = top centre, extends down by len. */
 export const Screw: React.FC<{ len?: number; spin?: number; glow?: number }> = ({ len = 1.4, spin = 0, glow = 0 }) => {
