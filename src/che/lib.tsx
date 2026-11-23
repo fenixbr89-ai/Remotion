@@ -13,7 +13,8 @@ import {
 /* ---------- fonts ---------- */
 export const SERIF = "'Inter', Helvetica, Arial, sans-serif"; // heavy upright sans (user preference)
 export const SANS = "'Inter', Helvetica, Arial, sans-serif";
-export const TYPE = "'Special Elite', 'Courier New', monospace";
+// labels/dates: same heavy sans (registered under its own name so it is always ExtraBold)
+export const TYPE = "'InterHeavy', 'Inter', Helvetica, sans-serif";
 
 const fontsToLoad: [string, string, FontFaceDescriptors][] = [
   [
@@ -28,7 +29,7 @@ const fontsToLoad: [string, string, FontFaceDescriptors][] = [
   ],
   ["Inter", "fonts/inter-latin-600-normal.woff2", { weight: "600" }],
   ["Inter", "fonts/inter-latin-800-normal.woff2", { weight: "800" }],
-  ["Special Elite", "fonts/special-elite-latin-400-normal.woff2", {}],
+  ["InterHeavy", "fonts/inter-latin-800-normal.woff2", {}],
 ];
 let fontsStarted = false;
 export const loadFonts = () => {
@@ -351,60 +352,39 @@ export const TypeCaps: React.FC<{
   weight?: number;
   style?: React.CSSProperties;
   boxWords?: string[];
-}> = ({
-  text,
-  start = 0,
-  cps = 18,
-  size = 40,
-  color = C.ink,
-  cursor = C.blue,
-  font = SANS,
-  weight = 600,
-  style,
-  boxWords = [],
-}) => {
+}> = ({ text, start = 0, size = 40, color = C.ink, style }) => {
   const f = useCurrentFrame();
-  const n = Math.max(0, Math.floor(((f - start) / 30) * cps));
-  const shown = text.slice(0, n);
-  const done = n >= text.length;
-  const blink = done ? Math.floor(f / 8) % 2 === 0 : true;
-  const parts = shown.split(/(\s+)/);
+  const words = text.split(" ");
   return (
     <div
       style={{
-        fontFamily: font,
-        fontWeight: weight,
-        fontSize: size,
+        fontFamily: TYPE,
+        fontSize: size * 0.9,
         color,
-        letterSpacing: font === SANS ? 1.5 : 0,
-        whiteSpace: "pre",
+        letterSpacing: 1,
         textAlign: "center",
+        whiteSpace: "nowrap",
         ...style,
       }}
     >
-      {parts.map((p, i) =>
-        boxWords.includes(p) ? (
+      {words.map((w, i) => {
+        const s0 = start + i * 4;
+        const p = ease(f, s0, s0 + 10);
+        return (
           <span
             key={i}
-            style={{ outline: `2px solid ${cursor}`, outlineOffset: 4 }}
+            style={{
+              display: "inline-block",
+              marginRight: size * 0.28,
+              opacity: p,
+              filter: `blur(${(1 - p) * 8}px)`,
+              translate: `0px ${(1 - p) * 12}px`,
+            }}
           >
-            {p}
+            {w}
           </span>
-        ) : (
-          <span key={i}>{p}</span>
-        ),
-      )}
-      <span
-        style={{
-          display: "inline-block",
-          width: 3,
-          height: size * 1.05,
-          marginLeft: 4,
-          verticalAlign: "middle",
-          background: cursor,
-          opacity: n > 0 && blink ? 1 : 0,
-        }}
-      />
+        );
+      })}
     </div>
   );
 };

@@ -89,8 +89,8 @@ export const S02: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 250 }}>
           <SerifWords
             text="em camisetas, muros e bandeiras"
-            start={6}
-            every={6}
+            start={4}
+            every={14}
             size={72}
             highlight={["camisetas", "muros", "bandeiras"]}
             style={{ width: 860 }}
@@ -193,7 +193,7 @@ export const S02: React.FC<S> = ({ d }) => {
           </div>
         </div>
         <div style={{ ...center, top: 1640 }}>
-          <SerifWords text="no mundo inteiro." start={62} every={5} size={64} />
+          <SerifWords text="no mundo inteiro." start={84} every={5} size={64} />
         </div>
       </Camera>
     </Paper>
@@ -256,8 +256,8 @@ export const S04: React.FC<S> = ({ d }) => {
             w={1000}
             h={1300}
             fit={SA}
-            highlight={[{ name: "Argentina", color: C.red, start: 24 }]}
-            pins={[{ at: [-60.64, -32.95], label: "ROSARIO", start: 44 }]}
+            highlight={[{ name: "Argentina", color: C.red, start: 120 }]}
+            pins={[{ at: [-60.64, -32.95], label: "ROSARIO", start: 110 }]}
           />
         </div>
         <div style={{ ...center, top: 210 }}>
@@ -266,7 +266,7 @@ export const S04: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 300 }}>
           <SerifWords
             text="nasceu na Argentina"
-            start={20}
+            start={38}
             every={5}
             size={66}
           />
@@ -277,8 +277,8 @@ export const S04: React.FC<S> = ({ d }) => {
             right: 90,
             top: 470,
             rotate: "-8deg",
-            opacity: ease(f, 34, 40),
-            scale: String(interpolate(f, [34, 44], [1.4, 1], clamp)),
+            opacity: ease(f, 64, 70),
+            scale: String(interpolate(f, [64, 74], [1.4, 1], clamp)),
           }}
         >
           <div
@@ -325,8 +325,8 @@ export const S05: React.FC<S> = ({ d }) => {
             highlight={["asmático"]}
           />
         </div>
-        <div style={{ ...center, top: 360 }}>
-          <SerifWords text="lia sem parar" start={22} every={5} size={72} />
+        <div style={{ ...center, top: 330 }}>
+          <SerifWords text="lia sem parar" start={40} every={5} size={72} />
         </div>
         <div
           style={{
@@ -392,7 +392,7 @@ export const S05: React.FC<S> = ({ d }) => {
         />
         <Label
           text="BUENOS AIRES"
-          start={86}
+          start={110}
           style={{ left: 380, top: 1530 }}
           size={40}
         />
@@ -451,10 +451,10 @@ export const S06: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 200 }}>
           <TypeCaps text="AOS 23 ANOS" start={2} cps={14} size={50} />
         </div>
-        <div style={{ ...center, top: 290 }}>
+        <div style={{ ...center, top: 275 }}>
           <SerifWords
             text="numa motocicleta velha"
-            start={20}
+            start={80}
             every={5}
             size={70}
             highlight={["motocicleta"]}
@@ -492,11 +492,10 @@ export const S06: React.FC<S> = ({ d }) => {
 
 /* 7 — mineiros explorados, leprosos isolados, pobreza */
 export const S07: React.FC<S> = ({ d }) => {
-  const f = useCurrentFrame();
   const words: [string, number][] = [
-    ["mineiros explorados", 16],
-    ["leprosos isolados", 56],
-    ["pobreza", 96],
+    ["mineiros explorados", 40],
+    ["leprosos isolados", 88],
+    ["pobreza", 145],
   ];
   return (
     <Dark>
@@ -528,7 +527,7 @@ export const S07: React.FC<S> = ({ d }) => {
         />
       </div>
       {words.map(([w, s], i) => (
-        <div key={w} style={{ ...center, top: 700 + i * 200 }}>
+        <div key={w} style={{ ...center, top: 720 + i * 95 }}>
           <div style={{ position: "relative" }}>
             <SerifWords
               text={w}
@@ -542,32 +541,13 @@ export const S07: React.FC<S> = ({ d }) => {
           </div>
         </div>
       ))}
-      <div style={{ ...center, top: 1480 }}>
+      <div style={{ ...center, top: 1060 }}>
         <SerifWords
           text="que mudou tudo o que ele pensava."
-          start={130}
+          start={165}
           every={4}
           size={58}
           color="#e6e1d6"
-        />
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: 1060,
-          height: 6,
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            width: 420 * ease(f, 112, 132),
-            height: 6,
-            background: C.redSoft,
-          }}
         />
       </div>
     </Dark>
@@ -593,7 +573,7 @@ export const S08: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 300 }}>
           <SerifWords
             text="um jovem advogado cubano"
-            start={22}
+            start={105}
             every={5}
             size={66}
           />
@@ -616,15 +596,15 @@ export const S08: React.FC<S> = ({ d }) => {
               fontSize: 120,
               letterSpacing: -3,
               color: C.red,
-              opacity: ease(f, 66, 80),
-              filter: `blur(${(1 - ease(f, 66, 80)) * 10}px)`,
+              opacity: ease(f, 160, 174),
+              filter: `blur(${(1 - ease(f, 160, 174)) * 10}px)`,
             }}
           >
             Fidel Castro
           </div>
         </div>
         <RedStroke
-          start={82}
+          start={176}
           w={620}
           h={40}
           style={{ left: 230, top: 590 }}
@@ -721,7 +701,7 @@ export const S09: React.FC<S> = ({ d }) => {
         </div>
         <Label
           text="GRANMA → CUBA · 1956"
-          start={70}
+          start={110}
           style={{ left: 260, top: 1600 }}
           size={44}
         />
@@ -736,7 +716,7 @@ export const S10: React.FC<S> = ({ d }) => {
   return (
     <Paper>
       <Camera dur={d} from={1} to={1.12}>
-        <div style={{ ...center, top: 760 }}>
+        <div style={{ ...center, top: 820 }}>
           <div style={{ position: "relative" }}>
             <SerifWords text="o médico" start={4} every={6} size={110} />
             <div
@@ -752,10 +732,10 @@ export const S10: React.FC<S> = ({ d }) => {
             />
           </div>
         </div>
-        <div style={{ ...center, top: 920 }}>
+        <div style={{ ...center, top: 930 }}>
           <SerifWords text="virou" start={30} size={70} />
         </div>
-        <div style={{ ...center, top: 1030 }}>
+        <div style={{ ...center, top: 1000 }}>
           <TypeCaps
             text="COMANDANTE"
             start={42}
@@ -932,16 +912,16 @@ export const S13: React.FC<S> = ({ d }) => (
       <div style={{ ...center, top: 1130 }}>
         <SerifWords
           text="mas também comandou"
-          start={24}
+          start={8}
           every={5}
           size={66}
           color="#e9e4da"
         />
       </div>
-      <div style={{ ...center, top: 1240 }}>
+      <div style={{ ...center, top: 1200 }}>
         <SerifWords text="tribunais" start={46} size={120} color={C.redSoft} />
       </div>
-      <div style={{ ...center, top: 1390 }}>
+      <div style={{ ...center, top: 1305 }}>
         <SerifWords
           text="e fuzilamentos"
           start={66}
@@ -995,7 +975,7 @@ export const S14: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 1450 }}>
           <SerifWords
             text="o fotógrafo Alberto Korda"
-            start={24}
+            start={66}
             every={5}
             size={70}
             color="#eee"
@@ -1003,10 +983,10 @@ export const S14: React.FC<S> = ({ d }) => {
             hlColor={C.redSoft}
           />
         </div>
-        <div style={{ ...center, top: 1560 }}>
+        <div style={{ ...center, top: 1530 }}>
           <SerifWords
             text="por um instante."
-            start={62}
+            start={150}
             every={5}
             size={70}
             color="#bbb"
@@ -1074,15 +1054,15 @@ export const S15: React.FC<S> = ({ d }) => {
       <div style={{ ...center, top: 1560 }}>
         <SerifWords
           text="uma das imagens mais reproduzidas"
-          start={34}
+          start={45}
           every={5}
           size={64}
         />
       </div>
-      <div style={{ ...center, top: 1650 }}>
+      <div style={{ ...center, top: 1625 }}>
         <SerifWords
           text="da história."
-          start={66}
+          start={115}
           every={6}
           size={86}
           highlight={["história"]}
@@ -1264,7 +1244,7 @@ export const S18: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 360 }}>
           <SerifWords text="herói" start={2} size={200} />
         </div>
-        <div style={{ ...center, top: 600 }}>
+        <div style={{ ...center, top: 540 }}>
           <SerifWords text="para uns." start={14} every={5} size={66} />
         </div>
       </Camera>
@@ -1298,10 +1278,10 @@ export const S18: React.FC<S> = ({ d }) => {
               color={C.redSoft}
             />
           </div>
-          <div style={{ ...center, top: 380 }}>
+          <div style={{ ...center, top: 320 }}>
             <SerifWords
               text="para outros."
-              start={60}
+              start={78}
               every={5}
               size={66}
               color="#e9e4da"
@@ -1332,15 +1312,15 @@ export const S19: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 1180 }}>
           <SerifWords
             text="aquilo que ele nunca controlou:"
-            start={56}
+            start={48}
             every={5}
             size={60}
           />
         </div>
-        <div style={{ ...center, top: 1290 }}>
+        <div style={{ ...center, top: 1250 }}>
           <SerifWords
             text="uma imagem."
-            start={96}
+            start={120}
             every={8}
             size={150}
             highlight={["imagem"]}

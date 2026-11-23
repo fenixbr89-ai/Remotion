@@ -1,6 +1,8 @@
 import React from "react";
 import {
   AbsoluteFill,
+  Audio,
+  staticFile,
   Sequence,
   interpolate,
   useCurrentFrame,
@@ -13,7 +15,7 @@ import { FilmLook, clamp, easeInOut, loadFonts, tornPath } from "./lib";
 
 loadFonts();
 
-/** Seconds per scene, matched to the narration sentence it covers. */
+/** The 27 scenes, in order. */
 const SCENES = [
   A.S01,
   A.S02,
@@ -43,10 +45,12 @@ const SCENES = [
   A.S19,
   B.N_CTA,
 ];
-/** Seconds per scene, matched to the narration sentence it covers. */
+/** Seconds per scene, cut from the recorded narration: each scene starts
+ * 0.25s before its sentence's first word, so transitions fall in the pauses. */
 export const SCENE_SECONDS = [
-  2.8, 3.4, 3.8, 4.4, 4.2, 4.4, 4.4, 6.2, 5.6, 3.4, 5.2, 5.4, 5.6, 2.8, 5.0,
-  4.6, 5.0, 5.0, 4.6, 4.6, 6.4, 6.0, 8.0, 4.6, 3.8, 5.6, 8.0,
+  2.77, 4.24, 4.2, 5.58, 3.74, 4.92, 4.68, 8.06, 7.38, 4.4, 6.82, 5.8, 5.86,
+  2.46, 6.08, 6.26, 4.94, 4.42, 6.6, 4.86, 9.04, 7.16, 11.63, 6.25, 3.64, 5.42,
+  7.39,
 ];
 /** Scenes that get blurred foreground scraps for depth. */
 const SCRAPS = new Set([1, 4, 5, 10, 16, 19, 21]);
@@ -216,6 +220,7 @@ export const CheVideo: React.FC = () => {
     <AbsoluteFill style={{ background: "#0b0b0b" }}>
       {items}
       <FilmLook />
+      <Audio src={staticFile("che/narracao.m4a")} />
     </AbsoluteFill>
   );
 };

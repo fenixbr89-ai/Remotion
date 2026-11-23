@@ -79,7 +79,7 @@ export const N_Family: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 260 }}>
           <SerifWords text="o mais velho" start={4} every={5} size={86} />
         </div>
-        <div style={{ ...center, top: 360 }}>
+        <div style={{ ...center, top: 335 }}>
           <SerifWords
             text="de cinco irmãos"
             start={18}
@@ -115,7 +115,7 @@ export const N_Family: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 1460 }}>
           <SerifWords
             text="uma família de classe média."
-            start={60}
+            start={52}
             every={5}
             size={62}
           />
@@ -185,24 +185,24 @@ export const N_Guatemala: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 1320 }}>
           <SerifWords
             text="ele viu um governo eleito"
-            start={40}
+            start={95}
             every={5}
             size={66}
           />
         </div>
-        <div style={{ ...center, top: 1420 }}>
+        <div style={{ ...center, top: 1385 }}>
           <SerifWords
             text="cair num golpe"
-            start={60}
+            start={140}
             every={5}
             size={92}
             highlight={["golpe"]}
           />
         </div>
-        <div style={{ ...center, top: 1560 }}>
+        <div style={{ ...center, top: 1475 }}>
           <SerifWords
             text="apoiado pelos Estados Unidos."
-            start={78}
+            start={170}
             every={5}
             size={60}
           />
@@ -217,7 +217,7 @@ export const N_Armas: React.FC<S> = ({ d }) => (
   <Dark glow="rgba(160,25,20,0.5)">
     <Scraps dark seed={3} />
     <Camera dur={d} from={1.0} to={1.14}>
-      <div style={{ ...center, top: 700 }}>
+      <div style={{ ...center, top: 760 }}>
         <SerifWords
           text="ali, ele decidiu:"
           start={2}
@@ -229,16 +229,16 @@ export const N_Armas: React.FC<S> = ({ d }) => (
       <div style={{ ...center, top: 820 }}>
         <SerifWords
           text="a mudança viria"
-          start={20}
+          start={58}
           every={5}
           size={100}
           color="#f3efe6"
         />
       </div>
-      <div style={{ ...center, top: 950 }}>
+      <div style={{ ...center, top: 905 }}>
         <SerifWords
           text="pelas armas."
-          start={40}
+          start={90}
           every={7}
           size={150}
           color={C.redSoft}
@@ -252,7 +252,7 @@ export const N_Armas: React.FC<S> = ({ d }) => (
 export const N_Sierra: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
   const n = Math.round(
-    interpolate(f, [26, 70], [82, 20], { ...clamp, easing: easeInOut }),
+    interpolate(f, [55, 95], [82, 20], { ...clamp, easing: easeInOut }),
   );
   return (
     <Dark>
@@ -289,10 +289,10 @@ export const N_Sierra: React.FC<S> = ({ d }) => {
       >
         {n}
       </div>
-      <div style={{ ...center, top: 620 }}>
+      <div style={{ ...center, top: 590 }}>
         <SerifWords
           text="só uns vinte sobreviveram"
-          start={50}
+          start={63}
           every={5}
           size={64}
           color="#eee"
@@ -331,18 +331,18 @@ export const N_SantaClara: React.FC<S> = ({ d }) => {
                   [-78.5, 21.3],
                   [-79.96, 22.4],
                 ],
-                start: 14,
-                dur: 30,
+                start: 60,
+                dur: 50,
               },
             ]}
             pins={[
               {
                 at: [-79.96, 22.4],
                 label: "SANTA CLARA",
-                start: 40,
+                start: 110,
                 side: "l",
               },
-              { at: [-82.36, 23.13], label: "HAVANA", start: 56, side: "r" },
+              { at: [-82.36, 23.13], label: "HAVANA", start: 125, side: "r" },
             ]}
           />
         </div>
@@ -359,14 +359,14 @@ export const N_SantaClara: React.FC<S> = ({ d }) => {
         </div>
         <Label
           text="TREM BLINDADO · DEZ 1958"
-          start={60}
+          start={130}
           style={{ left: 480, top: 1520 }}
           size={36}
         />
         <div style={{ ...center, top: 160 }}>
           <SerifWords
-            text="Che comandou a batalha de"
-            start={2}
+            text="fim de 1958: a batalha de"
+            start={30}
             every={4}
             size={56}
           />
@@ -374,7 +374,7 @@ export const N_SantaClara: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 1660 }}>
           <SerifWords
             text="que decidiu a guerra."
-            start={70}
+            start={150}
             every={5}
             size={70}
             highlight={["guerra"]}
@@ -411,7 +411,7 @@ export const N_Batista: React.FC<S> = ({ d }) => {
           letterSpacing: -6,
           color: "transparent",
           WebkitTextStroke: "3px #f2eee6",
-          opacity: ease(f, 2, 16),
+          opacity: ease(f, 40, 55),
         }}
       >
         1959
@@ -422,14 +422,14 @@ export const N_Batista: React.FC<S> = ({ d }) => {
           left: 110,
           top: 1000,
           rotate: "-5deg",
-          ...pop(f, 20),
+          ...pop(f, 110),
         }}
       >
         <Clipping
           w={860}
           kicker="LA HABANA · 1º DE ENERO DE 1959"
           headline="BATISTA FOGE DE CUBA"
-          start={26}
+          start={116}
         />
       </div>
     </Dark>
@@ -477,24 +477,29 @@ export const N_Congo: React.FC<S> = ({ d }) => {
             left: 120,
             top: 1170,
             rotate: "-5deg",
-            ...pop(f, 60),
+            ...pop(f, 70),
           }}
         >
           <Photo k="congo" w={360} h={460} border={16} pos="50% 30%" />
         </div>
         <Stamp
           text="FRACASSO"
-          start={96}
+          start={225}
           size={84}
           style={{ left: 480, top: 1360 }}
         />
         <div style={{ ...center, top: 200 }}>
-          <SerifWords text="em 1965, ele sumiu" start={0} every={5} size={72} />
-        </div>
-        <div style={{ ...center, top: 300 }}>
           <SerifWords
-            text="e foi lutar no Congo."
-            start={18}
+            text="ele não queria um escritório."
+            start={2}
+            every={5}
+            size={64}
+          />
+        </div>
+        <div style={{ ...center, top: 275 }}>
+          <SerifWords
+            text="em 1965, foi lutar no Congo."
+            start={80}
             every={5}
             size={72}
             highlight={["Congo"]}
@@ -579,12 +584,12 @@ export const N_Captured: React.FC<S> = ({ d }) => {
         <AbsoluteFill style={{ opacity: 0.16 * ease(f, 0, 30) }}>
           <Photo k="bolivia" w={1080} h={1920} tint="bw" pos="50% 40%" />
         </AbsoluteFill>
-        <div style={{ ...center, top: 520 }}>
+        <div style={{ ...center, top: 560 }}>
           <TypeCaps
             text="8 · OUTUBRO · 1967"
             start={4}
             cps={14}
-            size={84}
+            size={70}
             color="#f1f1f1"
             font={TYPE}
             weight={400}
@@ -596,14 +601,14 @@ export const N_Captured: React.FC<S> = ({ d }) => {
           w={760}
           h={240}
           color={C.redSoft}
-          style={{ left: 160, top: 460 }}
+          style={{ left: 160, top: 500 }}
           len={2200}
           d="M380 15 C 650 5, 760 80, 740 130 C 710 220, 100 230, 30 150 C -10 90, 120 20, 400 22"
         />
-        <div style={{ ...center, top: 760 }}>
+        <div style={{ ...center, top: 790 }}>
           <SerifWords
             text="capturado pelo exército boliviano,"
-            start={30}
+            start={100}
             every={4}
             size={60}
             color="#e9e4da"
@@ -612,7 +617,7 @@ export const N_Captured: React.FC<S> = ({ d }) => {
         <div style={{ ...center, top: 850 }}>
           <SerifWords
             text="com apoio da CIA."
-            start={52}
+            start={175}
             every={5}
             size={60}
             color="#e9e4da"
@@ -620,25 +625,25 @@ export const N_Captured: React.FC<S> = ({ d }) => {
             hlColor={C.redSoft}
           />
         </div>
-        <div style={{ ...center, top: 1050 }}>
+        <div style={{ ...center, top: 960 }}>
           <SerifWords
             text="no dia seguinte, executado"
-            start={80}
+            start={210}
             every={5}
             size={72}
             color="#f3efe6"
           />
         </div>
-        <div style={{ ...center, top: 1150 }}>
+        <div style={{ ...center, top: 1030 }}>
           <SerifWords
             text="em La Higuera."
-            start={104}
+            start={262}
             every={5}
             size={72}
             color="#bdb7ab"
           />
         </div>
-        <div style={{ ...center, top: 1420, opacity: ease(f, 140, 160) }}>
+        <div style={{ ...center, top: 1160, opacity: ease(f, 290, 308) }}>
           <div
             style={{
               fontFamily: SERIF,
@@ -660,12 +665,12 @@ export const N_Captured: React.FC<S> = ({ d }) => {
 export const N_1997: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
   const y = Math.round(
-    interpolate(f, [30, 90], [1967, 1997], { ...clamp, easing: easeInOut }),
+    interpolate(f, [20, 110], [1967, 1997], { ...clamp, easing: easeInOut }),
   );
   return (
     <Dark>
       <Camera dur={d} from={1.0} to={1.1}>
-        <div style={{ ...center, top: 520 }}>
+        <div style={{ ...center, top: 590 }}>
           <SerifWords
             text="seu corpo ficou escondido"
             start={2}
@@ -677,7 +682,7 @@ export const N_1997: React.FC<S> = ({ d }) => {
         <div
           style={{
             ...center,
-            top: 700,
+            top: 660,
             fontFamily: TYPE,
             fontSize: 250,
             color: y === 1997 ? C.redSoft : "#f1f1f1",
@@ -685,10 +690,10 @@ export const N_1997: React.FC<S> = ({ d }) => {
         >
           {y}
         </div>
-        <div style={{ ...center, top: 1060 }}>
+        <div style={{ ...center, top: 960 }}>
           <SerifWords
             text="só foi encontrado 30 anos depois."
-            start={96}
+            start={85}
             every={4}
             size={58}
             color="#cfc8bb"
@@ -715,24 +720,24 @@ export const N_CTA: React.FC<S> = ({ d }) => {
           />
         </div>
         <div style={{ ...center, top: 270, gap: 30 }}>
-          <SerifWords text="herói" start={18} size={150} />
+          <SerifWords text="herói" start={40} size={150} />
           <SerifWords
             text="ou"
-            start={26}
+            start={48}
             size={80}
             style={{ alignSelf: "center" }}
           />
-          <SerifWords text="vilão?" start={32} size={150} color={C.red} />
+          <SerifWords text="vilão?" start={58} size={150} color={C.red} />
         </div>
-        <div style={{ ...center, top: 560, ...pop(f, 50, 16) }}>
+        <div style={{ ...center, top: 560, ...pop(f, 72, 16) }}>
           <CommentCard
-            start={54}
+            start={76}
             name="você"
             text="eu acho que ele foi..."
             likes="12 mil"
           />
         </div>
-        <div style={{ ...center, top: 860, opacity: ease(f, 80, 92) }}>
+        <div style={{ ...center, top: 860, opacity: ease(f, 88, 100) }}>
           <div
             style={{
               display: "flex",
@@ -770,10 +775,10 @@ export const N_CTA: React.FC<S> = ({ d }) => {
             top: 1080,
             height: 4,
             background: "rgba(0,0,0,.15)",
-            opacity: ease(f, 110, 120),
+            opacity: ease(f, 108, 118),
           }}
         />
-        <div style={{ ...center, top: 1180, ...pop(f, 120, 16) }}>
+        <div style={{ ...center, top: 1180, ...pop(f, 115, 16) }}>
           <div
             style={{
               width: 230,
@@ -791,12 +796,12 @@ export const N_CTA: React.FC<S> = ({ d }) => {
           </div>
         </div>
         <div style={{ ...center, top: 1450 }}>
-          <FollowButton start={130} pressAt={170} />
+          <FollowButton start={122} pressAt={150} />
         </div>
         <div style={{ ...center, top: 1640 }}>
           <SerifWords
             text="pra mais histórias como essa."
-            start={150}
+            start={140}
             every={5}
             size={56}
           />
@@ -806,7 +811,7 @@ export const N_CTA: React.FC<S> = ({ d }) => {
             position: "absolute",
             right: 120,
             top: 1220,
-            opacity: ease(f, 175, 185),
+            opacity: ease(f, 152, 162),
             rotate: `${f}deg`,
           }}
         >
