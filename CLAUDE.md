@@ -15,15 +15,17 @@ Inspirado num vídeo de referência que ela enviou. Siga o estilo e o ritmo, sem
   - Molar com coroa arredondada, 4 cúspides e 2 raízes cônicas.
   - Arcada em corte: osso claro opaco (`#efe6d6`) com as raízes aparecendo na frente, gengiva rosa (`#e7a5b4`), 3 dentes.
   - Pino de titânio com roscas, pilar, coroa.
-  - **Ela quer rosto e gente**, não só dente: busto 3D de cabeça (`public/models/head.glb`, CC BY 3.0, crédito em `public/models/CREDITS.md`), com brilho rosa na bochecha feito por uma luz pontual rosa colada ao rosto (não usar esfera flutuante, ela se descola quando a cabeça gira) e modo raio-x (cabeça transparente mostrando os dentes dentro da boca). Ela **não gostou do bonequinho nem do rosto no final**: a cena final fica **sem nenhum objeto 3D**: legenda "Siga o perfil pra não perder nenhum vídeo!" e, no centro, @yasminsr09 + botão "Seguir" que um dedinho toca e vira "Seguindo ✓" (`src/Escuro/Follow.tsx`).
+  - **Ela quer rosto e gente**, não só dente: busto 3D de cabeça (`public/models/head.glb`, CC BY 3.0, crédito em `public/models/CREDITS.md`), com brilho rosa na bochecha feito por uma luz pontual rosa colada ao rosto (não usar esfera flutuante, ela se descola quando a cabeça gira) e modo raio-x (cabeça transparente mostrando os dentes dentro da boca). Ela **não gostou do bonequinho nem do rosto no final**: a cena final fica **sem nenhum objeto 3D**: legenda "Siga o perfil pra não perder nenhum vídeo!" e, no centro, @yasminsr09 + botão "Seguir" que leva um toque (sem dedinho/cursor, ela não gostou) e vira "Seguindo ✓" (`src/Escuro/Follow.tsx`).
 - Holofote rosa em cone + plataforma redonda com borda neon nas cenas de destaque.
 - Cor de destaque: rosa claro `#f27cb0`; texto rosa legível `#d9488a`; texto escuro `#2b2326`.
 
 ### Texto e interface
 - **Sem cabeçalho**: ela pediu para retirar o tema no topo esquerdo, a pílula da seção e o @ no topo direito.
-- Legenda grande (Inter ExtraBold ~74px) mais para baixo (topo da caixa em y≈1430 de 1920), numa caixa branca com sombra rosada, **palavra por palavra**: palavra falada em rosa, as próximas em cinza claro (estilo karaokê), sincronizada com a narração. Já começa com a primeira palavra acesa no primeiro quadro.
-- Etiquetas sobre os objetos: caixa branca com contorno rosa brilhante e texto rosa (destaques e números grandes, ex.: "ATÉ 50%", "3 A 6 MESES") ou caixa branca com texto escuro (rótulos simples).
-- Final: sem objeto 3D; botão "Seguir" → "Seguindo ✓" com toque do dedinho e onda rosa; legenda "Siga o perfil pra não perder nenhum vídeo!".
+- Legenda grande (Inter ExtraBold ~74px) mais para baixo (y≈1430 de 1920), **sem caixa de fundo** (só um brilho branco suave em volta das letras) e **sem vírgula no fim dos trechos**, **palavra por palavra**: palavra falada em rosa, as próximas em cinza claro (estilo karaokê), sincronizada com a narração. Já começa com a primeira palavra acesa no primeiro quadro.
+- Etiquetas **nunca em cima dos dentes**: em cenas de uma arcada ficam entre a arcada e a legenda (y≈1170); em cenas de duas arcadas, no alto (y≈215). Conferir no fim da cena (câmera mais perto).
+- Dente 3D é **uma peça contínua** (um só perfil de lathe da coroa ao colo, raízes saindo de dentro), sem emenda visível.
+- Etiquetas: caixa branca com contorno rosa brilhante e texto rosa (destaques e números grandes, ex.: "ATÉ 50%", "3 A 6 MESES") ou caixa branca com texto escuro (rótulos simples).
+- Final: sem objeto 3D; botão "Seguir" → "Seguindo ✓" com onda rosa, sem dedinho; legenda "Siga o perfil pra não perder nenhum vídeo!".
 
 ### Movimento
 - Câmera sempre em movimento suave (aproxima + gira levemente) até o fim da cena.

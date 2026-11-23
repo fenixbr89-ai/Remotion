@@ -97,14 +97,14 @@ export const Tag: React.FC<{ text: string; sub?: string; x: number; y: number; n
     <div
       style={{
         display: "inline-block",
-        padding: big ? "10px 26px" : "8px 18px",
+        padding: big ? "10px 26px" : "10px 24px",
         borderRadius: 10,
         background: neon ? "rgba(255,255,255,0.9)" : "#ffffff",
         border: neon ? `3px solid ${K.pink}` : "none",
         boxShadow: neon ? `0 0 26px rgba(242,124,176,0.45)` : "0 10px 24px rgba(200,90,140,0.16)",
         fontFamily: sans,
         fontWeight: 800,
-        fontSize: big ? 84 : 34,
+        fontSize: big ? 84 : 42,
         letterSpacing: big ? -2 : 0.5,
         color: neon ? K.pinkDeep : K.ink,
         whiteSpace: "nowrap",

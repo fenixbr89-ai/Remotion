@@ -42,11 +42,10 @@ export const NarrationCaptions: React.FC = () => {
     <div style={{ position: "absolute", left: 60, right: 60, top: 1430, display: "flex", justifyContent: "center" }}>
       <div
         style={{
-          padding: "18px 34px",
-          borderRadius: 22,
-          background: "rgba(255,255,255,0.9)",
-          boxShadow: "0 18px 40px rgba(200,90,140,0.14)",
+          padding: "0 10px",
           fontFamily: sans,
+          // no box: a soft white halo keeps the words readable over anything
+          textShadow: "0 0 18px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.9), 0 3px 10px rgba(200,90,140,0.18)",
           fontWeight: 800,
           fontSize: 76,
           letterSpacing: -1.5,
@@ -60,7 +59,7 @@ export const NarrationCaptions: React.FC = () => {
           return (
             <React.Fragment key={i}>
               {i > 0 ? " " : null}
-              <span style={{ color: spoken ? K.pinkDeep : "rgba(43,35,38,0.25)" }}>{w.w}</span>
+              <span style={{ color: spoken ? K.pinkDeep : "rgba(43,35,38,0.32)" }}>{w.w.replace(/,$/, "")}</span>
             </React.Fragment>
           );
         })}

@@ -27,9 +27,25 @@ const Clay: React.FC<{ color?: string; emissive?: string; glow?: number; opacity
 );
 
 const V2 = (x: number, y: number) => new Vector2(x, y);
-const CROWN = [V2(0.43, 0), V2(0.55, 0.1), V2(0.65, 0.3), V2(0.67, 0.52), V2(0.6, 0.7), V2(0.46, 0.8), V2(0.25, 0.84), V2(0.001, 0.82)];
-const ROOT = [V2(0.001, -1.12), V2(0.07, -1.09), V2(0.12, -0.98), V2(0.16, -0.7), V2(0.2, -0.3), V2(0.23, 0)];
-const TRUNK = [V2(0.36, -0.32), V2(0.4, -0.15), V2(0.43, 0)];
+// One continuous profile: root trunk -> cervical neck -> bulging crown -> occlusal top (no seams).
+const TOOTH = [
+  V2(0.001, -0.5),
+  V2(0.22, -0.48),
+  V2(0.34, -0.4),
+  V2(0.4, -0.25),
+  V2(0.42, -0.08),
+  V2(0.45, 0.02),
+  V2(0.54, 0.12),
+  V2(0.64, 0.3),
+  V2(0.67, 0.5),
+  V2(0.62, 0.68),
+  V2(0.48, 0.79),
+  V2(0.26, 0.84),
+  V2(0.001, 0.82),
+];
+// Crown only (implant crown): closed at the bottom.
+const CROWN = [V2(0.001, 0.02), V2(0.36, 0.0), V2(0.45, 0.02), ...TOOTH.slice(6)];
+const ROOT = [V2(0.001, -1.12), V2(0.07, -1.09), V2(0.12, -0.98), V2(0.17, -0.7), V2(0.21, -0.35), V2(0.23, 0), V2(0.22, 0.12), V2(0.001, 0.2)];
 
 /**
  * Anatomical-ish molar: bulging crown with 4 soft cusps, narrow neck, two tapered roots
@@ -50,7 +66,7 @@ export const Molar: React.FC<{
   return (
     <group scale={incisor ? [0.62, 1.05, 0.55] : [1, 1, 0.86]}>
       <mesh castShadow receiveShadow>
-        <latheGeometry args={[CROWN, 48]} />
+        <latheGeometry args={[roots ? TOOTH : CROWN, 64]} />
         {mat}
       </mesh>
       {mood ? (
@@ -77,13 +93,9 @@ export const Molar: React.FC<{
           ))}
       {roots ? (
         <>
-          <mesh castShadow>
-            <latheGeometry args={[TRUNK, 40]} />
-            {mat}
-          </mesh>
-          {(incisor ? [0] : [-0.2, 0.2]).map((x) => (
-            <mesh key={x} position={[x, -0.28, 0]} rotation={[0, 0, x === 0 ? 0 : x > 0 ? -0.1 : 0.1]} scale={[1, 1, 1.25]} castShadow>
-              <latheGeometry args={[ROOT, 32]} />
+          {(incisor ? [0] : [-0.19, 0.19]).map((x) => (
+            <mesh key={x} position={[x, -0.3, 0]} rotation={[0, 0, x === 0 ? 0 : x > 0 ? -0.09 : 0.09]} scale={[1, 1, 1.25]} castShadow>
+              <latheGeometry args={[ROOT, 48]} />
               {mat}
             </mesh>
           ))}

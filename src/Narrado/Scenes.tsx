@@ -136,7 +136,7 @@ export const NSCENES: NScene[] = [
         </>,
         -0.3 + t * 0.2,
       ),
-    tags: (s) => (s > 0.3 ? <Tag text="ESPAÇO VAZIO" x={540} y={400} neon /> : null),
+    tags: (s) => (s > 0.3 ? <Tag text="ESPAÇO VAZIO" x={540} y={1170} neon /> : null),
   },
   {
     // "Sem a raiz para receber estímulo, o osso daquela região começa a ser reabsorvido."
@@ -160,7 +160,7 @@ export const NSCENES: NScene[] = [
         </>,
       );
     },
-    tags: (s) => (s > 2.3 ? <Tag text="REABSORÇÃO" x={540} y={400} neon /> : null),
+    tags: (s) => (s > 2.3 ? <Tag text="REABSORÇÃO" x={540} y={1170} neon /> : null),
   },
   {
     // "Em alguns casos, essa perda pode chegar até 50%."
@@ -178,7 +178,7 @@ export const NSCENES: NScene[] = [
         -0.25 + t * 0.15,
       );
     },
-    tags: (s) => <Tag text={`ATÉ ${Math.round(50 * P(s, 0.3, 2.0))}%`} sub="DA LARGURA DO OSSO" x={540} y={405} neon big />,
+    tags: (s) => <Tag text={`ATÉ ${Math.round(50 * P(s, 0.3, 2.0))}%`} sub="DA LARGURA DO OSSO" x={540} y={1170} neon big />,
   },
   {
     // "Enquanto isso, os dentes ao lado podem tombar para dentro do buraco,"
@@ -188,7 +188,7 @@ export const NSCENES: NScene[] = [
     cam: JAW_CAM,
     world: (s, t, f) =>
       JAW(<Jaw middle="none" boneLoss={1} tilt={0.26 * P(s, 2.6, 1.6)} mood={s < 2.6 ? "worried" : "wow"} look={1} t={f} />, -0.3 + t * 0.15),
-    tags: (s) => (s > 2.6 ? <Tag text="INCLINAÇÃO" x={540} y={400} /> : null),
+    tags: (s) => (s > 2.6 ? <Tag text="INCLINAÇÃO" x={540} y={1170} /> : null),
   },
   {
     // "e o dente de cima pode descer."
@@ -206,7 +206,7 @@ export const NSCENES: NScene[] = [
         </group>
       </group>
     ),
-    tags: () => <Tag text="EXTRUSÃO" x={760} y={820} neon />,
+    tags: () => <Tag text="EXTRUSÃO" x={540} y={215} neon />,
   },
   {
     // "Aos poucos, a mordida perde o encaixe, facilitando o acúmulo de restos de comida e dificultando a mastigação."
@@ -230,8 +230,8 @@ export const NSCENES: NScene[] = [
     },
     tags: (s) => (
       <>
-        {s > 1.4 ? <Tag text="SEM ENCAIXE" x={760} y={560} /> : null}
-        {s > 2.8 ? <Tag text="COMIDA PRESA" x={300} y={1010} /> : null}
+        {s > 1.4 ? <Tag text="SEM ENCAIXE" x={330} y={215} /> : null}
+        {s > 2.8 ? <Tag text="COMIDA PRESA" x={760} y={215} neon /> : null}
       </>
     ),
   },
@@ -252,7 +252,7 @@ export const NSCENES: NScene[] = [
         </>
       );
     },
-    tags: (s) => (s > 1.9 ? <Tag text="IMPLANTE DENTÁRIO" x={540} y={400} neon /> : null),
+    tags: (s) => (s > 1.9 ? <Tag text="IMPLANTE DENTÁRIO" x={540} y={300} neon /> : null),
   },
   {
     // "Primeiro, o espaço é preparado no osso."
@@ -276,7 +276,7 @@ export const NSCENES: NScene[] = [
         />,
       );
     },
-    tags: (s) => (s > 0.7 ? <Tag text="PREPARO DO OSSO" x={760} y={520} neon /> : null),
+    tags: (s) => (s > 0.7 ? <Tag text="PREPARO DO OSSO" x={540} y={1170} neon /> : null),
   },
   {
     // "Depois, um pino de titânio é colocado com precisão."
@@ -300,7 +300,7 @@ export const NSCENES: NScene[] = [
         />,
       );
     },
-    tags: (s) => (s > 0.9 ? <Tag text="PINO DE TITÂNIO" x={760} y={520} neon /> : null),
+    tags: (s) => (s > 0.9 ? <Tag text="PINO DE TITÂNIO" x={540} y={1170} neon /> : null),
   },
   {
     // "Com o tempo, o osso se une ao pino, um processo chamado osseointegração."
@@ -319,7 +319,7 @@ export const NSCENES: NScene[] = [
         -0.25 + t * 0.15,
       );
     },
-    tags: (s) => (s > 3.2 ? <Tag text="OSSEOINTEGRAÇÃO" x={540} y={405} neon big /> : null),
+    tags: (s) => (s > 3.2 ? <Tag text="OSSEOINTEGRAÇÃO" x={540} y={1170} neon /> : null),
   },
   {
     // "Em seguida, o pilar é encaixado e recebe a coroa, que devolve a forma e a função do dente."
@@ -347,8 +347,8 @@ export const NSCENES: NScene[] = [
     },
     tags: (s) => (
       <>
-        {s > 1.1 ? <Tag text="PILAR" x={330} y={700} /> : null}
-        {s > 2.8 ? <Tag text="COROA" x={760} y={470} neon /> : null}
+        {s > 1.1 ? <Tag text="PILAR" x={360} y={1170} /> : null}
+        {s > 2.8 ? <Tag text="COROA" x={720} y={1170} neon /> : null}
       </>
     ),
   },
@@ -371,7 +371,7 @@ export const NSCENES: NScene[] = [
         -0.3 + t * 0.2,
       );
     },
-    tags: (s) => (s > 2.8 ? <Tag text="ESTÍMULO DE VOLTA" x={540} y={330} neon /> : null),
+    tags: (s) => (s > 2.8 ? <Tag text="ESTÍMULO DE VOLTA" x={540} y={1170} neon /> : null),
   },
   {
     // "Cada caso precisa de avaliação profissional, planejamento e acompanhamento do dentista."
