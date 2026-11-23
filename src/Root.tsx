@@ -2,6 +2,8 @@ import { Composition, Folder } from "remotion";
 import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
+import { KronicVPS, SCENES, TOTAL_DURATION } from "./Kronic/KronicVPS";
+import { FPS, H, W } from "./Kronic/theme";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -33,6 +35,27 @@ export const RemotionRoot: React.FC = () => {
             titleColor: "#000000",
           }}
         />
+      </Folder>
+      <Composition
+        id="KronicVPS"
+        component={KronicVPS}
+        durationInFrames={TOTAL_DURATION}
+        fps={FPS}
+        width={W}
+        height={H}
+      />
+      <Folder name="KronicVPS-Scenes">
+        {SCENES.map((s) => (
+          <Composition
+            key={s.id}
+            id={s.id}
+            component={s.component}
+            durationInFrames={s.durationInFrames}
+            fps={FPS}
+            width={W}
+            height={H}
+          />
+        ))}
       </Folder>
       <Composition
         // You can take the "id" to render a video:
