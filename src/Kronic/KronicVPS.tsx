@@ -3,6 +3,7 @@ import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { Audio } from "@remotion/media";
 import { AbsoluteFill, staticFile } from "remotion";
 import { zoomBlur } from "./zoomBlur";
+import { Watermark } from "./Watermark";
 import { Hook } from "./scenes/Hook";
 import { Wait } from "./scenes/Wait";
 import { Distance } from "./scenes/Distance";
@@ -50,5 +51,6 @@ export const KronicVPS: React.FC = () => (
       );
     })}
   </TransitionSeries>
+  <Watermark />
   </AbsoluteFill>
 );
