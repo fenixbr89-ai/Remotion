@@ -163,6 +163,32 @@ export const Screw: React.FC<{ len?: number; spin?: number; glow?: number }> = (
   );
 };
 
+/** Dental handpiece with a spinning bit. Origin = bit tip. */
+export const Drill: React.FC<{ spin: number; on: number }> = ({ spin, on }) => (
+  <group>
+    <group rotation={[0, spin, 0]}>
+      <mesh position={[0, 0.75, 0]} castShadow>
+        <cylinderGeometry args={[0.07, 0.035, 1.5, 16]} />
+        <meshStandardMaterial color="#c9ced6" metalness={0.7} roughness={0.25} transparent opacity={on} />
+      </mesh>
+      {new Array(7).fill(0).map((_, i) => (
+        <mesh key={i} position={[0, 0.15 + i * 0.13, 0]} rotation={[Math.PI / 2, 0.4, 0]}>
+          <torusGeometry args={[0.065, 0.014, 6, 16]} />
+          <meshStandardMaterial color="#9aa1ab" metalness={0.7} roughness={0.3} transparent opacity={on} />
+        </mesh>
+      ))}
+    </group>
+    <mesh position={[0, 2.1, 0]} castShadow>
+      <capsuleGeometry args={[0.28, 1.2, 8, 24]} />
+      <meshPhysicalMaterial color="#ffffff" roughness={0.35} clearcoat={0.8} transparent opacity={on} />
+    </mesh>
+    <mesh position={[0, 2.25, 0]}>
+      <cylinderGeometry args={[0.295, 0.295, 0.2, 32]} />
+      <meshStandardMaterial color={K.pink} roughness={0.5} transparent opacity={on} />
+    </mesh>
+  </group>
+);
+
 /** Abutment: short tapered post. Origin = bottom centre. */
 export const Abutment: React.FC = () => (
   <mesh position={[0, 0.25, 0]} castShadow>
@@ -188,6 +214,10 @@ export const Jaw: React.FC<{
   middleMood?: Mood;
   look?: number; // neighbours look toward the middle by this much
   t?: number; // frame, for blinking
+  middleRot?: number; // wiggle of the middle tooth (radians)
+  drill?: { depth: number; spin: number; on: number } | null;
+  hole?: number; // 0..1 depth of the drilled bed
+  screwOn?: boolean;
 }> = ({
   middle = "tooth",
   middleLift = 0,
@@ -201,6 +231,10 @@ export const Jaw: React.FC<{
   middleMood,
   look = 0,
   t = 0,
+  middleRot = 0,
+  drill = null,
+  hole = 0,
+  screwOn = true,
 }) => {
   const blink = (k: number) => (t + k * 37) % 95 < 4;
   const S = 1.55;
@@ -233,15 +267,28 @@ export const Jaw: React.FC<{
         </group>
       </group>
       {middle === "tooth" && middleLift < 1 ? (
-        <group position={[0, 0.05 + middleLift * 3.5 + extrude, 0]} rotation={[0, 0, middleLift * 0.6]}>
+        <group position={[0, 0.05 + middleLift * 3.5 + extrude, 0]} rotation={[0, 0, middleLift * 0.9 + middleRot]}>
           <Molar glow={middleGlow} mood={middleMood ?? mood} blink={blink(3)} flipFace={upper} />
+        </group>
+      ) : null}
+      {hole > 0 ? (
+        <mesh position={[0, -0.15 - (hole * 1.45) / 2, 0.02]}>
+          <cylinderGeometry args={[0.27, 0.24, hole * 1.45, 32]} />
+          <meshStandardMaterial color="#cdb89a" roughness={1} />
+        </mesh>
+      ) : null}
+      {drill && drill.on > 0 ? (
+        <group position={[0, 0.1 - drill.depth * 1.35, 0.05]}>
+          <Drill spin={drill.spin} on={drill.on} />
         </group>
       ) : null}
       {middle === "implant" && implant ? (
         <group>
-          <group position={[0, 0.25 + (1 - implant.insert) * 2.4, 0]}>
-            <Screw len={1.5} spin={implant.spin} glow={implant.glow} />
-          </group>
+          {screwOn ? (
+            <group position={[0, 0.25 + (1 - implant.insert) * 2.4, 0]}>
+              <Screw len={1.5} spin={implant.spin} glow={implant.glow} />
+            </group>
+          ) : null}
           {implant.abutment > 0 ? (
             <group position={[0, 0.2 + (1 - implant.abutment) * 2, 0]}>
               <Abutment />
