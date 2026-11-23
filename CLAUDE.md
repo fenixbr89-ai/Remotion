@@ -30,6 +30,7 @@ Inspirado num vídeo de referência que ela enviou. Siga o estilo e o ritmo, sem
 - Cortes rápidos e suaves entre cenas (fade de ~6 frames), uma cena por frase da narração.
 - Objetos animados: dente saindo, osso encolhendo, vizinhos tombando, dente de cima descendo, pino entrando girando, coroa encaixando, brilho pulsando, etiquetas surgindo.
 - Nada de tremidas ou "batidas" na tela.
+- **Ela quer animação rica em todas as cenas** ("não quero um vídeo qualquer"): cada ação tem que ser bem visível e durar o suficiente (ex.: o pino entrando no osso girando de verdade, com broca antes; coroa descendo e encaixando; dentes tombando aos poucos), como na versão 2D de `src/Curiosidades/`. Nada de cena quase parada.
 
 ### Fluxo de trabalho
 1. Escrever o roteiro/narração em texto corrido.
