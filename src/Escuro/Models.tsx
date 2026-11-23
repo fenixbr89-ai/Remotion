@@ -3,6 +3,7 @@ import { RoundedBox } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import { DoubleSide, Vector2 } from "three";
 import { K } from "./theme";
+import { Face3D, Mood } from "./Face3D";
 
 type V3 = [number, number, number];
 
@@ -12,10 +13,12 @@ const Clay: React.FC<{ color?: string; emissive?: string; glow?: number; opacity
   glow = 0,
   opacity = 1,
 }) => (
-  <meshStandardMaterial
+  <meshPhysicalMaterial
     key={opacity < 1 ? "t" : "o"}
     color={color}
-    roughness={0.85}
+    roughness={0.42}
+    clearcoat={0.6}
+    clearcoatRoughness={0.35}
     emissive={emissive}
     emissiveIntensity={glow}
     transparent={opacity < 1}
@@ -32,12 +35,16 @@ const TRUNK = [V2(0.36, -0.32), V2(0.4, -0.15), V2(0.43, 0)];
  * Anatomical-ish molar: bulging crown with 4 soft cusps, narrow neck, two tapered roots
  * with rounded tips. Origin = neck (crown bottom) centre.
  */
-export const Molar: React.FC<{ glow?: number; roots?: boolean; opacity?: number; shape?: "molar" | "incisor" }> = ({
-  glow = 0,
-  roots = true,
-  opacity = 1,
-  shape = "molar",
-}) => {
+export const Molar: React.FC<{
+  glow?: number;
+  roots?: boolean;
+  opacity?: number;
+  shape?: "molar" | "incisor";
+  mood?: Mood | null;
+  look?: number;
+  blink?: boolean;
+  flipFace?: boolean; // tooth is upside down (upper jaw) but the face stays upright
+}> = ({ glow = 0, roots = true, opacity = 1, shape = "molar", mood = null, look = 0, blink = false, flipFace = false }) => {
   const mat = <Clay glow={glow} opacity={opacity} />;
   const incisor = shape === "incisor";
   return (
@@ -46,6 +53,15 @@ export const Molar: React.FC<{ glow?: number; roots?: boolean; opacity?: number;
         <latheGeometry args={[CROWN, 48]} />
         {mat}
       </mesh>
+      {mood ? (
+        <group scale={[1, 1, 1 / 0.86]}>
+          <group position={[0, 0.42, 0.5]} rotation={[0, 0, flipFace ? Math.PI : 0]}>
+            <group scale={1.4}>
+              <Face3D mood={mood} look={look} blink={blink} z={0.04} y={0} />
+            </group>
+          </group>
+        </group>
+      ) : null}
       {incisor
         ? null
         : [
@@ -168,7 +184,25 @@ export const Jaw: React.FC<{
   middleGlow?: number;
   upper?: boolean;
   extrude?: number; // only for the middle tooth (upper jaw)
-}> = ({ middle = "tooth", middleLift = 0, tilt = 0, boneLoss = 0, implant, middleGlow = 0, upper, extrude = 0 }) => {
+  mood?: Mood; // neighbours
+  middleMood?: Mood;
+  look?: number; // neighbours look toward the middle by this much
+  t?: number; // frame, for blinking
+}> = ({
+  middle = "tooth",
+  middleLift = 0,
+  tilt = 0,
+  boneLoss = 0,
+  implant,
+  middleGlow = 0,
+  upper,
+  extrude = 0,
+  mood = "happy",
+  middleMood,
+  look = 0,
+  t = 0,
+}) => {
+  const blink = (k: number) => (t + k * 37) % 95 < 4;
   const S = 1.55;
   const sideH = 1.9;
   const midH = sideH * (1 - boneLoss * 0.45);
@@ -190,17 +224,17 @@ export const Jaw: React.FC<{
       {/* neighbours */}
       <group position={[-S, 0, 0]} rotation={[0, 0, -tilt]}>
         <group position={[0, 0.05, 0]}>
-          <Molar />
+          <Molar mood={mood} look={upper ? 0 : look} blink={blink(1)} flipFace={upper} />
         </group>
       </group>
       <group position={[S, 0, 0]} rotation={[0, 0, tilt]}>
         <group position={[0, 0.05, 0]}>
-          <Molar />
+          <Molar mood={mood} look={upper ? 0 : -look} blink={blink(2)} flipFace={upper} />
         </group>
       </group>
       {middle === "tooth" && middleLift < 1 ? (
         <group position={[0, 0.05 + middleLift * 3.5 + extrude, 0]} rotation={[0, 0, middleLift * 0.6]}>
-          <Molar glow={middleGlow} opacity={1 - middleLift * 0.6} />
+          <Molar glow={middleGlow} mood={middleMood ?? mood} blink={blink(3)} flipFace={upper} />
         </group>
       ) : null}
       {middle === "implant" && implant ? (
@@ -215,7 +249,7 @@ export const Jaw: React.FC<{
           ) : null}
           {implant.crown > 0 ? (
             <group position={[0, 0.05 + (1 - implant.crown) * 2.5, 0]}>
-              <Molar roots={false} />
+              <Molar roots={false} mood={implant.crown >= 1 ? (middleMood ?? "happy") : "wow"} blink={implant.crown >= 1 && blink(3)} />
             </group>
           ) : null}
         </group>

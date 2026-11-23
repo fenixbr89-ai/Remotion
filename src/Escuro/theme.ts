@@ -17,7 +17,7 @@ export const K = {
   pinkDeep: "#d9488a", // pink for text (readable on white)
   pinkSoft: "rgba(242,124,176,0.18)",
   ink: "#2b2326",
-  clay: "#f3f0ec",
+  clay: "#fbf9f6",
   bone: "#efe6d6",
   gum: "#e7a5b4",
   titanium: "#b9bec6",

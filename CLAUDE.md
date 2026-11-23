@@ -15,7 +15,7 @@ Inspirado num vídeo de referência que ela enviou. Siga o estilo e o ritmo, sem
   - Molar com coroa arredondada, 4 cúspides e 2 raízes cônicas.
   - Arcada em corte: osso claro opaco (`#efe6d6`) com as raízes aparecendo na frente, gengiva rosa (`#e7a5b4`), 3 dentes.
   - Pino de titânio com roscas, pilar, coroa.
-  - **Ela quer rosto e gente**, não só dente: busto 3D de cabeça (`public/models/head.glb`, CC BY 3.0, crédito em `public/models/CREDITS.md`), com brilho rosa na bochecha feito por uma luz pontual rosa colada ao rosto (não usar esfera flutuante, ela se descola quando a cabeça gira) e modo raio-x (cabeça transparente mostrando os dentes dentro da boca). Ela **não gostou do bonequinho**: no final usar o rosto 3D sobre a plataforma, debaixo do holofote rosa, girando devagar.
+  - **Ela quer rosto e gente**, não só dente: busto 3D de cabeça (`public/models/head.glb`, CC BY 3.0, crédito em `public/models/CREDITS.md`), com brilho rosa na bochecha feito por uma luz pontual rosa colada ao rosto (não usar esfera flutuante, ela se descola quando a cabeça gira) e modo raio-x (cabeça transparente mostrando os dentes dentro da boca). Ela **não gostou do bonequinho nem do rosto no final**: a cena final fica **sem nenhum objeto**, só a etiqueta grande "SEGUE @YASMINSR09" e a legenda.
 - Holofote rosa em cone + plataforma redonda com borda neon nas cenas de destaque.
 - Cor de destaque: rosa claro `#f27cb0`; texto rosa legível `#d9488a`; texto escuro `#2b2326`.
 
@@ -23,7 +23,7 @@ Inspirado num vídeo de referência que ela enviou. Siga o estilo e o ritmo, sem
 - **Sem cabeçalho**: ela pediu para retirar o tema no topo esquerdo, a pílula da seção e o @ no topo direito.
 - Legenda grande (Inter ExtraBold ~74px) mais para baixo (topo da caixa em y≈1430 de 1920), numa caixa branca com sombra rosada, **palavra por palavra**: palavra falada em rosa, as próximas em cinza claro (estilo karaokê), sincronizada com a narração. Já começa com a primeira palavra acesa no primeiro quadro.
 - Etiquetas sobre os objetos: caixa branca com contorno rosa brilhante e texto rosa (destaques e números grandes, ex.: "ATÉ 50%", "3 A 6 MESES") ou caixa branca com texto escuro (rótulos simples).
-- Final: rosto 3D no holofote com a etiqueta "SEGUE @YASMINSR09" acima da cabeça.
+- Final: sem objeto, só a etiqueta grande "SEGUE @YASMINSR09" no centro e a legenda.
 
 ### Movimento
 - Câmera sempre em movimento suave (aproxima + gira levemente) até o fim da cena.
