@@ -39,6 +39,7 @@ Inspirado num vídeo de referência que ela enviou. Siga o estilo e o ritmo, sem
 ### Renderização (ambiente na nuvem)
 - 3D precisa de WebGL: usar `chromiumOptions: { gl: "swangle" }` e o Chrome em `/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell`.
 - Fontes locais em `public/fonts/` (o proxy bloqueia Google Fonts no render).
+- Material que muda entre sólido e transparente (ex.: cabeça no raio-x) precisa de materiais separados com `key` diferente; senão alguma aba do render fica com o material antigo e a cena pisca. Depois de renderizar, medir a diferença entre quadros para achar piscadas.
 - Animação no Remotion é sempre por frame (`useCurrentFrame` + `interpolate`), nunca CSS `transition`/`@keyframes`.
 
 ## Estilos anteriores (guardados, não são o padrão)

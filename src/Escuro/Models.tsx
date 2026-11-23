@@ -13,6 +13,7 @@ const Clay: React.FC<{ color?: string; emissive?: string; glow?: number; opacity
   opacity = 1,
 }) => (
   <meshStandardMaterial
+    key={opacity < 1 ? "t" : "o"}
     color={color}
     roughness={0.85}
     emissive={emissive}

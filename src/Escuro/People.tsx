@@ -26,7 +26,12 @@ export const HeadBust: React.FC<{
   return (
     <group>
       <mesh geometry={head.geometry} scale={0.42} castShadow={xray < 0.5} receiveShadow renderOrder={2}>
-        <meshStandardMaterial color={K.clay} roughness={0.8} transparent={xray > 0} opacity={solid} depthWrite={xray < 0.5} />
+        {/* separate materials for solid / x-ray so no render tab keeps a stale opaque program */}
+        {xray > 0 ? (
+          <meshStandardMaterial key="xray" color={K.clay} roughness={0.8} transparent opacity={solid} depthWrite={false} />
+        ) : (
+          <meshStandardMaterial key="solid" color={K.clay} roughness={0.8} />
+        )}
       </mesh>
       {/* teeth inside the mouth: upper + lower U-shaped arches */}
       {xray > 0 ? (
