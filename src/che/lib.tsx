@@ -276,6 +276,8 @@ export const Camera: React.FC<{
 };
 
 /* ---------- text ---------- */
+/** In-scene text is switched off: all words now live in the bottom caption track. */
+export const SHOW_SCENE_TEXT = false;
 /** Heavy sans words appearing one by one with blur. */
 export const SerifWords: React.FC<{
   text: string;
@@ -301,6 +303,7 @@ export const SerifWords: React.FC<{
   align = "center",
 }) => {
   const f = useCurrentFrame();
+  if (!SHOW_SCENE_TEXT) return null;
   const words = text.split(" ");
   return (
     <div
@@ -354,6 +357,7 @@ export const TypeCaps: React.FC<{
   boxWords?: string[];
 }> = ({ text, start = 0, size = 40, color = C.ink, style }) => {
   const f = useCurrentFrame();
+  if (!SHOW_SCENE_TEXT) return null;
   const words = text.split(" ");
   return (
     <div

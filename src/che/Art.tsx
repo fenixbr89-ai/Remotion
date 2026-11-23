@@ -1,7 +1,15 @@
 import React from "react";
 import { AbsoluteFill, Img, staticFile, useCurrentFrame } from "remotion";
 import { PHOTOS } from "./assets";
-import { C, SERIF, TYPE, cutoutFilter, ease, easeInOut } from "./lib";
+import {
+  C,
+  SERIF,
+  SHOW_SCENE_TEXT,
+  TYPE,
+  cutoutFilter,
+  ease,
+  easeInOut,
+} from "./lib";
 
 /* ---------- photos (public domain, from Wikimedia Commons) ---------- */
 export const has = (k: string) => Boolean(PHOTOS[k]);
@@ -502,6 +510,7 @@ export const Label: React.FC<{
   color?: string;
 }> = ({ text, start, size = 34, style, bg = "#f4f1ea", color = C.ink }) => {
   const f = useCurrentFrame();
+  if (!SHOW_SCENE_TEXT) return null;
   const p = ease(f, start, start + 12);
   const n = Math.floor(Math.max(0, f - start) * 1.2);
   return (

@@ -10,7 +10,9 @@ import {
 } from "remotion";
 import * as A from "./Scenes";
 import * as B from "./Scenes2";
+import * as X from "./Scenes3";
 import { Scraps } from "./Art";
+import { CaptionBand, Captions, Tone } from "./Captions";
 import { FilmLook, clamp, easeInOut, loadFonts, tornPath } from "./lib";
 
 loadFonts();
@@ -24,26 +26,26 @@ const SCENES = [
   B.N_Family,
   A.S05,
   A.S06,
-  A.S07,
+  X.X_Caminho,
   B.N_Guatemala,
-  B.N_Armas,
+  X.X_Armas,
   A.S08,
   A.S09,
-  B.N_Sierra,
-  A.S10,
+  X.X_Sierra,
+  X.X_Comandante,
   B.N_SantaClara,
-  B.N_Batista,
+  X.X_Batista,
   A.S12,
   A.S13,
   A.S14,
   A.S15,
   B.N_Congo,
   B.N_Bolivia,
-  B.N_Captured,
-  B.N_1997,
-  A.S18,
+  X.X_Captured,
+  X.X_1997,
+  X.X_Split,
   A.S19,
-  B.N_CTA,
+  X.X_CTA,
 ];
 /** Seconds per scene, cut from the recorded narration: each scene starts
  * 0.25s before its sentence's first word, so transitions fall in the pauses. */
@@ -52,6 +54,40 @@ export const SCENE_SECONDS = [
   2.46, 6.08, 6.26, 4.94, 4.42, 6.6, 4.86, 9.04, 7.16, 11.63, 6.25, 3.64, 5.42,
   7.39,
 ];
+/** Background tone of each scene (colour of the caption band). */
+const TONES: Tone[] = [
+  "dark",
+  "paper",
+  "paper",
+  "paper",
+  "paper",
+  "paper",
+  "paper",
+  "dark",
+  "paper",
+  "dark",
+  "paper",
+  "blue",
+  "dark",
+  "paper",
+  "paper",
+  "dark",
+  "paper",
+  "dark",
+  "dark",
+  "paper",
+  "paper",
+  "paper",
+  "dark",
+  "dark",
+  "dark",
+  "paper",
+  "dark",
+];
+/** Scene content is lifted so the visuals use the top area (no top text any more). */
+const LIFT = -200;
+/** Scenes designed directly for the top area (no lift). */
+const NO_LIFT = new Set([7, 9, 12, 13, 15, 22, 23, 24, 26]);
 /** Scenes that get blurred foreground scraps for depth. */
 const SCRAPS = new Set([1, 4, 5, 10, 16, 19, 21]);
 
@@ -188,6 +224,15 @@ const Wrap: React.FC<{
   );
 };
 
+const toneAt = (frame: number) => {
+  let acc = 0;
+  for (let i = 0; i < SCENE_SECONDS.length; i++) {
+    acc += SCENE_SECONDS[i];
+    if (frame < acc * 30) return TONES[i];
+  }
+  return TONES[TONES.length - 1];
+};
+
 export const CheVideo: React.FC = () => {
   const { fps } = useVideoConfig();
   let acc = 0;
@@ -210,8 +255,13 @@ export const CheVideo: React.FC = () => {
           tin={i > 0 ? TRANS[i - 1] : undefined}
           tout={i < SCENES.length - 1 ? TRANS[i] : undefined}
         >
-          <Scene d={len} />
+          <AbsoluteFill
+            style={{ translate: `0px ${NO_LIFT.has(i) ? 0 : LIFT}px` }}
+          >
+            <Scene d={len} />
+          </AbsoluteFill>
           {SCRAPS.has(i) ? <Scraps seed={i} /> : null}
+          <CaptionBand tone={TONES[i]} />
         </Wrap>
       </Sequence>
     );
@@ -219,6 +269,7 @@ export const CheVideo: React.FC = () => {
   return (
     <AbsoluteFill style={{ background: "#0b0b0b" }}>
       {items}
+      <Captions toneAt={toneAt} />
       <FilmLook />
       <Audio src={staticFile("che/narracao.m4a")} />
     </AbsoluteFill>

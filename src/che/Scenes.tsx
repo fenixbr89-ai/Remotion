@@ -163,7 +163,7 @@ export const S02: React.FC<S> = ({ d }) => {
           style={{
             position: "absolute",
             left: 300,
-            top: 1200,
+            top: 1060,
             rotate: "-3deg",
             ...pop(f, 48),
           }}
@@ -217,7 +217,7 @@ export const S03: React.FC<S> = ({ d }) => {
         </div>
         <div style={{ ...center, top: 520, ...pop(f, 10, 18) }}>
           <div style={{ rotate: "-2deg" }}>
-            <Photo k="portrait" w={760} h={980} border={22} pos="50% 20%" />
+            <Photo k="portrait" w={760} h={900} border={22} pos="50% 20%" />
           </div>
         </div>
         <div style={{ ...center, top: 1590 }}>
@@ -251,10 +251,10 @@ export const S04: React.FC<S> = ({ d }) => {
   return (
     <Paper>
       <Camera dur={d} from={1.0} to={1.12} x={60} y={-120}>
-        <div style={{ position: "absolute", left: 40, top: 520 }}>
+        <div style={{ position: "absolute", left: 40, top: 380 }}>
           <MapArt
             w={1000}
-            h={1300}
+            h={1130}
             fit={SA}
             highlight={[{ name: "Argentina", color: C.red, start: 120 }]}
             pins={[{ at: [-60.64, -32.95], label: "ROSARIO", start: 110 }]}
@@ -271,34 +271,12 @@ export const S04: React.FC<S> = ({ d }) => {
             size={66}
           />
         </div>
-        <div
-          style={{
-            position: "absolute",
-            right: 90,
-            top: 470,
-            rotate: "-8deg",
-            opacity: ease(f, 64, 70),
-            scale: String(interpolate(f, [64, 74], [1.4, 1], clamp)),
-          }}
-        >
-          <div
-            style={{
-              border: `6px solid ${C.red}`,
-              padding: "6px 22px",
-              fontFamily: TYPE,
-              fontSize: 92,
-              color: C.red,
-            }}
-          >
-            1928
-          </div>
-        </div>
         {has("kid") ? (
           <div
             style={{
               position: "absolute",
               left: 90,
-              top: 1240,
+              top: 980,
               rotate: "5deg",
               ...pop(f, 64),
             }}
@@ -383,13 +361,6 @@ export const S05: React.FC<S> = ({ d }) => {
             size={84}
           />
         </div>
-        <RedStroke
-          start={80}
-          w={420}
-          h={40}
-          style={{ left: 520, top: 1440 }}
-          d="M5 20 C 120 5, 260 35, 410 15"
-        />
         <Label
           text="BUENOS AIRES"
           start={110}
@@ -416,7 +387,7 @@ const TRIP: LonLat[] = [
 ];
 export const S06: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
-  const proj = useProjector(1000, 1300, SA);
+  const proj = useProjector(1000, 1130, SA);
   const t = ease(f, 14, d - 8, 0, 1, easeInOut);
   const seg = Math.min(TRIP.length - 2, Math.floor(t * (TRIP.length - 1)));
   const lt = t * (TRIP.length - 1) - seg;
@@ -430,10 +401,10 @@ export const S06: React.FC<S> = ({ d }) => {
   return (
     <Paper>
       <Camera dur={d} from={1.0} to={1.06}>
-        <div style={{ position: "absolute", left: 40, top: 520 }}>
+        <div style={{ position: "absolute", left: 40, top: 380 }}>
           <MapArt
             w={1000}
-            h={1300}
+            h={1130}
             fit={SA}
             routes={[{ pts: TRIP, start: 14, dur: d - 22 }]}
           />
@@ -500,7 +471,9 @@ export const S07: React.FC<S> = ({ d }) => {
   return (
     <Dark>
       <Camera dur={d} from={1.05} to={1.18} x={-30}>
-        <AbsoluteFill style={{ opacity: 0.85 }}>
+        <AbsoluteFill
+          style={{ opacity: 1, filter: "brightness(1.35) contrast(1.05)" }}
+        >
           <Photo
             k="leper"
             w={1080}
@@ -513,7 +486,7 @@ export const S07: React.FC<S> = ({ d }) => {
         <AbsoluteFill
           style={{
             background:
-              "linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.15) 40%, rgba(0,0,0,.7))",
+              "linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,0) 40%, rgba(0,0,0,.35))",
           }}
         />
       </Camera>
@@ -582,34 +555,12 @@ export const S08: React.FC<S> = ({ d }) => {
           style={{
             position: "absolute",
             left: 74,
-            top: 640,
+            top: 380,
             translate: `0px ${(1 - ease(f, 8, 40)) * 500}px`,
           }}
         >
           <Cutout k="fidel" h={1320} edge={0} />
         </div>
-        <div style={{ ...center, top: 400 }}>
-          <div
-            style={{
-              fontFamily: SERIF,
-              fontWeight: 800,
-              fontSize: 120,
-              letterSpacing: -3,
-              color: C.red,
-              opacity: ease(f, 160, 174),
-              filter: `blur(${(1 - ease(f, 160, 174)) * 10}px)`,
-            }}
-          >
-            Fidel Castro
-          </div>
-        </div>
-        <RedStroke
-          start={176}
-          w={620}
-          h={40}
-          style={{ left: 230, top: 590 }}
-          d="M5 25 C 200 5, 420 35, 610 12"
-        />
         <Label
           text="↑ CHE"
           start={50}
@@ -889,8 +840,8 @@ export const S13: React.FC<S> = ({ d }) => (
         <div style={{ rotate: "-2deg", opacity: 0.92 }}>
           <Photo
             k="sierra"
-            w={900}
-            h={640}
+            w={960}
+            h={860}
             border={16}
             tint="bw"
             pos="50% 50%"

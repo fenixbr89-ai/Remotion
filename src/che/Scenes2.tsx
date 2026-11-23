@@ -18,6 +18,7 @@ import {
   Paper,
   RedStroke,
   SERIF,
+  SHOW_SCENE_TEXT,
   SerifWords,
   TYPE,
   TypeCaps,
@@ -44,6 +45,7 @@ const Stamp: React.FC<{
   color?: string;
 }> = ({ text, start, style, size = 90, color = C.red }) => {
   const f = useCurrentFrame();
+  if (!SHOW_SCENE_TEXT) return null;
   return (
     <div
       style={{
@@ -145,7 +147,7 @@ export const N_Guatemala: React.FC<S> = ({ d }) => {
           style={{
             position: "absolute",
             left: 560,
-            top: 420,
+            top: 620,
             rotate: "6deg",
             ...pop(f, 30),
           }}
@@ -162,7 +164,7 @@ export const N_Guatemala: React.FC<S> = ({ d }) => {
           style={{
             position: "absolute",
             left: 60,
-            top: 520,
+            top: 720,
             rotate: "-4deg",
             ...pop(f, 8),
           }}
@@ -178,7 +180,7 @@ export const N_Guatemala: React.FC<S> = ({ d }) => {
           start={44}
           w={600}
           h={160}
-          style={{ left: 70, top: 600 }}
+          style={{ left: 70, top: 800 }}
           len={1700}
           d="M300 10 C 520 0, 600 60, 580 100 C 550 160, 80 160, 30 100 C -10 50, 120 10, 320 14"
         />
@@ -350,12 +352,12 @@ export const N_SantaClara: React.FC<S> = ({ d }) => {
           style={{
             position: "absolute",
             left: 120,
-            top: 860,
+            top: 820,
             rotate: "-4deg",
             ...pop(f, 30),
           }}
         >
-          <Photo k="havana" w={600} h={720} border={18} pos="40% 40%" />
+          <Photo k="havana" w={560} h={620} border={18} pos="40% 40%" />
         </div>
         <Label
           text="TREM BLINDADO · DEZ 1958"

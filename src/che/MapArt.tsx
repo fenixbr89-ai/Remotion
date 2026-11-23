@@ -3,7 +3,7 @@ import { useCurrentFrame } from "remotion";
 import { geoMercator, geoPath, geoNaturalEarth1, GeoProjection } from "d3-geo";
 import { feature } from "topojson-client";
 import world from "world-atlas/countries-50m.json";
-import { C, TYPE, ease, easeInOut, easeOut } from "./lib";
+import { C, SHOW_SCENE_TEXT, TYPE, ease, easeInOut, easeOut } from "./lib";
 
 import type { Topology, GeometryCollection } from "topojson-specification";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
@@ -157,24 +157,26 @@ export const MapArt: React.FC<MapSpec> = ({
               stroke="#fff"
               strokeWidth={3}
             />
-            <text
-              x={x + (side === "r" ? 26 : -26)}
-              y={y + 12}
-              textAnchor={side === "r" ? "start" : "end"}
-              fontFamily={TYPE}
-              fontSize={38}
-              fill={C.ink}
-              style={{
-                paintOrder: "stroke",
-                stroke: "rgba(233,230,223,0.9)",
-                strokeWidth: 8,
-              }}
-            >
-              {pin.label.slice(
-                0,
-                Math.max(0, Math.floor((f - pin.start - 6) * 0.9)),
-              )}
-            </text>
+            {SHOW_SCENE_TEXT ? (
+              <text
+                x={x + (side === "r" ? 26 : -26)}
+                y={y + 12}
+                textAnchor={side === "r" ? "start" : "end"}
+                fontFamily={TYPE}
+                fontSize={38}
+                fill={C.ink}
+                style={{
+                  paintOrder: "stroke",
+                  stroke: "rgba(233,230,223,0.9)",
+                  strokeWidth: 8,
+                }}
+              >
+                {pin.label.slice(
+                  0,
+                  Math.max(0, Math.floor((f - pin.start - 6) * 0.9)),
+                )}
+              </text>
+            ) : null}
           </g>
         );
       })}
