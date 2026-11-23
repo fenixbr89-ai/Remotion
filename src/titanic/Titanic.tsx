@@ -1,9 +1,10 @@
 /**
- * "Por que o Titanic afundou" — premium 3D motion style for @quebra.padrao.
- * Rules: black & white only; red only for negative things; real people in B&W photos;
- * cards face the camera (slight tilt only); captions at the bottom, max 2 lines.
+ * "Por que o Titanic afundou" — black & white 3D motion for @quebra.padrao.
+ *  - visuals are driven by the caption words (each element enters on its word);
+ *  - the camera moves (push, pull, pan, slight roll) on the beats;
+ *  - every scene opens the next one (match, dive, shrink/grow, iris, pan, flash).
  */
-import React from "react";
+import React, { createContext, useContext } from "react";
 import {
   AbsoluteFill,
   Img,
@@ -22,258 +23,115 @@ import {
   loadFonts,
   pop,
 } from "../che/lib";
+import { Glass, Glow, Glyph, Icon, Mat, PhotoIn, RED } from "./kit";
 
 loadFonts();
 
-const RED = "#e0372e";
+const FPS = 30;
+const TF = 16; // transition overlap (frames)
 const BAND_TOP = 1330;
 
-/* ---------------- glyphs (drawn in a 100x100 box) ---------------- */
-const G: Record<string, string> = {
-  ship: '<path d="M8 60 L92 60 L80 80 L20 80 Z" fill="F"/><rect x="26" y="44" width="48" height="14" rx="3" fill="F"/><rect x="32" y="24" width="8" height="18" fill="F"/><rect x="46" y="24" width="8" height="18" fill="F"/><rect x="60" y="24" width="8" height="18" fill="F"/>',
-  ice: '<path d="M50 8 L70 40 L86 44 L94 80 L6 80 L18 50 L34 44 Z" fill="F"/><path d="M50 8 L58 40 L44 80" stroke="A" stroke-width="4" fill="none"/>',
-  buoy: '<circle cx="50" cy="50" r="36" fill="none" stroke="F" stroke-width="16"/><path d="M50 12 V28 M50 72 V88 M12 50 H28 M72 50 H88" stroke="A" stroke-width="16"/>',
-  bino: '<circle cx="28" cy="64" r="20" fill="F"/><circle cx="72" cy="64" r="20" fill="F"/><rect x="16" y="22" width="22" height="40" rx="8" fill="F"/><rect x="62" y="22" width="22" height="40" rx="8" fill="F"/><rect x="38" y="36" width="24" height="16" fill="F"/><circle cx="28" cy="64" r="9" fill="A"/><circle cx="72" cy="64" r="9" fill="A"/>',
-  lock: '<rect x="20" y="44" width="60" height="44" rx="10" fill="F"/><path d="M32 44 V32 a18 18 0 0 1 36 0 V44" stroke="F" stroke-width="10" fill="none"/><circle cx="50" cy="64" r="7" fill="A"/>',
-  key: '<circle cx="30" cy="50" r="17" fill="none" stroke="F" stroke-width="10"/><path d="M47 50 H90 M76 50 V64 M88 50 V60" stroke="F" stroke-width="10" stroke-linecap="round"/>',
-  warn: '<path d="M50 12 L90 84 L10 84 Z" fill="F" stroke="F" stroke-width="6" stroke-linejoin="round"/><rect x="45" y="36" width="10" height="28" rx="4" fill="A"/><circle cx="50" cy="74" r="6" fill="A"/>',
-  shield:
-    '<path d="M50 8 L84 20 V48 C84 70, 68 84, 50 92 C32 84, 16 70, 16 48 V20 Z" fill="F"/><path d="M34 50 L46 62 L68 38" stroke="A" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
-  moon: '<path d="M62 12 A40 40 0 1 0 88 66 A32 32 0 1 1 62 12 Z" fill="F"/>',
-  radio:
-    '<rect x="18" y="46" width="64" height="40" rx="8" fill="F"/><circle cx="36" cy="66" r="9" fill="A"/><rect x="52" y="58" width="22" height="5" rx="2" fill="A"/><rect x="52" y="68" width="22" height="5" rx="2" fill="A"/><path d="M60 46 L76 14" stroke="F" stroke-width="6" stroke-linecap="round"/>',
-  boat: '<path d="M8 52 L92 52 L76 78 L24 78 Z" fill="F"/><path d="M50 14 L50 50 M52 18 L76 46 L52 46 Z" stroke="F" stroke-width="5" fill="F"/>',
-  person:
-    '<circle cx="50" cy="26" r="16" fill="F"/><path d="M18 92 V66 Q18 48 50 48 Q82 48 82 66 V92 Z" fill="F"/>',
-  gauge:
-    '<path d="M12 70 A40 40 0 0 1 88 70" fill="none" stroke="F" stroke-width="12" stroke-linecap="round"/><circle cx="50" cy="70" r="9" fill="F"/>',
-  chat: '<path d="M14 20 H86 A8 8 0 0 1 94 28 V64 A8 8 0 0 1 86 72 H44 L24 88 V72 H14 A8 8 0 0 1 6 64 V28 A8 8 0 0 1 14 20 Z" fill="F"/><circle cx="32" cy="46" r="6" fill="A"/><circle cx="50" cy="46" r="6" fill="A"/><circle cx="68" cy="46" r="6" fill="A"/>',
+/* ---------------- words & timing ---------------- */
+type Tok = { w: string; k: "n" | "b" | "r" };
+type Word = Tok & { t: number; page: number };
+const norm = (w: string) =>
+  w
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9@]/g, "");
+
+const parse = (page: string): Tok[] => {
+  const out: Tok[] = [];
+  const re = /\*\*(.+?)\*\*([.,:?!]*)|\[\[(.+?)\]\]([.,:?!]*)|(\S+)/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(page))) {
+    if (m[1]) {
+      const ws = m[1].split(" ");
+      ws.forEach((w, i) =>
+        out.push({ w: i === ws.length - 1 ? w + m![2] : w, k: "b" }),
+      );
+    } else if (m[3]) {
+      const ws = m[3].split(" ");
+      ws.forEach((w, i) =>
+        out.push({ w: i === ws.length - 1 ? w + m![4] : w, k: "r" }),
+      );
+    } else out.push({ w: m[5], k: "n" });
+  }
+  return out;
 };
 
-type Mat = "silver" | "red" | "dark";
-const MAT: Record<Mat, { bg: string; shadow: string; f: string; a: string }> = {
-  silver: {
-    bg: "linear-gradient(160deg,#ffffff 0%,#d9d9de 45%,#7d7d86 100%)",
-    shadow:
-      "0 30px 60px rgba(0,0,0,.6), 0 0 40px rgba(255,255,255,.08), inset 0 -10px 24px rgba(0,0,0,.35), inset 0 8px 14px rgba(255,255,255,.8)",
-    f: "#17171b",
-    a: "#8a8a92",
-  },
-  red: {
-    bg: "linear-gradient(160deg,#ff8a7e 0%,#e0372e 45%,#8a1410 100%)",
-    shadow:
-      "0 30px 60px rgba(224,55,46,.4), inset 0 -10px 24px rgba(80,0,0,.45), inset 0 8px 14px rgba(255,255,255,.5)",
-    f: "#ffffff",
-    a: "#a3140f",
-  },
-  dark: {
-    bg: "linear-gradient(160deg,#4a4a52 0%,#23232a 55%,#0f0f12 100%)",
-    shadow:
-      "0 30px 60px rgba(0,0,0,.6), inset 0 -10px 24px rgba(0,0,0,.6), inset 0 8px 14px rgba(255,255,255,.25)",
-    f: "#ffffff",
-    a: "rgba(255,255,255,.4)",
-  },
+const timeline = (pages: string[]) => {
+  let t = 0.3;
+  const words: Word[] = [];
+  const pageStart: number[] = [];
+  pages.forEach((pg, pi) => {
+    pageStart.push(t);
+    parse(pg).forEach((tk) => {
+      words.push({ ...tk, t, page: pi });
+      let d = 0.27 + 0.024 * tk.w.length;
+      if (/,$/.test(tk.w)) d += 0.14;
+      if (/[.?!:]$/.test(tk.w)) d += 0.34;
+      t += d;
+    });
+    t += 0.1;
+  });
+  return { words, pageStart, dur: t + 0.35 };
 };
 
-const Glyph: React.FC<{
-  g: string;
-  f: string;
-  a: string;
-  size: string | number;
-}> = ({ g, f, a, size }) => (
-  <svg
-    viewBox="0 0 100 100"
-    width={size}
-    height={size}
-    dangerouslySetInnerHTML={{
-      __html: G[g].split('"F"').join(`"${f}"`).split('"A"').join(`"${a}"`),
-    }}
-  />
-);
-
-/** Glossy 3D squircle icon; floats gently. */
-const Icon: React.FC<{
-  g: string;
-  x: number;
-  y: number;
-  s: number;
-  mat?: Mat;
-  rot?: number;
-  blur?: boolean;
-  at?: number;
-  slash?: number; // 0..1 red slash drawn over it
-}> = ({ g, x, y, s, mat = "silver", rot = 0, blur, at = 0, slash = 0 }) => {
-  const f = useCurrentFrame();
-  const m = MAT[mat];
-  const bob = Math.sin(f / 18 + x * 0.01) * 14;
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: x,
-        top: y,
-        width: s,
-        height: s,
-        translate: `0px ${bob}px`,
-        rotate: `${rot + Math.sin(f / 30 + y) * 2}deg`,
-        filter: blur ? "blur(10px)" : undefined,
-        opacity: (blur ? 0.7 : 1) * pop(f, at, 16).opacity,
-        scale: pop(f, at, 16).scale,
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          borderRadius: "28%",
-          background: m.bg,
-          boxShadow: m.shadow,
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            left: "12%",
-            right: "12%",
-            top: "6%",
-            height: "34%",
-            borderRadius: "50%",
-            background:
-              "linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,0))",
-          }}
-        />
-      </div>
-      <div style={{ position: "absolute", inset: "22%" }}>
-        <Glyph g={g} f={m.f} a={m.a} size="100%" />
-      </div>
-      {slash > 0 ? (
-        <svg
-          viewBox="0 0 100 100"
-          style={{
-            position: "absolute",
-            inset: "10%",
-            width: "80%",
-            height: "80%",
-          }}
-        >
-          <line
-            x1={14}
-            y1={14}
-            x2={14 + 72 * slash}
-            y2={14 + 72 * slash}
-            stroke={RED}
-            strokeWidth={10}
-            strokeLinecap="round"
-          />
-        </svg>
-      ) : null}
-    </div>
-  );
+const BeatCtx = createContext<{ words: Word[]; offset: number }>({
+  words: [],
+  offset: 0,
+});
+/** b("iceberg") → local frame where that word is spoken. */
+const useBeat = () => {
+  const { words, offset } = useContext(BeatCtx);
+  return (key: string, nth = 0) => {
+    const k = norm(key);
+    const hits = words.filter((w) => norm(w.w).startsWith(k));
+    const w = hits[Math.min(nth, hits.length - 1)];
+    return w ? offset + Math.round(w.t * FPS) : offset;
+  };
 };
 
-/** Frosted glass card, facing the camera (tiny tilt only). */
-const Glass: React.FC<{
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  at?: number;
-  tilt?: number;
-  children?: React.ReactNode;
-  radius?: number;
-}> = ({ x, y, w, h, at = 0, tilt = 0, children, radius = 44 }) => {
-  const f = useCurrentFrame();
-  const p = pop(f, at, 18);
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: x,
-        top: y,
-        width: w,
-        height: h,
-        borderRadius: radius,
-        background:
-          "linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.04) 55%,rgba(255,255,255,.08))",
-        border: "1.5px solid rgba(255,255,255,.22)",
-        boxShadow:
-          "0 50px 90px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.35)",
-        overflow: "hidden",
-        rotate: `${tilt + Math.sin(f / 40) * 0.6}deg`,
-        scale: p.scale,
-        opacity: p.opacity,
-      }}
-    >
-      {children}
-    </div>
-  );
-};
-
-const PhotoIn: React.FC<{ src: string; pos?: string; inset?: number }> = ({
-  src,
-  pos = "50% 45%",
-  inset = 20,
-}) => {
-  const f = useCurrentFrame();
-  return (
-    <div
-      style={{
-        position: "absolute",
-        inset,
-        borderRadius: 28,
-        overflow: "hidden",
-      }}
-    >
-      <Img
-        src={staticFile(`titanic/${src}`)}
-        style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          objectPosition: pos,
-          filter: "grayscale(1) contrast(1.12)",
-          scale: String(1.04 + f * 0.0007),
-        }}
-      />
-    </div>
-  );
-};
-
-const Glow: React.FC<{
-  x?: number;
-  y?: number;
-  r?: number;
-  a?: number;
-  color?: string;
-}> = ({ x = 540, y = 640, r = 460, a = 0.08, color = "255,255,255" }) => (
-  <div
-    style={{
-      position: "absolute",
-      left: x - r,
-      top: y - r,
-      width: r * 2,
-      height: r * 2,
-      borderRadius: "50%",
-      background: `radial-gradient(circle, rgba(${color},${a}), rgba(${color},0) 70%)`,
-    }}
-  />
-);
-
-/** Slow push-in; no sideways camera. */
-const Cam: React.FC<{
+/* ---------------- camera ---------------- */
+type CamKey = { f: number; s?: number; x?: number; y?: number; r?: number };
+const Camera: React.FC<{
+  keys: CamKey[];
   d: number;
   children: React.ReactNode;
-  from?: number;
-  to?: number;
-}> = ({ d, children, from = 1, to = 1.13 }) => {
+}> = ({ keys, d, children }) => {
   const f = useCurrentFrame();
-  const t = f / d;
+  const ks = [...keys].sort((a, b) => a.f - b.f);
+  const val = (prop: "s" | "x" | "y" | "r", def: number) => {
+    const pts = ks.map((k) => ({ f: k.f, v: k[prop] }));
+    let last = { f: 0, v: def };
+    const filled = pts.map((p) => {
+      last = { f: p.f, v: p.v ?? last.v };
+      return last;
+    });
+    if (f <= filled[0].f) return filled[0].v;
+    for (let i = 0; i < filled.length - 1; i++) {
+      const a = filled[i];
+      const b = filled[i + 1];
+      if (f <= b.f)
+        return (
+          a.v +
+          (b.v - a.v) *
+            easeInOut(
+              Math.max(0, Math.min(1, (f - a.f) / Math.max(1, b.f - a.f))),
+            )
+        );
+    }
+    return filled[filled.length - 1].v;
+  };
+  const drift = 1 + 0.04 * (f / d);
   return (
     <AbsoluteFill
       style={{
-        scale: String(from + (to - from) * t),
-        translate: `0px ${-24 * t}px`,
+        scale: String(val("s", 1) * drift),
+        translate: `${val("x", 0)}px ${val("y", 0)}px`,
+        rotate: `${val("r", 0)}deg`,
       }}
     >
       {children}
@@ -281,9 +139,9 @@ const Cam: React.FC<{
   );
 };
 
-const Stage: React.FC<{ children: React.ReactNode; glow?: number }> = ({
-  children,
+const Bg: React.FC<{ glow?: number; children: React.ReactNode }> = ({
   glow = 0.08,
+  children,
 }) => (
   <AbsoluteFill style={{ background: "#050506" }}>
     <Glow a={glow} />
@@ -291,38 +149,106 @@ const Stage: React.FC<{ children: React.ReactNode; glow?: number }> = ({
   </AbsoluteFill>
 );
 
+const at = (f: number, a: number, b: number, from = 0, to = 1) =>
+  ease(f, a, b, from, to, easeInOut);
+
 /* ---------------- scenes ---------------- */
 type S = { d: number };
 
-const S1: React.FC<S> = ({ d }) => (
-  <Stage>
-    <Cam d={d}>
-      <Glass x={100} y={330} w={880} h={560} at={2}>
-        <PhotoIn src="ship.jpg" pos="50% 55%" />
-      </Glass>
-      <Icon g="ice" x={730} y={790} s={230} at={40} />
-      <Icon g="buoy" x={50} y={140} s={150} rot={-14} blur />
-      <Icon g="ship" x={860} y={1100} s={130} rot={12} blur />
-    </Cam>
-  </Stage>
-);
+/** Titanic → iceberg → maior navio → impossível afundar (shield). */
+const A: React.FC<S> = ({ d }) => {
+  const f = useCurrentFrame();
+  const b = useBeat();
+  const tT = b("titanic");
+  const tI = b("iceberg");
+  const tM = b("maior");
+  const tImp = b("impossivel");
+  const iceY = interpolate(
+    f,
+    [tI - 4, tI + 18, tM - 10, tM + 14],
+    [1500, 640, 640, 1600],
+    { ...clamp, easing: easeInOut },
+  );
+  const grow = at(f, tM, tM + 24, 1, 1.12);
+  const flip = at(f, d - 16, d - 8, 0, 90);
+  return (
+    <Bg>
+      <Camera
+        d={d}
+        keys={[
+          { f: 0, s: 1.35, y: 60 },
+          { f: tT + 12, s: 1, y: 0 },
+          { f: tI, s: 1, r: 0 },
+          { f: tI + 22, s: 1.08, y: -40, r: -1.5 },
+          { f: tM, s: 1, y: 0, r: 0 },
+          { f: tImp, s: 1.05 },
+          { f: tImp + 24, s: 1.22, y: -50 },
+        ]}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            scale: String(grow),
+            opacity: 1 - at(f, d - 30, d - 14),
+          }}
+        >
+          <Glass x={100} y={300} w={880} h={560} at={tT - 6}>
+            <PhotoIn src="ship.jpg" pos="50% 55%" />
+          </Glass>
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            left: 60,
+            top: iceY,
+            width: 960,
+            opacity: ease(f, tI - 4, tI + 6),
+          }}
+        >
+          <Img
+            src={staticFile("titanic/iceberg_cut.png")}
+            style={{
+              width: "100%",
+              filter:
+                "grayscale(1) contrast(1.1) drop-shadow(0 40px 60px rgba(0,0,0,.8))",
+            }}
+          />
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            left: 425,
+            top: 800,
+            transform: `perspective(900px) rotateY(${flip}deg)`,
+          }}
+        >
+          <Icon g="shield" x={0} y={0} s={230} at={tImp} />
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 1 - at(f, d - 30, d - 14),
+          }}
+        >
+          <Icon g="buoy" x={50} y={140} s={150} rot={-14} blur at={tT} />
+          <Icon g="ship" x={860} y={1100} s={130} rot={12} blur at={tT + 6} />
+        </div>
+      </Camera>
+    </Bg>
+  );
+};
 
-const S2: React.FC<S> = ({ d }) => (
-  <Stage>
-    <Cam d={d} from={1.02} to={1.1}>
-      <Glass x={70} y={260} w={940} h={620} at={0}>
-        <PhotoIn src="ship.jpg" pos="40% 55%" />
-      </Glass>
-      <Icon g="shield" x={420} y={790} s={240} at={70} />
-      <Icon g="ship" x={60} y={1040} s={120} blur rot={-8} />
-      <Icon g="ice" x={880} y={150} s={120} blur rot={10} />
-    </Cam>
-  </Stage>
-);
-
-const S3: React.FC<S> = ({ d }) => {
+/** The shield flips into a red alert; six alerts surround the captain. */
+const B: React.FC<S> = ({ d }) => {
+  const f = useCurrentFrame();
+  const b = useBeat();
+  const tN = b("navio");
+  const tS = b("seis");
+  const flip = at(f, 8, 16, 90, 0);
+  const move = at(f, tN, tN + 20);
   const spots: [number, number, number][] = [
-    [90, 270, -10],
     [860, 250, 10],
     [70, 640, -6],
     [880, 620, 12],
@@ -330,11 +256,30 @@ const S3: React.FC<S> = ({ d }) => {
     [820, 990, 8],
   ];
   return (
-    <Stage>
-      <Cam d={d}>
-        <Glass x={240} y={230} w={600} h={800} at={0}>
+    <Bg>
+      <Camera
+        d={d}
+        keys={[
+          { f: 0, s: 1.22, y: -50 },
+          { f: tN + 20, s: 1, y: 0 },
+          { f: tS + 24, s: 1.08, r: 1 },
+        ]}
+      >
+        <Glass x={240} y={230} w={600} h={800} at={tN}>
           <PhotoIn src="smith.jpg" pos="50% 25%" />
         </Glass>
+        <div
+          style={{
+            position: "absolute",
+            left: interpolate(move, [0, 1], [425, 90]),
+            top: interpolate(move, [0, 1], [800, 270]),
+            scale: String(interpolate(move, [0, 1], [1, 130 / 230])),
+            transformOrigin: "0 0",
+            transform: `perspective(900px) rotateY(${flip}deg)`,
+          }}
+        >
+          <Icon g="warn" mat="red" x={0} y={0} s={230} />
+        </div>
         {spots.map(([x, y, r], i) => (
           <Icon
             key={i}
@@ -344,22 +289,29 @@ const S3: React.FC<S> = ({ d }) => {
             y={y}
             s={130}
             rot={r}
-            at={14 + i * 12}
+            at={tS + i * 5}
           />
         ))}
-      </Cam>
-    </Stage>
+      </Camera>
+    </Bg>
   );
 };
 
-const S4: React.FC<S> = ({ d }) => {
+/** Speed gauge: needle into the red on "40", lights dim on "escuro". */
+const C: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
+  const b = useBeat();
+  const t40 = b("40");
+  const tE = b("escuro");
   const ang =
-    interpolate(f, [8, 60], [-120, 48], { ...clamp, easing: easeOut }) +
-    Math.sin(f / 4) * 1.5;
+    interpolate(f, [t40 - 8, t40 + 20], [-120, 48], {
+      ...clamp,
+      easing: easeOut,
+    }) + (f > t40 + 20 ? Math.sin(f / 3) * 1.5 : 0);
+  const speed = 10 + at(f, t40, t40 + 20) * 30;
+  const dark = at(f, tE, tE + 20, 0, 0.5);
   return (
-    <Stage>
-      {/* speed streaks */}
+    <Bg>
       <svg
         width={1080}
         height={1330}
@@ -367,7 +319,7 @@ const S4: React.FC<S> = ({ d }) => {
       >
         {Array.from({ length: 18 }).map((_, i) => {
           const y = 120 + ((i * 137) % 1100);
-          const x = 1200 - ((f * (22 + (i % 5) * 6) + i * 300) % 1700);
+          const x = 1200 - ((f * (speed + (i % 5) * 6) + i * 300) % 1700);
           return (
             <line
               key={i}
@@ -376,15 +328,23 @@ const S4: React.FC<S> = ({ d }) => {
               x2={x + 160 + (i % 4) * 60}
               y2={y}
               stroke="#fff"
-              strokeOpacity={0.12 + (i % 3) * 0.06}
+              strokeOpacity={0.1 + (i % 3) * 0.06}
               strokeWidth={3}
               strokeLinecap="round"
             />
           );
         })}
       </svg>
-      <Cam d={d}>
-        <Glass x={240} y={300} w={600} h={600} at={0} radius={300}>
+      <Camera
+        d={d}
+        keys={[
+          { f: 0, s: 1 },
+          { f: t40, s: 1.04 },
+          { f: t40 + 26, s: 1.16, r: 1.2 },
+          { f: d - 10, s: 1.24, r: 0 },
+        ]}
+      >
+        <Glass x={240} y={300} w={600} h={600} radius={300}>
           <svg viewBox="0 0 600 600" width={600} height={600}>
             <path
               d="M120 400 A200 200 0 0 1 480 400"
@@ -399,6 +359,7 @@ const S4: React.FC<S> = ({ d }) => {
               stroke={RED}
               strokeWidth={34}
               strokeLinecap="round"
+              opacity={ease(f, t40 + 6, t40 + 16)}
             />
             <g transform={`rotate(${ang} 300 400)`}>
               <line
@@ -416,25 +377,47 @@ const S4: React.FC<S> = ({ d }) => {
         </Glass>
         <Icon g="ice" x={760} y={980} s={150} blur rot={-8} />
         <Icon g="ship" x={80} y={180} s={130} blur rot={10} />
-      </Cam>
-    </Stage>
+      </Camera>
+      <AbsoluteFill style={{ background: "#000", opacity: dark }} />
+    </Bg>
   );
 };
 
-const S5: React.FC<S> = ({ d }) => {
+/** Lookout eye → binoculars → red lock → key leaves. */
+const D: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
-  const kx = interpolate(f, [120, 170], [0, 700], {
-    ...clamp,
-    easing: easeInOut,
-  });
-  const ky = interpolate(f, [120, 170], [0, -500], {
-    ...clamp,
-    easing: easeInOut,
-  });
+  const b = useBeat();
+  const tB = b("binoculos");
+  const tTr = b("trancados");
+  const tCh = b("chave");
+  const tDes = b("desembarcou");
+  const eyeOut = at(f, tB - 6, tB + 10);
+  const keyFly = at(f, tDes, tDes + 26);
   return (
-    <Stage>
-      <Cam d={d}>
-        <Glass x={190} y={260} w={700} h={780} at={0}>
+    <Bg>
+      <Camera
+        d={d}
+        keys={[
+          { f: 0, s: 1 },
+          { f: tB, s: 1.12 },
+          { f: tTr, s: 1 },
+          { f: tTr + 16, s: 1.08, x: -30 },
+          { f: tDes, s: 1.04, x: 40 },
+          { f: d - 4, s: 1.12, x: 0 },
+        ]}
+      >
+        <div
+          style={{
+            position: "absolute",
+            left: 390,
+            top: 500,
+            opacity: 1 - eyeOut,
+            scale: String(1 - 0.5 * eyeOut),
+          }}
+        >
+          <Icon g="eye" x={0} y={0} s={300} />
+        </div>
+        <Glass x={190} y={260} w={700} h={780} at={tB - 4}>
           <div
             style={{
               position: "absolute",
@@ -444,130 +427,169 @@ const S5: React.FC<S> = ({ d }) => {
             }}
           />
         </Glass>
-        <Icon g="bino" x={330} y={430} s={420} at={6} />
-        <Icon g="lock" mat="red" x={690} y={780} s={210} rot={8} at={70} />
+        <Icon g="bino" x={330} y={430} s={420} at={tB} />
+        <Icon g="lock" mat="red" x={690} y={780} s={210} rot={8} at={tTr} />
         <div
           style={{
             position: "absolute",
-            left: 120 + kx,
-            top: 1000 + ky,
-            opacity: 1 - ease(f, 150, 175),
+            left: 140 + keyFly * 900,
+            top: 1000 - keyFly * 900,
+            opacity: 1 - ease(f, tDes + 18, tDes + 26),
           }}
         >
-          <Icon g="key" x={0} y={0} s={150} rot={-20} at={96} />
+          <Icon g="key" x={0} y={0} s={150} rot={-20} at={tCh} />
         </div>
-      </Cam>
-    </Stage>
+      </Camera>
+    </Bg>
   );
 };
 
-const S6: React.FC<S> = ({ d }) => {
+/** Through the lens: night without moon, flat sea, the iceberg, 37 seconds. */
+const E: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
+  const b = useBeat();
+  const tL = b("lua");
+  const tO = b("ondas");
+  const tI = b("iceberg");
+  const t37 = b("37");
+  const shipX = interpolate(f, [tO, d], [60, 470], clamp);
+  const iceRise = at(f, tI - 2, tI + 18);
+  const left = interpolate(f, [t37, d - 2], [37, 0], clamp);
+  const c = 2 * Math.PI * 150;
   return (
-    <Stage glow={0.04}>
-      <Cam d={d}>
-        <Icon g="moon" x={400} y={250} s={280} at={2} slash={ease(f, 40, 60)} />
-        {/* perfectly flat sea */}
+    <Bg glow={0.03}>
+      <Camera
+        d={d}
+        keys={[
+          { f: 0, s: 1.15 },
+          { f: tO, s: 1 },
+          { f: tI, s: 1 },
+          { f: tI + 22, s: 1.12, x: -60, y: 20 },
+          { f: d, s: 1.3, x: -140, y: 30 },
+        ]}
+      >
+        <Icon
+          g="moon"
+          x={110}
+          y={170}
+          s={220}
+          at={b("noite")}
+          slash={ease(f, tL + 4, tL + 20)}
+        />
         <div
           style={{
             position: "absolute",
-            left: 60,
-            right: 60,
-            top: 900,
+            left: 40,
+            top: 880,
             height: 3,
+            width: 1000 * ease(f, tO - 4, tO + 20),
             background:
-              "linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.7),rgba(255,255,255,0))",
-            opacity: ease(f, 20, 40),
+              "linear-gradient(90deg,rgba(255,255,255,.1),rgba(255,255,255,.75),rgba(255,255,255,.1))",
           }}
         />
         <div
           style={{
             position: "absolute",
-            left: interpolate(f, [0, d], [140, 560]),
-            top: 820,
-            opacity: ease(f, 24, 40),
+            left: shipX,
+            top: 790,
+            opacity: ease(f, tO, tO + 10),
           }}
         >
           <Glyph g="ship" f="#d9d9de" a="#555" size={110} />
         </div>
-        <Icon g="ice" x={830} y={760} s={150} at={60} mat="dark" />
-      </Cam>
-    </Stage>
-  );
-};
-
-const S7: React.FC<S> = ({ d }) => {
-  const f = useCurrentFrame();
-  const t = interpolate(f, [6, d - 6], [37, 0], clamp);
-  const p = t / 37;
-  const r = 250;
-  const c = 2 * Math.PI * r;
-  const late = t < 12;
-  return (
-    <Stage>
-      <Cam d={d}>
-        <Glass x={240} y={300} w={600} h={600} at={0} radius={300}>
-          <svg viewBox="0 0 600 600" width={600} height={600}>
-            <circle
-              cx={300}
-              cy={300}
-              r={r}
-              fill="none"
-              stroke="rgba(255,255,255,.15)"
-              strokeWidth={22}
-            />
-            <circle
-              cx={300}
-              cy={300}
-              r={r}
-              fill="none"
-              stroke={late ? RED : "#fff"}
-              strokeWidth={22}
-              strokeLinecap="round"
-              strokeDasharray={c}
-              strokeDashoffset={c * (1 - p)}
-              transform="rotate(-90 300 300)"
-            />
-          </svg>
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontFamily: SANS,
-              fontWeight: 800,
-              fontSize: 230,
-              color: late ? RED : "#fff",
-              letterSpacing: -8,
-            }}
-          >
-            {Math.ceil(t)}
-          </div>
-        </Glass>
         <div
           style={{
             position: "absolute",
-            left: interpolate(f, [0, d], [980, 760]),
-            top: 960,
-            scale: String(interpolate(f, [0, d], [0.7, 1.3])),
+            left: 600,
+            top: 882 - 190 * iceRise,
+            width: 440,
+            height: 190 * iceRise,
+            overflow: "hidden",
           }}
         >
-          <Icon g="ice" x={0} y={0} s={170} />
+          <Img
+            src={staticFile("titanic/iceberg_cut.png")}
+            style={{
+              width: 440,
+              position: "absolute",
+              top: 0,
+              filter: "grayscale(1) brightness(.95)",
+            }}
+          />
         </div>
-      </Cam>
-    </Stage>
+        <div
+          style={{
+            position: "absolute",
+            left: 600,
+            top: 140,
+            ...pop(f, t37, 16),
+          }}
+        >
+          <Glass x={0} y={0} w={380} h={380} radius={190}>
+            <svg viewBox="0 0 380 380" width={380} height={380}>
+              <circle
+                cx={190}
+                cy={190}
+                r={150}
+                fill="none"
+                stroke="rgba(255,255,255,.15)"
+                strokeWidth={16}
+              />
+              <circle
+                cx={190}
+                cy={190}
+                r={150}
+                fill="none"
+                stroke={left < 12 ? RED : "#fff"}
+                strokeWidth={16}
+                strokeLinecap="round"
+                strokeDasharray={c}
+                strokeDashoffset={c * (1 - left / 37)}
+                transform="rotate(-90 190 190)"
+              />
+            </svg>
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: SANS,
+                fontWeight: 800,
+                fontSize: 150,
+                color: left < 12 ? RED : "#fff",
+                letterSpacing: -6,
+              }}
+            >
+              {Math.ceil(left)}
+            </div>
+          </Glass>
+        </div>
+      </Camera>
+    </Bg>
   );
 };
 
-const S8: React.FC<S> = ({ d }) => {
+/** Impact → hull cross-section floods from the bow. */
+const F: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
+  const b = useBeat();
+  const tA = b("abriu");
+  const tAg = b("aguentava");
   const n = 16;
   return (
-    <Stage>
-      <Cam d={d}>
-        <Glass x={50} y={380} w={980} h={480} at={0}>
+    <Bg>
+      <Camera
+        d={d}
+        keys={[
+          { f: 0, s: 1.7, x: -320 },
+          { f: tA + 10, s: 1.6, x: -300 },
+          { f: tAg - 10, s: 1.15, x: -100 },
+          { f: tAg + 10, s: 1, x: 0 },
+        ]}
+      >
+        <Glass x={50} y={380} w={980} h={480}>
           <svg viewBox="0 0 980 480" width={980} height={480}>
             {[300, 400, 500, 600].map((x) => (
               <rect
@@ -589,9 +611,14 @@ const S8: React.FC<S> = ({ d }) => {
             {Array.from({ length: n }).map((_, i) => {
               const x0 = 140 + i * (730 / n);
               const w = 730 / n;
+              const k = n - 1 - i; // bow first
               const flood =
-                i >= n - 6
-                  ? ease(f, 30 + (n - 1 - i) * 10, 50 + (n - 1 - i) * 10)
+                k < 6
+                  ? at(
+                      f,
+                      tA + k * ((tAg - tA) / 6),
+                      tA + k * ((tAg - tA) / 6) + 16,
+                    )
                   : 0;
               return (
                 <g key={i}>
@@ -623,23 +650,35 @@ const S8: React.FC<S> = ({ d }) => {
             />
           </svg>
         </Glass>
-        <Icon g="warn" mat="red" x={820} y={880} s={160} rot={10} at={70} />
-        <Icon g="ice" x={60} y={180} s={130} blur rot={-10} />
-      </Cam>
-    </Stage>
+        <Icon g="warn" mat="red" x={820} y={880} s={160} rot={10} at={tAg} />
+      </Camera>
+    </Bg>
   );
 };
 
-const S9: React.FC<S> = ({ d }) => {
+/** Pan to the Californian: radio waves go out, its radio is off. */
+const Gs: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
-  const off = f > 120;
+  const b = useBeat();
+  const tNv = b("navio");
+  const tR = b("radio");
+  const tD = b("desligado");
+  const off = f > tD;
+  const ringsOn = 1 - ease(f, tD + 10, tD + 30);
   return (
-    <Stage>
-      <Cam d={d}>
-        <Glass x={80} y={230} w={920} h={560} at={0}>
+    <Bg>
+      <Camera
+        d={d}
+        keys={[
+          { f: 0, s: 1.1, x: 220 },
+          { f: tNv, s: 1, x: 0 },
+          { f: tR, s: 1.05, x: -60, y: -40 },
+          { f: tD + 12, s: 1.14, x: -130, y: -70 },
+        ]}
+      >
+        <Glass x={80} y={230} w={920} h={560} at={tNv}>
           <PhotoIn src="californian.jpg" pos="50% 50%" />
         </Glass>
-        {/* Titanic calling */}
         <div style={{ position: "absolute", left: 140, top: 900 }}>
           <Glyph g="ship" f="#d9d9de" a="#555" size={130} />
           <svg
@@ -650,6 +689,7 @@ const S9: React.FC<S> = ({ d }) => {
               left: 60,
               top: -80,
               overflow: "visible",
+              opacity: ringsOn,
             }}
           >
             {Array.from({ length: 4 }).map((_, i) => {
@@ -675,23 +715,34 @@ const S9: React.FC<S> = ({ d }) => {
           x={700}
           y={860}
           s={220}
-          at={40}
-          slash={ease(f, 120, 140)}
+          at={tR}
+          slash={ease(f, tD, tD + 16)}
         />
-      </Cam>
-    </Stage>
+      </Camera>
+    </Bg>
   );
 };
 
-const S10: React.FC<S> = ({ d }) => {
+/** Lifeboats for half of the people. */
+const H: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
+  const b = useBeat();
+  const tBo = b("botes");
+  const tMe = b("metade");
   return (
-    <Stage>
-      <Cam d={d}>
-        <Glass x={90} y={170} w={900} h={460} at={0}>
+    <Bg>
+      <Camera
+        d={d}
+        keys={[
+          { f: 0, s: 1.05, y: 140 },
+          { f: tBo, s: 1.05, y: -40 },
+          { f: tMe, s: 1.12, y: -150 },
+        ]}
+      >
+        <Glass x={90} y={170} w={900} h={460}>
           <PhotoIn src="lifeboat.jpg" pos="50% 50%" />
         </Glass>
-        <Glass x={90} y={680} w={900} h={520} at={10}>
+        <Glass x={90} y={680} w={900} h={520} at={tBo - 4}>
           <div
             style={{
               position: "absolute",
@@ -704,7 +755,7 @@ const S10: React.FC<S> = ({ d }) => {
             }}
           >
             {Array.from({ length: 20 }).map((_, i) => (
-              <div key={i} style={{ opacity: ease(f, 16 + i * 2, 26 + i * 2) }}>
+              <div key={i} style={{ opacity: ease(f, tBo + i, tBo + i + 8) }}>
                 <Glyph g="boat" f="#fff" a="#fff" size={62} />
               </div>
             ))}
@@ -721,12 +772,16 @@ const S10: React.FC<S> = ({ d }) => {
             }}
           >
             {Array.from({ length: 60 }).map((_, i) => {
-              const lost = i >= 30;
-              const red = lost ? ease(f, 70 + (i - 30), 80 + (i - 30)) : 0;
+              const red =
+                i >= 30
+                  ? ease(f, tMe + (i - 30) * 0.5, tMe + (i - 30) * 0.5 + 6)
+                  : 0;
               return (
                 <div
                   key={i}
-                  style={{ opacity: ease(f, 30 + i * 0.6, 40 + i * 0.6) }}
+                  style={{
+                    opacity: ease(f, tBo + 8 + i * 0.4, tBo + 16 + i * 0.4),
+                  }}
                 >
                   <Glyph
                     g="person"
@@ -739,23 +794,91 @@ const S10: React.FC<S> = ({ d }) => {
             })}
           </div>
         </Glass>
-      </Cam>
-    </Stage>
+      </Camera>
+    </Bg>
   );
 };
 
-const S11: React.FC<S> = ({ d }) => {
+/** Clock spins (three hours), the ship sinks, then the paperboy and the toll. */
+const I: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
+  const b = useBeat();
+  const tTr = b("tres");
+  const tAf = b("afundou");
+  const t15 = b("1500");
+  const sink = at(f, tAf, tAf + 40);
+  const hand = (f - tTr) * 9;
   return (
-    <Stage>
-      <Cam d={d}>
+    <Bg>
+      <Camera
+        d={d}
+        keys={[
+          { f: 0, s: 1.05 },
+          { f: tAf, s: 1 },
+          { f: tAf + 30, s: 1.08, r: 1.5, y: 40 },
+          { f: t15, s: 1, r: 0, y: 0 },
+          { f: d, s: 1.06 },
+        ]}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 1 - sink,
+            translate: `0px ${sink * 700}px`,
+            rotate: `${sink * 12}deg`,
+          }}
+        >
+          <Glass x={140} y={450} w={800} h={480}>
+            <PhotoIn src="ship.jpg" pos="45% 55%" />
+          </Glass>
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            left: 420,
+            top: 140,
+            opacity: 1 - ease(f, t15 - 10, t15),
+          }}
+        >
+          <Icon g="clock" x={0} y={0} s={240} at={tTr - 4} />
+          <svg
+            viewBox="0 0 100 100"
+            width={240}
+            height={240}
+            style={{ position: "absolute", left: 0, top: 0 }}
+          >
+            <g transform={`translate(50 50) rotate(${hand})`}>
+              <line
+                x1={0}
+                y1={0}
+                x2={0}
+                y2={-22}
+                stroke="#8a8a92"
+                strokeWidth={5}
+                strokeLinecap="round"
+              />
+            </g>
+            <g transform={`translate(50 50) rotate(${hand / 12})`}>
+              <line
+                x1={0}
+                y1={0}
+                x2={0}
+                y2={-14}
+                stroke="#17171b"
+                strokeWidth={6}
+                strokeLinecap="round"
+              />
+            </g>
+          </svg>
+        </div>
         <div
           style={{
             position: "absolute",
             left: 250,
-            top: 140,
-            opacity: ease(f, 0, 14),
-            translate: `0px ${(1 - ease(f, 0, 24)) * 60}px`,
+            top: 150,
+            opacity: ease(f, t15 - 6, t15 + 8),
+            translate: `0px ${(1 - ease(f, t15 - 6, t15 + 24)) * 260}px`,
           }}
         >
           <Img
@@ -767,16 +890,26 @@ const S11: React.FC<S> = ({ d }) => {
             }}
           />
         </div>
-        <Icon g="warn" mat="red" x={820} y={380} s={160} rot={12} at={40} />
-        <Icon g="person" x={70} y={300} s={140} blur rot={-10} />
-        <Icon g="ship" x={60} y={950} s={130} blur rot={8} mat="dark" />
-      </Cam>
-    </Stage>
+        <Icon
+          g="warn"
+          mat="red"
+          x={820}
+          y={380}
+          s={160}
+          rot={12}
+          at={t15 + 10}
+        />
+      </Camera>
+    </Bg>
   );
 };
 
-const S12: React.FC<S> = ({ d }) => {
+/** One error… then all of them orbit the ship. */
+const J: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
+  const b = useBeat();
+  const tE = b("erro");
+  const tV = b("varios");
   const items: { g: string; mat: Mat; slash?: boolean }[] = [
     { g: "warn", mat: "red" },
     { g: "lock", mat: "red" },
@@ -785,46 +918,78 @@ const S12: React.FC<S> = ({ d }) => {
     { g: "radio", mat: "red", slash: true },
     { g: "boat", mat: "silver" },
   ];
-  const rot = f * 0.4;
+  const burst = at(f, tV - 2, tV + 22);
+  const rot = f * 0.5;
   return (
-    <Stage>
-      <Cam d={d}>
-        <Glass x={340} y={460} w={400} h={300} at={0}>
+    <Bg>
+      <Camera
+        d={d}
+        keys={[
+          { f: 0, s: 1.25 },
+          { f: tV, s: 1 },
+          { f: d, s: 1.06, r: 2 },
+        ]}
+      >
+        <Glass x={340} y={460} w={400} h={300}>
           <PhotoIn src="ship.jpg" pos="50% 55%" inset={14} />
         </Glass>
+        <div
+          style={{
+            position: "absolute",
+            left: 460,
+            top: 180,
+            opacity: 1 - burst,
+          }}
+        >
+          <Icon g="warn" mat="red" x={0} y={0} s={160} at={tE} />
+        </div>
         {items.map((it, i) => {
           const a = ((i / items.length) * 360 + rot) * (Math.PI / 180);
-          const x = 540 + Math.cos(a) * 400 - 80;
-          const y = 610 + Math.sin(a) * 430 - 80;
+          const x = 540 + Math.cos(a) * 400 * burst - 80;
+          const y = 610 + Math.sin(a) * 430 * burst - 80;
           return (
-            <Icon
+            <div
               key={i}
-              g={it.g}
-              mat={it.mat}
-              x={x}
-              y={y}
-              s={160}
-              at={8 + i * 8}
-              slash={it.slash ? 1 : 0}
-            />
+              style={{ position: "absolute", left: x, top: y, opacity: burst }}
+            >
+              <Icon
+                g={it.g}
+                mat={it.mat}
+                x={0}
+                y={0}
+                s={160}
+                slash={it.slash ? 1 : 0}
+              />
+            </div>
           );
         })}
-      </Cam>
-    </Stage>
+      </Camera>
+    </Bg>
   );
 };
 
-const S13: React.FC<S> = ({ d }) => {
+/** Final hook: comment + profile card. */
+const K: React.FC<S> = ({ d }) => {
   const f = useCurrentFrame();
-  const pressAt = 120;
+  const b = useBeat();
+  const tSe = b("segue");
+  const tQ = b("@quebra");
+  const pressAt = tQ + 12;
   const pressed = f >= pressAt;
   const squash = 1 - 0.07 * Math.max(0, 1 - Math.abs(f - pressAt) / 5);
   const q = "qual erro foi o pior?";
-  const n = Math.max(0, Math.floor((f - 14) * 0.9));
+  const n = Math.max(0, Math.floor((f - 10) * 0.9));
   return (
-    <Stage glow={0.1}>
-      <Cam d={d} from={1} to={1.04}>
-        <Glass x={110} y={140} w={860} h={200} at={6} radius={36}>
+    <Bg glow={0.1}>
+      <Camera
+        d={d}
+        keys={[
+          { f: 0, s: 1.12, y: 160 },
+          { f: tSe - 6, s: 1.08, y: 140 },
+          { f: tSe + 14, s: 1, y: 0 },
+        ]}
+      >
+        <Glass x={110} y={140} w={860} h={200} at={2} radius={36}>
           <div
             style={{
               position: "absolute",
@@ -864,7 +1029,7 @@ const S13: React.FC<S> = ({ d }) => {
             <span style={{ opacity: n < q.length ? 1 : 0 }}>|</span>
           </div>
         </Glass>
-        <Glass x={120} y={420} w={840} h={820} at={60}>
+        <Glass x={120} y={420} w={840} h={820} at={tSe - 8}>
           <div
             style={{
               position: "absolute",
@@ -948,123 +1113,122 @@ const S13: React.FC<S> = ({ d }) => {
             </div>
           </div>
         </Glass>
-      </Cam>
-    </Stage>
+      </Camera>
+    </Bg>
   );
 };
 
-/* ---------------- timeline ---------------- */
-/** Caption pages per scene. **x** = white emphasis, [[x]] = red (negative). */
-const SCENES: {
-  C: React.FC<S>;
-  s: number;
-  caps: string[];
-  t: "zoom" | "up" | "fade" | "flash";
-}[] = [
+/* ---------------- script, transitions, timeline ---------------- */
+type Tr = {
+  type: "match" | "dive" | "shrink" | "iris" | "pan" | "flash" | "up";
+  p?: [number, number];
+  q?: [number, number];
+};
+
+/** **x** = white emphasis, [[x]] = red (negative). Max ~40 chars per page (2 lines). */
+const SCENES: { C: React.FC<S>; pages: string[]; out?: Tr }[] = [
   {
-    C: S1,
-    s: 4.2,
-    caps: ["O Titanic não afundou", "só por causa de um **iceberg**."],
-    t: "zoom",
-  },
-  {
-    C: S2,
-    s: 5.4,
-    caps: [
+    C: A,
+    pages: [
+      "O **Titanic** não afundou",
+      "só por causa de um **iceberg**.",
       "Em 1912, era o **maior navio** do mundo.",
-      "Diziam que era impossível afundar.",
+      "Diziam que era **impossível** afundar.",
     ],
-    t: "zoom",
+    out: { type: "match" },
   },
   {
-    C: S3,
-    s: 4.6,
-    caps: ["Naquele dia, o navio recebeu", "[[seis alertas]] de gelo."],
-    t: "up",
+    C: B,
+    pages: ["Naquele dia, o navio recebeu", "[[seis alertas]] de gelo."],
+    out: { type: "shrink", p: [540, 630], q: [540, 600] },
   },
   {
-    C: S4,
-    s: 4.2,
-    caps: ["Mesmo assim, seguia a mais", "de **40 km/h** no escuro."],
-    t: "zoom",
+    C: C,
+    pages: ["Mesmo assim, seguia a mais", "de **40 km/h** no escuro."],
+    out: { type: "dive", p: [540, 700], q: [540, 650] },
   },
   {
-    C: S5,
-    s: 6.4,
-    caps: [
-      "Os vigias procuravam gelo a olho nu.",
+    C: D,
+    pages: [
+      "Os vigias procuravam gelo **a olho nu**.",
       "Os **binóculos** estavam [[trancados]]",
       "e a chave ficou com um oficial que desembarcou.",
     ],
-    t: "fade",
+    out: { type: "iris", p: [591, 672], q: [591, 672] },
   },
   {
-    C: S6,
-    s: 5.0,
-    caps: ["A noite estava [[sem lua]]", "e o mar, sem ondas."],
-    t: "zoom",
+    C: E,
+    pages: [
+      "A noite estava [[sem lua]]",
+      "e o mar, **sem ondas**.",
+      "Quando o **iceberg** apareceu,",
+      "faltavam só [[37 segundos]].",
+    ],
+    out: { type: "flash" },
   },
   {
-    C: S7,
-    s: 4.2,
-    caps: ["Quando o iceberg apareceu,", "faltavam só **37 segundos**."],
-    t: "flash",
-  },
-  {
-    C: S8,
-    s: 5.2,
-    caps: [
+    C: F,
+    pages: [
       "A batida abriu mais compartimentos",
       "do que o navio [[aguentava]].",
     ],
-    t: "up",
+    out: { type: "pan" },
   },
   {
-    C: S9,
-    s: 6.2,
-    caps: [
-      "Perto dali, outro navio",
+    C: Gs,
+    pages: [
+      "Perto dali, outro **navio**",
       "poderia ajudar.",
       "Mas o rádio dele estava [[desligado]].",
     ],
-    t: "zoom",
+    out: { type: "shrink", p: [200, 965], q: [540, 400] },
   },
   {
-    C: S10,
-    s: 4.6,
-    caps: ["E só havia **botes**", "para [[metade]] das pessoas."],
-    t: "fade",
+    C: H,
+    pages: ["E só havia **botes**", "para [[metade]] das pessoas."],
+    out: { type: "up" },
   },
   {
-    C: S11,
-    s: 5.2,
-    caps: [
-      "Em menos de três horas, ele afundou.",
+    C: I,
+    pages: [
+      "Em menos de **três horas**, ele afundou.",
       "Mais de [[1.500]] pessoas não voltaram.",
     ],
-    t: "zoom",
+    out: { type: "shrink", p: [540, 640], q: [540, 610] },
   },
   {
-    C: S12,
-    s: 4.6,
-    caps: ["Não foi um erro só.", "Foram **vários**, ao mesmo tempo."],
-    t: "up",
+    C: J,
+    pages: ["Não foi um erro só.", "Foram **vários**, ao mesmo tempo."],
+    out: { type: "shrink", p: [540, 610], q: [540, 760] },
   },
   {
-    C: S13,
-    s: 6.8,
-    caps: ["Qual foi o pior? **Comenta** aí.", "E segue o **@quebra.padrao**."],
-    t: "zoom",
+    C: K,
+    pages: [
+      "Qual foi o pior? **Comenta** aí.",
+      "E segue o **@quebra.padrao**.",
+    ],
   },
 ];
-const TF = 14;
-export const titanicFrames = (fps: number) =>
-  Math.round(SCENES.reduce((a, b) => a + b.s, 0) * fps);
+
+const PLAN = (() => {
+  let acc = 0;
+  return SCENES.map((sc) => {
+    const tl = timeline(sc.pages);
+    const start = Math.round(acc * FPS);
+    acc += tl.dur;
+    const end = Math.round(acc * FPS);
+    return { ...sc, tl, start, end };
+  });
+})();
+export const titanicFrames = () => PLAN[PLAN.length - 1].end;
+
+const around = (p: [number, number], s: number) =>
+  `translate(${p[0]}px, ${p[1]}px) scale(${s}) translate(${-p[0]}px, ${-p[1]}px)`;
 
 const Trans: React.FC<{
   len: number;
-  tin?: string;
-  tout?: string;
+  tin?: Tr;
+  tout?: Tr;
   children: React.ReactNode;
 }> = ({ len, tin, tout, children }) => {
   const f = useCurrentFrame();
@@ -1074,41 +1238,69 @@ const Trans: React.FC<{
   const pout = tout
     ? interpolate(f, [len - TF, len], [0, 1], { ...clamp, easing: easeInOut })
     : 0;
-  let scale = 1;
-  let ty = 0;
-  let blur = 0;
+  const tf: string[] = [];
   let op = 1;
+  let blur = 0;
   let flash = 0;
-  if (tin === "zoom") {
-    scale *= 0.8 + 0.2 * pin;
-    op *= pin;
-    blur += (1 - pin) * 14;
+  let clip: string | undefined;
+  if (tin) {
+    const q = tin.q ?? [540, 640];
+    if (tin.type === "match") op *= ease(f, 6, 8);
+    if (tin.type === "dive") {
+      tf.push(around(q, 6 - 5 * pin));
+      op *= ease(pin, 0, 0.35);
+      blur += (1 - pin) * 10;
+    }
+    if (tin.type === "shrink") {
+      tf.push(around(q, 0.05 + 0.95 * pin));
+      op *= ease(pin, 0, 0.25);
+    }
+    if (tin.type === "iris")
+      clip = `circle(${pin * 1500}px at ${q[0]}px ${q[1]}px)`;
+    if (tin.type === "pan") {
+      tf.push(`translateX(${(1 - pin) * 1080}px)`);
+      blur += Math.sin(pin * Math.PI) * 12;
+    }
+    if (tin.type === "up") {
+      tf.push(`translateY(${(1 - pin) * 1920}px)`);
+      blur += Math.sin(pin * Math.PI) * 14;
+    }
+    if (tin.type === "flash") {
+      op *= interpolate(pin, [0.45, 0.55], [0, 1], clamp);
+      flash = 1 - Math.abs(pin * 2 - 1);
+    }
   }
-  if (tin === "up") {
-    ty += (1 - pin) * 1920;
-    blur += Math.sin(pin * Math.PI) * 16;
-  }
-  if (tin === "fade") op *= pin;
-  if (tin === "flash") {
-    op *= interpolate(pin, [0.45, 0.55], [0, 1], clamp);
-    flash = 1 - Math.abs(pin * 2 - 1);
-  }
-  if (tout === "zoom") {
-    scale *= 1 + pout * 0.8;
-    blur += pout * 14;
-  }
-  if (tout === "up") {
-    ty -= pout * 1920;
-    blur += Math.sin(pout * Math.PI) * 16;
+  if (tout && pout > 0) {
+    const p = tout.p ?? [540, 640];
+    if (tout.type === "dive") {
+      tf.push(around(p, 1 + 7 * pout * pout));
+      op *= 1 - ease(pout, 0.7, 1);
+      blur += pout * 8;
+    }
+    if (tout.type === "shrink") {
+      tf.push(around(p, 1 - 0.95 * pout));
+      op *= 1 - ease(pout, 0.75, 1);
+    }
+    if (tout.type === "iris") {
+      tf.push(around(p, 1 + 3 * pout));
+    }
+    if (tout.type === "pan") {
+      tf.push(`translateX(${-pout * 1080}px)`);
+      blur += Math.sin(pout * Math.PI) * 12;
+    }
+    if (tout.type === "up") {
+      tf.push(`translateY(${-pout * 1920}px)`);
+      blur += Math.sin(pout * Math.PI) * 14;
+    }
   }
   return (
     <>
       <AbsoluteFill
         style={{
           opacity: op,
-          scale: String(scale),
-          translate: `0px ${ty}px`,
+          transform: tf.join(" ") || undefined,
           filter: blur > 0.3 ? `blur(${blur}px)` : undefined,
+          clipPath: clip,
         }}
       >
         {children}
@@ -1120,51 +1312,23 @@ const Trans: React.FC<{
   );
 };
 
-const renderCap = (text: string, prog: number) => {
-  const tokens: { w: string; k: "n" | "b" | "r" }[] = [];
-  const re = /\*\*(.+?)\*\*|\[\[(.+?)\]\]|(\S+)/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(text))) {
-    if (m[1]) m[1].split(" ").forEach((w) => tokens.push({ w, k: "b" }));
-    else if (m[2]) m[2].split(" ").forEach((w) => tokens.push({ w, k: "r" }));
-    else tokens.push({ w: m[3], k: "n" });
-  }
-  // attach punctuation tokens like "." that follow markup
-  return tokens.map((tk, i) => {
-    const p = Math.max(0, Math.min(1, prog * tokens.length * 1.6 - i));
-    return (
-      <span
-        key={i}
-        style={{
-          display: "inline-block",
-          marginRight: /^[.,:?!]/.test(tokens[i + 1]?.w ?? "") ? 0 : 16,
-          opacity: 0.15 + 0.85 * p,
-          filter: `blur(${(1 - p) * 4}px)`,
-          translate: `0px ${(1 - p) * 8}px`,
-          color:
-            tk.k === "r"
-              ? RED
-              : tk.k === "b"
-                ? "#ffffff"
-                : "rgba(255,255,255,.74)",
-        }}
-      >
-        {tk.w}
-      </span>
-    );
-  });
-};
-
-const CaptionTrack: React.FC<{ caps: string[]; len: number }> = ({
-  caps,
-  len,
-}) => {
+const Captions: React.FC<{
+  words: Word[];
+  pageStart: number[];
+  len: number;
+}> = ({ words, pageStart, len }) => {
   const f = useCurrentFrame();
-  const per = len / caps.length;
-  const i = Math.min(caps.length - 1, Math.floor(f / per));
-  const local = f - i * per;
-  const prog = local / (per * 0.75);
-  const fade = Math.min(ease(local, 0, 5), 1 - ease(local, per - 5, per));
+  const t = f / FPS;
+  let page = 0;
+  pageStart.forEach((s, i) => {
+    if (t >= s - 0.05) page = i;
+  });
+  const pEnd = page < pageStart.length - 1 ? pageStart[page + 1] : len / FPS;
+  const fade = Math.min(
+    ease(t, pageStart[page] - 0.1, pageStart[page] + 0.05),
+    1 - ease(t, pEnd - 0.12, pEnd),
+  );
+  const ws = words.filter((w) => w.page === page);
   return (
     <div
       style={{
@@ -1181,22 +1345,42 @@ const CaptionTrack: React.FC<{ caps: string[]; len: number }> = ({
         opacity: fade,
       }}
     >
-      {renderCap(caps[i], prog)}
+      {ws.map((w, i) => {
+        const p = ease(t, w.t - 0.05, w.t + 0.15);
+        return (
+          <span
+            key={i}
+            style={{
+              display: "inline-block",
+              marginRight: 16,
+              opacity: 0.15 + 0.85 * p,
+              filter: `blur(${(1 - p) * 4}px)`,
+              translate: `0px ${(1 - p) * 8}px`,
+              color:
+                w.k === "r"
+                  ? RED
+                  : w.k === "b"
+                    ? "#ffffff"
+                    : "rgba(255,255,255,.74)",
+            }}
+          >
+            {w.w}
+          </span>
+        );
+      })}
     </div>
   );
 };
 
 export const Titanic: React.FC = () => {
-  const { fps } = useVideoConfig();
-  let acc = 0;
+  useVideoConfig();
   return (
     <AbsoluteFill style={{ background: "#050506" }}>
-      {SCENES.map(({ C, s, t }, i) => {
-        const start = Math.round(acc * fps);
-        acc += s;
-        const end = Math.round(acc * fps);
-        const from = i === 0 ? 0 : start - TF / 2;
-        const to = i === SCENES.length - 1 ? end : end + TF / 2;
+      {PLAN.map((sc, i) => {
+        const from = i === 0 ? 0 : sc.start - TF / 2;
+        const to = i === PLAN.length - 1 ? sc.end : sc.end + TF / 2;
+        const tin = i > 0 ? PLAN[i - 1].out : undefined;
+        const { C } = sc;
         return (
           <Sequence
             key={i}
@@ -1204,54 +1388,50 @@ export const Titanic: React.FC = () => {
             durationInFrames={to - from}
             name={`Cena ${i + 1}`}
           >
-            <Trans
-              len={to - from}
-              tin={i > 0 ? SCENES[i - 1].t : undefined}
-              tout={i < SCENES.length - 1 ? t : undefined}
+            <BeatCtx.Provider
+              value={{ words: sc.tl.words, offset: i === 0 ? 0 : TF / 2 }}
             >
-              <C d={to - from} />
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  right: 0,
-                  top: BAND_TOP - 90,
-                  height: 90,
-                  background: "linear-gradient(180deg,rgba(5,5,6,0),#050506)",
-                }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  right: 0,
-                  top: BAND_TOP,
-                  bottom: 0,
-                  background: "#050506",
-                }}
-              />
-            </Trans>
+              <Trans len={to - from} tin={tin} tout={sc.out}>
+                <C d={to - from} />
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    top: BAND_TOP - 90,
+                    height: 90,
+                    background: "linear-gradient(180deg,rgba(5,5,6,0),#050506)",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    top: BAND_TOP,
+                    bottom: 0,
+                    background: "#050506",
+                  }}
+                />
+              </Trans>
+            </BeatCtx.Provider>
           </Sequence>
         );
       })}
-      {(() => {
-        let a = 0;
-        return SCENES.map(({ s, caps }, i) => {
-          const start = Math.round(a * fps);
-          a += s;
-          const len = Math.round(a * fps) - start;
-          return (
-            <Sequence
-              key={`c${i}`}
-              from={start}
-              durationInFrames={len}
-              name={`Legenda ${i + 1}`}
-            >
-              <CaptionTrack caps={caps} len={len} />
-            </Sequence>
-          );
-        });
-      })()}
+      {PLAN.map((sc, i) => (
+        <Sequence
+          key={`c${i}`}
+          from={sc.start}
+          durationInFrames={sc.end - sc.start}
+          name={`Legenda ${i + 1}`}
+        >
+          <Captions
+            words={sc.tl.words}
+            pageStart={sc.tl.pageStart}
+            len={sc.end - sc.start}
+          />
+        </Sequence>
+      ))}
       <AbsoluteFill
         style={{
           background:

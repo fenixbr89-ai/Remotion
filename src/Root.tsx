@@ -21,7 +21,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="Titanic"
         component={Titanic}
-        durationInFrames={titanicFrames(30)}
+        durationInFrames={titanicFrames()}
         fps={30}
         width={1080}
         height={1920}
