@@ -2,33 +2,32 @@ import { loadFont } from "@remotion/google-fonts/Inter";
 import { Easing } from "remotion";
 
 export const { fontFamily } = loadFont("normal", {
-  weights: ["400", "500", "600", "700", "800"],
+  weights: ["400", "500", "600", "700"],
   subsets: ["latin"],
 });
 
-// Kronic Host brand palette (from logo + Instagram feed)
+// Apple-style neutral palette + Kronic purple as the only accent
 export const C = {
+  white: "#FFFFFF",
+  gray: "#F5F5F7",
+  black: "#000000",
+  ink: "#1D1D1F",
+  sub: "#86868B",
+  hair: "#D2D2D7",
   purple: "#8468F9",
   purpleDeep: "#5A3BE8",
-  lavender: "#C8BBFF",
-  lilac: "#EEEAFF",
-  dark: "#07060D",
-  darkSoft: "#120F22",
-  light: "#F5F4FA",
-  ink: "#16131F",
-  inkSoft: "#6B6880",
-  alert: "#FF5C7A",
-  ok: "#34D399",
+  lavender: "#B9A8FF",
 };
 
-export const GRADIENT = `linear-gradient(135deg, ${C.lavender} 0%, ${C.purple} 45%, ${C.purpleDeep} 100%)`;
+export const ACCENT = `linear-gradient(90deg, ${C.lavender} 0%, ${C.purple} 50%, ${C.purpleDeep} 100%)`;
 
 export const clamp = {
   extrapolateLeft: "clamp",
   extrapolateRight: "clamp",
 } as const;
 
-export const EASE_OUT = Easing.bezier(0.16, 1, 0.3, 1);
+// Slow, confident easing (Apple keynote feel)
+export const EASE = Easing.bezier(0.22, 1, 0.36, 1);
 export const EASE_IN_OUT = Easing.bezier(0.65, 0, 0.35, 1);
 
 // Editable offer data
