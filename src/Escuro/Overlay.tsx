@@ -21,8 +21,8 @@ export const Dust: React.FC = () => {
               width: r * 2,
               height: r * 2,
               borderRadius: 99,
-              background: "#fff",
-              opacity: 0.15 + random(`do${i}`) * 0.3,
+              background: K.pink,
+              opacity: 0.12 + random(`do${i}`) * 0.25,
               filter: r > 4 ? "blur(1.5px)" : undefined,
             }}
           />
@@ -71,7 +71,8 @@ export const Caption: React.FC<{ words: string[]; spoken: number; strong?: numbe
       style={{
         padding: "18px 34px",
         borderRadius: 22,
-        background: "rgba(255,255,255,0.05)",
+        background: "rgba(255,255,255,0.88)",
+        boxShadow: "0 18px 40px rgba(200,90,140,0.14)",
         fontFamily: sans,
         fontWeight: 800,
         fontSize: 74,
@@ -83,7 +84,7 @@ export const Caption: React.FC<{ words: string[]; spoken: number; strong?: numbe
       {words.map((w, i) => (
         <React.Fragment key={i}>
           {i > 0 ? " " : null}
-          <span style={{ color: i < spoken ? (strong.includes(i) ? "#fff" : K.pink) : "rgba(255,255,255,0.45)" }}>{w}</span>
+          <span style={{ color: i < spoken ? (strong.includes(i) ? K.ink : K.pinkDeep) : "rgba(43,35,38,0.25)" }}>{w}</span>
         </React.Fragment>
       ))}
     </div>
@@ -98,27 +99,27 @@ export const Tag: React.FC<{ text: string; sub?: string; x: number; y: number; n
         display: "inline-block",
         padding: big ? "10px 26px" : "8px 18px",
         borderRadius: 10,
-        background: neon ? "rgba(255,95,168,0.12)" : "rgba(15,15,16,0.85)",
+        background: neon ? "rgba(255,255,255,0.9)" : "#ffffff",
         border: neon ? `3px solid ${K.pink}` : "none",
-        boxShadow: neon ? `0 0 26px rgba(255,95,168,0.45)` : "none",
+        boxShadow: neon ? `0 0 26px rgba(242,124,176,0.45)` : "0 10px 24px rgba(200,90,140,0.16)",
         fontFamily: sans,
         fontWeight: 800,
         fontSize: big ? 84 : 34,
         letterSpacing: big ? -2 : 0.5,
-        color: neon ? K.pink : "#fff",
+        color: neon ? K.pinkDeep : K.ink,
         whiteSpace: "nowrap",
       }}
     >
       {text}
     </div>
     {sub ? (
-      <div style={{ marginTop: 8, fontFamily: mono, fontWeight: 700, fontSize: 22, letterSpacing: 4, color: "rgba(255,255,255,0.55)" }}>{sub}</div>
+      <div style={{ marginTop: 8, fontFamily: mono, fontWeight: 700, fontSize: 22, letterSpacing: 4, color: "rgba(43,35,38,0.5)" }}>{sub}</div>
     ) : null}
   </div>
 );
 
 export const Frame: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <AbsoluteFill style={{ background: `radial-gradient(ellipse 80% 55% at 50% 45%, #262628 0%, ${K.bg} 70%, #0e0e0f 100%)`, overflow: "hidden" }}>
+  <AbsoluteFill style={{ background: `radial-gradient(ellipse 80% 55% at 50% 42%, #ffffff 0%, ${K.bg} 60%, #f6e6ec 100%)`, overflow: "hidden" }}>
     {children}
   </AbsoluteFill>
 );

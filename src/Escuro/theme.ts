@@ -12,10 +12,12 @@ for (const w of ["500", "700"]) {
 }
 
 export const K = {
-  bg: "#141415",
-  pink: "#ff5fa8",
-  pinkSoft: "rgba(255,95,168,0.18)",
-  clay: "#e7e4df",
+  bg: "#faf6f3", // off-white
+  pink: "#f27cb0", // light pink accent
+  pinkDeep: "#d9488a", // pink for text (readable on white)
+  pinkSoft: "rgba(242,124,176,0.18)",
+  ink: "#2b2326",
+  clay: "#f3f0ec",
   bone: "#efe6d6",
   gum: "#e7a5b4",
   titanium: "#b9bec6",

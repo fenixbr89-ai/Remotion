@@ -167,7 +167,7 @@ export const Stage: React.FC<{ y?: number; radius?: number; on?: number }> = ({ 
     </mesh>
     <mesh position={[0, y + 5, 0]}>
       <coneGeometry args={[radius, 10, 64, 1, true]} />
-      <meshBasicMaterial color={K.pink} transparent opacity={0.05 * on} depthWrite={false} side={DoubleSide} />
+      <meshBasicMaterial color={K.pink} transparent opacity={0.1 * on} depthWrite={false} side={DoubleSide} />
     </mesh>
   </group>
 );
@@ -175,13 +175,13 @@ export const Stage: React.FC<{ y?: number; radius?: number; on?: number }> = ({ 
 export const Floor: React.FC<{ y?: number }> = ({ y = -1.42 }) => (
   <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, y, 0]} receiveShadow>
     <planeGeometry args={[60, 60]} />
-    <shadowMaterial opacity={0.5} />
+    <shadowMaterial color="#b06a88" opacity={0.28} />
   </mesh>
 );
 
 export const Lights: React.FC<{ pinkSpot?: number }> = ({ pinkSpot = 0 }) => (
   <>
-    <ambientLight intensity={0.55} />
+    <ambientLight intensity={0.85} />
     <directionalLight position={[-4, 7, 5]} intensity={2.3} castShadow shadow-mapSize={[2048, 2048]} shadow-camera-left={-8} shadow-camera-right={8} shadow-camera-top={8} shadow-camera-bottom={-8} />
     <directionalLight position={[5, 2, -3]} intensity={0.5} />
     {pinkSpot > 0 ? <spotLight position={[0, 9, 0]} angle={0.3} penumbra={0.7} intensity={40 * pinkSpot} color={K.pink} /> : null}

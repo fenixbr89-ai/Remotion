@@ -32,10 +32,8 @@ export const HeadBust: React.FC<{
         </group>
       ) : null}
       {glow > 0 ? (
-        <mesh position={[glowSide * 0.38, 0.0, 0.72]}>
-          <sphereGeometry args={[0.3, 32, 32]} />
-          <meshBasicMaterial color={K.pink} transparent opacity={0.45 * glow} depthWrite={false} />
-        </mesh>
+        // pink light right in front of the cheek: tints the skin, stays glued to the face
+        <pointLight position={[0.1 + glowSide * 0.34, 0.0, 0.98]} color="#ff4f9a" intensity={2.2 * glow} distance={0.75} decay={1.8} />
       ) : null}
     </group>
   );

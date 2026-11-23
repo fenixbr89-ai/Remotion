@@ -2,7 +2,7 @@ import React from "react";
 import { ThreeCanvas } from "@remotion/three";
 import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { Cam, Floor, Jaw, Lights, Screw, Stage } from "./Models";
-import { Caption, Dust, Frame, Header, Tag } from "./Overlay";
+import { Caption, Dust, Frame, Tag } from "./Overlay";
 import { HeadBust, Mannequin } from "./People";
 import { K } from "./theme";
 
@@ -47,12 +47,12 @@ export const SPECS: SceneSpec[] = [
     id: "E01-Gancho",
     section: "O DENTE",
     words: ["Perdeu", "um", "dente?"],
-    sec: 2,
+    sec: 2.8,
     cam: HEAD_CAM,
     floorY: -1.68,
     world: (t) => (
-      <group rotation={[0, -0.45 + t * 0.35, 0]}>
-        <HeadBust glow={0.55 + 0.45 * Math.sin(t * 12)} glowSide={0.5} />
+      <group rotation={[0, -0.32 + t * 0.18, 0]}>
+        <HeadBust glow={0.7 + 0.3 * Math.sin(t * 9)} glowSide={0.5} />
       </group>
     ),
     tags: () => <Tag text="UM DENTE A MENOS" x={790} y={600} neon />,
@@ -248,7 +248,7 @@ export const EscuroScene: React.FC<{ index: number; still?: number; dur?: number
   const f = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
   const t = still ?? Math.min(1, f / (dur ?? durationInFrames));
-  const spoken = Math.ceil(s.words.length * Math.min(1, t * 1.15));
+  const spoken = Math.max(1, Math.ceil(s.words.length * Math.min(1, t * 1.15)));
   const k = 1.05 - 0.09 * Easing.bezier(0.33, 0, 0.2, 1)(t);
   const camPos: V3 = [s.cam.pos[0] + (t - 0.5) * 1.2, s.cam.pos[1], s.cam.pos[2] * k];
   const tagP = interpolate(f, [8, 20], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.bezier(0.34, 1.4, 0.64, 1) });
@@ -258,7 +258,7 @@ export const EscuroScene: React.FC<{ index: number; still?: number; dur?: number
       <ThreeCanvas width={1080} height={1920} shadows>
         <Cam pos={still === undefined ? camPos : s.cam.pos} target={s.cam.target} />
         <Lights />
-        <Floor y={s.floorY ?? (s.cam === STAGE_CAM ? -1.42 : -4.2)} />
+        <Floor y={s.floorY ?? (s.cam === STAGE_CAM ? -1.42 : s.cam === JAWS_CAM ? -3.8 : -1.48)} />
         {s.world(t, f)}
       </ThreeCanvas>
       {s.tags ? (
@@ -266,7 +266,6 @@ export const EscuroScene: React.FC<{ index: number; still?: number; dur?: number
           {s.tags(t)}
         </div>
       ) : null}
-      <Header section={s.section} />
       <Caption words={s.words} spoken={spoken} strong={s.strong} />
     </Frame>
   );

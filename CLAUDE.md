@@ -3,28 +3,26 @@
 Vídeos curtos de curiosidades de odontologia, feitos em Remotion. Ela grava a narração.
 Perfil: **@yasminsr09**. Fale com ela em português.
 
-## Estilo padrão: "escuro 3D com rosa neon" (aprovado)
+## Estilo padrão: "3D claro com rosa" (aprovado)
 
 Código de referência: `src/Escuro/` (composição `QuandoODenteCai`).
 Inspirado num vídeo de referência que ela enviou. Siga o estilo e o ritmo, sem copiar marca, textos ou cenas de terceiros.
 
 ### Visual
 - Vertical 1080x1920, 30fps.
-- Fundo escuro grafite (`#141415`) com vinheta radial e poeirinha branca flutuando.
-- Objetos em **3D de verdade** (three.js via `@remotion/three` + `@react-three/drei`), material fosco tipo massinha clara (`#e7e4df`), com luz e sombra no chão.
+- **Cores claras**: fundo off-white (`#faf6f3`) com brilho branco no centro e rosa claro nas bordas, poeirinha rosa clara flutuando. Paleta: rosa claro, branco e off-white (ela pediu para tirar o fundo escuro).
+- Objetos em **3D de verdade** (three.js via `@remotion/three` + `@react-three/drei`), material fosco tipo massinha clara (`#f3f0ec`), com luz e sombra rosada suave no chão.
   - Molar com coroa arredondada, 4 cúspides e 2 raízes cônicas.
   - Arcada em corte: osso claro opaco (`#efe6d6`) com as raízes aparecendo na frente, gengiva rosa (`#e7a5b4`), 3 dentes.
   - Pino de titânio com roscas, pilar, coroa.
-  - **Ela quer rosto e gente**, não só dente: busto 3D de cabeça (`public/models/head.glb`, CC BY 3.0, crédito em `public/models/CREDITS.md`), com brilho rosa na região do dente e modo raio-x (cabeça transparente mostrando os dentes dentro da boca). Bonequinho 3D (mannequin) acenando no final.
+  - **Ela quer rosto e gente**, não só dente: busto 3D de cabeça (`public/models/head.glb`, CC BY 3.0, crédito em `public/models/CREDITS.md`), com brilho rosa na bochecha feito por uma luz pontual rosa colada ao rosto (não usar esfera flutuante, ela se descola quando a cabeça gira) e modo raio-x (cabeça transparente mostrando os dentes dentro da boca). Bonequinho 3D (mannequin) acenando no final.
 - Holofote rosa em cone + plataforma redonda com borda neon nas cenas de destaque.
-- Cor de destaque: **rosa neon `#ff5fa8`** (ela escolheu rosa em vez do verde da referência).
+- Cor de destaque: rosa claro `#f27cb0`; texto rosa legível `#d9488a`; texto escuro `#2b2326`.
 
 ### Texto e interface
-- Topo esquerdo: tema do vídeo em fonte mono espaçada (JetBrains Mono), ex.: "QUANDO O DENTE CAI".
-- Abaixo: pílula escura com bolinha rosa e o nome da seção (ex.: "O OSSO", "A VIRADA").
-- Topo direito: @yasminsr09 em mono cinza.
-- Legenda grande (Inter ExtraBold ~74px) na parte de baixo do meio, numa caixa escura translúcida, **palavra por palavra**: palavra falada em rosa, as próximas em cinza (estilo karaokê), sincronizada com a narração.
-- Etiquetas sobre os objetos: rosa neon com contorno brilhante (destaques e números grandes, ex.: "ATÉ 50%", "3 A 6 MESES") ou caixa preta com texto branco (rótulos simples).
+- **Sem cabeçalho**: ela pediu para retirar o tema no topo esquerdo, a pílula da seção e o @ no topo direito.
+- Legenda grande (Inter ExtraBold ~74px) na parte de baixo do meio, numa caixa branca com sombra rosada, **palavra por palavra**: palavra falada em rosa, as próximas em cinza claro (estilo karaokê), sincronizada com a narração. Já começa com a primeira palavra acesa no primeiro quadro.
+- Etiquetas sobre os objetos: caixa branca com contorno rosa brilhante e texto rosa (destaques e números grandes, ex.: "ATÉ 50%", "3 A 6 MESES") ou caixa branca com texto escuro (rótulos simples).
 - Final: bonequinho no holofote com "SEGUE @YASMINSR09".
 
 ### Movimento
@@ -39,6 +37,7 @@ Inspirado num vídeo de referência que ela enviou. Siga o estilo e o ritmo, sem
 3. Animar e mandar o vídeo. Ela grava a narração; quando mandar o áudio, sincronizar cada palavra da legenda e a duração das cenas com a voz.
 
 ### Renderização (ambiente na nuvem)
+- Usar `out/quando-o-dente-cai-claro.mp4` como referência da versão aprovada mais recente.
 - 3D precisa de WebGL: usar `chromiumOptions: { gl: "swangle" }` e o Chrome em `/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell`.
 - Fontes locais em `public/fonts/` (o proxy bloqueia Google Fonts no render).
 - Animação no Remotion é sempre por frame (`useCurrentFrame` + `interpolate`), nunca CSS `transition`/`@keyframes`.
