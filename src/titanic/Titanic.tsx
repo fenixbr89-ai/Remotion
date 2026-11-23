@@ -7,6 +7,7 @@
 import React, { createContext, useContext } from "react";
 import {
   AbsoluteFill,
+  Audio,
   Img,
   Sequence,
   interpolate,
@@ -24,6 +25,7 @@ import {
   pop,
 } from "../che/lib";
 import { Glass, Glow, Glyph, Icon, Mat, PhotoIn, RED } from "./kit";
+import { NARRATION_END, WORD_TIMES } from "./narration";
 
 loadFonts();
 
@@ -1126,7 +1128,7 @@ type Tr = {
 };
 
 /** **x** = white emphasis, [[x]] = red (negative). Max ~40 chars per page (2 lines). */
-const SCENES: { C: React.FC<S>; pages: string[]; out?: Tr }[] = [
+const SCENES: { C: React.FC<S>; pages: string[]; out?: Tr; lead?: number }[] = [
   {
     C: A,
     pages: [
@@ -1185,6 +1187,7 @@ const SCENES: { C: React.FC<S>; pages: string[]; out?: Tr }[] = [
   },
   {
     C: H,
+    lead: 1,
     pages: ["E só havia **botes**", "para [[metade]] das pessoas."],
     out: { type: "up" },
   },
@@ -1210,14 +1213,32 @@ const SCENES: { C: React.FC<S>; pages: string[]; out?: Tr }[] = [
   },
 ];
 
+/** Scene timing comes from the recorded narration (word start times). */
 const PLAN = (() => {
-  let acc = 0;
-  return SCENES.map((sc) => {
+  let k = 0;
+  const raw = SCENES.map((sc) => {
     const tl = timeline(sc.pages);
-    const start = Math.round(acc * FPS);
-    acc += tl.dur;
-    const end = Math.round(acc * FPS);
-    return { ...sc, tl, start, end };
+    const abs = tl.words.map(() => WORD_TIMES[k++]);
+    return { sc, tl, abs };
+  });
+  // a scene may open on a later word (e.g. skip a connector "E" said right after the previous line)
+  const starts = raw.map((r, i) =>
+    i === 0 ? 0 : r.abs[r.sc.lead ?? 0] - 0.25,
+  );
+  return raw.map(({ sc, tl, abs }, i) => {
+    const s0 = starts[i];
+    const s1 = i < raw.length - 1 ? starts[i + 1] : NARRATION_END + 1.6;
+    const words = tl.words.map((w, j) => ({ ...w, t: abs[j] - s0 }));
+    const pageStart = tl.pageStart.map((_, pi) => {
+      const first = words.find((w) => w.page === pi);
+      return first ? first.t - 0.05 : 0;
+    });
+    return {
+      ...sc,
+      tl: { words, pageStart, dur: s1 - s0 },
+      start: Math.round(s0 * FPS),
+      end: Math.round(s1 * FPS),
+    };
   });
 })();
 export const titanicFrames = () => PLAN[PLAN.length - 1].end;
@@ -1432,6 +1453,7 @@ export const Titanic: React.FC = () => {
           />
         </Sequence>
       ))}
+      <Audio src={staticFile("titanic/narracao.m4a")} />
       <AbsoluteFill
         style={{
           background:
