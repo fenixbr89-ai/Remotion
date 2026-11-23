@@ -1,6 +1,7 @@
 import { Composition, Folder } from "remotion";
 import { HelloWorld } from "./HelloWorld";
 import { CheVideo, totalFrames } from "./che/CheVideo";
+import { Titanic, titanicFrames } from "./titanic/Titanic";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
 
@@ -13,6 +14,14 @@ export const RemotionRoot: React.FC = () => {
         id="CheGuevara"
         component={CheVideo}
         durationInFrames={totalFrames(30)}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="Titanic"
+        component={Titanic}
+        durationInFrames={titanicFrames(30)}
         fps={30}
         width={1080}
         height={1920}
@@ -59,7 +68,6 @@ export const RemotionRoot: React.FC = () => {
           titleColor: "#000000",
         }}
       />
-
     </>
   );
 };
