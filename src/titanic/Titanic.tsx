@@ -165,12 +165,9 @@ const A: React.FC<S> = ({ d }) => {
   const tI = b("iceberg");
   const tM = b("maior");
   const tImp = b("impossivel");
-  const iceY = interpolate(
-    f,
-    [tI - 4, tI + 18, tM - 10, tM + 14],
-    [1500, 640, 640, 1600],
-    { ...clamp, easing: easeInOut },
-  );
+  // inside the same card: ship slides out, iceberg photo slides in on "iceberg"; back on "maior"
+  const swap = at(f, tI - 3, tI + 9) - at(f, tM - 3, tM + 9);
+  const swapBlur = Math.sin(Math.max(0, Math.min(1, swap)) * Math.PI) * 10;
   const grow = at(f, tM, tM + 24, 1, 1.12);
   const flip = at(f, d - 16, d - 8, 0, 90);
   return (
@@ -196,26 +193,27 @@ const A: React.FC<S> = ({ d }) => {
           }}
         >
           <Glass x={100} y={300} w={880} h={560} at={tT - 6}>
-            <PhotoIn src="ship.jpg" pos="50% 55%" />
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                translate: `${-swap * 900}px 0px`,
+                filter: swapBlur > 0.3 ? `blur(${swapBlur}px)` : undefined,
+              }}
+            >
+              <PhotoIn src="ship.jpg" pos="50% 55%" />
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                translate: `${(1 - swap) * 900}px 0px`,
+                filter: swapBlur > 0.3 ? `blur(${swapBlur}px)` : undefined,
+              }}
+            >
+              <PhotoIn src="iceberg.jpg" pos="50% 60%" />
+            </div>
           </Glass>
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            left: 60,
-            top: iceY,
-            width: 960,
-            opacity: ease(f, tI - 4, tI + 6),
-          }}
-        >
-          <Img
-            src={staticFile("titanic/iceberg_cut.png")}
-            style={{
-              width: "100%",
-              filter:
-                "grayscale(1) contrast(1.1) drop-shadow(0 40px 60px rgba(0,0,0,.8))",
-            }}
-          />
         </div>
         <div
           style={{
