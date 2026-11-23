@@ -37,7 +37,6 @@ Inspirado num vídeo de referência que ela enviou. Siga o estilo e o ritmo, sem
 3. Animar e mandar o vídeo. Ela grava a narração; quando mandar o áudio, sincronizar cada palavra da legenda e a duração das cenas com a voz.
 
 ### Renderização (ambiente na nuvem)
-- Usar `out/quando-o-dente-cai-claro.mp4` como referência da versão aprovada mais recente.
 - 3D precisa de WebGL: usar `chromiumOptions: { gl: "swangle" }` e o Chrome em `/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell`.
 - Fontes locais em `public/fonts/` (o proxy bloqueia Google Fonts no render).
 - Animação no Remotion é sempre por frame (`useCurrentFrame` + `interpolate`), nunca CSS `transition`/`@keyframes`.
