@@ -21,7 +21,7 @@ const ZoomBlur: React.FC<TransitionPresentationComponentProps<Props>> = ({
       }
     : {
         opacity: 1 - p * 0.6,
-        scale: String(1 - 0.12 * p),
+        scale: String(1 + 0.12 * p),
         filter: `blur(${p * 30}px)`,
       };
   return <AbsoluteFill style={style}>{children}</AbsoluteFill>;
