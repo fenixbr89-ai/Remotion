@@ -38,7 +38,7 @@ const FEATURES = [
   },
   {
     title: "Alta performance",
-    sub: "Para sites, sistemas e aplicações",
+    sub: "Sites, sistemas, automações e mais",
     icon: (
       <svg width="60" height="60" viewBox="0 0 24 24" {...ic}>
         <path d="M13 2 4 14h7l-1 8 9-12h-7z" />

@@ -3,7 +3,7 @@ import { AbsoluteFill, interpolate, useCurrentFrame, Easing } from "remotion";
 import { Bg, Camera, Glass, Words } from "../components";
 import { C, clamp, EASE_OUT, fontFamily } from "../theme";
 
-// 1 — "Seu site travou de novo?"
+// 1 — "Seu site ou sistema travou de novo?"
 export const Hook: React.FC = () => {
   const frame = useCurrentFrame();
   const enter = interpolate(frame, [10, 40], [0, 1], {
@@ -20,7 +20,7 @@ export const Hook: React.FC = () => {
       <Bg variant="dark" />
       <Camera rx={[10, 2]} ry={[-4, 4]} scale={[1, 1.08]}>
         <AbsoluteFill style={{ alignItems: "center", paddingTop: 330 }}>
-          <Words text="Seu site" start={2} size={92} weight={500} color="rgba(255,255,255,0.7)" />
+          <Words text="Seu site ou sistema" start={2} size={84} weight={500} color="rgba(255,255,255,0.7)" />
           <Words text="travou de novo?" start={8} size={116} weight={800} color="#fff" accent={["travou"]} />
         </AbsoluteFill>
 
