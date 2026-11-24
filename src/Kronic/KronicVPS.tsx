@@ -30,7 +30,7 @@ export const TOTAL_DURATION =
   SCENES.reduce((a, s) => a + s.durationInFrames, 0) -
   TRANSITION * (SCENES.length - 1);
 
-export const KronicVPS: React.FC = () => (
+export const KronicVPS: React.FC<{ watermark?: boolean }> = ({ watermark = true }) => (
   <AbsoluteFill>
   <Audio src={staticFile("narracao.wav")} />
   <TransitionSeries>
@@ -51,6 +51,6 @@ export const KronicVPS: React.FC = () => (
       );
     })}
   </TransitionSeries>
-  <Watermark />
+  {watermark ? <Watermark /> : null}
   </AbsoluteFill>
 );

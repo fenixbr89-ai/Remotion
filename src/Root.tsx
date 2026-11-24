@@ -50,6 +50,15 @@ export const RemotionRoot: React.FC = () => {
         height={H}
       />
       <Composition
+        id="KronicVPS-Cliente"
+        component={KronicVPS}
+        durationInFrames={TOTAL_DURATION}
+        fps={FPS}
+        width={W}
+        height={H}
+        defaultProps={{ watermark: false }}
+      />
+      <Composition
         id="KronicVPS-Apple"
         component={KronicApple}
         durationInFrames={APPLE_DURATION}
