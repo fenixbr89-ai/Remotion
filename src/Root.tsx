@@ -2,12 +2,24 @@ import { Composition, Folder } from "remotion";
 import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
+import { CriandoSites, DURACAO_TOTAL } from "./CriandoSites/CriandoSites";
+import { criandoSitesSchema, padraoDia2 } from "./CriandoSites/schema";
 
 // Each <Composition> is an entry in the sidebar!
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      <Composition
+        id="CriandoSites-Dia2"
+        component={CriandoSites}
+        schema={criandoSitesSchema}
+        durationInFrames={DURACAO_TOTAL}
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={padraoDia2}
+      />
       <Folder name="Elements">
         <Composition
           id="Logo"
