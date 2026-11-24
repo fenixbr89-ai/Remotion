@@ -15,17 +15,17 @@ import type { CriandoSitesProps } from "./schema";
 
 // Duração de cada cena em frames (30 fps)
 export const T = {
-  abertura: 75,
-  sorteio: 120,
-  categoria: 45,
-  vouAtras: 60,
-  achei: 75,
-  google: 105,
-  pesquisa: 60,
-  desenvolvendo: 80,
-  resultado: 55,
-  porSecao: 85,
-  chamada: 160,
+  abertura: 100,
+  sorteio: 180,
+  categoria: 60,
+  vouAtras: 80,
+  achei: 100,
+  google: 150,
+  pesquisa: 85,
+  desenvolvendo: 110,
+  resultado: 75,
+  porSecao: 105,
+  chamada: 210,
 };
 export const DURACAO_TOTAL =
   T.abertura +

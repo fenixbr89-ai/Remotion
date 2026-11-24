@@ -109,7 +109,7 @@ export const Sorteio: React.FC<{ p: CriandoSitesProps; duracao: number }> = ({
   const frame = useCurrentFrame();
   return (
     <Branco>
-      <Frase texto="pra começar" tamanho={92} />
+      <Frase texto={"pra começar,\nvamos sortear o *ramo*"} tamanho={88} />
       <Roleta opcoes={p.opcoesRoleta} alvo={p.categoria} duracao={duracao - 25} />
       <div
         style={{
@@ -174,7 +174,7 @@ export const Google: React.FC<{ p: CriandoSitesProps }> = ({ p }) => (
       categoria={p.categoria}
       foto={p.midias.fichaGoogle}
     />
-    <Sequence from={45} layout="none">
+    <Sequence from={70} layout="none">
       <Frase texto="e nenhum *site*." tamanho={96} />
     </Sequence>
   </Branco>
@@ -195,7 +195,7 @@ const CODIGO = [
 export const Desenvolvendo: React.FC = () => {
   const frame = useCurrentFrame();
   const texto = CODIGO.join("\n");
-  const chars = Math.floor(interpolate(frame, [8, 70], [0, texto.length], clamp));
+  const chars = Math.floor(interpolate(frame, [8, 95], [0, texto.length], clamp));
   const anim = useEntrada(4);
   return (
     <Branco cor={C.preto}>
@@ -253,7 +253,7 @@ export const Vitrine: React.FC<{ p: CriandoSitesProps; porSecao: number }> = ({
     "e como *chegar*",
   ];
   const ESCALA = 0.62; // 1440 -> ~893 px
-  const keys = legendas.flatMap((_, i) => [i * porSecao, i * porSecao + 22]);
+  const keys = legendas.flatMap((_, i) => [i * porSecao, i * porSecao + 30]);
   const valores = legendas.flatMap((_, i) => [
     Math.max(0, i - 1) * SECAO,
     i * SECAO,
@@ -370,7 +370,7 @@ export const Vitrine: React.FC<{ p: CriandoSitesProps; porSecao: number }> = ({
 /* CTA final em 3 batidas */
 export const Chamada: React.FC<{ p: CriandoSitesProps }> = ({ p }) => {
   const frame = useCurrentFrame();
-  const batida = 50;
+  const batida = 70;
   return (
     <AbsoluteFill style={{ backgroundColor: C.branco }}>
       <Sequence durationInFrames={batida} layout="none">
