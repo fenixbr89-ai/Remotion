@@ -8,10 +8,10 @@ export const Wait: React.FC = () => {
   const frame = useCurrentFrame();
   const card = interpolate(frame, [6, 30], [0, 1], { ...clamp, easing: EASE_OUT });
   const progress = interpolate(frame, [14, 50], [0, 98], { ...clamp, easing: EASE_OUT });
-  const secs = interpolate(frame, [14, 195], [0, 9.6], clamp);
+  const secs = interpolate(frame, [14, 165], [0, 8.4], clamp);
   const late = secs > 3;
-  const t1 = interpolate(frame, [100, 118], [0, 1], { ...clamp, easing: EASE_OUT });
-  const t2 = interpolate(frame, [134, 152], [0, 1], { ...clamp, easing: EASE_OUT });
+  const t1 = interpolate(frame, [96, 114], [0, 1], { ...clamp, easing: EASE_OUT });
+  const t2 = interpolate(frame, [120, 138], [0, 1], { ...clamp, easing: EASE_OUT });
 
   const toasts = [
     { p: t1, title: "Cliente saiu do site", sub: "há 1 segundo", top: 1320, rot: -3 },

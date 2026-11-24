@@ -7,10 +7,10 @@ import { C, clamp, EASE_IN_OUT, EASE_OUT, fontFamily, GRADIENT, OFFER } from "..
 export const CTA: React.FC = () => {
   const frame = useCurrentFrame();
   const logo = interpolate(frame, [0, 26], [0, 1], { ...clamp, easing: EASE_OUT });
-  const btn = interpolate(frame, [46, 66], [0, 1], { ...clamp, easing: EASE_OUT });
-  const move = interpolate(frame, [58, 88], [0, 1], { ...clamp, easing: EASE_IN_OUT });
-  const press = interpolate(frame, [92, 96, 104], [1, 0.92, 1], clamp);
-  const ripple = interpolate(frame, [94, 120], [0, 1], { ...clamp, easing: EASE_OUT });
+  const btn = interpolate(frame, [40, 58], [0, 1], { ...clamp, easing: EASE_OUT });
+  const move = interpolate(frame, [50, 76], [0, 1], { ...clamp, easing: EASE_IN_OUT });
+  const press = interpolate(frame, [78, 82, 90], [1, 0.92, 1], clamp);
+  const ripple = interpolate(frame, [80, 106], [0, 1], { ...clamp, easing: EASE_OUT });
 
   const btnY = 1180;
   return (
@@ -73,7 +73,7 @@ export const CTA: React.FC = () => {
             left: interpolate(move, [0, 1], [1100, 600]),
             top: interpolate(move, [0, 1], [1700, btnY + 70]),
             scale: String(press),
-            opacity: interpolate(frame, [56, 62], [0, 1], clamp),
+            opacity: interpolate(frame, [48, 54], [0, 1], clamp),
           }}
         >
           <Cursor size={100} />

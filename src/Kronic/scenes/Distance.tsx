@@ -87,8 +87,8 @@ const Label: React.FC<{ text: string }> = ({ text }) => (
 // 3 — "Servidor lá fora?"
 export const Distance: React.FC = () => {
   const frame = useCurrentFrame();
-  const ms = Math.round(interpolate(frame, [56, 110], [0, OFFER.latencyFar], { ...clamp, easing: EASE_OUT }));
-  const card = interpolate(frame, [52, 72], [0, 1], { ...clamp, easing: EASE_OUT });
+  const ms = Math.round(interpolate(frame, [48, 100], [0, OFFER.latencyFar], { ...clamp, easing: EASE_OUT }));
+  const card = interpolate(frame, [44, 64], [0, 1], { ...clamp, easing: EASE_OUT });
 
   return (
     <AbsoluteFill>

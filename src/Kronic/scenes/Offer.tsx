@@ -7,11 +7,11 @@ import { C, clamp, EASE_OUT, fontFamily, GRADIENT, OFFER } from "../theme";
 export const Offer: React.FC = () => {
   const frame = useCurrentFrame();
   const chip = interpolate(frame, [8, 28], [0, 1], { ...clamp, easing: Easing.spring({ damping: 14 }) });
-  const priceP = interpolate(frame, [84, 118], [0, 1], { ...clamp, easing: EASE_OUT });
+  const priceP = interpolate(frame, [78, 110], [0, 1], { ...clamp, easing: EASE_OUT });
   const price = OFFER.price * priceP;
   const [int, dec] = price.toFixed(2).split(".");
-  const priceIn = interpolate(frame, [80, 100], [0, 1], { ...clamp, easing: EASE_OUT });
-  const pulse = 1 + Math.max(0, Math.sin((frame - 118) / 8)) * 0.02 * (frame > 118 ? 1 : 0);
+  const priceIn = interpolate(frame, [74, 94], [0, 1], { ...clamp, easing: EASE_OUT });
+  const pulse = 1 + Math.max(0, Math.sin((frame - 110) / 8)) * 0.02 * (frame > 110 ? 1 : 0);
 
   const floaters = [
     { x: 60, y: 1250, s: 150, d: 0, blur: 2 },
@@ -59,7 +59,7 @@ export const Offer: React.FC = () => {
               BLACK FRIDAY
             </div>
           </div>
-          <Words text="VPS a partir de" start={54} size={80} weight={500} color="rgba(255,255,255,0.75)" style={{ marginTop: 70 }} />
+          <Words text="VPS a partir de" start={48} size={80} weight={500} color="rgba(255,255,255,0.75)" style={{ marginTop: 70 }} />
 
           <div
             style={{
@@ -98,7 +98,7 @@ export const Offer: React.FC = () => {
         </AbsoluteFill>
 
         <AbsoluteFill style={{ alignItems: "center", top: 1460 }}>
-          <div style={{ opacity: interpolate(frame, [140, 160], [0, 1], clamp), translate: `0px ${interpolate(frame, [140, 160], [30, 0], { ...clamp, easing: EASE_OUT })}px` }}>
+          <div style={{ opacity: interpolate(frame, [118, 138], [0, 1], clamp), translate: `0px ${interpolate(frame, [118, 138], [30, 0], { ...clamp, easing: EASE_OUT })}px` }}>
             <Glass dark style={{ padding: "24px 44px", borderRadius: 60, color: "#fff", fontSize: 34, fontWeight: 600 }}>
               Oferta por tempo limitado
             </Glass>

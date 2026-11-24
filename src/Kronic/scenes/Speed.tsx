@@ -8,7 +8,7 @@ export const Speed: React.FC = () => {
   const frame = useCurrentFrame();
   const gauge = interpolate(frame, [20, 70], [0, 1], { ...clamp, easing: EASE_OUT });
   const ms = Math.round(interpolate(frame, [20, 70], [OFFER.latencyFar, OFFER.latencyNear], { ...clamp, easing: EASE_OUT }));
-  const chip = interpolate(frame, [64, 84], [0, 1], { ...clamp, easing: EASE_OUT });
+  const chip = interpolate(frame, [60, 78], [0, 1], { ...clamp, easing: EASE_OUT });
   const card = interpolate(frame, [10, 34], [0, 1], { ...clamp, easing: EASE_OUT });
 
   const R = 300;
@@ -21,7 +21,7 @@ export const Speed: React.FC = () => {
       <Camera rx={[8, 0]} ry={[6, -6]} scale={[1, 1.07]}>
         <AbsoluteFill style={{ alignItems: "center", paddingTop: 280 }}>
           <Words text="Mais perto." start={2} size={130} weight={800} color="#fff" />
-          <Words text="Mais rápido." start={62} size={130} weight={800} color="#fff" accent={["rápido."]} />
+          <Words text="Mais rápido." start={56} size={130} weight={800} color="#fff" accent={["rápido."]} />
         </AbsoluteFill>
 
         <AbsoluteFill style={{ alignItems: "center", top: 820 }}>
