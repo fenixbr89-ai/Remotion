@@ -7,7 +7,8 @@ import type {
 
 type Props = Record<string, never>;
 
-const ZoomBlur: React.FC<TransitionPresentationComponentProps<Props>> = ({
+// Whip-pan: the camera snaps sideways with heavy motion blur.
+const Whip: React.FC<TransitionPresentationComponentProps<Props>> = ({
   children,
   presentationDirection,
   presentationProgress: p,
@@ -15,19 +16,21 @@ const ZoomBlur: React.FC<TransitionPresentationComponentProps<Props>> = ({
   const entering = presentationDirection === "entering";
   const style: React.CSSProperties = entering
     ? {
-        opacity: p,
-        scale: String(1.25 - 0.25 * p),
-        filter: `blur(${(1 - p) * 40}px)`,
+        opacity: Math.min(1, p * 2.2),
+        translate: `${(1 - p) * 38}% 0%`,
+        scale: String(1.08 - 0.08 * p),
+        filter: `blur(${(1 - p) * 34}px)`,
       }
     : {
-        opacity: 1 - p * 0.6,
-        scale: String(1 + 0.12 * p),
-        filter: `blur(${p * 30}px)`,
+        opacity: 1,
+        translate: `${-p * 38}% 0%`,
+        scale: String(1 + 0.08 * p),
+        filter: `blur(${p * 34}px)`,
       };
   return <AbsoluteFill style={style}>{children}</AbsoluteFill>;
 };
 
 export const zoomBlur = (): TransitionPresentation<Props> => ({
-  component: ZoomBlur,
+  component: Whip,
   props: {},
 });

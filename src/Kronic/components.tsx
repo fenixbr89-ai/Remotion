@@ -256,3 +256,116 @@ export const IconTile: React.FC<{ children: React.ReactNode; size?: number }> = 
     {children}
   </div>
 );
+
+/* ---------- Keyframed 3D camera with velocity motion blur ---------- */
+
+export type CamKey = {
+  f: number; // frame
+  x?: number; // target point on the 1080x1920 canvas brought to screen center
+  y?: number;
+  z?: number; // zoom
+  rx?: number;
+  ry?: number;
+  rz?: number;
+};
+
+type Pose = Required<Omit<CamKey, "f">>;
+const DEFAULT_POSE: Pose = { x: 540, y: 960, z: 1, rx: 0, ry: 0, rz: 0 };
+
+const poseAt = (keys: CamKey[], frame: number): Pose => {
+  // Fill missing values from previous key
+  const full: (Pose & { f: number })[] = [];
+  let prev: Pose = DEFAULT_POSE;
+  for (const k of keys) {
+    const p = { ...prev, ...k } as Pose & { f: number };
+    full.push(p);
+    prev = p;
+  }
+  const fs = full.map((k) => k.f);
+  const get = (prop: keyof Pose) =>
+    full.length === 1
+      ? full[0][prop]
+      : interpolate(
+          frame,
+          fs,
+          full.map((k) => k[prop]),
+          { ...clamp, easing: EASE_CAM },
+        );
+  return { x: get("x"), y: get("y"), z: get("z"), rx: get("rx"), ry: get("ry"), rz: get("rz") };
+};
+
+const EASE_CAM = (t: number) =>
+  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+export const Cam: React.FC<{ keys: CamKey[]; children: React.ReactNode; blurAmount?: number }> = ({
+  keys,
+  children,
+  blurAmount = 0.22,
+}) => {
+  const frame = useCurrentFrame();
+  const a = poseAt(keys, frame);
+  const b = poseAt(keys, frame + 1);
+  const speed =
+    Math.abs(b.x - a.x) * a.z +
+    Math.abs(b.y - a.y) * a.z +
+    Math.abs(b.z - a.z) * 900 +
+    (Math.abs(b.rx - a.rx) + Math.abs(b.ry - a.ry) + Math.abs(b.rz - a.rz)) * 14;
+  const blur = Math.min(16, Math.max(0, speed * blurAmount - 1));
+  return (
+    <AbsoluteFill style={{ filter: blur > 0.3 ? `blur(${blur.toFixed(2)}px)` : undefined }}>
+      <AbsoluteFill style={{ perspective: 1800 }}>
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: 1080,
+            height: 1920,
+            transformOrigin: "0 0",
+            transformStyle: "preserve-3d",
+            transform: `translate(540px, 960px) scale(${a.z}) rotateX(${a.rx}deg) rotateY(${a.ry}deg) rotateZ(${a.rz}deg) translate(${-a.x}px, ${-a.y}px)`,
+          }}
+        >
+          {children}
+        </div>
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
+
+/* ---------- Out-of-focus foreground element passing the lens ---------- */
+
+export const Foreground: React.FC<{
+  from: [number, number];
+  to: [number, number];
+  start: number;
+  end: number;
+  size?: number;
+  blur?: number;
+  dark?: boolean;
+  children?: React.ReactNode;
+}> = ({ from, to, start, end, size = 420, blur = 22, dark, children }) => {
+  const frame = useCurrentFrame();
+  const p = interpolate(frame, [start, end], [0, 1], clamp);
+  if (p <= 0 || p >= 1) return null;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: from[0] + (to[0] - from[0]) * p - size / 2,
+        top: from[1] + (to[1] - from[1]) * p - size / 2,
+        width: size,
+        height: size * 0.62,
+        borderRadius: 48,
+        filter: `blur(${blur}px)`,
+        opacity: 0.85,
+        background: dark
+          ? "linear-gradient(160deg, rgba(200,187,255,0.35), rgba(132,104,249,0.18))"
+          : "linear-gradient(160deg, rgba(255,255,255,0.95), rgba(200,187,255,0.6))",
+        border: "2px solid rgba(255,255,255,0.4)",
+      }}
+    >
+      {children}
+    </div>
+  );
+};

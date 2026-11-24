@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { Bg, Camera, Glass, ServerIcon, Words } from "../components";
+import { Bg, Glass, ServerIcon, Words, Cam, Foreground } from "../components";
 import { C, clamp, EASE_OUT, fontFamily, OFFER } from "../theme";
 
 // Shared route diagram: server -> user, with a packet travelling.
@@ -93,7 +93,7 @@ export const Distance: React.FC = () => {
   return (
     <AbsoluteFill>
       <Bg variant="dark" />
-      <Camera rx={[4, 0]} ry={[-8, 6]} scale={[1, 1.06]}>
+      <Cam keys={[{ f: 0, x: 820, y: 800, z: 1.7, rx: 10, ry: -26 }, { f: 40, x: 560, y: 980, z: 1.05, rx: 4, ry: -6 }, { f: 70, x: 380, y: 1080, z: 1.3, rx: 0, ry: 12 }, { f: 136, x: 440, y: 1040, z: 1.2, ry: 6, rz: 2 }]}>
         <AbsoluteFill style={{ alignItems: "center", paddingTop: 260 }}>
           <Words text="Servidor" start={2} size={92} weight={500} color="rgba(255,255,255,0.7)" />
           <Words text="lá fora?" start={6} size={150} weight={800} color="#fff" accent={["fora?"]} />
@@ -116,7 +116,8 @@ export const Distance: React.FC = () => {
             </div>
           </Glass>
         </div>
-      </Camera>
+      </Cam>
+      <Foreground dark from={[1300, 300]} to={[-300, 900]} start={30} end={62} size={560} blur={26} />
     </AbsoluteFill>
   );
 };
