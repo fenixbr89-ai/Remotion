@@ -61,7 +61,7 @@ export const Features: React.FC = () => {
 
         <AbsoluteFill style={{ alignItems: "center", top: 690, gap: 34, display: "flex", flexDirection: "column" }}>
           {FEATURES.map((f, i) => {
-            const s = [16, 26, 106, 162][i];
+            const s = [16, 26, 112, 168][i];
             const p = interpolate(frame, [s, s + 24], [0, 1], { ...clamp, easing: EASE_OUT });
             const float = Math.sin((frame + i * 20) / 22) * 6;
             return (

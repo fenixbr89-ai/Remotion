@@ -63,7 +63,7 @@ export const Reveal: React.FC = () => {
 
         <AbsoluteFill style={{ alignItems: "center", paddingTop: 1180 }}>
           <Words text="VPS de alta performance" start={80} size={58} weight={600} color={C.ink} stagger={2} />
-          <Words text="hospedada no Brasil" start={118} size={58} weight={600} color={C.ink} accent={["Brasil"]} stagger={2} />
+          <Words text="hospedada no Brasil" start={130} size={58} weight={600} color={C.ink} accent={["Brasil"]} stagger={2} />
         </AbsoluteFill>
       </Camera>
     </AbsoluteFill>

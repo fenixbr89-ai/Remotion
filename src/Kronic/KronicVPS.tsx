@@ -14,14 +14,14 @@ import { Offer } from "./scenes/Offer";
 import { CTA } from "./scenes/CTA";
 
 export const SCENES = [
-  { id: "K1-Hook", component: Hook, durationInFrames: 85 },
+  { id: "K1-Hook", component: Hook, durationInFrames: 115 },
   { id: "K2-Wait", component: Wait, durationInFrames: 201 },
-  { id: "K3-Distance", component: Distance, durationInFrames: 152 },
-  { id: "K4-Reveal", component: Reveal, durationInFrames: 202 },
-  { id: "K5-Speed", component: Speed, durationInFrames: 115 },
-  { id: "K6-Features", component: Features, durationInFrames: 289 },
-  { id: "K7-Offer", component: Offer, durationInFrames: 175 },
-  { id: "K8-CTA", component: CTA, durationInFrames: 165 },
+  { id: "K3-Distance", component: Distance, durationInFrames: 136 },
+  { id: "K4-Reveal", component: Reveal, durationInFrames: 212 },
+  { id: "K5-Speed", component: Speed, durationInFrames: 119 },
+  { id: "K6-Features", component: Features, durationInFrames: 338 },
+  { id: "K7-Offer", component: Offer, durationInFrames: 183 },
+  { id: "K8-CTA", component: CTA, durationInFrames: 156 },
 ] as const;
 
 export const TRANSITION = 16;

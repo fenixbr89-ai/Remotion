@@ -10,10 +10,10 @@ export const Hook: React.FC = () => {
     ...clamp,
     easing: Easing.spring({ damping: 18 }),
   });
-  const broke = frame >= 40;
-  const shake = broke ? Math.sin(frame * 2.2) * interpolate(frame, [40, 58], [26, 0], clamp) : 0;
-  const errP = interpolate(frame, [40, 54], [0, 1], { ...clamp, easing: EASE_OUT });
-  const toast = interpolate(frame, [52, 68], [0, 1], { ...clamp, easing: EASE_OUT });
+  const broke = frame >= 55;
+  const shake = broke ? Math.sin(frame * 2.2) * interpolate(frame, [55, 73], [26, 0], clamp) : 0;
+  const errP = interpolate(frame, [55, 69], [0, 1], { ...clamp, easing: EASE_OUT });
+  const toast = interpolate(frame, [66, 82], [0, 1], { ...clamp, easing: EASE_OUT });
 
   return (
     <AbsoluteFill>
