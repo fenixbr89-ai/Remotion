@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { Bg, Glass, IconTile, Words, Cam, Foreground } from "../components";
+import { Bg, Camera, Glass, IconTile, Words } from "../components";
 import { C, clamp, EASE_OUT } from "../theme";
 
 const ic = { fill: "none", stroke: "#fff", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" } as const;
@@ -53,7 +53,7 @@ export const Features: React.FC = () => {
   return (
     <AbsoluteFill>
       <Bg variant="light" />
-      <Cam keys={[{ f: 0, x: 540, y: 640, z: 1.15, rx: 8, ry: 6 }, { f: 30, x: 540, y: 900, z: 1.32, rx: 4, ry: -12 }, { f: 104, x: 540, y: 930, z: 1.34, ry: -6 }, { f: 120, x: 540, y: 1200, z: 1.36, ry: 12, rz: 1 }, { f: 160, x: 540, y: 1220, z: 1.34, ry: 6, rz: 0 }, { f: 176, x: 540, y: 1420, z: 1.36, ry: -10 }, { f: 250, x: 540, y: 1440, z: 1.32, ry: -4 }, { f: 300, x: 540, y: 1000, z: 1.0, rx: 0, ry: 0 }, { f: 338, x: 540, y: 980, z: 0.98, ry: 4 }]}>
+      <Camera rx={[6, 0]} ry={[8, -8]} scale={[1, 1.05]}>
         <AbsoluteFill style={{ alignItems: "center", paddingTop: 260 }}>
           <Words text="Tudo que o seu" start={0} size={88} weight={500} color={C.inkSoft} />
           <Words text="projeto precisa." start={6} size={124} weight={800} color={C.ink} accent={["precisa."]} />
@@ -84,8 +84,7 @@ export const Features: React.FC = () => {
             );
           })}
         </AbsoluteFill>
-      </Cam>
-      <Foreground from={[1400, 600]} to={[-400, 1500]} start={104} end={128} size={640} blur={30} />
+      </Camera>
     </AbsoluteFill>
   );
 };

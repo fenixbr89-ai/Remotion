@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
-import { Bg, Cursor, Words, Cam } from "../components";
+import { Bg, Camera, Cursor, Words } from "../components";
 import { C, clamp, EASE_IN_OUT, EASE_OUT, fontFamily, GRADIENT, OFFER } from "../theme";
 
 // 8 — Logo + site + button click
@@ -16,7 +16,7 @@ export const CTA: React.FC = () => {
   return (
     <AbsoluteFill>
       <Bg variant="light" />
-      <Cam keys={[{ f: 0, x: 540, y: 900, z: 1.2, ry: -28, rz: 4 }, { f: 22, x: 540, y: 960, z: 1.02, ry: 0, rz: 0 }, { f: 56, x: 540, y: 1000, z: 1.0 }, { f: 84, x: 580, y: 1230, z: 1.3 }, { f: 118, x: 570, y: 1230, z: 1.32 }, { f: 156, x: 540, y: 1060, z: 1.06 }]}>
+      <Camera rx={[0, 0]} ry={[0, 0]} scale={[1.06, 1]}>
         <AbsoluteFill style={{ alignItems: "center", paddingTop: 640 }}>
           <Img
             src={staticFile("logo-full.png")}
@@ -78,7 +78,7 @@ export const CTA: React.FC = () => {
         >
           <Cursor size={100} />
         </div>
-      </Cam>
+      </Camera>
     </AbsoluteFill>
   );
 };

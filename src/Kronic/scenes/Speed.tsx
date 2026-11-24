@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { Bg, Glass, Words, Cam } from "../components";
+import { Bg, Camera, Glass, Words } from "../components";
 import { C, clamp, EASE_OUT, OFFER } from "../theme";
 
 // 5 — "Mais perto. Mais rápido."
@@ -18,7 +18,7 @@ export const Speed: React.FC = () => {
   return (
     <AbsoluteFill>
       <Bg variant="dark" />
-      <Cam keys={[{ f: 0, x: 540, y: 1150, z: 1.55, rx: 38, ry: 0 }, { f: 45, x: 540, y: 1040, z: 1.1, rx: 8, ry: -4 }, { f: 119, x: 540, y: 980, z: 1.04, rx: 0, ry: 6 }]}>
+      <Camera rx={[8, 0]} ry={[6, -6]} scale={[1, 1.07]}>
         <AbsoluteFill style={{ alignItems: "center", paddingTop: 280 }}>
           <Words text="Mais perto." start={2} size={130} weight={800} color="#fff" />
           <Words text="Mais rápido." start={62} size={130} weight={800} color="#fff" accent={["rápido."]} />
@@ -65,7 +65,7 @@ export const Speed: React.FC = () => {
             </Glass>
           </div>
         </AbsoluteFill>
-      </Cam>
+      </Camera>
     </AbsoluteFill>
   );
 };

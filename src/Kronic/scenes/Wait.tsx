@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { Bg, Glass, Words, Cam, Foreground } from "../components";
+import { Bg, Camera, Glass, Words } from "../components";
 import { C, clamp, EASE_OUT, GRADIENT } from "../theme";
 
 // 2 — "O seu cliente não espera."
@@ -21,7 +21,7 @@ export const Wait: React.FC = () => {
   return (
     <AbsoluteFill>
       <Bg variant="light" />
-      <Cam keys={[{ f: 0, x: 540, y: 760, z: 1.3, rx: 6, ry: 12 }, { f: 85, x: 540, y: 840, z: 1.12, rx: 2, ry: -6 }, { f: 106, x: 540, y: 1380, z: 1.38, ry: 14, rz: -2 }, { f: 150, x: 540, y: 1420, z: 1.3, ry: 4, rz: 0 }, { f: 201, x: 540, y: 1150, z: 1.05, ry: -6 }]}>
+      <Camera rx={[0, 0]} ry={[5, -5]} scale={[1.02, 1.08]}>
         <AbsoluteFill style={{ alignItems: "center", paddingTop: 300 }}>
           <Words text="O seu cliente" start={6} size={92} weight={500} color={C.inkSoft} />
           <Words text="não espera." start={16} size={140} weight={800} color={C.ink} accent={["não", "espera."]} />
@@ -81,8 +81,7 @@ export const Wait: React.FC = () => {
             </Glass>
           </div>
         ))}
-      </Cam>
-      <Foreground from={[-300, 1500]} to={[1400, 1250]} start={86} end={118} size={620} blur={28} />
+      </Camera>
     </AbsoluteFill>
   );
 };

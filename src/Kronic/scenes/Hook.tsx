@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame, Easing } from "remotion";
-import { Bg, Glass, Words, Cam } from "../components";
+import { Bg, Camera, Glass, Words } from "../components";
 import { C, clamp, EASE_OUT, fontFamily } from "../theme";
 
 // 1 — "Seu site ou sistema travou de novo?"
@@ -18,7 +18,7 @@ export const Hook: React.FC = () => {
   return (
     <AbsoluteFill>
       <Bg variant="dark" />
-      <Cam keys={[{ f: 0, x: 540, y: 1150, z: 1.65, rx: 14, ry: -24, rz: -3 }, { f: 34, x: 540, y: 960, z: 1.08, rx: 6, ry: -6, rz: 0 }, { f: 70, x: 540, y: 1060, z: 1.12, rx: 2, ry: 4 }, { f: 115, x: 550, y: 1060, z: 1.12, rx: 0, ry: 8 }]}>
+      <Camera rx={[10, 2]} ry={[-4, 4]} scale={[1, 1.08]}>
         <AbsoluteFill style={{ alignItems: "center", paddingTop: 330 }}>
           <Words text="Seu site ou sistema" start={2} size={84} weight={500} color="rgba(255,255,255,0.7)" />
           <Words text="travou de novo?" start={8} size={116} weight={800} color="#fff" accent={["travou"]} />
@@ -92,7 +92,7 @@ export const Hook: React.FC = () => {
             <div style={{ color: "#fff", fontSize: 32, fontWeight: 600 }}>Servidor sem resposta</div>
           </Glass>
         </div>
-      </Cam>
+      </Camera>
     </AbsoluteFill>
   );
 };

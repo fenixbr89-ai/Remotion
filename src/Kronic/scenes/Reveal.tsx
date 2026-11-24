@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
-import { Bg, Words, Cam } from "../components";
+import { Bg, Camera, Words } from "../components";
 import { C, clamp, EASE_IN_OUT, EASE_OUT } from "../theme";
 
 // Full logo is 1827x625; icon occupies x 0..538 (29.4%), text starts at ~31.7%.
@@ -20,7 +20,7 @@ export const Reveal: React.FC = () => {
   return (
     <AbsoluteFill>
       <Bg variant="light" />
-      <Cam keys={[{ f: 0, x: 540, y: 960, z: 1.25, ry: 40, rz: -6 }, { f: 16, x: 540, y: 960, z: 1.12, ry: 0, rz: 0 }, { f: 212, x: 540, y: 980, z: 1.0, ry: 0 }]}>
+      <Camera rx={[0, 0]} ry={[0, 0]} scale={[1.08, 1]}>
         <AbsoluteFill style={{ alignItems: "center", paddingTop: 560 }}>
           <Words text="Conheça a" start={10} size={80} weight={500} color={C.inkSoft} />
         </AbsoluteFill>
@@ -65,7 +65,7 @@ export const Reveal: React.FC = () => {
           <Words text="VPS de alta performance" start={80} size={58} weight={600} color={C.ink} stagger={2} />
           <Words text="hospedada no Brasil" start={130} size={58} weight={600} color={C.ink} accent={["Brasil"]} stagger={2} />
         </AbsoluteFill>
-      </Cam>
+      </Camera>
     </AbsoluteFill>
   );
 };

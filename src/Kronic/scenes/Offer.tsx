@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame } from "remotion";
-import { Bg, Glass, ServerIcon, Words, Cam, Foreground } from "../components";
+import { Bg, Camera, Glass, ServerIcon, Words } from "../components";
 import { C, clamp, EASE_OUT, fontFamily, GRADIENT, OFFER } from "../theme";
 
 // 7 — Black Friday price
@@ -24,7 +24,7 @@ export const Offer: React.FC = () => {
     <AbsoluteFill>
       <Bg variant="dark" />
       <AbsoluteFill style={{ background: "radial-gradient(700px 600px at 50% 48%, rgba(132,104,249,0.45), transparent 70%)" }} />
-      <Cam keys={[{ f: 0, x: 540, y: 520, z: 1.45, rx: -10, ry: 12 }, { f: 60, x: 540, y: 700, z: 1.12, rx: 0, ry: 0 }, { f: 80, x: 540, y: 800, z: 1.05 }, { f: 100, x: 540, y: 960, z: 1.22, rz: -2 }, { f: 140, x: 540, y: 990, z: 1.15, rz: 0 }, { f: 183, x: 540, y: 1150, z: 1.02 }]}>
+      <Camera rx={[10, 0]} ry={[-5, 5]} scale={[1.04, 1.1]}>
         {floaters.map((f, i) => (
           <div
             key={i}
@@ -104,8 +104,7 @@ export const Offer: React.FC = () => {
             </Glass>
           </div>
         </AbsoluteFill>
-      </Cam>
-      <Foreground dark from={[-400, 1500]} to={[1500, 1100]} start={78} end={102} size={600} blur={30} />
+      </Camera>
     </AbsoluteFill>
   );
 };
