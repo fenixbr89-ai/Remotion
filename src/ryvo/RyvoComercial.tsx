@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { AUDIO_FILE, CLIPS, SHOT_FRAMES } from "./sync";
+import { SoundFx } from "./sfx";
 import { Background } from "./components";
 import { Cam, Dir, Shot } from "./camera";
 import { FONT, FPS, ThemeName } from "./theme";
@@ -93,6 +94,8 @@ const Inner: React.FC = () => {
           <Audio src={staticFile(AUDIO_FILE)} trimBefore={Math.round(a * FPS)} trimAfter={Math.round(b * FPS)} />
         </Sequence>
       ))}
+      {/* sound effects */}
+      <SoundFx shots={shots} />
       {shots.map((s) => {
         const Comp = s.comp;
         return (
