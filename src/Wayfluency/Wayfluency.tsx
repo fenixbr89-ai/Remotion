@@ -133,6 +133,11 @@ const CUES: Cue[] = [
   { at: 45.3, src: "open16.mp3", vol: 0.35, to: 0.4 },
   { at: 46.1, src: "clicky.mp3", vol: 0.45, to: 1.02 },
   { at: 46.47, src: "ui02.mp3", vol: 0.3, to: 0.43 },
+  { at: 2.7, src: "ui01.mp3", vol: 0.25 },
+  { at: 24.02, src: "swipe.mp3", vol: 0.45, to: 0.3 },
+  { at: 36.03, src: "ui06.mp3", vol: 0.3, to: 0.59 },
+  { at: 43.83, src: "ui04.mp3", vol: 0.25 },
+  { at: 45.75, src: "ui05.mp3", vol: 0.25 },
 ];
 
 export const Wayfluency: React.FC = () => (
