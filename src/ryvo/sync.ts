@@ -2,8 +2,7 @@
 // (pausas longas cortadas; velocidade do áudio e do vídeo inalteradas).
 // SYNC: início de cada palavra (s, relativo ao início do plano).
 export const SYNC: Record<string, number[]> = {
-  "Uma *marca* não precisa": [0.78, 1.12, 1.46, 1.63],
-  "apenas *aparecer.*": [0.02, 0.41],
+  "não precisa apenas *aparecer.*": [0.06, 0.23, 0.85, 1.24],
   "Ela precisa ser *lembrada.*": [0.09, 0.4, 0.87, 1.02],
   "Transformamos *ideias* em *movimento,*": [1.21, 1.92, 2.28, 2.45],
   "criando *vídeos,* *animações*": [0.1, 0.57, 1.14],
@@ -18,11 +17,11 @@ export const SYNC: Record<string, number[]> = {
 };
 
 /** Trechos do áudio: [início na fonte, fim na fonte, posição no vídeo] (s). */
-export const CLIPS: [number, number, number][] = [[0.27, 2.78, 0.8], [3.11, 4.65, 3.71], [5.07, 6.75, 5.45], [7.3, 8.3, 7.38], [8.53, 10.63, 8.5], [10.86, 12.93, 10.72], [12.98, 17.43, 12.84], [17.76, 24.7, 17.54], [25.1, 25.86, 24.73], [26.28, 32.6, 25.64], [33.16, 33.62, 32.41], [33.82, 35.79, 33.02], [35.96, 37.88, 35.14], [38.36, 39.1, 37.26], [39.35, 41.15, 38.15]];
+export const CLIPS: [number, number, number][] = [[0.27, 2.78, 1.2], [3.11, 4.65, 4.11], [5.07, 6.75, 5.85], [7.3, 8.3, 7.78], [8.53, 10.63, 8.9], [10.86, 12.93, 11.12], [12.98, 17.43, 13.24], [17.76, 24.7, 17.94], [25.1, 25.86, 25.13], [26.28, 32.6, 26.04], [33.16, 33.62, 32.81], [33.82, 35.79, 33.42], [35.96, 37.88, 35.54], [38.36, 39.1, 37.66], [39.35, 41.15, 38.55]];
 
 export const AUDIO_FILE = "audio/narracao-v2.wav";
 
-export const SHOT_FRAMES: Record<string, number> = {"s01": 67, "s02": 41, "s03": 52, "s04": 58, "s05": 100, "s06": 64, "s07": 141, "s08": 80, "s09": 75, "s10": 60, "s11": 111, "s12": 63, "s13": 51, "s14": 88, "s15": 175};
+export const SHOT_FRAMES: Record<string, number> = {"s01": 54, "s02": 66, "s03": 52, "s04": 58, "s05": 100, "s06": 64, "s07": 141, "s08": 80, "s09": 75, "s10": 60, "s11": 111, "s12": 63, "s13": 51, "s14": 88, "s15": 175};
 
 /** Tempos (s, relativos ao plano) do título "Sua marca merece mais." e do encerramento. */
 export const HEAD = {"light": 0.15, "bold": 0.8};

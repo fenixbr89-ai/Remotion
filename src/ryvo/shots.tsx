@@ -104,7 +104,7 @@ export const S01: React.FC<ShotProps> = () => {
         <Img src={staticFile(T.spiral)} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
       </div>
       <Center y={1270}>
-        <Kinetic text="Uma *marca*" start={0.9} size={150} wps={2.2} />
+        <Kinetic text="Uma *marca*" start={0.4} size={150} wps={3} />
       </Center>
     </AbsoluteFill>
   );
