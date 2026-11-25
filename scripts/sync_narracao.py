@@ -36,8 +36,8 @@ CL = [
     [(39.38, 41.10, "Solicite seu orçamento pelo WhatsApp.")],
 ]
 # pausa mantida depois de cada frase (s): curta dentro da cena, um pouco maior na troca de cena
-GAP = [0.15, 0.2, 0.25, 0.12, 0.12, 0.05, 0.25, 0.25, 0.15, 0.45, 0.15, 0.15, 0.2, 0.15]
-START, HOLD = 0.35, 0.9
+GAP = [0.4, 0.2, 0.25, 0.12, 0.12, 0.05, 0.25, 0.25, 0.15, 0.45, 0.15, 0.15, 0.2, 0.15]
+START, HOLD = 0.8, 0.9
 PAD0, PAD1 = 0.03, 0.05
 
 cur = START
@@ -78,13 +78,14 @@ def vend(seq):
 LEAD = 0.15
 cuts = [
     ("s01", 0),
+    ("s02", vt("apenas aparecer.") - 0.08),  # usa a pausa natural depois de "precisa"
     ("s03", vt("Ela precisa ser") - LEAD),
     ("s04", vt("Sua marca merece") - LEAD),
     ("s05", vt("Motion design.") - LEAD),
     ("s06", vt("criando vídeos,") - LEAD),
     ("s07", vt("e experiências visuais") - LEAD),
     ("s08", vt("Design gráfico.") - LEAD),
-    ("s09", vt("e conteúdos digitais") + 0.02),  # deixa "visuais" terminar no plano anterior
+    ("s09", vt("e conteúdos digitais") + 0.2),  # deixa "visuais" terminar no plano anterior
     ("s10", vt("e a personalidade") - LEAD),
     ("s11", vt("Impressos.") - LEAD),
     ("s12", vt("com materiais gráficos") - LEAD),
@@ -100,16 +101,18 @@ for i, k in enumerate(ids):
     nxt = st[ids[i + 1]] if i + 1 < len(ids) else fr(END)
     frames[k] = nxt - st[k]
 
+# textos exatamente como na v3 aprovada pelo cliente
 TEXTS = {
-    "s01": ["Uma marca não precisa apenas *aparecer.*"],
+    "s01": ["Uma *marca* não precisa"],
+    "s02": ["apenas *aparecer.*"],
     "s03": ["Ela precisa ser *lembrada.*"],
-    "s05": ["Motion *design.*", "Transformamos *ideias* em *movimento,*"],
+    "s05": ["Transformamos *ideias* em *movimento,*"],
     "s06": ["criando *vídeos,* *animações*"],
     "s07": ["e experiências visuais que capturam a *atenção.*"],
-    "s08": ["Design *gráfico.*", "Criamos *identidades* *visuais*"],
+    "s08": ["Criamos *identidades* *visuais*"],
     "s09": ["e *conteúdos* *digitais* que fortalecem a *presença*"],
     "s10": ["e a *personalidade* das marcas."],
-    "s11": ["*Impressos.*", "E levamos sua comunicação *além* *das* *telas,*"],
+    "s11": ["E levamos sua comunicação *além* *das* *telas,*"],
     "s12": ["com *materiais* *gráficos* e *publicitários*"],
     "s13": ["que dão *vida* à sua marca."],
     "s14": ["Criatividade que vai *além* *do* *visual.*"],

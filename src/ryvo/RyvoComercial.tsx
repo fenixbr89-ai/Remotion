@@ -24,7 +24,8 @@ type ShotDef = {
 
 export const SHOTS: ShotDef[] = [
   // CENA 01 — "Uma marca não precisa apenas aparecer. Ela precisa ser lembrada."
-  { id: "s01", dur: SHOT_FRAMES.s01 / 30, comp: S.S01, cam: [{ s: 1 }, { s: 1.08, rz: -1 }], inDir: "none", outDir: "up" },
+  { id: "s01", dur: SHOT_FRAMES.s01 / 30, comp: S.S01, cam: [{ s: 1 }, { s: 1.1, rz: -1 }], inDir: "none", outDir: "up" },
+  { id: "s02", dur: SHOT_FRAMES.s02 / 30, comp: S.S02, cam: [{ s: 1.05, ry: 8 }, { s: 1.0, ry: -6 }], inDir: "up", outDir: "up" },
   { id: "s03", dur: SHOT_FRAMES.s03 / 30, comp: S.S03, cam: [{ s: 0.96 }, { s: 1.12, rz: 1 }], inDir: "up", outDir: "zoom" },
   { id: "s04", dur: SHOT_FRAMES.s04 / 30, comp: S.S04, cam: [{ s: 1.14, ry: 16, rx: -4 }, { s: 1.0, ry: -6, rx: 2 }], inDir: "zoom", outDir: "left", alt: true },
   // CENA 02 — "Transformamos ideias em movimento, criando vídeos, animações e experiências visuais que capturam a atenção."
