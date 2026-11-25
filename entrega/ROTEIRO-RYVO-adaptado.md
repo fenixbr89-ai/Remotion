@@ -50,7 +50,7 @@ A locução está igual à do cliente. As mudanças foram só no texto da tela (
 - Sua próxima ideia **começa aqui.**
 - Botão: Vamos conversar?
 - Solicite seu orçamento pelo **WhatsApp**
-- ✎ (62) 99523-7527 (número da conversa, precisa confirmar)
+- ✎ (62) 99523-7527 (número da conversa, precisa confirmar) • @ryvocreative
 
 **Locução:** "RYVO. Criatividade que vai além do visual. Vamos desenvolver seu próximo projeto?"
 
@@ -71,5 +71,5 @@ A locução está igual à do cliente. As mudanças foram só no texto da tela (
 5. RYVO. Criatividade que vai além do visual. Vamos desenvolver seu próximo projeto?
 
 ## Pendências
-- Confirmar o WhatsApp e mandar o @ do Instagram, se for para aparecer no final.
+- Confirmar o WhatsApp.
 - Confirmar a pronúncia de "RYVO".

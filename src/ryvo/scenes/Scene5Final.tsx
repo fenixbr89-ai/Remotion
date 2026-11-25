@@ -99,8 +99,22 @@ export const Scene5Final: React.FC = () => {
         </Reveal>
         <div style={{ height: 18 }} />
         <Reveal delay={1.9}>
-          <div style={{ fontSize: 36, fontWeight: 800, color: T.text, letterSpacing: "0.02em", transform: `translateY(${Math.sin(t) * 0}px)` }}>
-            (62) 99523-7527
+          <div style={{ display: "flex", alignItems: "center", gap: 22, fontSize: 34, fontWeight: 800, color: T.text, letterSpacing: "0.01em" }}>
+            <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <svg width={34} height={34} viewBox="0 0 24 24" fill={T.accentText}>
+                <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z" />
+              </svg>
+              (62) 99523-7527
+            </span>
+            <span style={{ width: 2, height: 30, background: T.surfaceLine }} />
+            <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <svg width={32} height={32} viewBox="0 0 24 24" fill="none" stroke={T.accentText} strokeWidth={2.2}>
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4.2" />
+                <circle cx="17.4" cy="6.6" r="0.6" fill={T.accentText} />
+              </svg>
+              @ryvocreative
+            </span>
           </div>
         </Reveal>
       </div>
