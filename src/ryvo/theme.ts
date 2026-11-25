@@ -25,13 +25,13 @@ export const LOGO_FONT = "'Archivo Variable', Archivo, sans-serif";
 
 export const headlineGradient = `linear-gradient(90deg, ${C.lilac} 0%, #CC8BF8 45%, ${C.purple} 80%, ${C.violet} 100%)`;
 
-// Scene durations in seconds (estimated from the narration: ~3.4 words/s + padding).
+// Scene durations in seconds. Total ~33s (target 30–40s); narration ~21s at ~3.4 words/s.
 export const SCENES = [
-  { id: "reveal", dur: 4.6 },
-  { id: "motion", dur: 5.6 },
-  { id: "grafico", dur: 5.4 },
-  { id: "impressao", dur: 6.0 },
-  { id: "final", dur: 6.4 },
+  { id: "reveal", dur: 5.8 },
+  { id: "motion", dur: 6.8 },
+  { id: "grafico", dur: 6.6 },
+  { id: "impressao", dur: 7.2 },
+  { id: "final", dur: 8.0 },
 ] as const;
 
 export const OVERLAP = 0.3;
