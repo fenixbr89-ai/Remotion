@@ -80,10 +80,9 @@ para relembrar o visual.
 - Roteiros: `entrega/ROTEIRO-RYVO-cliente.txt` (cliente) e `entrega/ROTEIRO-RYVO-adaptado.md` (interno).
 
 ### Status (RYVO)
-- Enviado ao cliente para avaliação: `entrega/claro/RYVO-Claro-v3.mp4` (legenda com desfoque).
-- Aguardando a resposta do cliente antes de seguir.
-- Texto da narração enviado: `entrega/NARRACAO-RYVO.txt`.
-- **Correção pendente (fazer quando chegar a narração):** no plano s02 ("não precisa apenas
-  aparecer.") a palavra "aparecer." sai cortada na borda da tela; o travelling tem que terminar
-  com a palavra inteira visível.
-- Quando os áudios chegarem: ajustar cada plano à fala e exportar com som.
+- v3 claro enviado ao cliente para avaliação (legenda com desfoque).
+- Narração recebida (voz feminina, um arquivo só): `public/audio/narracao.mp3` (32,3s).
+  Trechos e tempo de cada palavra em `src/ryvo/sync.ts` (gerado por detecção de pausas; o
+  Whisper não baixa modelo aqui porque o Hugging Face é bloqueado na rede).
+- Versão final com som: `entrega/*/RYVO-*-final-com-som.mp4` (39,9s, -14 LUFS).
+- "aparecer." cortado no plano s02: corrigido.
