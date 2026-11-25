@@ -1,7 +1,8 @@
 import React from "react";
 import { AbsoluteFill, Sequence, interpolate, useCurrentFrame } from "remotion";
 import { Background, BrandBar, SceneWrap } from "./components";
-import { LOGO_FONT, sceneFrames } from "./theme";
+import { LOGO_FONT, ThemeName, sceneFrames } from "./theme";
+import { ThemeProvider, useTheme } from "./ThemeContext";
 import { Scene1Reveal } from "./scenes/Scene1Reveal";
 import { Scene2Motion } from "./scenes/Scene2Motion";
 import { Scene3Grafico } from "./scenes/Scene3Grafico";
@@ -16,7 +17,14 @@ const SCENE_COMPONENTS: Record<string, React.FC> = {
   final: Scene5Final,
 };
 
-export const RyvoComercial: React.FC = () => {
+export const RyvoComercial: React.FC<{ tema: ThemeName }> = ({ tema }) => (
+  <ThemeProvider name={tema}>
+    <Inner />
+  </ThemeProvider>
+);
+
+const Inner: React.FC = () => {
+  const T = useTheme();
   const frame = useCurrentFrame();
   const scenes = sceneFrames();
   const last = scenes[scenes.length - 1];
@@ -38,7 +46,7 @@ export const RyvoComercial: React.FC = () => {
             fontWeight: 900,
             fontSize: 300,
             letterSpacing: "0.08em",
-            color: "#A78BFA",
+            color: T.watermark,
             opacity: 0.05 * barOpacity,
             transform: "rotate(-90deg)",
             whiteSpace: "nowrap",

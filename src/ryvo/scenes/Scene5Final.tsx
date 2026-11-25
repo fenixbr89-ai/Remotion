@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
-import { Bubble, Headline, LogoText, Reveal, glass, useProgress } from "../components";
+import { useTheme } from "../ThemeContext";
+import { Bubble, Headline, LogoText, Reveal, useProgress } from "../components";
 import { FONT } from "../theme";
 
 const WhatsIcon: React.FC<{ size: number }> = ({ size }) => (
@@ -11,6 +12,8 @@ const WhatsIcon: React.FC<{ size: number }> = ({ size }) => (
 
 export const Scene5Final: React.FC = () => {
   const frame = useCurrentFrame();
+  const T = useTheme();
+  const glass = T.glass;
   const t = frame / 30;
   const ring = useProgress(0, 1.5);
   const logo = useProgress(0.2, 1.0);
@@ -32,7 +35,7 @@ export const Scene5Final: React.FC = () => {
           filter: `blur(${(1 - ring) * 18}px)`,
         }}
       >
-        <Img src={staticFile("glass-ring-dark.png")} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+        <Img src={staticFile(T.ring)} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
       </div>
       <Bubble size={80} x={900} y={300} phase={1} blur={2} />
       <Bubble size={50} x={90} y={820} phase={2} />
@@ -40,7 +43,7 @@ export const Scene5Final: React.FC = () => {
       <div style={{ position: "absolute", left: 0, right: 0, top: 250, display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ opacity: logo, filter: `blur(${(1 - logo) * 16}px)`, transform: `scale(${0.9 + logo * 0.1})`, textAlign: "center" }}>
           <LogoText size={120} />
-          <div style={{ fontSize: 28, letterSpacing: "0.42em", color: "#A78BFA", fontWeight: 500, marginTop: 10, paddingLeft: "0.42em" }}>
+          <div style={{ fontSize: 28, letterSpacing: "0.42em", color: T.accentText, fontWeight: 500, marginTop: 10, paddingLeft: "0.42em" }}>
             ESTÚDIO CRIATIVO
           </div>
         </div>
@@ -82,13 +85,13 @@ export const Scene5Final: React.FC = () => {
         </div>
         <div style={{ height: 34 }} />
         <Reveal delay={1.7}>
-          <div style={{ ...glass(0.15, 40), padding: "18px 36px", fontSize: 32, color: "#F5F3FF", fontWeight: 500, textAlign: "center" }}>
+          <div style={{ ...glass(0.15, 40), padding: "18px 36px", fontSize: 32, color: T.text, fontWeight: 500, textAlign: "center" }}>
             Solicite seu orçamento pelo <b style={{ fontWeight: 800 }}>WhatsApp</b>
           </div>
         </Reveal>
         <div style={{ height: 18 }} />
         <Reveal delay={1.9}>
-          <div style={{ fontSize: 36, fontWeight: 700, color: "#A78BFA", letterSpacing: "0.02em", transform: `translateY(${Math.sin(t) * 0}px)` }}>
+          <div style={{ fontSize: 36, fontWeight: 700, color: T.accentText, letterSpacing: "0.02em", transform: `translateY(${Math.sin(t) * 0}px)` }}>
             (62) 99523-7527
           </div>
         </Reveal>

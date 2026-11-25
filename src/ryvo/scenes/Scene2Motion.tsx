@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { Bubble, Chips, Eyebrow, GlassTile, Headline, glass, useProgress } from "../components";
+import { useTheme } from "../ThemeContext";
+import { Bubble, Chips, Eyebrow, GlassTile, Headline, useProgress } from "../components";
 import { C, FONT } from "../theme";
 
 const PlayIcon: React.FC<{ size: number; color?: string }> = ({ size, color = "#fff" }) => (
@@ -12,6 +13,8 @@ const PlayIcon: React.FC<{ size: number; color?: string }> = ({ size, color = "#
 /** Floating 3D glass "editor" interface. */
 const MotionInterface: React.FC = () => {
   const frame = useCurrentFrame();
+  const T = useTheme();
+  const glass = T.glass;
   const t = frame / 30;
   const enter = useProgress(0.15, 1.2);
   const ry = interpolate(enter, [0, 1], [-42, -16]) + Math.sin(t * 0.8) * 3;
@@ -21,7 +24,7 @@ const MotionInterface: React.FC = () => {
   const tracks = [
     { c1: "#7547E8", c2: "#A78BFA", clips: [[0, 0.28], [0.32, 0.62], [0.66, 0.95]] },
     { c1: "#087BFF", c2: "#4FA3FF", clips: [[0.06, 0.4], [0.46, 0.84]] },
-    { c1: "#A78BFA", c2: "#F5F3FF", clips: [[0, 0.18], [0.22, 0.52], [0.58, 0.74], [0.78, 1]] },
+    { c1: "#A78BFA", c2: T.name === "escuro" ? "#F5F3FF" : "#7547E8", clips: [[0, 0.18], [0.22, 0.52], [0.58, 0.74], [0.78, 1]] },
   ];
 
   return (
@@ -96,7 +99,7 @@ const MotionInterface: React.FC = () => {
           {/* side panel */}
           <div style={{ width: 190, display: "flex", flexDirection: "column", gap: 14 }}>
             {[0.8, 0.55, 0.7, 0.4].map((w, i) => (
-              <div key={i} style={{ height: 58, borderRadius: 16, background: "rgba(245,243,255,0.07)", border: "1px solid rgba(245,243,255,0.12)", padding: 14 }}>
+              <div key={i} style={{ height: 58, borderRadius: 16, background: T.surface, border: `1px solid ${T.surfaceLine}`, padding: 14 }}>
                 <div style={{ height: 10, width: `${w * 100}%`, borderRadius: 5, background: "rgba(167,139,250,0.6)" }} />
                 <div style={{ height: 8, width: `${w * 60}%`, borderRadius: 4, marginTop: 8, background: "rgba(167,139,250,0.3)" }} />
               </div>
@@ -106,7 +109,7 @@ const MotionInterface: React.FC = () => {
         {/* timeline */}
         <div style={{ position: "relative", marginTop: 26 }}>
           {tracks.map((tr, i) => (
-            <div key={i} style={{ position: "relative", height: 40, marginBottom: 12, borderRadius: 12, background: "rgba(245,243,255,0.06)" }}>
+            <div key={i} style={{ position: "relative", height: 40, marginBottom: 12, borderRadius: 12, background: T.surface }}>
               {tr.clips.map(([a, b], j) => (
                 <div
                   key={j}

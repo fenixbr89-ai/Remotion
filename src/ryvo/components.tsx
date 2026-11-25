@@ -6,7 +6,8 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { C, FONT, LOGO_FONT, P, headlineGradient, logoGradient } from "./theme";
+import { FONT, LOGO_FONT, P } from "./theme";
+import { useTheme } from "./ThemeContext";
 
 const ease = Easing.bezier(0.16, 1, 0.3, 1);
 
@@ -78,6 +79,7 @@ export const SceneWrap: React.FC<{
 /** Deep black background with drifting violet / blue light and a faint tech grid. */
 export const Background: React.FC = () => {
   const frame = useCurrentFrame();
+  const T = useTheme();
   const t = frame / 30;
   const orb = (x: number, y: number, size: number, color: string, phase: number, o: number) => (
     <div
@@ -95,11 +97,11 @@ export const Background: React.FC = () => {
     />
   );
   return (
-    <AbsoluteFill style={{ background: C.bg, overflow: "hidden" }}>
-      {orb(520, 1000, 780, P.violet, 0, 0.55)}
-      {orb(-300, 1380, 620, P.blue, 2, 0.3)}
-      {orb(560, -260, 600, P.lavender, 4, 0.22)}
-      {orb(-260, 260, 460, P.violet, 1, 0.3)}
+    <AbsoluteFill style={{ background: T.bg, overflow: "hidden" }}>
+      {orb(520, 1000, 780, T.orbs[0].color, 0, T.orbs[0].o)}
+      {orb(-300, 1380, 620, T.orbs[1].color, 2, T.orbs[1].o)}
+      {orb(560, -260, 600, T.orbs[2].color, 4, T.orbs[2].o)}
+      {orb(-260, 260, 460, T.orbs[3].color, 1, T.orbs[3].o)}
       {/* perspective grid floor */}
       <div
         style={{
@@ -110,7 +112,7 @@ export const Background: React.FC = () => {
           height: 900,
           transform: "perspective(900px) rotateX(68deg)",
           transformOrigin: "bottom",
-          backgroundImage: `linear-gradient(rgba(8,123,255,0.22) 2px, transparent 2px), linear-gradient(90deg, rgba(8,123,255,0.22) 2px, transparent 2px)`,
+          backgroundImage: `linear-gradient(${T.grid} 2px, transparent 2px), linear-gradient(90deg, ${T.grid} 2px, transparent 2px)`,
           backgroundSize: "120px 120px",
           backgroundPosition: `0 ${(t * 40) % 120}px`,
           WebkitMaskImage: "linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 85%)",
@@ -119,25 +121,14 @@ export const Background: React.FC = () => {
       />
       {/* vignette */}
       <AbsoluteFill
-        style={{ background: "radial-gradient(120% 80% at 50% 45%, transparent 55%, rgba(8,8,18,0.85) 100%)" }}
+        style={{ background: T.vignette }}
       />
     </AbsoluteFill>
   );
 };
 
-/** Dark frosted glass surface. `tint` 0 = neutral, 1 = strong violet. */
-export const glass = (tint = 0, radius = 48): React.CSSProperties => ({
-  borderRadius: radius,
-  background: `linear-gradient(145deg, rgba(245,243,255,${0.14 + tint * 0.04}) 0%, rgba(167,139,250,${
-    0.08 + tint * 0.1
-  }) 50%, rgba(117,71,232,${0.1 + tint * 0.2}) 100%)`,
-  border: "1.5px solid rgba(245,243,255,0.22)",
-  boxShadow: `inset 0 1.5px 0 rgba(245,243,255,0.45), inset 0 -20px 40px rgba(117,71,232,${
-    0.15 + tint * 0.2
-  }), 0 40px 90px rgba(0,0,0,0.55), 0 0 60px rgba(117,71,232,${0.12 + tint * 0.15})`,
-  backdropFilter: "blur(22px) saturate(140%)",
-  WebkitBackdropFilter: "blur(22px) saturate(140%)",
-});
+/** Frosted glass surface for the current theme. */
+export const useGlass = () => useTheme().glass;
 
 /** Thick rounded glass "petal" like the reference renders. */
 export const GlassTile: React.FC<{
@@ -153,6 +144,7 @@ export const GlassTile: React.FC<{
   opacity?: number;
 }> = ({ size, x, y, rx = 0, ry = 0, rz = 0, tint = 0.6, blur = 0, floatPhase = 0, opacity = 1 }) => {
   const frame = useCurrentFrame();
+  const glass = useGlass();
   const t = frame / 30;
   const fy = Math.sin(t * 0.9 + floatPhase) * 14;
   const frz = Math.sin(t * 0.5 + floatPhase) * 4;
@@ -215,7 +207,9 @@ export const Bubble: React.FC<{ size: number; x: number; y: number; phase?: numb
   );
 };
 
-export const LogoText: React.FC<{ size: number; style?: React.CSSProperties }> = ({ size, style }) => (
+export const LogoText: React.FC<{ size: number; style?: React.CSSProperties }> = ({ size, style }) => {
+  const T = useTheme();
+  return (
   <span
     style={{
       fontFamily: LOGO_FONT,
@@ -223,7 +217,7 @@ export const LogoText: React.FC<{ size: number; style?: React.CSSProperties }> =
       fontWeight: 800,
       fontSize: size,
       letterSpacing: "0.1em",
-      background: logoGradient,
+      background: T.logoGradient,
       WebkitBackgroundClip: "text",
       backgroundClip: "text",
       color: "transparent",
@@ -232,10 +226,13 @@ export const LogoText: React.FC<{ size: number; style?: React.CSSProperties }> =
   >
     RYVO
   </span>
-);
+  );
+};
 
 /** Glass pill: RYVO left, ESTÚDIO CRIATIVO right. */
-export const BrandBar: React.FC<{ opacity?: number }> = ({ opacity = 1 }) => (
+export const BrandBar: React.FC<{ opacity?: number }> = ({ opacity = 1 }) => {
+  const T = useTheme();
+  return (
   <div
     style={{
       position: "absolute",
@@ -248,17 +245,17 @@ export const BrandBar: React.FC<{ opacity?: number }> = ({ opacity = 1 }) => (
       justifyContent: "space-between",
       padding: "0 64px",
       opacity,
-      ...glass(0.15, 64),
-      background:
-        "linear-gradient(90deg, rgba(245,243,255,0.16) 0%, rgba(245,243,255,0.06) 35%, rgba(117,71,232,0.22) 75%, rgba(117,71,232,0.35) 100%)",
+      ...T.glass(0.15, 64),
+      background: T.brandBarBg,
     }}
   >
     <LogoText size={40} />
-    <span style={{ fontFamily: FONT, fontSize: 26, letterSpacing: "0.12em", color: P.lavender, fontWeight: 500 }}>
+    <span style={{ fontFamily: FONT, fontSize: 26, letterSpacing: "0.12em", color: T.accentText, fontWeight: 500 }}>
       ESTÚDIO CRIATIVO
     </span>
   </div>
-);
+  );
+};
 
 /** Two-weight headline: thin ice line + heavy italic gradient line. */
 export const Headline: React.FC<{
@@ -269,11 +266,13 @@ export const Headline: React.FC<{
   boldSize?: number;
   boldItalic?: boolean;
   align?: "left" | "center";
-}> = ({ light, bold, delay, lightSize = 132, boldSize = 150, boldItalic = true, align = "left" }) => (
+}> = ({ light, bold, delay, lightSize = 132, boldSize = 150, boldItalic = true, align = "left" }) => {
+  const T = useTheme();
+  return (
   <div style={{ fontFamily: FONT, textAlign: align }}>
     {light.split("\n").map((l, i) => (
       <Reveal key={l} delay={delay + i * 0.08}>
-        <div style={{ fontSize: lightSize, fontWeight: 300, color: C.text, letterSpacing: "-0.045em", lineHeight: 0.98 }}>
+        <div style={{ fontSize: lightSize, fontWeight: 300, color: T.text, letterSpacing: "-0.045em", lineHeight: 0.98 }}>
           {l}
         </div>
       </Reveal>
@@ -290,7 +289,7 @@ export const Headline: React.FC<{
             paddingRight: 20,
             paddingBottom: 6,
             display: "inline-block",
-            background: headlineGradient,
+            background: T.headlineGradient,
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             color: "transparent",
@@ -301,9 +300,12 @@ export const Headline: React.FC<{
       </Reveal>
     ))}
   </div>
-);
+  );
+};
 
-export const Eyebrow: React.FC<{ n: string; label: string; delay: number }> = ({ n, label, delay }) => (
+export const Eyebrow: React.FC<{ n: string; label: string; delay: number }> = ({ n, label, delay }) => {
+  const T = useTheme();
+  return (
   <Reveal delay={delay}>
     <div
       style={{
@@ -315,8 +317,8 @@ export const Eyebrow: React.FC<{ n: string; label: string; delay: number }> = ({
         fontSize: 26,
         fontWeight: 600,
         letterSpacing: "0.16em",
-        color: P.lavender,
-        ...glass(0.1, 40),
+        color: T.accentText,
+        ...T.glass(0.1, 40),
       }}
     >
       <span style={{ color: P.blue }}>{n}</span>
@@ -324,9 +326,12 @@ export const Eyebrow: React.FC<{ n: string; label: string; delay: number }> = ({
       {label}
     </div>
   </Reveal>
-);
+  );
+};
 
-export const Chips: React.FC<{ items: string[]; delay: number }> = ({ items, delay }) => (
+export const Chips: React.FC<{ items: string[]; delay: number }> = ({ items, delay }) => {
+  const T = useTheme();
+  return (
   <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
     {items.map((it, i) => (
       <Reveal key={it} delay={delay + i * 0.1} rise={18}>
@@ -336,8 +341,8 @@ export const Chips: React.FC<{ items: string[]; delay: number }> = ({ items, del
             fontFamily: FONT,
             fontSize: 30,
             fontWeight: 500,
-            color: P.ice,
-            ...glass(0.35, 40),
+            color: T.name === "escuro" ? P.ice : P.black,
+            ...T.glass(0.35, 40),
           }}
         >
           {it}
@@ -345,7 +350,8 @@ export const Chips: React.FC<{ items: string[]; delay: number }> = ({ items, del
       </Reveal>
     ))}
   </div>
-);
+  );
+};
 
 /** Supporting line with the blue accent bar. */
 export const Support: React.FC<{ children: React.ReactNode; delay: number; width?: number }> = ({
@@ -354,6 +360,7 @@ export const Support: React.FC<{ children: React.ReactNode; delay: number; width
   width = 820,
 }) => {
   const p = useProgress(delay, 0.8);
+  const T = useTheme();
   return (
     <div style={{ display: "flex", gap: 26, width }}>
       <div
@@ -367,7 +374,7 @@ export const Support: React.FC<{ children: React.ReactNode; delay: number; width
         }}
       />
       <Reveal delay={delay + 0.1}>
-        <div style={{ fontFamily: FONT, fontSize: 36, lineHeight: 1.45, color: C.textSoft, fontWeight: 400 }}>
+        <div style={{ fontFamily: FONT, fontSize: 36, lineHeight: 1.45, color: T.textSoft, fontWeight: 400 }}>
           {children}
         </div>
       </Reveal>
@@ -376,5 +383,5 @@ export const Support: React.FC<{ children: React.ReactNode; delay: number; width
 };
 
 export const B: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <b style={{ fontWeight: 800, fontStyle: "italic", color: P.lavender }}>{children}</b>
+  <b style={{ fontWeight: 800, fontStyle: "italic", color: useTheme().accentText }}>{children}</b>
 );

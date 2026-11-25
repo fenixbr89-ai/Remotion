@@ -1,11 +1,14 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { Bubble, Chips, Eyebrow, GlassTile, Headline, LogoText, glass, useProgress } from "../components";
+import { useTheme } from "../ThemeContext";
+import { Bubble, Chips, Eyebrow, GlassTile, Headline, LogoText, useProgress } from "../components";
 import { FONT } from "../theme";
 
 /** Phone with a social post + identity board, fanned in 3D. */
 const Visual: React.FC = () => {
   const frame = useCurrentFrame();
+  const T = useTheme();
+  const glass = T.glass;
   const t = frame / 30;
   const a = useProgress(0.2, 1.1);
   const b = useProgress(0.45, 1.1);
@@ -32,10 +35,10 @@ const Visual: React.FC = () => {
           justifyContent: "space-between",
         }}
       >
-        <div style={{ fontFamily: FONT, fontSize: 22, letterSpacing: "0.18em", color: "#A78BFA", fontWeight: 600 }}>
+        <div style={{ fontFamily: FONT, fontSize: 22, letterSpacing: "0.18em", color: T.accentText, fontWeight: 600 }}>
           IDENTIDADE VISUAL
         </div>
-        <div style={{ fontFamily: FONT, fontSize: 170, fontWeight: 900, fontStyle: "italic", letterSpacing: "-0.06em", color: "#F5F3FF", lineHeight: 1 }}>
+        <div style={{ fontFamily: FONT, fontSize: 170, fontWeight: 900, fontStyle: "italic", letterSpacing: "-0.06em", color: T.text, lineHeight: 1 }}>
           Aa
         </div>
         <div style={{ display: "flex", gap: 12 }}>
@@ -47,7 +50,7 @@ const Visual: React.FC = () => {
                 height: 56,
                 borderRadius: 18,
                 background: s,
-                border: "2px solid rgba(245,243,255,0.5)",
+                border: `2px solid ${T.surfaceLine}`,
                 transform: `scale(${interpolate(frame, [30 + i * 4, 42 + i * 4], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
               }}
             />

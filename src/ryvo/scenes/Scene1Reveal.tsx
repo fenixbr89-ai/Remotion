@@ -1,9 +1,11 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { useTheme } from "../ThemeContext";
 import { B, Bubble, GlassTile, Headline, Support, useProgress } from "../components";
 
 export const Scene1Reveal: React.FC = () => {
   const frame = useCurrentFrame();
+  const T = useTheme();
   const p = useProgress(0, 1.4);
   const rot = interpolate(frame, [0, 140], [-28, 6]);
   return (
@@ -26,7 +28,7 @@ export const Scene1Reveal: React.FC = () => {
         }}
       >
         <Img
-          src={staticFile("glass-spiral-dark.png")}
+          src={staticFile(T.spiral)}
           style={{ width: "100%", height: "100%", objectFit: "contain" }}
         />
       </div>
