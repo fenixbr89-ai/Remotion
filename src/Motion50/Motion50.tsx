@@ -7,20 +7,12 @@ import { N1, N2, N3, N4, N5, N6, N7, N8, N9 } from "./scenes";
 /* Time-warp: the animation was timed on a guide voice ("old" seconds).
  * Each anchor maps a guide-voice moment to the same word in the recorded narration ("new" seconds). */
 const WARP: [number, number][] = [
-  [0, 0], [0.33, 0.9], [1.17, 1.44], [2.13, 2.4], [2.64, 2.76], [3.53, 3.4], [3.75, 4.3],
-  [4.14, 4.75], [5.2, 5.25], [5.91, 6.54], [6.35, 6.9], [7.2, 7.95],
-  [7.53, 8.4], [8.4, 9.09], [9.15, 9.54], [9.75, 10.5],
-  [9.87, 11.12], [10.92, 11.97], [11.19, 12.21], [11.3, 12.57], [12.0, 13.35],
-  [12.18, 13.74], [13.45, 15.0], [13.86, 16.35], [14.2, 16.68], [14.8, 17.45],
-  [15.06, 17.79], [15.76, 18.62], [16.47, 19.44], [17.16, 20.16], [17.7, 21.03], [18.51, 22.23], [19.08, 22.44], [20.0, 23.25],
-  [20.28, 23.67], [21.88, 24.92], [24.48, 26.37], [24.84, 26.7], [25.08, 26.9], [25.95, 27.5],
-  [26.43, 28.08], [27.21, 28.59], [28.08, 29.88], [29.6, 31.38], [30.09, 31.68], [30.9, 32.4],
-  [31.14, 32.85], [32.1, 33.9], [32.85, 34.38], [33.51, 34.75], [35.2, 36.4],
+  [0, 0], [0.33, 0.39], [1.17, 0.93], [2.13, 1.89], [2.64, 2.25], [3.53, 2.81], [3.75, 3], [4.14, 3.13], [5.2, 3.63], [5.91, 4.64], [6.35, 5], [7.2, 5.72], [7.53, 5.9], [8.4, 6.59], [9.15, 7.04], [9.75, 7.51], [9.87, 7.77], [10.92, 8.62], [11.19, 8.86], [11.3, 9.22], [12, 9.75], [12.18, 9.9], [13.45, 10.92], [13.86, 11.96], [14.2, 12.29], [14.8, 12.87], [15.06, 13.02], [15.76, 13.83], [16.47, 14.65], [17.16, 15.37], [17.7, 16.24], [18.51, 17.11], [19.08, 17.32], [20, 17.83], [20.28, 17.98], [21.88, 19.07], [24.48, 20.32], [24.84, 20.64], [25.08, 20.84], [25.95, 21.11], [26.43, 21.4], [27.21, 21.91], [28.08, 22.92], [29.6, 24.12], [30.09, 24.42], [30.9, 24.84], [31.14, 25.01], [32.1, 25.73], [32.85, 26.19], [33.51, 26.54], [35.2, 28],
 ];
 const lerp = (x: number, xs: number[], ys: number[]) => interpolate(x, xs, ys, { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 const oldFromNew = (t: number) => lerp(t, WARP.map((w) => w[1]), WARP.map((w) => w[0]));
 const newFromOld = (t: number) => lerp(t, WARP.map((w) => w[0]), WARP.map((w) => w[1]));
-export const M50_TOTAL = 36.4;
+export const M50_TOTAL = 28.0;
 const OLD_TOTAL = 35.2;
 // scene boundaries, aligned to pauses in the narration
 const B = [0, 3.75, 7.2, 9.75, 12.0, 14.8, 20.0, 25.95, 30.9, OLD_TOTAL];
@@ -143,19 +135,23 @@ const CUES: Cue[] = [
 const Warped: React.FC = () => {
   const f = useCurrentFrame();
   return (
-    <Freeze frame={oldFromNew(f / FPS) * FPS}>
-      {SCENES.map((_, i) => (
-        <Slot key={i} i={i} />
-      ))}
-      {B.slice(1, -1).map((b, i) => (KINDS[i] === "lime" ? <LimeWipe key={i} at={b} /> : null))}
-    </Freeze>
+    // playbackRate 2 keeps the frozen timeline position inside the (shorter) composition range;
+    // children still read the full guide-voice frame through useCurrentFrame().
+    <Sequence playbackRate={2} layout="none">
+      <Freeze frame={oldFromNew(f / FPS) * FPS}>
+        {SCENES.map((_, i) => (
+          <Slot key={i} i={i} />
+        ))}
+        {B.slice(1, -1).map((b, i) => (KINDS[i] === "lime" ? <LimeWipe key={i} at={b} /> : null))}
+      </Freeze>
+    </Sequence>
   );
 };
 
 export const Motion50: React.FC = () => (
   <AbsoluteFill style={{ background: K.black }}>
     <Warped />
-    <Audio src={staticFile("motionad/locucao-feminina.wav")} />
+    <Audio src={staticFile("motionad/locucao-feminina-tight.wav")} />
     {CUES.map((c, i) => (
       <Sequence key={i} from={Math.round(newFromOld(c.at) * FPS)} durationInFrames={Math.ceil(((c.to ?? 2) - (c.from ?? 0)) * FPS) + 2} layout="none">
         <Audio src={staticFile(`sfx/${c.src}`)} volume={c.vol} trimBefore={c.from ? Math.round(c.from * FPS) : undefined} trimAfter={c.to ? Math.round(c.to * FPS) : undefined} />
