@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { useTheme } from "../ThemeContext";
-import { Bubble, Chips, Eyebrow, GlassTile, Headline, LogoText, useProgress } from "../components";
+import { Bubble, Chips, Eyebrow, GlassTile, Headline, LogoMark, LogoText, useProgress } from "../components";
 import { FONT } from "../theme";
 
 /** Phone with a social post + identity board, fanned in 3D. */
@@ -73,7 +73,9 @@ const Visual: React.FC = () => {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 8px 16px" }}>
-          <div style={{ width: 46, height: 46, borderRadius: 23, background: "linear-gradient(135deg,#7547E8,#087BFF)", border: "3px solid #F5F3FF" }} />
+          <div style={{ width: 46, height: 46, borderRadius: 23, background: "#080812", border: "2px solid #A78BFA", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <LogoMark height={18} />
+          </div>
           <LogoText size={20} />
         </div>
         <div

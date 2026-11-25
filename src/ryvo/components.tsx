@@ -2,6 +2,8 @@ import React from "react";
 import {
   AbsoluteFill,
   Easing,
+  Img,
+  staticFile,
   interpolate,
   useCurrentFrame,
   useVideoConfig,
@@ -229,6 +231,18 @@ export const LogoText: React.FC<{ size: number; style?: React.CSSProperties }> =
   );
 };
 
+/** Official RYVO "R" symbol (PNG with transparency, aspect 1348:1060). */
+export const LogoMark: React.FC<{ height: number; white?: boolean; style?: React.CSSProperties }> = ({
+  height,
+  white,
+  style,
+}) => (
+  <Img
+    src={staticFile(white ? "ryvo-r-white.png" : "ryvo-r.png")}
+    style={{ height, width: (height * 1348) / 1060, display: "block", ...style }}
+  />
+);
+
 /** Glass pill: RYVO left, ESTÚDIO CRIATIVO right. */
 export const BrandBar: React.FC<{ opacity?: number }> = ({ opacity = 1 }) => {
   const T = useTheme();
@@ -249,7 +263,10 @@ export const BrandBar: React.FC<{ opacity?: number }> = ({ opacity = 1 }) => {
       background: T.brandBarBg,
     }}
   >
-    <LogoText size={40} />
+    <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+      <LogoMark height={50} />
+      <LogoText size={40} />
+    </div>
     <span style={{ fontFamily: FONT, fontSize: 26, letterSpacing: "0.12em", color: T.accentText, fontWeight: 500 }}>
       ESTÚDIO CRIATIVO
     </span>

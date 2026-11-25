@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame } from "remotion";
-import { Bubble, Chips, Eyebrow, GlassTile, Headline, LogoText, useProgress } from "../components";
+import { Bubble, Chips, Eyebrow, GlassTile, Headline, LogoMark, LogoText, useProgress } from "../components";
 import { FONT } from "../theme";
 
 const Card: React.FC<{ front?: boolean }> = ({ front }) => (
@@ -21,9 +21,12 @@ const Card: React.FC<{ front?: boolean }> = ({ front }) => (
   >
     {front ? (
       <>
-        <span style={{ fontFamily: "'Archivo Variable'", fontStretch: "125%", fontWeight: 800, fontSize: 40, letterSpacing: "0.1em", color: "#fff" }}>
-          RYVO
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <LogoMark height={44} white />
+          <span style={{ fontFamily: "'Archivo Variable'", fontStretch: "125%", fontWeight: 800, fontSize: 40, letterSpacing: "0.1em", color: "#fff" }}>
+            RYVO
+          </span>
+        </div>
         <span style={{ fontFamily: FONT, fontSize: 16, letterSpacing: "0.2em", color: "rgba(255,255,255,0.85)" }}>ESTÚDIO CRIATIVO</span>
       </>
     ) : (
@@ -124,7 +127,7 @@ const Visual: React.FC = () => {
           height: 150,
           borderRadius: 75,
           opacity: bag,
-          transform: `scale(${0.6 + bag * 0.4}) rotate(${-15 + t * 8}deg)`,
+          transform: `scale(${0.6 + bag * 0.4}) rotate(${-10 + Math.sin(t * 1.5) * 6}deg)`,
           background: "linear-gradient(135deg, #087BFF, #7547E8)",
           display: "flex",
           alignItems: "center",
@@ -138,7 +141,7 @@ const Visual: React.FC = () => {
           letterSpacing: "0.08em",
         }}
       >
-        RYVO
+        <LogoMark height={64} white />
       </div>
     </div>
   );

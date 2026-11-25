@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Sequence, interpolate, useCurrentFrame } from "remotion";
-import { Background, BrandBar, SceneWrap } from "./components";
-import { LOGO_FONT, ThemeName, sceneFrames } from "./theme";
+import { Background, BrandBar, LogoMark, SceneWrap } from "./components";
+import { ThemeName, sceneFrames } from "./theme";
 import { ThemeProvider, useTheme } from "./ThemeContext";
 import { Scene1Reveal } from "./scenes/Scene1Reveal";
 import { Scene2Motion } from "./scenes/Scene2Motion";
@@ -37,23 +37,9 @@ const Inner: React.FC = () => {
   return (
     <AbsoluteFill>
       <Background />
-      {/* faint centred watermark */}
+      {/* faint centred watermark: official R symbol */}
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
-        <div
-          style={{
-            fontFamily: LOGO_FONT,
-            fontStretch: "125%",
-            fontWeight: 900,
-            fontSize: 300,
-            letterSpacing: "0.08em",
-            color: T.watermark,
-            opacity: 0.05 * barOpacity,
-            transform: "rotate(-90deg)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          RYVO
-        </div>
+        <LogoMark height={760} style={{ opacity: (T.name === "escuro" ? 0.06 : 0.07) * barOpacity, transform: "translateX(60px)" }} />
       </AbsoluteFill>
       {scenes.map((s, i) => {
         const Comp = SCENE_COMPONENTS[s.id];
