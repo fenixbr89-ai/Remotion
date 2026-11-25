@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<style>
+@font-face{font-family:"IT";src:url(InterTight-500.ttf);font-weight:500}
+@font-face{font-family:"IT";src:url(InterTight-600.ttf);font-weight:600}
+@font-face{font-family:"IT";src:url(InterTight-700.ttf);font-weight:700}
+@font-face{font-family:"IT";src:url(InterTight-800.ttf);font-weight:800}
+@font-face{font-family:"IT";src:url(InterTight-900.ttf);font-weight:900}
+@font-face{font-family:"IS";src:url(InstrumentSerif-Italic.ttf);font-style:italic}
+:root{--lime:#D0F85C;--black:#0A0A0A;--card:#171717;--card2:#222;--light:#F0F2EF;--grey:#8C8C8C}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#777;font-family:IT,sans-serif;letter-spacing:-.03em}
+.s{width:1080px;height:1920px;position:relative;overflow:hidden;margin-bottom:20px}
+.dark{background:var(--black);color:#fff}
+.light{background:var(--light);color:var(--black)}
+.limebg{background:var(--lime);color:var(--black)}
+.grid::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--gl) 2px,transparent 2px),linear-gradient(90deg,var(--gl) 2px,transparent 2px);background-size:90px 90px}
+.dark{--gl:rgba(255,255,255,.045)} .light{--gl:rgba(0,0,0,.05)} .limebg{--gl:rgba(0,0,0,.06)}
+.glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(closest-side,rgba(208,248,92,.3),transparent);filter:blur(40px);transform:translate(-50%,-50%)}
+.c{position:absolute;left:0;right:0;text-align:center}
+.small{font-size:54px;font-weight:500;color:var(--grey)}
+.big{font-size:118px;font-weight:800;line-height:1}
+.ser{font-family:IS;font-style:italic;font-weight:400;letter-spacing:-.01em}
+.lime{color:var(--lime)}
+.phone{position:absolute;width:440px;height:900px;border-radius:70px;background:#050505;padding:15px;box-shadow:0 40px 90px rgba(0,0,0,.35),inset 0 0 0 3px #2a2a2a}
+.phone .scr{width:100%;height:100%;border-radius:58px;overflow:hidden;position:relative}
+.phone .notch{position:absolute;top:26px;left:50%;width:114px;height:32px;border-radius:99px;background:#000;transform:translateX(-50%);z-index:3}
+.chk{width:64px;height:64px;border-radius:19px;background:var(--lime);display:grid;place-items:center;flex:none}
+.pill{display:inline-flex;align-items:center;gap:14px;border-radius:99px;font-weight:700}
+svg{display:block}
+</style>
+</head>
+<body>
+
+<!-- 1 — GANCHO -->
+<section class="s dark grid" id="c1">
+  <div class="glow" style="left:540px;top:820px"></div>
+  <div class="c" style="top:430px" ><span class="small" style="color:#9a9a9a">você tem só</span></div>
+  <div class="c" style="top:470px;font-size:560px;font-weight:900;line-height:1;color:var(--lime);letter-spacing:-.06em">3s</div>
+  <div style="position:absolute;left:240px;right:240px;top:1080px;height:18px;border-radius:9px;background:#262626">
+    <div style="width:68%;height:100%;border-radius:9px;background:var(--lime)"></div>
+  </div>
+  <div class="c big" style="top:1200px">pra <span class="ser lime" style="font-size:150px">prender</span></div>
+  <div class="c big" style="top:1330px">seu cliente.</div>
+</section>
+
+<!-- 2 — PROBLEMA: vídeo parado, ninguém assiste -->
+<section class="s light grid" id="c2">
+  <div class="phone" style="left:320px;top:190px;transform:rotate(-5deg)">
+    <div class="notch"></div>
+    <div class="scr" style="background:#DADDD9">
+      <div style="position:absolute;left:30px;right:30px;top:120px;display:flex;gap:14px;align-items:center"><div style="width:44px;height:44px;border-radius:22px;background:#b9bdb8"></div><div style="width:150px;height:14px;border-radius:7px;background:#b9bdb8"></div></div>
+      <div style="position:absolute;left:30px;right:30px;top:190px;height:420px;border-radius:24px;background:#C6CAC5;display:grid;place-items:center">
+        <div style="font-size:48px;font-weight:800;color:#9fa39e;text-align:center;line-height:1.05">PROMOÇÃO<br><span style="font-size:30px;font-weight:600">imagem parada</span></div>
+      </div>
+      <div style="position:absolute;left:30px;top:640px;width:300px;height:14px;border-radius:7px;background:#b9bdb8"></div>
+      <div style="position:absolute;left:30px;top:670px;width:220px;height:14px;border-radius:7px;background:#c6cac5"></div>
+    </div>
+  </div>
+  <!-- swipe -->
+  <div style="position:absolute;left:760px;top:430px;display:flex;flex-direction:column;align-items:center;gap:16px">
+    <svg width="120" height="260" viewBox="0 0 60 130"><path d="M30 125V15" stroke="#0A0A0A" stroke-width="7" stroke-linecap="round"/><path d="M12 32L30 12l18 20" fill="none" stroke="#0A0A0A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="pill" style="background:#0A0A0A;color:#fff;font-size:36px;padding:14px 28px">pulou</div>
+  </div>
+  <div class="c small" style="top:1210px">vídeo parado?</div>
+  <div class="c big" style="top:1290px">ninguém <span class="ser" style="font-size:150px">assiste.</span></div>
+</section>
+
+<!-- 3 — VIRADA (fundo limão) -->
+<section class="s limebg grid" id="c3">
+  <div class="c" style="top:640px;font-size:90px;font-weight:600;color:rgba(10,10,10,.55)">agora</div>
+  <div class="c" style="top:740px;font-size:200px;font-weight:900;line-height:.95;letter-spacing:-.05em">imagina</div>
+  <div class="c ser" style="top:930px;font-size:260px;line-height:1">assim:</div>
+  <svg style="position:absolute;left:170px;top:1290px" width="740" height="40"><path d="M10 22 C 200 4, 520 4, 730 22" stroke="#0A0A0A" stroke-width="10" fill="none" stroke-linecap="round"/></svg>
+</section>
+
+<!-- 4 — SOLUÇÃO: com motion, o feed para -->
+<section class="s dark grid" id="c4">
+  <div class="glow" style="left:540px;top:640px"></div>
+  <div class="phone" style="left:320px;top:150px;transform:rotate(4deg)">
+    <div class="notch"></div>
+    <div class="scr" style="background:#0d0d0d">
+      <div style="position:absolute;left:34px;top:120px;font-size:22px;letter-spacing:.12em;font-weight:700;color:#888">HAMBURGUERIA</div>
+      <div style="position:absolute;left:34px;top:156px;font-size:78px;font-weight:900;line-height:.92;color:#fff">NOVO<br>SABOR</div>
+      <div style="position:absolute;left:105px;top:380px;width:200px;height:200px;border-radius:50%;background:var(--lime);box-shadow:0 0 80px rgba(208,248,92,.55)"></div>
+      <!-- motion streaks -->
+      <div style="position:absolute;left:30px;top:430px;width:60px;height:10px;border-radius:5px;background:rgba(208,248,92,.5)"></div>
+      <div style="position:absolute;left:10px;top:470px;width:80px;height:10px;border-radius:5px;background:rgba(208,248,92,.3)"></div>
+      <div style="position:absolute;left:40px;top:510px;width:50px;height:10px;border-radius:5px;background:rgba(208,248,92,.4)"></div>
+      <div class="pill" style="position:absolute;left:34px;top:640px;background:#fff;color:#111;font-size:28px;padding:14px 28px">Peça agora</div>
+      <div style="position:absolute;left:34px;right:34px;bottom:70px;height:6px;border-radius:3px;background:#333"><div style="width:62%;height:100%;border-radius:3px;background:#fff"></div></div>
+    </div>
+  </div>
+  <!-- stop badge -->
+  <div class="pill" style="position:absolute;left:640px;top:250px;background:var(--lime);color:#0A0A0A;font-size:40px;padding:18px 32px;transform:rotate(8deg);box-shadow:0 20px 40px rgba(0,0,0,.4)">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>parou aqui</div>
+  <div class="c small" style="top:1210px;color:#9a9a9a">com motion,</div>
+  <div class="c big" style="top:1290px">ele <span class="ser lime" style="font-size:150px">para</span> o feed.</div>
+</section>
+
+<!-- 5 — RESULTADO: atenção, cliques, vendas -->
+<section class="s light grid" id="c5">
+  <div class="glow" style="left:820px;top:420px"></div>
+  <div style="position:absolute;left:150px;top:250px;display:flex;flex-direction:column;gap:34px">
+    <div style="width:780px;height:150px;border-radius:36px;background:#fff;display:flex;align-items:center;gap:28px;padding:0 36px;box-shadow:0 24px 60px rgba(0,0,0,.08);transform:rotate(-2deg) translateX(-20px)">
+      <div style="width:84px;height:84px;border-radius:24px;background:#0A0A0A;display:grid;place-items:center"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#D0F85C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <div style="flex:1;font-size:48px;font-weight:700">mais atenção</div>
+      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+    </div>
+    <div style="width:780px;height:150px;border-radius:36px;background:#fff;display:flex;align-items:center;gap:28px;padding:0 36px;box-shadow:0 24px 60px rgba(0,0,0,.08);transform:rotate(1.5deg) translateX(30px)">
+      <div style="width:84px;height:84px;border-radius:24px;background:#0A0A0A;display:grid;place-items:center"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#D0F85C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3l1 9 3-3 5 8-3 2-5-8-3 3z"/></svg></div>
+      <div style="flex:1;font-size:48px;font-weight:700">mais cliques</div>
+      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+    </div>
+    <div style="width:780px;height:150px;border-radius:36px;background:#0A0A0A;color:#fff;display:flex;align-items:center;gap:28px;padding:0 36px;box-shadow:0 24px 60px rgba(0,0,0,.2);transform:rotate(-1deg) scale(1.04)">
+      <div style="width:84px;height:84px;border-radius:24px;background:var(--lime);display:grid;place-items:center"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L5 2H2"/><circle cx="9" cy="20" r="1.4" fill="#0A0A0A"/><circle cx="18" cy="20" r="1.4" fill="#0A0A0A"/></svg></div>
+      <div style="flex:1;font-size:48px;font-weight:700">mais vendas</div>
+      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#D0F85C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+    </div>
+  </div>
+  <div class="c small" style="top:1060px">mais atenção,</div>
+  <div class="c big" style="top:1140px">mais <span class="ser" style="font-size:150px">vendas.</span></div>
+</section>
+
+<!-- 6 — TUDO INCLUSO -->
+<section class="s dark grid" id="c6">
+  <div class="glow" style="left:260px;top:520px"></div>
+  <div style="position:absolute;left:110px;top:230px;display:grid;grid-template-columns:repeat(2,420px);gap:30px">
+    <!-- tiles -->
+    <div style="height:230px;border-radius:36px;background:var(--card);border:2px solid #262626;padding:30px;display:flex;flex-direction:column;justify-content:space-between">
+      <div style="display:flex;justify-content:space-between"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg><div class="chk"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div></div>
+      <div style="font-size:46px;font-weight:700">Roteiro</div></div>
+    <div style="height:230px;border-radius:36px;background:var(--card);border:2px solid #262626;padding:30px;display:flex;flex-direction:column;justify-content:space-between">
+      <div style="display:flex;justify-content:space-between"><svg width="60" height="60" viewBox="0 0 24 24"><rect x="2" y="3" width="13" height="13" rx="3" fill="#fff"/><rect x="9" y="9" width="13" height="13" rx="3" fill="#D0F85C"/></svg><div class="chk"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div></div>
+      <div style="font-size:46px;font-weight:700">Animação</div></div>
+    <div style="height:230px;border-radius:36px;background:var(--card);border:2px solid #262626;padding:30px;display:flex;flex-direction:column;justify-content:space-between">
+      <div style="display:flex;justify-content:space-between"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3" fill="#fff"/><path d="M19 11a7 7 0 0 1-14 0M12 18v4"/></svg><div class="chk"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div></div>
+      <div style="font-size:46px;font-weight:700">Narração</div></div>
+    <div style="height:230px;border-radius:36px;background:var(--card);border:2px solid #262626;padding:30px;display:flex;flex-direction:column;justify-content:space-between">
+      <div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;gap:6px;align-items:center;height:60px"><div style="width:6px;height:26px;border-radius:3px;background:#fff"></div><div style="width:6px;height:50px;border-radius:3px;background:#fff"></div><div style="width:6px;height:36px;border-radius:3px;background:#fff"></div><div style="width:6px;height:58px;border-radius:3px;background:#D0F85C"></div><div style="width:6px;height:30px;border-radius:3px;background:#fff"></div><div style="width:6px;height:44px;border-radius:3px;background:#fff"></div></div><div class="chk"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div></div>
+      <div style="font-size:46px;font-weight:700">Efeitos sonoros</div></div>
+    <div style="height:230px;border-radius:36px;background:var(--card);border:2px solid #262626;padding:30px;display:flex;flex-direction:column;justify-content:space-between">
+      <div style="display:flex;justify-content:space-between"><svg width="56" height="56" viewBox="0 0 64 64" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M24 48V14l30-6v34"/><circle cx="17" cy="48" r="7" fill="#fff"/><circle cx="47" cy="42" r="7" fill="#D0F85C" stroke="#D0F85C"/></svg><div class="chk"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div></div>
+      <div style="font-size:46px;font-weight:700">Trilha</div></div>
+    <div style="height:230px;border-radius:36px;background:var(--lime);color:#0A0A0A;padding:30px;display:flex;flex-direction:column;justify-content:space-between">
+      <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+      <div style="font-size:44px;font-weight:800;line-height:1">Pronto pra postar</div></div>
+  </div>
+  <div class="c small" style="top:1100px;color:#9a9a9a">e o melhor:</div>
+  <div class="c big" style="top:1180px">tudo <span class="ser lime" style="font-size:156px">incluso.</span></div>
+</section>
+
+<!-- 7 — COMO FUNCIONA -->
+<section class="s light grid" id="c7">
+  <div class="glow" style="left:200px;top:300px"></div>
+  <div style="position:absolute;left:150px;top:220px;width:780px;border-radius:40px;background:#fff;padding:44px;box-shadow:0 30px 70px rgba(0,0,0,.08);transform:rotate(-1.5deg)">
+    <div style="display:flex;gap:30px;align-items:center">
+      <div style="width:96px;height:96px;border-radius:28px;background:#0A0A0A;color:var(--lime);display:grid;place-items:center;font-size:40px;font-weight:800">01</div>
+      <div><div style="font-size:30px;color:var(--grey);font-weight:600">você</div><div style="font-size:50px;font-weight:800;line-height:1">manda a ideia</div></div>
+    </div>
+    <div style="margin:18px 0 18px 46px;width:4px;height:60px;background:#D9DCD8"></div>
+    <div style="display:flex;gap:30px;align-items:center">
+      <div style="width:96px;height:96px;border-radius:28px;background:#0A0A0A;color:var(--lime);display:grid;place-items:center;font-size:40px;font-weight:800">02</div>
+      <div><div style="font-size:30px;color:var(--grey);font-weight:600">a gente</div><div style="font-size:50px;font-weight:800;line-height:1">cria e anima</div></div>
+    </div>
+    <div style="margin:18px 0 18px 46px;width:4px;height:60px;background:#D9DCD8"></div>
+    <div style="display:flex;gap:30px;align-items:center">
+      <div style="width:96px;height:96px;border-radius:28px;background:var(--lime);color:#0A0A0A;display:grid;place-items:center"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <div><div style="font-size:30px;color:var(--grey);font-weight:600">você</div><div style="font-size:50px;font-weight:800;line-height:1">só posta</div></div>
+    </div>
+  </div>
+  <div class="c small" style="top:1080px">sem complicação.</div>
+  <div class="c big" style="top:1160px">simples <span class="ser" style="font-size:150px">assim.</span></div>
+</section>
+
+<!-- 8 — PREÇO -->
+<section class="s dark grid" id="c8">
+  <div class="glow" style="left:540px;top:760px"></div>
+  <div class="c small" style="top:470px;color:#9a9a9a">tudo isso por apenas</div>
+  <div style="position:absolute;left:110px;top:580px;width:860px;padding:70px 50px 60px;border-radius:48px;background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:2px solid rgba(255,255,255,.12);box-shadow:0 40px 90px rgba(0,0,0,.5);text-align:center">
+    <div class="pill" style="position:absolute;top:-34px;right:60px;background:var(--lime);color:#0A0A0A;font-size:34px;padding:12px 30px">por vídeo</div>
+    <div style="display:flex;align-items:flex-start;justify-content:center;font-weight:900;line-height:.9">
+      <span style="font-size:110px;margin-top:70px;margin-right:16px">R$</span>
+      <span style="font-size:380px;letter-spacing:-.06em;color:var(--lime)">50</span>
+      <span style="font-size:120px;margin-top:40px;color:var(--lime)">,00</span>
+    </div>
+  </div>
+  <div class="c big" style="top:1200px">cabe no <span class="ser lime" style="font-size:150px">bolso.</span></div>
+</section>
+
+<!-- 9 — CTA -->
+<section class="s limebg grid" id="c9">
+  <div style="position:absolute;left:150px;top:300px;width:780px;border-radius:44px;background:#0A0A0A;color:#fff;box-shadow:0 40px 90px rgba(0,0,0,.25);transform:rotate(-2deg)">
+    <div style="display:flex;align-items:center;gap:20px;padding:34px;border-bottom:2px solid #222">
+      <div style="width:76px;height:76px;border-radius:38px;background:linear-gradient(135deg,#555,#222);border:3px solid var(--lime)"></div>
+      <div><div style="font-size:38px;font-weight:800">kayke.hs</div><div style="font-size:26px;color:#8a8a8a">Ativo agora</div></div>
+    </div>
+    <div style="padding:40px 34px 34px;display:flex;flex-direction:column;gap:22px">
+      <div style="align-self:flex-end;background:var(--lime);color:#0A0A0A;font-weight:700;font-size:38px;padding:22px 30px;border-radius:30px 30px 8px 30px">Quero o meu vídeo!</div>
+      <div style="align-self:flex-start;background:#262626;font-weight:600;font-size:36px;padding:22px 30px;border-radius:30px 30px 30px 8px">Bora! Me conta a ideia 🚀</div>
+    </div>
+  </div>
+  <div class="c" style="top:1000px;font-size:58px;font-weight:600;color:rgba(10,10,10,.6)">quer o seu?</div>
+  <div class="c big" style="top:1080px;font-size:130px">chama no <span class="ser" style="font-size:170px">direct.</span></div>
+  <div class="c" style="top:1300px"><span class="pill" style="background:#0A0A0A;color:#fff;font-size:46px;padding:24px 50px">
+    <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#D0F85C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.5" cy="6.5" r="1" fill="#D0F85C" stroke="none"/></svg>@kayke.hs</span></div>
+</section>
+
+</body>
+</html>
