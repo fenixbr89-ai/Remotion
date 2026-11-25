@@ -81,16 +81,10 @@ para relembrar o visual.
 - Roteiros: `entrega/ROTEIRO-RYVO-cliente.txt` (cliente) e `entrega/ROTEIRO-RYVO-adaptado.md` (interno).
 
 ### Status (RYVO)
-- v3 claro enviado ao cliente para avaliação (legenda com desfoque).
-- Narração recebida (voz feminina, um arquivo só): `public/audio/narracao.mp3` (32,3s).
-  Trechos e tempo de cada palavra em `src/ryvo/sync.ts` (gerado por detecção de pausas; o
-  Whisper não baixa modelo aqui porque o Hugging Face é bloqueado na rede).
-- Versão final com som: `entrega/*/RYVO-*-final-com-som.mp4` (39,9s, -14 LUFS).
-- "aparecer." cortado no plano s02: corrigido.
-- **Rodada atual:** o Kayke vai regravar a voz com o texto novo (`entrega/NARRACAO-RYVO.txt`, v2),
-  que inclui TODAS as frases da tela: "Sua marca merece mais.", "Motion design.", "Design gráfico.",
-  "Impressos.", "Sua próxima ideia começa aqui. Vamos conversar? Solicite seu orçamento pelo WhatsApp."
-- **Pendente quando a voz nova chegar:** (1) a abertura está rápida demais — dar tempo para ler
-  "Uma marca" (plano s01 mais longo, texto entrando antes do whip); (2) sincronizar tudo de novo
-  com o áudio novo (refazer `src/ryvo/sync.ts`); (3) legendas só com o que é falado;
-  (4) renderizar só a versão clara.
+- Só versão clara. Narração atual: `public/audio/narracao-v2.wav` (texto em `entrega/NARRACAO-RYVO.txt`).
+- Sincronia gerada por `scripts/sync_narracao.py` → `src/ryvo/sync.ts` (trechos de fala por
+  detecção de pausas, pausas longas cortadas para ~0,15–0,45s, **sem mudar velocidade** de áudio
+  ou vídeo; tempo das palavras estimado por sílabas — Whisper não baixa modelo aqui).
+- Entrega atual: `entrega/claro/RYVO-Claro-narracao-v2.mp4` (40,2s, ~-14 LUFS).
+- Regra do Kayke: nunca acelerar/desacelerar áudio ou vídeo para sincronizar; cortar pausas e
+  refazer os planos em cima da fala. Legenda na tela = exatamente o que é falado.
