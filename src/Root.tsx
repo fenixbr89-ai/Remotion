@@ -3,6 +3,8 @@ import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
 import { Wayfluency } from "./Wayfluency/Wayfluency";
+import { MotionAd } from "./MotionAd/MotionAd";
+import { TOTAL as MA_TOTAL } from "./MotionAd/theme";
 import { F, TOTAL_SEC } from "./Wayfluency/theme";
 
 // Each <Composition> is an entry in the sidebar!
@@ -10,6 +12,14 @@ import { F, TOTAL_SEC } from "./Wayfluency/theme";
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      <Composition
+        id="MotionAd"
+        component={MotionAd}
+        durationInFrames={F(MA_TOTAL)}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
       <Composition
         id="Wayfluency"
         component={Wayfluency}
