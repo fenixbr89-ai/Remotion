@@ -89,5 +89,10 @@ para relembrar o visual.
   etiquetas pequenas das seções (01 MOTION DESIGN…), travelling do "aparecer.", mesmos planos e
   câmeras. A versão `RYVO-Claro-narracao-v2.mp4` mudou o visual (títulos grandes) e foi rejeitada.
 - Entrega atual: `entrega/claro/RYVO-Claro-v3-com-narracao.mp4` (visual da v3 + narração v2, ~40,8s).
+- **"aparecer." deve ficar meio escondido na borda** (travelling da v3) — ele gostou assim.
+- **Sincronia:** com a narração num arquivo só, a estimativa de tempo das palavras desandou a
+  partir de "Motion design". Pedido ao Kayke: **um arquivo por frase (01…20)** conforme
+  `entrega/NARRACAO-RYVO.txt` (v3 do texto, com tom/pausas por frase). Com isso, cada plano
+  começa no início exato do seu arquivo (sem estimativa).
 - Regra do Kayke: nunca acelerar/desacelerar áudio ou vídeo para sincronizar; cortar pausas e
   refazer os planos em cima da fala. Legenda na tela = exatamente o que é falado.

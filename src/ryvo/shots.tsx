@@ -104,7 +104,7 @@ export const S01: React.FC<ShotProps> = () => {
         <Img src={staticFile(T.spiral)} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
       </div>
       <Center y={1270}>
-        <Kinetic text="Uma *marca* não precisa" size={130} width={940} />
+        <Kinetic text="Uma *marca*" start={0.9} size={150} wps={2.2} />
       </Center>
     </AbsoluteFill>
   );
@@ -112,19 +112,17 @@ export const S01: React.FC<ShotProps> = () => {
 
 /** "não precisa apenas aparecer." — camera tracks along the line as it is written. */
 export const S02: React.FC<ShotProps> = ({ dur }) => {
-  const tAp = SYNC["apenas *aparecer.*"][1];
-  const p = useKf([
-    [0, 0],
-    [tAp + 0.35, 1],
+  // as in v3 (approved): the camera keeps travelling and "aparecer." ends half hidden at the edge
+  const x = useKf([
+    [0, 120],
+    [dur / 30, -980],
   ]);
   return (
     <AbsoluteFill>
       <GlassTile size={220} x={760} y={430} rx={20} ry={-30} rz={15} tint={0.6} blur={4} floatPhase={1} />
       <GlassTile size={160} x={80} y={1300} rx={-20} ry={30} rz={-20} tint={0.4} blur={6} floatPhase={2} />
-      <div style={{ position: "absolute", top: 860, left: 90, right: 90 }}>
-        <div style={{ position: "absolute", left: `${p * 100}%`, transform: `translateX(${-p * 100}%)` }}>
-          <Kinetic text="apenas *aparecer.*" nowrap size={190} align="left" />
-        </div>
+      <div style={{ position: "absolute", top: 860, left: 0, transform: `translateX(${x}px)` }}>
+        <Kinetic text="não precisa apenas *aparecer.*" nowrap size={170} start={0.1} wps={2.6} align="left" />
       </div>
       <Foreground from={[1300, 1500]} to={[-300, 1300]} size={420} dur={dur} blur={22}>
         <GlassTile size={420} x={0} y={0} tint={0.7} />

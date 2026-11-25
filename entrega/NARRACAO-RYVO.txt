@@ -1,13 +1,140 @@
-RYVO — Texto da narração (versão 2, com todas as frases que aparecem no vídeo)
+RYVO — NARRAÇÃO (versão 3) — uma frase por arquivo
+==================================================
 
-VOZ: feminina (a mesma da versão anterior), PT-BR, segura, moderna e sofisticada. Tom publicitário premium, natural.
-AJUSTES: velocidade 0.95 a 1.0 • estabilidade ~50% • mesma voz e mesmas configurações em todas as cenas.
-ARQUIVOS: de preferência um MP3 por cena (cena01.mp3 … cena05.mp3), sem música, sem silêncio no início e no fim.
-          Se vier num arquivo só, deixe uma pausa de ~1 segundo entre as cenas.
-PONTUAÇÃO: respeite os pontos — cada ponto é uma pequena pausa.
+COMO GERAR
+• Gere UM ARQUIVO POR FRASE, numerado: 01.wav, 02.wav … 20.wav (MP3 também serve).
+  Assim cada fala entra exatamente no seu plano, sem estimativa — é isso que resolve a sincronia.
+• Mesma voz feminina e mesmas configurações em todos os arquivos (a mesma que você já usou).
+• Velocidade 1.0 (normal) • estabilidade ~50% • sem música • sem silêncio no começo e no fim do arquivo.
+• Pronúncia: "RYVO" = "RÍ-vo" (igual à última gravação).
+• As pausas entre as frases eu coloco na edição — não precisa gravar silêncio.
+• Se a ferramenta só gerar um arquivo, use o texto do final ("VERSÃO EM ARQUIVO ÚNICO"),
+  que já tem as pausas marcadas com <break>.
 
-cena01: Uma marca não precisa apenas aparecer. Ela precisa ser lembrada. Sua marca merece mais.
-cena02: Motion design. Transformamos ideias em movimento, criando vídeos, animações e experiências visuais que capturam a atenção.
-cena03: Design gráfico. Criamos identidades visuais e conteúdos digitais que fortalecem a presença e a personalidade das marcas.
-cena04: Impressos. E levamos sua comunicação além das telas, com materiais gráficos e publicitários que dão vida à sua marca.
-cena05: RYVO. Criatividade que vai além do visual. Sua próxima ideia começa aqui. Vamos conversar? Solicite seu orçamento pelo WhatsApp.
+TOM GERAL: feminina, segura, moderna, sofisticada. Publicidade premium, natural, sem exagero.
+Frases curtas, bem articuladas. Ponto final = afirmação (voz desce no fim). Vírgula = a frase continua.
+
+
+CENA 1 — ABERTURA
+01  "Uma marca... não precisa apenas aparecer."
+    Afirmação calma. Faça uma PAUSA CURTA depois de "marca" (as reticências).
+    Leve ênfase em "aparecer".
+    Na tela: espiral de vidro + "Uma marca" → câmera acompanha "não precisa apenas aparecer."
+    [respiro de ~0,5s depois — o R de vidro está chegando]
+
+02  "Ela precisa ser lembrada."
+    Afirmação, mais firme. Ênfase em "lembrada".
+    Na tela: o símbolo R chega + "Ela precisa ser lembrada."
+
+03  "Sua marca merece mais."
+    Afirmação forte, confiante — é o título da abertura. Ênfase em "merece mais".
+    Na tela: Sua marca merece mais.
+    [respiro de ~0,6s depois — troca de cena]
+
+
+CENA 2 — MOTION DESIGN
+04  "Motion design."
+    Tom de título, curto e limpo ("môu-shon di-záin").
+    Na tela: etiqueta MOTION DESIGN + ícone da lâmpada.
+
+05  "Transformamos ideias em movimento,"
+    Continua (vírgula, a voz não desce). Ênfase leve em "movimento".
+    Na tela: a lâmpada vira botão de play.
+
+06  "criando vídeos, animações"
+    Continua, ritmo de lista.
+    Na tela: interface de edição em 3D.
+
+07  "e experiências visuais que capturam a atenção."
+    Fecha a frase (afirmação). Ênfase em "atenção".
+    Na tela: ícones orbitando o olho + Vídeos • Animações • Publicidade.
+    [respiro de ~0,6s depois — troca de cena]
+
+
+CENA 3 — DESIGN GRÁFICO
+08  "Design gráfico."
+    Tom de título, curto.
+    Na tela: etiqueta DESIGN GRÁFICO + prancha de identidade visual.
+
+09  "Criamos identidades visuais"
+    Continua.
+    Na tela: "Aa" e as cores da paleta aparecendo.
+
+10  "e conteúdos digitais"
+    Continua.
+    Na tela: celular com o post e notificações chegando.
+
+11  "que fortalecem a presença e a personalidade das marcas."
+    Fecha a frase (afirmação). Ênfase em "presença" e "personalidade".
+    Na tela: painel de crescimento + Identidade Visual • Social Media • Conteúdo Digital.
+    [respiro de ~0,6s depois — troca de cena]
+
+
+CENA 4 — IMPRESSOS
+12  "Impressos."
+    Tom de título, curto.
+    Na tela: etiqueta IMPRESSOS + celular.
+
+13  "E levamos sua comunicação além das telas,"
+    Continua. Ênfase em "além das telas".
+    Na tela: a câmera mergulha na tela do celular.
+
+14  "com materiais gráficos e publicitários"
+    Continua.
+    Na tela: cartaz, cartões de visita e adesivo voando.
+
+15  "que dão vida à sua marca."
+    Fecha a frase (afirmação). Ênfase em "vida".
+    Na tela: cartão de visita girando + Materiais gráficos • Publicidade • Comunicação visual.
+    [respiro de ~0,8s depois — o R grande está chegando]
+
+
+CENA 5 — ENCERRAMENTO
+16  "RYVO."
+    Só o nome, firme e marcante ("RÍ-vo").
+    Na tela: o símbolo R atravessa a tela.
+
+17  "Criatividade que vai além do visual."
+    Afirmação, assinatura da marca. Ênfase em "além do visual".
+    [respiro de ~0,5s depois]
+
+18  "Sua próxima ideia começa aqui."
+    Afirmação, acolhedora. Ênfase em "começa aqui".
+    Na tela: símbolo R + ESTÚDIO CRIATIVO + Sua próxima ideia começa aqui.
+
+19  "Vamos conversar?"
+    PERGUNTA — entonação de convite, a voz sobe no fim, simpática.
+    Na tela: o cursor clica no botão "Vamos conversar?".
+
+20  "Solicite seu orçamento pelo WhatsApp."
+    Chamada final, clara e simpática (afirmação).
+    Na tela: Solicite seu orçamento pelo WhatsApp + (62) 99523-7527 + @ryvocreative.
+
+
+O QUE FICA SÓ NA IMAGEM (não é falado)
+• Etiquetas pequenas: Vídeos, Animações, Publicidade, Identidade Visual, Social Media,
+  Conteúdo Digital, Materiais gráficos, Comunicação visual.
+• Notificações do celular, número do contador, telefone e @.
+
+
+VERSÃO EM ARQUIVO ÚNICO (só se não der para gerar um arquivo por frase)
+Uma marca... não precisa apenas aparecer. <break time="0.5s"/>
+Ela precisa ser lembrada. <break time="0.3s"/>
+Sua marca merece mais. <break time="0.8s"/>
+Motion design. <break time="0.4s"/>
+Transformamos ideias em movimento, <break time="0.3s"/>
+criando vídeos, animações <break time="0.3s"/>
+e experiências visuais que capturam a atenção. <break time="0.8s"/>
+Design gráfico. <break time="0.4s"/>
+Criamos identidades visuais <break time="0.3s"/>
+e conteúdos digitais <break time="0.3s"/>
+que fortalecem a presença e a personalidade das marcas. <break time="0.8s"/>
+Impressos. <break time="0.4s"/>
+E levamos sua comunicação além das telas, <break time="0.3s"/>
+com materiais gráficos e publicitários <break time="0.3s"/>
+que dão vida à sua marca. <break time="0.9s"/>
+RYVO. <break time="0.4s"/>
+Criatividade que vai além do visual. <break time="0.6s"/>
+Sua próxima ideia começa aqui. <break time="0.4s"/>
+Vamos conversar? <break time="0.4s"/>
+Solicite seu orçamento pelo WhatsApp.
