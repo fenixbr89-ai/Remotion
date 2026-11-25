@@ -1,12 +1,29 @@
 import React from "react";
-import { AbsoluteFill, Audio, Easing, interpolate, Sequence, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, Easing, Freeze, interpolate, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { cl } from "../Wayfluency/motion";
 import { F, FPS, K } from "../MotionAd/theme";
 import { N1, N2, N3, N4, N5, N6, N7, N8, N9 } from "./scenes";
 
-export const M50_TOTAL = 35.2;
+/* Time-warp: the animation was timed on a guide voice ("old" seconds).
+ * Each anchor maps a guide-voice moment to the same word in the recorded narration ("new" seconds). */
+const WARP: [number, number][] = [
+  [0, 0], [0.33, 0.9], [1.17, 1.44], [2.13, 2.4], [2.64, 2.76], [3.53, 3.4], [3.75, 4.3],
+  [4.14, 4.75], [5.2, 5.25], [5.91, 6.54], [6.35, 6.9], [7.2, 7.95],
+  [7.53, 8.4], [8.4, 9.09], [9.15, 9.54], [9.75, 10.5],
+  [9.87, 11.12], [10.92, 11.97], [11.19, 12.21], [11.3, 12.57], [12.0, 13.35],
+  [12.18, 13.74], [13.45, 15.0], [13.86, 16.35], [14.2, 16.68], [14.8, 17.45],
+  [15.06, 17.79], [15.76, 18.62], [16.47, 19.44], [17.16, 20.16], [17.7, 21.03], [18.51, 22.23], [19.08, 22.44], [20.0, 23.25],
+  [20.28, 23.67], [21.88, 24.92], [24.48, 26.37], [24.84, 26.7], [25.08, 26.9], [25.95, 27.5],
+  [26.43, 28.08], [27.21, 28.59], [28.08, 29.88], [29.6, 31.38], [30.09, 31.68], [30.9, 32.4],
+  [31.14, 32.85], [32.1, 33.9], [32.85, 34.38], [33.51, 34.75], [35.2, 36.4],
+];
+const lerp = (x: number, xs: number[], ys: number[]) => interpolate(x, xs, ys, { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+const oldFromNew = (t: number) => lerp(t, WARP.map((w) => w[1]), WARP.map((w) => w[0]));
+const newFromOld = (t: number) => lerp(t, WARP.map((w) => w[0]), WARP.map((w) => w[1]));
+export const M50_TOTAL = 36.4;
+const OLD_TOTAL = 35.2;
 // scene boundaries, aligned to pauses in the narration
-const B = [0, 3.75, 7.2, 9.75, 12.0, 14.8, 20.0, 25.95, 30.9, M50_TOTAL];
+const B = [0, 3.75, 7.2, 9.75, 12.0, 14.8, 20.0, 25.95, 30.9, OLD_TOTAL];
 type Kind = "whipLeft" | "cut" | "zoomThrough" | "whipUp" | "zoomOut" | "lime";
 const KINDS: Kind[] = ["whipLeft", "cut", "zoomThrough", "whipUp", "zoomOut", "whipLeft", "zoomThrough", "lime"];
 const SCENES = [N1, N2, N3, N4, N5, N6, N7, N8, N9];
@@ -123,15 +140,24 @@ const CUES: Cue[] = [
   { at: 33.4, src: "chimes.mp3", vol: 0.3, to: 1.0 },
 ];
 
+const Warped: React.FC = () => {
+  const f = useCurrentFrame();
+  return (
+    <Freeze frame={oldFromNew(f / FPS) * FPS}>
+      {SCENES.map((_, i) => (
+        <Slot key={i} i={i} />
+      ))}
+      {B.slice(1, -1).map((b, i) => (KINDS[i] === "lime" ? <LimeWipe key={i} at={b} /> : null))}
+    </Freeze>
+  );
+};
+
 export const Motion50: React.FC = () => (
   <AbsoluteFill style={{ background: K.black }}>
-    {SCENES.map((_, i) => (
-      <Slot key={i} i={i} />
-    ))}
-    {B.slice(1, -1).map((b, i) => (KINDS[i] === "lime" ? <LimeWipe key={i} at={b} /> : null))}
-    <Audio src={staticFile("motionad/narracao-nova.wav")} />
+    <Warped />
+    <Audio src={staticFile("motionad/locucao-feminina.wav")} />
     {CUES.map((c, i) => (
-      <Sequence key={i} from={Math.round(c.at * FPS)} durationInFrames={Math.ceil(((c.to ?? 2) - (c.from ?? 0)) * FPS) + 2} layout="none">
+      <Sequence key={i} from={Math.round(newFromOld(c.at) * FPS)} durationInFrames={Math.ceil(((c.to ?? 2) - (c.from ?? 0)) * FPS) + 2} layout="none">
         <Audio src={staticFile(`sfx/${c.src}`)} volume={c.vol} trimBefore={c.from ? Math.round(c.from * FPS) : undefined} trimAfter={c.to ? Math.round(c.to * FPS) : undefined} />
       </Sequence>
     ))}
