@@ -49,6 +49,7 @@ para relembrar o visual.
 - Fazer versões **fundo escuro e fundo claro** quando a marca permitir.
 - Usar só o símbolo/logo oficial do cliente, sem recriar logo com fonte.
 - Sem marca d'água do Kayke em vídeo de cliente.
+- **Não usar linhas/raios de luz saindo do logo** (ele não gostou). Use só brilho suave.
 - Locução: o Kayke gera os áudios por cena (cena01.mp3…) numa IA de voz e manda depois.
 
 ## Como renderizar aqui

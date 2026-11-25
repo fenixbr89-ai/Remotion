@@ -42,31 +42,25 @@ const Label: React.FC<{ n: string; text: string }> = ({ n, text }) => {
   );
 };
 
-/** Light rays behind a hero element (like the reference logo reveals). */
-const Rays: React.FC<{ cx: number; cy: number; delay?: number }> = ({ cx, cy, delay = 0.2 }) => {
+/** Soft glow behind a hero element (no lines). */
+const Glow: React.FC<{ cx: number; cy: number; delay?: number }> = ({ cx, cy, delay = 0.2 }) => {
   const p = useProgress(delay, 0.9);
   const time = useTime();
+  const r = 340 + Math.sin(time * 2) * 20;
   return (
-    <svg width={1080} height={1920} style={{ position: "absolute", left: 0, top: 0 }}>
-      {Array.from({ length: 14 }).map((_, i) => {
-        const a = (i / 14) * Math.PI * 2 + time * 0.15;
-        const r1 = 230;
-        const r2 = 230 + p * (260 + (i % 3) * 120);
-        return (
-          <line
-            key={i}
-            x1={cx + Math.cos(a) * r1}
-            y1={cy + Math.sin(a) * r1}
-            x2={cx + Math.cos(a) * r2}
-            y2={cy + Math.sin(a) * r2}
-            stroke={i % 2 ? P.lavender : P.blue}
-            strokeOpacity={0.55 * p}
-            strokeWidth={3}
-            strokeLinecap="round"
-          />
-        );
-      })}
-    </svg>
+    <div
+      style={{
+        position: "absolute",
+        left: cx - r,
+        top: cy - r,
+        width: r * 2,
+        height: r * 2,
+        borderRadius: "50%",
+        background: `radial-gradient(circle, rgba(117,71,232,0.55) 0%, rgba(167,139,250,0.25) 40%, rgba(117,71,232,0) 70%)`,
+        opacity: p,
+        filter: "blur(10px)",
+      }}
+    />
   );
 };
 
@@ -148,7 +142,7 @@ export const S03: React.FC<ShotProps> = () => {
   const time = useTime();
   return (
     <AbsoluteFill>
-      <Rays cx={540} cy={760} delay={0.55} />
+      <Glow cx={540} cy={760} delay={0.55} />
       <Center y={560}>
         <div style={{ transform: `scale(${z}) rotate(${Math.sin(time * 1.5) * 4}deg)`, filter: `blur(${blur}px)` }}>
           <Tile3D size={400}>
@@ -646,7 +640,7 @@ export const S14: React.FC<ShotProps> = () => {
   const time = useTime();
   return (
     <AbsoluteFill>
-      <Rays cx={540} cy={720} delay={0.5} />
+      <Glow cx={540} cy={720} delay={0.5} />
       <Center y={560}>
         <div style={{ transform: `scale(${z})`, filter: `blur(${blur}px) drop-shadow(0 0 ${40 + Math.sin(time * 2) * 12}px rgba(117,71,232,0.6))` }}>
           <LogoMark height={300} />
