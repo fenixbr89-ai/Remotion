@@ -30,13 +30,15 @@ TEXT = {
 }
 # a fala 01 é dividida na pausa natural depois de "marca" (0,60s no arquivo)
 SPLIT01 = 0.60
-ORDER = ["01a", "01b", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11",
-         "12", "13", "14", "15", "16", "17", "18", "19", "20"]
+# 04, 08 e 12 (títulos "Motion design.", "Design gráfico.", "Impressos.") ficaram de fora a
+# pedido do Kayke para o vídeo caber em ~40s — as etiquetas das seções continuam na tela.
+ORDER = ["01a", "01b", "02", "03", "05", "06", "07", "09", "10", "11",
+         "13", "14", "15", "16", "17", "18", "19", "20"]
 # pausa depois de cada fala (s): mínima dentro da frase, um pouco maior na troca de cena
-GAP = {"01a": 0.3, "01b": 0.3, "02": 0.2, "03": 0.35, "04": 0.2, "05": 0.05, "06": 0.05,
-       "07": 0.35, "08": 0.2, "09": 0.05, "10": 0.05, "11": 0.35, "12": 0.2, "13": 0.05,
-       "14": 0.05, "15": 0.4, "16": 0.25, "17": 0.25, "18": 0.2, "19": 0.2}
-START, HOLD = 0.9, 0.9
+GAP = {"01a": 0.2, "01b": 0.25, "02": 0.15, "03": 0.3, "05": 0.05, "06": 0.05,
+       "07": 0.3, "09": 0.05, "10": 0.05, "11": 0.3, "13": 0.05,
+       "14": 0.05, "15": 0.35, "16": 0.2, "17": 0.2, "18": 0.15, "19": 0.15}
+START, HOLD = 0.6, 0.8
 
 
 def speech_bounds(path):
@@ -124,9 +126,9 @@ def end_of(key):
 LEAD = 0.15
 cuts = [
     ("s01", 0), ("s02", first("01b") - 0.12), ("s03", first("02") - LEAD), ("s04", first("03") - LEAD),
-    ("s05", first("04") - LEAD), ("s06", first("06") - LEAD), ("s07", first("07") - LEAD),
-    ("s08", first("08") - LEAD), ("s09", first("10") - LEAD), ("s10", first("11") - LEAD),
-    ("s11", first("12") - LEAD), ("s12", first("14") - LEAD), ("s13", first("15") - LEAD),
+    ("s05", first("05") - LEAD), ("s06", first("06") - LEAD), ("s07", first("07") - LEAD),
+    ("s08", first("09") - LEAD), ("s09", first("10") - LEAD), ("s10", first("11") - LEAD),
+    ("s11", first("13") - LEAD), ("s12", first("14") - LEAD), ("s13", first("15") - LEAD),
     ("s14", first("16") - 0.4), ("s15", first("18") - LEAD),
 ]
 fr = lambda x: int(round(x * FPS))

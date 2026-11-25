@@ -94,4 +94,6 @@ para relembrar o visual.
   Para refazer: `pip install --no-deps vosk` + stub `srt.py` no PYTHONPATH.
 - Regra do Kayke: nunca acelerar/desacelerar áudio ou vídeo; cortar pausas e refazer os planos em
   cima da fala. Legenda na tela = exatamente o que é falado. Uma fala por arquivo = sincronia exata.
+- As falas 04, 08 e 12 (títulos das seções) **não entram** — o Kayke escolheu tirar para caber em
+  ~40s; as etiquetas pequenas das seções continuam na tela.
 - `scripts/sync_narracao.py` é da narração antiga (arquivo único) — não usar mais.
