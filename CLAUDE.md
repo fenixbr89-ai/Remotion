@@ -50,6 +50,8 @@ para relembrar o visual.
 - Usar só o símbolo/logo oficial do cliente, sem recriar logo com fonte.
 - Sem marca d'água do Kayke em vídeo de cliente.
 - **Não usar linhas/raios de luz saindo do logo** (ele não gostou). Use só brilho suave.
+- **Ritmo um pouco mais calmo que as referências:** planos de ~2,3–3,2s, whip de ~10 quadros,
+  texto a ~2,9 palavras/s, e **a marca do cliente aparece devagar** (revelação de ~1,7s).
 - Locução: o Kayke gera os áudios por cena (cena01.mp3…) numa IA de voz e manda depois.
 
 ## Como renderizar aqui

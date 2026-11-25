@@ -13,7 +13,7 @@ const VEC: Record<string, [number, number]> = {
 };
 
 /** Frames used by a whip transition on each side of a cut. */
-export const WHIP = 7;
+export const WHIP = 10;
 
 const lerp = (a = 0, b = 0, t: number) => a + (b - a) * t;
 
@@ -69,30 +69,30 @@ export const Shot: React.FC<{
     const k = 1 - frame / WHIP;
     const e = k * k;
     if (inDir === "zoom") {
-      sc *= 1 + e * 1.6;
-      iso = k * 36;
+      sc *= 1 + e * 1.0;
+      iso = k * 30;
       op = 1 - e * 0.6;
     } else {
       const v = VEC[inDir];
-      ox = -v[0] * 1400 * e;
-      oy = -v[1] * 2000 * e;
-      bx = Math.abs(v[0]) * 110 * k;
-      by = Math.abs(v[1]) * 110 * k;
+      ox = -v[0] * 1000 * e;
+      oy = -v[1] * 1400 * e;
+      bx = Math.abs(v[0]) * 80 * k;
+      by = Math.abs(v[1]) * 80 * k;
     }
   }
   if (outDir !== "none" && frame > dur - WHIP) {
     const k = (frame - (dur - WHIP)) / WHIP;
     const e = k * k;
     if (outDir === "zoom") {
-      sc *= 1 + e * 2.4;
-      iso = Math.max(iso, k * 36);
+      sc *= 1 + e * 1.5;
+      iso = Math.max(iso, k * 30);
       op = 1 - e * 0.7;
     } else {
       const v = VEC[outDir];
-      ox = v[0] * 1400 * e;
-      oy = v[1] * 2000 * e;
-      bx = Math.max(bx, Math.abs(v[0]) * 110 * k);
-      by = Math.max(by, Math.abs(v[1]) * 110 * k);
+      ox = v[0] * 1000 * e;
+      oy = v[1] * 1400 * e;
+      bx = Math.max(bx, Math.abs(v[0]) * 80 * k);
+      by = Math.max(by, Math.abs(v[1]) * 80 * k);
     }
   }
 
@@ -144,7 +144,7 @@ export const Kinetic: React.FC<{
   nowrap?: boolean;
   align?: "center" | "left";
   style?: React.CSSProperties;
-}> = ({ text, start = 0.12, wps = 3.3, size = 84, width = 940, nowrap, align = "center", style }) => {
+}> = ({ text, start = 0.12, wps = 2.9, size = 84, width = 940, nowrap, align = "center", style }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const T = useTheme();
@@ -169,7 +169,7 @@ export const Kinetic: React.FC<{
         const hl = w.startsWith("*");
         const clean = w.replace(/\*/g, "");
         const t0 = (start + i / wps) * fps;
-        const k = interpolate(frame, [t0, t0 + 0.32 * fps], [0, 1], {
+        const k = interpolate(frame, [t0, t0 + 0.5 * fps], [0, 1], {
           extrapolateLeft: "clamp",
           extrapolateRight: "clamp",
           easing: Easing.bezier(0.16, 1, 0.3, 1),
