@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame } from "remotion";
-import { AUDIO_FILE, CLIPS, SHOT_FRAMES } from "./sync";
+import { CLIPS, SHOT_FRAMES } from "./sync";
 import { SoundFx } from "./sfx";
 import { Background } from "./components";
 import { Cam, Dir, Shot } from "./camera";
@@ -89,9 +89,9 @@ const Inner: React.FC = () => {
       <Background />
       <AbsoluteFill style={{ background: T.altBg, opacity: alt }} />
       {/* narration, placed phrase by phrase */}
-      {CLIPS.map(([a, b, at], i) => (
-        <Sequence key={`vo${i}`} from={Math.round(at * FPS)} durationInFrames={Math.round((b - a) * FPS) + 2} name={`locução ${i + 1}`}>
-          <Audio src={staticFile(AUDIO_FILE)} trimBefore={Math.round(a * FPS)} trimAfter={Math.round(b * FPS)} />
+      {CLIPS.map(([file, a, b, at], i) => (
+        <Sequence key={`vo${i}`} from={Math.round(at * FPS)} durationInFrames={Math.round((b - a) * FPS) + 1} name={`fala ${file}`}>
+          <Audio src={staticFile(file)} trimBefore={Math.round(a * FPS) || undefined} trimAfter={Math.round(b * FPS)} />
         </Sequence>
       ))}
       {/* sound effects */}

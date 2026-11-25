@@ -227,7 +227,7 @@ export const S06: React.FC<ShotProps> = ({ dur }) => (
   <AbsoluteFill>
     <Label n="01" text="MOTION DESIGN" />
     <Center y={330}>
-      <Kinetic text="criando *vídeos,* *animações*" start={0.1} size={96} width={940} />
+      <Kinetic text="criando *vídeos* e *animações*" start={0.1} size={96} width={940} />
     </Center>
     <div style={{ position: "absolute", inset: 0, transform: "translateY(-150px)" }}>
       <MotionInterface />
@@ -371,13 +371,13 @@ export const S09: React.FC<ShotProps> = () => {
     <AbsoluteFill>
       <Label n="02" text="DESIGN GRÁFICO" />
       <Center y={330}>
-        <Kinetic text="e *conteúdos* *digitais* que fortalecem a *presença*" size={84} width={940} />
+        <Kinetic text="e *conteúdos* *digitais*" size={96} width={940} />
       </Center>
       <div
         style={{
           position: "absolute",
           left: 130,
-          top: 650,
+          top: 560,
           width: 470,
           height: 900,
           padding: 26,
@@ -439,7 +439,7 @@ export const S09: React.FC<ShotProps> = () => {
             style={{
               position: "absolute",
               left: 520,
-              top: 850 + i * 150,
+              top: 760 + i * 150,
               display: "flex",
               alignItems: "center",
               gap: 18,
@@ -478,7 +478,7 @@ export const S10: React.FC<ShotProps> = () => {
     <AbsoluteFill>
       <Label n="02" text="DESIGN GRÁFICO" />
       <Center y={330}>
-        <Kinetic text="e a *personalidade* das marcas." size={96} width={940} />
+        <Kinetic text="que fortalecem a *presença* e a *personalidade* das marcas." size={80} width={960} />
       </Center>
       <Center y={720}>
         <div

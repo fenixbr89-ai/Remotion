@@ -85,18 +85,13 @@ para relembrar o visual.
 - Roteiros: `entrega/ROTEIRO-RYVO-cliente.txt` (cliente) e `entrega/ROTEIRO-RYVO-adaptado.md` (interno).
 
 ### Status (RYVO)
-- Só versão clara. Narração atual: `public/audio/narracao-v2.wav` (texto em `entrega/NARRACAO-RYVO.txt`).
-- Sincronia gerada por `scripts/sync_narracao.py` → `src/ryvo/sync.ts` (trechos de fala por
-  detecção de pausas, pausas longas cortadas para ~0,15–0,45s, **sem mudar velocidade** de áudio
-  ou vídeo; tempo das palavras estimado por sílabas — Whisper não baixa modelo aqui).
-- **O cliente aprovou o visual da v3 clara** (`entrega/claro/RYVO-Claro-v3.mp4`). Não mudar o estilo:
-  etiquetas pequenas das seções (01 MOTION DESIGN…), travelling do "aparecer.", mesmos planos e
-  câmeras. A versão `RYVO-Claro-narracao-v2.mp4` mudou o visual (títulos grandes) e foi rejeitada.
-- Entrega atual: `entrega/claro/RYVO-Claro-v3-com-narracao.mp4` (visual da v3 + narração v2, ~40,8s).
-- **"aparecer." deve ficar meio escondido na borda** (travelling da v3) — ele gostou assim.
-- **Sincronia:** com a narração num arquivo só, a estimativa de tempo das palavras desandou a
-  partir de "Motion design". Pedido ao Kayke: **um arquivo por frase (01…20)** conforme
-  `entrega/NARRACAO-RYVO.txt` (v3 do texto, com tom/pausas por frase). Com isso, cada plano
-  começa no início exato do seu arquivo (sem estimativa).
-- Regra do Kayke: nunca acelerar/desacelerar áudio ou vídeo para sincronizar; cortar pausas e
-  refazer os planos em cima da fala. Legenda na tela = exatamente o que é falado.
+- Só versão clara, **visual da v3 aprovado pelo cliente** (`entrega/claro/RYVO-Claro-v3.mp4`) — não
+  mudar o estilo (etiquetas pequenas das seções, travelling com "aparecer." meio escondido na borda).
+- Narração final: **20 falas** em `public/audio/falas/01.wav…20.wav` (texto em
+  `entrega/NARRACAO-RYVO-falas.txt`). Sincronia: `python3 scripts/sync_falas.py` → `src/ryvo/sync.ts`.
+  O tempo de cada palavra vem do reconhecedor **Vosk** (modelo pequeno pt, baixa de alphacephei.com —
+  o Hugging Face/Whisper é bloqueado aqui); transcrições em `scripts/falas_palavras.json`.
+  Para refazer: `pip install --no-deps vosk` + stub `srt.py` no PYTHONPATH.
+- Regra do Kayke: nunca acelerar/desacelerar áudio ou vídeo; cortar pausas e refazer os planos em
+  cima da fala. Legenda na tela = exatamente o que é falado. Uma fala por arquivo = sincronia exata.
+- `scripts/sync_narracao.py` é da narração antiga (arquivo único) — não usar mais.
