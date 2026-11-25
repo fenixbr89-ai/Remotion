@@ -465,7 +465,14 @@ export const N8: React.FC = () => {
   );
 };
 
-/* ═════ 9 — "Quer o seu? Chama no direct!" (fundo limão + foto) ═════ */
+/* ═════ 9 — "Quer o seu? Chama no WhatsApp!" (fundo limão + foto) ═════ */
+const WA = "#25D366";
+const WaIcon: React.FC<{ size?: number; color?: string }> = ({ size = 48, color = "#fff" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+    <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.5-.3z" />
+  </svg>
+);
+
 export const N9: React.FC = () => {
   const f = useCurrentFrame();
   const t = f / FPS;
@@ -476,55 +483,63 @@ export const N9: React.FC = () => {
   const reply = spring({ frame: f - F(32.9), fps: FPS, config: { damping: 11 } });
   const cardIn = spring({ frame: f - F(30.95), fps: FPS, config: { damping: 14, stiffness: 130 } });
   const fl = float(f, 4, 4);
+  const pulse = 1 + Math.sin(f / 5) * 0.03;
   return (
     <LimeBg>
       <Cam
         fn={(fr) => ({
-          s: kf(fr, [[30.9, 1.35], [32.0, 1.3], [32.4, 1.0], [35.2, 1.06]]) + punch(fr, 32.05, 0.06) + punch(fr, 32.85, 0.1),
+          s: kf(fr, [[30.9, 1.35], [32.0, 1.3], [32.4, 1.0], [35.2, 1.06]]) + punch(fr, 32.05, 0.06) + punch(fr, 32.85, 0.12),
           y: kf(fr, [[30.9, 470], [32.0, 440], [32.4, 0]]),
           r: Math.sin(fr / 26) * 1.2,
         })}
       >
-        <div style={{ position: "absolute", left: 150, top: 260, width: 780, perspective: 1600 }}>
-          <div style={{ transform: `translateY(${(1 - cardIn) * 900}px) rotateX(${fl.rx + (1 - cardIn) * 30}deg) rotateY(${fl.ry}deg) rotate(-2deg)`, borderRadius: 44, background: K.black, color: "#fff", boxShadow: "0 40px 90px rgba(0,0,0,.25)", height: 600, position: "relative" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 20, padding: 32, borderBottom: "2px solid #222" }}>
-              <Img src={avatar} style={{ width: 84, height: 84, borderRadius: 42, objectFit: "cover", border: `3px solid ${K.lime}` }} />
-              <div>
-                <div style={{ fontSize: 40, fontWeight: 800 }}>kayke.hs</div>
-                <div style={{ fontSize: 26, color: "#8a8a8a" }}>Ativo agora</div>
+        <div style={{ position: "absolute", left: 150, top: 200, width: 780, perspective: 1600 }}>
+          <div style={{ transform: `translateY(${(1 - cardIn) * 900}px) rotateX(${fl.rx + (1 - cardIn) * 30}deg) rotateY(${fl.ry}deg) rotate(-2deg)`, borderRadius: 44, background: "#0B141A", color: "#fff", boxShadow: "0 40px 90px rgba(0,0,0,.25)", height: 620, position: "relative", overflow: "hidden" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 20, padding: "26px 30px", background: "#202C33" }}>
+              <Img src={avatar} style={{ width: 84, height: 84, borderRadius: 42, objectFit: "cover" }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 40, fontWeight: 700 }}>kayke.hs</div>
+                <div style={{ fontSize: 26, color: "#8696A0" }}>{t >= 32.6 && t < 32.9 ? "digitando…" : "online"}</div>
               </div>
+              <WaIcon size={52} color={WA} />
             </div>
             {sent && (
-              <div style={{ position: "absolute", right: 34, top: 180, background: K.lime, color: K.black, fontWeight: 700, fontSize: 38, padding: "22px 30px", borderRadius: "30px 30px 8px 30px", transform: `translateY(${(1 - sentS) * 120}px) scale(${interpolate(sentS, [0, 1], [0.6, 1])})`, transformOrigin: "right bottom" }}>{msg}</div>
+              <div style={{ position: "absolute", right: 30, top: 170, background: "#005C4B", fontWeight: 600, fontSize: 38, padding: "20px 28px", borderRadius: "26px 6px 26px 26px", transform: `translateY(${(1 - sentS) * 120}px) scale(${interpolate(sentS, [0, 1], [0.6, 1])})`, transformOrigin: "right top" }}>
+                {msg} <span style={{ fontSize: 22, color: "#53BDEB", marginLeft: 6 }}>✓✓</span>
+              </div>
             )}
             {t >= 32.9 && (
-              <div style={{ position: "absolute", left: 34, top: 310, background: "#262626", fontWeight: 600, fontSize: 36, padding: "22px 30px", borderRadius: "30px 30px 30px 8px", transform: `translateY(${(1 - reply) * 100}px) scale(${interpolate(reply, [0, 1], [0.6, 1])})`, transformOrigin: "left bottom" }}>Bora! Me conta a ideia 🚀</div>
+              <div style={{ position: "absolute", left: 30, top: 300, background: "#202C33", fontWeight: 600, fontSize: 36, padding: "20px 28px", borderRadius: "6px 26px 26px 26px", transform: `translateY(${(1 - reply) * 100}px) scale(${interpolate(reply, [0, 1], [0.6, 1])})`, transformOrigin: "left top" }}>Bora! Me conta a ideia 🚀</div>
             )}
-            <div style={{ position: "absolute", left: 30, right: 30, bottom: 30, height: 96, borderRadius: 48, background: K.card2, display: "flex", alignItems: "center", padding: "0 30px", justifyContent: "space-between" }}>
-              <span style={{ color: "#ddd", fontSize: 32, fontWeight: 500 }}>
-                {sent ? "" : msg.slice(0, typed)}
-                {!sent && Math.floor(f / 8) % 2 === 0 ? "|" : ""}
-              </span>
-              <div style={{ width: 64, height: 64, borderRadius: 32, background: typed > 0 ? K.lime : "#3a3a3a", display: "grid", placeItems: "center", transform: `scale(${t >= 31.98 && t < 32.1 ? 0.8 : 1})` }}>
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="#111">
+            <div style={{ position: "absolute", left: 24, right: 24, bottom: 24, display: "flex", gap: 16, alignItems: "center" }}>
+              <div style={{ flex: 1, height: 92, borderRadius: 46, background: "#202C33", display: "flex", alignItems: "center", padding: "0 30px" }}>
+                <span style={{ color: "#E9EDEF", fontSize: 32, fontWeight: 500 }}>
+                  {sent ? "" : msg.slice(0, typed)}
+                  {!sent && Math.floor(f / 8) % 2 === 0 ? "|" : ""}
+                </span>
+              </div>
+              <div style={{ width: 92, height: 92, borderRadius: 46, background: WA, display: "grid", placeItems: "center", transform: `scale(${t >= 31.98 && t < 32.1 ? 0.8 : 1})` }}>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="#0B141A">
                   <path d="M4 12l16-8-6 16-2-6z" />
                 </svg>
               </div>
             </div>
           </div>
         </div>
-        <Row y={980} style={{ fontSize: 64, fontWeight: 600, color: "rgba(10,10,10,.6)" }}>
+        <Row y={900} style={{ fontSize: 64, fontWeight: 600, color: "rgba(10,10,10,.6)" }}>
           <Type text="quer o seu?" at={31.14} dur={0.7} />
         </Row>
-        <Row y={1070}>
+        <Row y={985}>
           <Slam at={32.1} dir="up" inline style={{ ...sansBig, fontSize: 130 }}>chama no</Slam>
-          <Slam at={32.85} dir="zoom" inline style={{ ...serifBig(), fontSize: 175 }}>direct.</Slam>
         </Row>
-        <Row y={1300}>
-          <Slam at={33.4} dir="up" dist={200}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 16, background: K.black, color: "#fff", fontSize: 48, fontWeight: 700, padding: "16px 44px 16px 16px", borderRadius: 99 }}>
-              <Img src={avatar} style={{ width: 76, height: 76, borderRadius: 38, objectFit: "cover" }} />
-              @kayke.hs
+        <Row y={1115}>
+          <Slam at={32.85} dir="zoom" inline style={{ ...serifBig(), fontSize: 200 }}>WhatsApp.</Slam>
+        </Row>
+        <Row y={1360}>
+          <Slam at={33.3} dir="up" dist={200}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 18, background: WA, color: "#fff", fontSize: 48, fontWeight: 800, padding: "22px 46px", borderRadius: 99, transform: `scale(${pulse})`, boxShadow: "0 18px 40px rgba(0,0,0,.18)" }}>
+              <WaIcon size={56} />
+              Chamar no WhatsApp
             </div>
           </Slam>
         </Row>
@@ -532,5 +547,3 @@ export const N9: React.FC = () => {
     </LimeBg>
   );
 };
-
-
