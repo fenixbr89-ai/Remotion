@@ -7,6 +7,8 @@ import * as Ic from "./icons";
 const logo = staticFile("wayfluency-logo.svg");
 const logoW = staticFile("wayfluency-logo-branca.svg");
 
+const SAFE = 0.8;
+
 const base: React.CSSProperties = { fontFamily, letterSpacing: "-0.02em" };
 const L: React.CSSProperties = { fontWeight: 300 };
 const Bd: React.CSSProperties = { fontWeight: 700 };
@@ -23,7 +25,8 @@ const Bg: React.FC<{ kind: "blue" | "light"; children: React.ReactNode }> = ({ k
       : `radial-gradient(90% 60% at ${cx}% ${cy}%,#FFFFFF 0%,#EEF2F7 60%,#DCE4EE 100%)`;
   return (
     <AbsoluteFill style={{ ...base, background: bg, color: kind === "blue" ? "#fff" : C.navy, overflow: "hidden" }}>
-      {children}
+      {/* content scaled into the Instagram Reels safe area; background stays full-bleed */}
+      <AbsoluteFill style={{ transform: `scale(${SAFE})`, transformOrigin: "540px 930px" }}>{children}</AbsoluteFill>
     </AbsoluteFill>
   );
 };
@@ -71,7 +74,7 @@ const flyOut = (f: number, sec: number, dist = -420) => {
 const Flash: React.FC<{ at: number; max?: number }> = ({ at, max = 0.6 }) => {
   const f = useCurrentFrame();
   const o = interpolate(f, [F(at), F(at) + 2, F(at) + 8], [0, max, 0], cl);
-  return <AbsoluteFill style={{ background: "#fff", opacity: o, pointerEvents: "none" }} />;
+  return <div style={{ position: "absolute", inset: -400, background: "#fff", opacity: o, pointerEvents: "none" }} />;
 };
 
 /* Continuous 3D float for cards */
@@ -195,7 +198,7 @@ export const Scene3: React.FC = () => (
     <Cam
       fn={(fr) => ({
         s: kf(fr, [[9.3, 1.25], [10.7, 1.3], [11.2, 1.28], [14.9, 1.28], [15.35, 0.95]]) + punch(fr, 10.17, 0.1) + punch(fr, 11.37, 0.05) + punch(fr, 12.99, 0.05) + punch(fr, 14.4, 0.05),
-        y: kf(fr, [[9.3, 830], [10.7, 800], [11.2, 260], [12.8, 260], [13.05, 0], [14.2, 0], [14.45, -260], [14.9, -260], [15.35, 0]]),
+        y: kf(fr, [[9.3, 830], [10.7, 800], [11.2, 260], [12.8, 260], [13.05, 0], [14.2, 0], [14.45, -260], [14.9, -260], [15.35, 170]]),
         x: kf(fr, [[11.2, 60], [12.6, -20], [13.05, -60], [14.2, 20], [14.45, 0]]),
         r: Math.sin(fr / 30) * 1.2,
       })}
@@ -247,7 +250,7 @@ export const Scene4: React.FC = () => (
     <Cam
       fn={(fr) => ({
         s: kf(fr, [[15.6, 1.2], [18.3, 1.15], [18.8, 1.0], [20.3, 1.0], [20.55, 1.1], [22.4, 1.1], [22.8, 1.0]]) + punch(fr, 17.04, 0.08) + punch(fr, 17.7, 0.08) + punch(fr, 20.59, 0.05) + punch(fr, 21.29, 0.05) + punch(fr, 22.1, 0.05),
-        y: kf(fr, [[15.6, 760], [16.9, 740], [17.6, 600], [18.3, 520], [18.8, 220], [20.3, 220], [20.55, 0], [21.05, 0], [21.3, -240], [21.85, -240], [22.1, -480], [22.4, -480], [22.8, -100]]),
+        y: kf(fr, [[15.6, 760], [16.9, 740], [17.6, 600], [18.3, 520], [18.8, 220], [20.3, 220], [20.55, 0], [21.05, 0], [21.3, -240], [21.85, -240], [22.1, -480], [22.4, -480], [22.8, 75]]),
         x: kf(fr, [[20.3, 0], [20.55, 20], [21.05, 10], [21.3, -20], [21.85, -10], [22.1, 20], [22.8, 0]]),
         r: Math.sin(fr / 26) * 1.4,
       })}
@@ -444,9 +447,9 @@ export const Scene7: React.FC = () => {
     <Bg kind="light">
       <Cam
         fn={(fr) => ({
-          s: kf(fr, [[34.55, 1.3], [35.5, 1.3], [35.9, 1.0], [36.25, 1.0], [36.5, 1.5], [38.45, 1.5], [38.8, 1.12], [40.9, 1.18]]) + punch(fr, 36.03, 0.08) + punch(fr, 39.42, 0.1),
+          s: kf(fr, [[34.55, 1.3], [35.5, 1.3], [35.9, 1.0], [36.25, 1.0], [36.5, 1.5], [38.45, 1.5], [38.8, 1.12], [40.9, 1.0]]) + punch(fr, 36.03, 0.08) + punch(fr, 39.42, 0.1),
           x: kf(fr, [[36.25, 0], [36.5, m1.x], [37.05, m1.x], [37.35, t2.x], [37.9, t2.x], [38.2, n1.x], [38.45, n1.x], [38.8, 0]]),
-          y: kf(fr, [[34.55, 760], [35.5, 700], [35.9, 0], [36.25, 0], [36.5, m1.y], [37.05, m1.y], [37.35, t2.y], [37.9, t2.y], [38.2, n1.y], [38.45, n1.y], [38.8, 500], [40.9, 520]]),
+          y: kf(fr, [[34.55, 760], [35.5, 700], [35.9, 0], [36.25, 0], [36.5, m1.y], [37.05, m1.y], [37.35, t2.y], [37.9, t2.y], [38.2, n1.y], [38.45, n1.y], [38.8, 330], [40.9, 120]]),
           r: Math.sin(fr / 27) * 1.2,
         })}
       >
@@ -538,11 +541,11 @@ export const Scene8: React.FC = () => {
             <Img src={logo} style={{ width: 880 }} />
           </Slam>
         </div>
-        <Center y={1250} style={{ fontSize: 52, color: C.muted }}>
+        <Center y={1180} style={{ fontSize: 52, color: C.muted }}>
           <Type text="garanta já a sua" at={45.06} dur={0.6} style={L} />
           <Slam at={45.75} dir="up" inline dist={100} style={{ ...XB, color: C.navy }}>vaga</Slam>
         </Center>
-        <div style={{ position: "absolute", left: 440, top: 1390, width: 200, height: 200 }}>
+        <div style={{ position: "absolute", left: 440, top: 1300, width: 200, height: 200 }}>
           <Slam at={45.3} dir="zoom">
             <div style={{ position: "relative", width: 200, height: 200 }}>
               <div style={{ position: "absolute", inset: 0, borderRadius: "50%", background: C.blue, opacity: ripple > 0 ? 0.35 * (1 - ripple) : 0, transform: `scale(${1 + ripple * 0.9})` }} />
@@ -555,7 +558,7 @@ export const Scene8: React.FC = () => {
             <Ic.Cursor />
           </div>
         </div>
-        <Center y={1700}>
+        <Center y={1560}>
           <Slam at={46.47} dir="up" dist={200}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 18, borderRadius: 999, background: "#fff", padding: "22px 48px", fontWeight: 600, fontSize: 50, boxShadow: "0 14px 34px rgba(4,32,76,.14)" }}>
               <Ic.Insta size={50} />@way.fluency
