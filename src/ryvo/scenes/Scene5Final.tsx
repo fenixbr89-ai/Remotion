@@ -32,7 +32,7 @@ export const Scene5Final: React.FC = () => {
           filter: `blur(${(1 - ring) * 18}px)`,
         }}
       >
-        <Img src={staticFile("glass-ring.png")} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+        <Img src={staticFile("glass-ring-dark.png")} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
       </div>
       <Bubble size={80} x={900} y={300} phase={1} blur={2} />
       <Bubble size={50} x={90} y={820} phase={2} />
@@ -40,7 +40,7 @@ export const Scene5Final: React.FC = () => {
       <div style={{ position: "absolute", left: 0, right: 0, top: 250, display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ opacity: logo, filter: `blur(${(1 - logo) * 16}px)`, transform: `scale(${0.9 + logo * 0.1})`, textAlign: "center" }}>
           <LogoText size={120} />
-          <div style={{ fontSize: 28, letterSpacing: "0.42em", color: "#8A5BD8", fontWeight: 500, marginTop: 10, paddingLeft: "0.42em" }}>
+          <div style={{ fontSize: 28, letterSpacing: "0.42em", color: "#A78BFA", fontWeight: 500, marginTop: 10, paddingLeft: "0.42em" }}>
             ESTÚDIO CRIATIVO
           </div>
         </div>
@@ -60,8 +60,8 @@ export const Scene5Final: React.FC = () => {
             borderRadius: 80,
             position: "relative",
             overflow: "hidden",
-            background: "linear-gradient(90deg, #6366F1 0%, #A855F7 60%, #D46CF7 100%)",
-            boxShadow: "0 30px 60px rgba(120,60,230,0.4), inset 0 2px 0 rgba(255,255,255,0.45)",
+            background: "linear-gradient(90deg, #7547E8 0%, #8C5FF0 55%, #087BFF 100%)",
+            boxShadow: "0 30px 60px rgba(117,71,232,0.55), inset 0 2px 0 rgba(255,255,255,0.45)",
           }}
         >
           <div style={{ width: 76, height: 76, borderRadius: 38, background: "rgba(255,255,255,0.22)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -82,13 +82,13 @@ export const Scene5Final: React.FC = () => {
         </div>
         <div style={{ height: 34 }} />
         <Reveal delay={1.7}>
-          <div style={{ ...glass(0.15, 40), padding: "18px 36px", fontSize: 32, color: "#7C4DE0", fontWeight: 500, textAlign: "center" }}>
+          <div style={{ ...glass(0.15, 40), padding: "18px 36px", fontSize: 32, color: "#F5F3FF", fontWeight: 500, textAlign: "center" }}>
             Solicite seu orçamento pelo <b style={{ fontWeight: 800 }}>WhatsApp</b>
           </div>
         </Reveal>
         <div style={{ height: 18 }} />
         <Reveal delay={1.9}>
-          <div style={{ fontSize: 36, fontWeight: 700, color: "#6366F1", letterSpacing: "0.02em", transform: `translateY(${Math.sin(t) * 0}px)` }}>
+          <div style={{ fontSize: 36, fontWeight: 700, color: "#A78BFA", letterSpacing: "0.02em", transform: `translateY(${Math.sin(t) * 0}px)` }}>
             (62) 99523-7527
           </div>
         </Reveal>

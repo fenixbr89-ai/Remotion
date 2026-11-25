@@ -6,24 +6,29 @@ export const FPS = 30;
 export const W = 1080;
 export const H = 1920;
 
+// Paleta oficial RYVO
+export const P = {
+  black: "#080812", // Preto profundo · base principal
+  violet: "#7547E8", // Violeta elétrico · cor de identidade
+  lavender: "#A78BFA", // Lavanda luminosa · luzes e gradientes
+  blue: "#087BFF", // Azul elétrico · detalhes tecnológicos
+  ice: "#F5F3FF", // Branco gelo · textos e contraste
+};
+
 export const C = {
-  bg1: "#F2F5FF",
-  bg2: "#E6E6FB",
-  indigo: "#6366F1",
-  ink: "#3B2A6B",
-  body: "#8E4BD0",
-  bodySoft: "#9C7BC9",
-  blue: "#2F6BFF",
-  lilac: "#E3C5FB",
-  purple: "#A855F7",
-  violet: "#9333EA",
-  pink: "#E879F9",
+  bg: P.black,
+  text: P.ice,
+  textSoft: "rgba(245,243,255,0.72)",
+  accent: P.lavender,
+  violet: P.violet,
+  blue: P.blue,
 };
 
 export const FONT = "'Inter Variable', Inter, sans-serif";
 export const LOGO_FONT = "'Archivo Variable', Archivo, sans-serif";
 
-export const headlineGradient = `linear-gradient(90deg, ${C.lilac} 0%, #CC8BF8 45%, ${C.purple} 80%, ${C.violet} 100%)`;
+export const headlineGradient = `linear-gradient(90deg, ${P.ice} 0%, ${P.lavender} 45%, ${P.violet} 100%)`;
+export const logoGradient = `linear-gradient(90deg, ${P.ice} 0%, ${P.lavender} 100%)`;
 
 // Scene durations in seconds. Total ~33s (target 30–40s); narration ~21s at ~3.4 words/s.
 export const SCENES = [

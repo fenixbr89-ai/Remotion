@@ -14,9 +14,9 @@ const Card: React.FC<{ front?: boolean }> = ({ front }) => (
       flexDirection: "column",
       justifyContent: "space-between",
       background: front
-        ? "linear-gradient(135deg, #6366F1 0%, #A855F7 70%, #E879F9 100%)"
-        : "linear-gradient(160deg, #FFFFFF 0%, #F1ECFF 100%)",
-      boxShadow: "0 30px 60px rgba(90,60,200,0.28), inset 0 1px 0 rgba(255,255,255,0.6)",
+        ? "linear-gradient(135deg, #7547E8 0%, #A78BFA 70%, #087BFF 140%)"
+        : "linear-gradient(160deg, #F5F3FF 0%, #E4DEFF 100%)",
+      boxShadow: "0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(117,71,232,0.3), inset 0 1px 0 rgba(255,255,255,0.6)",
     }}
   >
     {front ? (
@@ -28,10 +28,10 @@ const Card: React.FC<{ front?: boolean }> = ({ front }) => (
       </>
     ) : (
       <>
-        <LogoText size={26} />
+        <LogoText size={26} style={{ background: "linear-gradient(90deg, #7547E8, #087BFF)", WebkitBackgroundClip: "text", backgroundClip: "text" }} />
         <div>
-          <div style={{ height: 9, width: 180, borderRadius: 5, background: "rgba(139,92,246,0.35)" }} />
-          <div style={{ height: 9, width: 130, borderRadius: 5, marginTop: 10, background: "rgba(139,92,246,0.2)" }} />
+          <div style={{ height: 9, width: 180, borderRadius: 5, background: "rgba(117,71,232,0.45)" }} />
+          <div style={{ height: 9, width: 130, borderRadius: 5, marginTop: 10, background: "rgba(117,71,232,0.25)" }} />
         </div>
       </>
     )}
@@ -59,14 +59,14 @@ const Visual: React.FC = () => {
           borderRadius: 10,
           opacity: poster,
           transform: `perspective(1600px) rotateY(${20 + (1 - poster) * 40}deg) rotateZ(-5deg) translateY(${(1 - poster) * 140}px)`,
-          background: "linear-gradient(170deg, #F2F5FF 0%, #E3D4FF 55%, #C79BFF 100%)",
-          boxShadow: "0 40px 80px rgba(90,60,200,0.28)",
+          background: "linear-gradient(170deg, #110E26 0%, #241868 55%, #7547E8 100%)",
+          boxShadow: "0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(117,71,232,0.3), inset 0 1px 0 rgba(245,243,255,0.25)",
           padding: 36,
           overflow: "hidden",
         }}
       >
-        <div style={{ fontFamily: FONT, fontSize: 52, fontWeight: 300, color: "#6366F1", letterSpacing: "-0.04em", lineHeight: 1 }}>Criatividade</div>
-        <div style={{ fontFamily: FONT, fontSize: 58, fontWeight: 900, fontStyle: "italic", color: "#9333EA", letterSpacing: "-0.06em", lineHeight: 1.05 }}>
+        <div style={{ fontFamily: FONT, fontSize: 52, fontWeight: 300, color: "#F5F3FF", letterSpacing: "-0.04em", lineHeight: 1 }}>Criatividade</div>
+        <div style={{ fontFamily: FONT, fontSize: 58, fontWeight: 900, fontStyle: "italic", color: "#A78BFA", letterSpacing: "-0.06em", lineHeight: 1.05 }}>
           impressa.
         </div>
         {[0, 1, 2].map((i) => (
@@ -80,8 +80,8 @@ const Visual: React.FC = () => {
               height: 200,
               borderRadius: 56,
               transform: `rotate(${30 + i * 12}deg)`,
-              background: `rgba(${200 - i * 30},${150 - i * 30},255,0.35)`,
-              border: "2px solid rgba(255,255,255,0.8)",
+              background: `rgba(${167 - i * 25},${139 - i * 34},${250 - i * 9},0.3)`,
+              border: "2px solid rgba(245,243,255,0.45)",
             }}
           />
         ))}
@@ -125,11 +125,11 @@ const Visual: React.FC = () => {
           borderRadius: 75,
           opacity: bag,
           transform: `scale(${0.6 + bag * 0.4}) rotate(${-15 + t * 8}deg)`,
-          background: "linear-gradient(135deg, #E879F9, #A855F7)",
+          background: "linear-gradient(135deg, #087BFF, #7547E8)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          boxShadow: "0 20px 40px rgba(150,60,230,0.35), inset 0 2px 0 rgba(255,255,255,0.5)",
+          boxShadow: "0 20px 40px rgba(8,123,255,0.45), inset 0 2px 0 rgba(255,255,255,0.5)",
           fontFamily: "'Archivo Variable'",
           fontStretch: "125%",
           fontWeight: 800,

@@ -10,7 +10,7 @@ const Visual: React.FC = () => {
   const a = useProgress(0.2, 1.1);
   const b = useProgress(0.45, 1.1);
   const c = useProgress(0.7, 1.1);
-  const swatches = ["#6366F1", "#A855F7", "#E879F9", "#E3C5FB", "#F2F5FF"];
+  const swatches = ["#080812", "#7547E8", "#A78BFA", "#087BFF", "#F5F3FF"];
   const like = interpolate(frame, [60, 72], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
@@ -32,10 +32,10 @@ const Visual: React.FC = () => {
           justifyContent: "space-between",
         }}
       >
-        <div style={{ fontFamily: FONT, fontSize: 22, letterSpacing: "0.18em", color: "#8A5BD8", fontWeight: 600 }}>
+        <div style={{ fontFamily: FONT, fontSize: 22, letterSpacing: "0.18em", color: "#A78BFA", fontWeight: 600 }}>
           IDENTIDADE VISUAL
         </div>
-        <div style={{ fontFamily: FONT, fontSize: 170, fontWeight: 900, fontStyle: "italic", letterSpacing: "-0.06em", color: "#7C4DE0", lineHeight: 1 }}>
+        <div style={{ fontFamily: FONT, fontSize: 170, fontWeight: 900, fontStyle: "italic", letterSpacing: "-0.06em", color: "#F5F3FF", lineHeight: 1 }}>
           Aa
         </div>
         <div style={{ display: "flex", gap: 12 }}>
@@ -47,7 +47,7 @@ const Visual: React.FC = () => {
                 height: 56,
                 borderRadius: 18,
                 background: s,
-                border: "2px solid rgba(255,255,255,0.85)",
+                border: "2px solid rgba(245,243,255,0.5)",
                 transform: `scale(${interpolate(frame, [30 + i * 4, 42 + i * 4], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
               }}
             />
@@ -70,23 +70,23 @@ const Visual: React.FC = () => {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 8px 16px" }}>
-          <div style={{ width: 46, height: 46, borderRadius: 23, background: "linear-gradient(135deg,#6366F1,#E879F9)", border: "3px solid #fff" }} />
+          <div style={{ width: 46, height: 46, borderRadius: 23, background: "linear-gradient(135deg,#7547E8,#087BFF)", border: "3px solid #F5F3FF" }} />
           <LogoText size={20} />
         </div>
         <div
           style={{
             height: 350,
             borderRadius: 30,
-            background: "linear-gradient(160deg, #EEF0FE 0%, #D9C2FF 60%, #B57BFF 100%)",
+            background: "linear-gradient(160deg, #15122E 0%, #2B1B6E 55%, #7547E8 100%)",
             padding: 26,
             position: "relative",
             overflow: "hidden",
           }}
         >
-          <div style={{ fontFamily: FONT, fontSize: 40, fontWeight: 300, color: "#6366F1", letterSpacing: "-0.04em", lineHeight: 1 }}>
+          <div style={{ fontFamily: FONT, fontSize: 40, fontWeight: 300, color: "#F5F3FF", letterSpacing: "-0.04em", lineHeight: 1 }}>
             Sua marca
           </div>
-          <div style={{ fontFamily: FONT, fontSize: 46, fontWeight: 900, fontStyle: "italic", color: "#9333EA", letterSpacing: "-0.06em", lineHeight: 1.05 }}>
+          <div style={{ fontFamily: FONT, fontSize: 46, fontWeight: 900, fontStyle: "italic", color: "#A78BFA", letterSpacing: "-0.06em", lineHeight: 1.05 }}>
             em movimento.
           </div>
           <div
@@ -98,8 +98,8 @@ const Visual: React.FC = () => {
               height: 200,
               borderRadius: 60,
               transform: `rotate(${20 + t * 10}deg)`,
-              background: "rgba(255,255,255,0.35)",
-              border: "2px solid rgba(255,255,255,0.8)",
+              background: "rgba(245,243,255,0.12)",
+              border: "2px solid rgba(245,243,255,0.45)",
             }}
           />
         </div>
@@ -107,17 +107,17 @@ const Visual: React.FC = () => {
           <svg width={40} height={40} viewBox="0 0 24 24" style={{ transform: `scale(${1 + like * 0.25 - like * like * 0.25})` }}>
             <path
               d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.3 5 6.6 5c2 0 3.4 1.1 5.4 3 2-1.9 3.4-3 5.4-3 3.3 0 5.6 3.3 4.1 6.8C19.5 16.4 12 21 12 21z"
-              fill={like > 0.5 ? "#E879F9" : "none"}
-              stroke="#9B5BE0"
+              fill={like > 0.5 ? "#A78BFA" : "none"}
+              stroke="#A78BFA"
               strokeWidth={1.8}
             />
           </svg>
           {[0.7, 0.45].map((w, i) => (
-            <div key={i} style={{ flex: w, height: 14, borderRadius: 7, alignSelf: "center", background: "rgba(139,92,246,0.3)" }} />
+            <div key={i} style={{ flex: w, height: 14, borderRadius: 7, alignSelf: "center", background: "rgba(167,139,250,0.35)" }} />
           ))}
         </div>
-        <div style={{ height: 12, width: "80%", borderRadius: 6, margin: "0 8px", background: "rgba(139,92,246,0.22)" }} />
-        <div style={{ height: 12, width: "55%", borderRadius: 6, margin: "12px 8px", background: "rgba(139,92,246,0.18)" }} />
+        <div style={{ height: 12, width: "80%", borderRadius: 6, margin: "0 8px", background: "rgba(167,139,250,0.25)" }} />
+        <div style={{ height: 12, width: "55%", borderRadius: 6, margin: "12px 8px", background: "rgba(167,139,250,0.18)" }} />
       </div>
 
       {/* floating colour card */}
@@ -134,11 +134,11 @@ const Visual: React.FC = () => {
           fontWeight: 700,
           color: "#fff",
           borderRadius: 26,
-          background: "linear-gradient(135deg,#6366F1,#A855F7)",
-          boxShadow: "0 20px 40px rgba(110,60,230,0.35), inset 0 2px 0 rgba(255,255,255,0.4)",
+          background: "linear-gradient(135deg,#7547E8,#087BFF)",
+          boxShadow: "0 20px 40px rgba(117,71,232,0.5), inset 0 2px 0 rgba(255,255,255,0.4)",
         }}
       >
-        #A855F7
+        #7547E8
       </div>
     </div>
   );

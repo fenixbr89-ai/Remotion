@@ -38,7 +38,7 @@ export const RyvoComercial: React.FC = () => {
             fontWeight: 900,
             fontSize: 300,
             letterSpacing: "0.08em",
-            color: "#7C4DE0",
+            color: "#A78BFA",
             opacity: 0.05 * barOpacity,
             transform: "rotate(-90deg)",
             whiteSpace: "nowrap",

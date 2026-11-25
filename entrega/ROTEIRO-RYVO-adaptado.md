@@ -1,7 +1,7 @@
 # RYVO — Vídeo motion (9:16, ~33s) — roteiro adaptado
 
 Formato: vertical 1080x1920 (Reels/Stories), 30fps.
-Estilo: glassmorphism claro, paleta do POST 02 (lavanda, índigo, lilás → roxo), peças de vidro 3D do Drive.
+Estilo: glassmorphism escuro com a paleta oficial RYVO: Preto profundo #080812 (base), Violeta elétrico #7547E8 (identidade), Lavanda luminosa #A78BFA (luzes e gradientes), Azul elétrico #087BFF (detalhes tecnológicos) e Branco gelo #F5F3FF (textos). Peças de vidro 3D do Drive ajustadas para o fundo escuro.
 Barra de vidro "RYVO | ESTÚDIO CRIATIVO" fixa embaixo nas cenas 1 a 4 (como no post).
 
 A locução está igual à do cliente. As mudanças foram só no texto da tela (marcadas com ✎).

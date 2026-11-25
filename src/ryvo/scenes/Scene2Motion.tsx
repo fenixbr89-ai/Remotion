@@ -19,9 +19,9 @@ const MotionInterface: React.FC = () => {
   const play = interpolate(frame, [20, 160], [0.08, 0.86], { extrapolateRight: "clamp" });
 
   const tracks = [
-    { c1: "#A78BFA", c2: "#C084FC", clips: [[0, 0.28], [0.32, 0.62], [0.66, 0.95]] },
-    { c1: "#818CF8", c2: "#60A5FA", clips: [[0.06, 0.4], [0.46, 0.84]] },
-    { c1: "#F0ABFC", c2: "#E879F9", clips: [[0, 0.18], [0.22, 0.52], [0.58, 0.74], [0.78, 1]] },
+    { c1: "#7547E8", c2: "#A78BFA", clips: [[0, 0.28], [0.32, 0.62], [0.66, 0.95]] },
+    { c1: "#087BFF", c2: "#4FA3FF", clips: [[0.06, 0.4], [0.46, 0.84]] },
+    { c1: "#A78BFA", c2: "#F5F3FF", clips: [[0, 0.18], [0.22, 0.52], [0.58, 0.74], [0.78, 1]] },
   ];
 
   return (
@@ -40,7 +40,7 @@ const MotionInterface: React.FC = () => {
       <div style={{ position: "absolute", inset: 0, ...glass(0.25, 44), padding: 32 }}>
         {/* window dots */}
         <div style={{ display: "flex", gap: 10, marginBottom: 22 }}>
-          {["#F9A8D4", "#C4B5FD", "#93C5FD"].map((c) => (
+          {["#7547E8", "#A78BFA", "#087BFF"].map((c) => (
             <div key={c} style={{ width: 16, height: 16, borderRadius: 8, background: c }} />
           ))}
         </div>
@@ -53,7 +53,7 @@ const MotionInterface: React.FC = () => {
               borderRadius: 26,
               position: "relative",
               overflow: "hidden",
-              background: "linear-gradient(135deg, #6366F1 0%, #A855F7 55%, #F0ABFC 100%)",
+              background: "linear-gradient(135deg, #080812 0%, #7547E8 55%, #A78BFA 100%)",
               boxShadow: "inset 0 2px 0 rgba(255,255,255,0.4)",
             }}
           >
@@ -96,9 +96,9 @@ const MotionInterface: React.FC = () => {
           {/* side panel */}
           <div style={{ width: 190, display: "flex", flexDirection: "column", gap: 14 }}>
             {[0.8, 0.55, 0.7, 0.4].map((w, i) => (
-              <div key={i} style={{ height: 58, borderRadius: 16, background: "rgba(255,255,255,0.55)", padding: 14 }}>
-                <div style={{ height: 10, width: `${w * 100}%`, borderRadius: 5, background: "rgba(139,92,246,0.45)" }} />
-                <div style={{ height: 8, width: `${w * 60}%`, borderRadius: 4, marginTop: 8, background: "rgba(139,92,246,0.25)" }} />
+              <div key={i} style={{ height: 58, borderRadius: 16, background: "rgba(245,243,255,0.07)", border: "1px solid rgba(245,243,255,0.12)", padding: 14 }}>
+                <div style={{ height: 10, width: `${w * 100}%`, borderRadius: 5, background: "rgba(167,139,250,0.6)" }} />
+                <div style={{ height: 8, width: `${w * 60}%`, borderRadius: 4, marginTop: 8, background: "rgba(167,139,250,0.3)" }} />
               </div>
             ))}
           </div>
@@ -106,7 +106,7 @@ const MotionInterface: React.FC = () => {
         {/* timeline */}
         <div style={{ position: "relative", marginTop: 26 }}>
           {tracks.map((tr, i) => (
-            <div key={i} style={{ position: "relative", height: 40, marginBottom: 12, borderRadius: 12, background: "rgba(255,255,255,0.35)" }}>
+            <div key={i} style={{ position: "relative", height: 40, marginBottom: 12, borderRadius: 12, background: "rgba(245,243,255,0.06)" }}>
               {tr.clips.map(([a, b], j) => (
                 <div
                   key={j}

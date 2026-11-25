@@ -6,7 +6,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { C, FONT, LOGO_FONT, headlineGradient } from "./theme";
+import { C, FONT, LOGO_FONT, P, headlineGradient, logoGradient } from "./theme";
 
 const ease = Easing.bezier(0.16, 1, 0.3, 1);
 
@@ -53,13 +53,9 @@ export const SceneWrap: React.FC<{
 }> = ({ durationInFrames, fadeIn = true, fadeOut = true, children }) => {
   const frame = useCurrentFrame();
   const f = 9;
-  const inP = fadeIn
-    ? interpolate(frame, [0, f], [0, 1], { extrapolateRight: "clamp" })
-    : 1;
+  const inP = fadeIn ? interpolate(frame, [0, f], [0, 1], { extrapolateRight: "clamp" }) : 1;
   const outP = fadeOut
-    ? interpolate(frame, [durationInFrames - f, durationInFrames], [1, 0], {
-        extrapolateLeft: "clamp",
-      })
+    ? interpolate(frame, [durationInFrames - f, durationInFrames], [1, 0], { extrapolateLeft: "clamp" })
     : 1;
   const o = Math.min(inP, outP);
   const scale = interpolate(frame, [durationInFrames - f, durationInFrames], [1, 1.04], {
@@ -79,18 +75,11 @@ export const SceneWrap: React.FC<{
   );
 };
 
-/** Light lavender background with drifting colour blooms. */
+/** Deep black background with drifting violet / blue light and a faint tech grid. */
 export const Background: React.FC = () => {
   const frame = useCurrentFrame();
   const t = frame / 30;
-  const orb = (
-    x: number,
-    y: number,
-    size: number,
-    color: string,
-    phase: number,
-    o: number,
-  ) => (
+  const orb = (x: number, y: number, size: number, color: string, phase: number, o: number) => (
     <div
       style={{
         position: "absolute",
@@ -100,38 +89,52 @@ export const Background: React.FC = () => {
         height: size,
         borderRadius: "50%",
         background: color,
-        filter: "blur(140px)",
+        filter: "blur(160px)",
         opacity: o,
       }}
     />
   );
   return (
-    <AbsoluteFill
-      style={{
-        background: `linear-gradient(170deg, ${C.bg1} 0%, #EEF0FE 45%, ${C.bg2} 100%)`,
-        overflow: "hidden",
-      }}
-    >
-      {orb(560, 1050, 760, "#C9A2FF", 0, 0.55)}
-      {orb(-260, 1350, 640, "#9DB4FF", 2, 0.45)}
-      {orb(620, -200, 560, "#E7C4FF", 4, 0.4)}
-      {orb(-200, 300, 420, "#CFE0FF", 1, 0.5)}
+    <AbsoluteFill style={{ background: C.bg, overflow: "hidden" }}>
+      {orb(520, 1000, 780, P.violet, 0, 0.55)}
+      {orb(-300, 1380, 620, P.blue, 2, 0.3)}
+      {orb(560, -260, 600, P.lavender, 4, 0.22)}
+      {orb(-260, 260, 460, P.violet, 1, 0.3)}
+      {/* perspective grid floor */}
+      <div
+        style={{
+          position: "absolute",
+          left: -600,
+          right: -600,
+          bottom: -200,
+          height: 900,
+          transform: "perspective(900px) rotateX(68deg)",
+          transformOrigin: "bottom",
+          backgroundImage: `linear-gradient(rgba(8,123,255,0.22) 2px, transparent 2px), linear-gradient(90deg, rgba(8,123,255,0.22) 2px, transparent 2px)`,
+          backgroundSize: "120px 120px",
+          backgroundPosition: `0 ${(t * 40) % 120}px`,
+          WebkitMaskImage: "linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 85%)",
+          maskImage: "linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 85%)",
+        }}
+      />
+      {/* vignette */}
+      <AbsoluteFill
+        style={{ background: "radial-gradient(120% 80% at 50% 45%, transparent 55%, rgba(8,8,18,0.85) 100%)" }}
+      />
     </AbsoluteFill>
   );
 };
 
-/** Frosted glass surface. `tint` 0 = clear, 1 = strong lilac. */
+/** Dark frosted glass surface. `tint` 0 = neutral, 1 = strong violet. */
 export const glass = (tint = 0, radius = 48): React.CSSProperties => ({
   borderRadius: radius,
-  background: `linear-gradient(140deg, rgba(255,255,255,${0.62 - tint * 0.25}) 0%, rgba(${
-    235 - tint * 40
-  },${220 - tint * 70},255,${0.28 + tint * 0.3}) 55%, rgba(${200 - tint * 20},${
-    170 - tint * 60
-  },255,${0.22 + tint * 0.35}) 100%)`,
-  border: "2px solid rgba(255,255,255,0.75)",
-  boxShadow: `inset 0 2px 0 rgba(255,255,255,0.95), inset 0 -18px 40px rgba(150,90,255,${
-    0.12 + tint * 0.15
-  }), inset 0 0 0 1px rgba(160,120,255,0.12), 0 40px 90px rgba(100,70,210,0.22), 0 8px 24px rgba(100,70,210,0.12)`,
+  background: `linear-gradient(145deg, rgba(245,243,255,${0.14 + tint * 0.04}) 0%, rgba(167,139,250,${
+    0.08 + tint * 0.1
+  }) 50%, rgba(117,71,232,${0.1 + tint * 0.2}) 100%)`,
+  border: "1.5px solid rgba(245,243,255,0.22)",
+  boxShadow: `inset 0 1.5px 0 rgba(245,243,255,0.45), inset 0 -20px 40px rgba(117,71,232,${
+    0.15 + tint * 0.2
+  }), 0 40px 90px rgba(0,0,0,0.55), 0 0 60px rgba(117,71,232,${0.12 + tint * 0.15})`,
   backdropFilter: "blur(22px) saturate(140%)",
   WebkitBackdropFilter: "blur(22px) saturate(140%)",
 });
@@ -165,9 +168,10 @@ export const GlassTile: React.FC<{
         filter: blur ? `blur(${blur}px)` : undefined,
         opacity,
         ...glass(tint, size * 0.28),
-        background: `linear-gradient(150deg, rgba(255,255,255,0.7) 0%, rgba(214,170,255,${
-          0.35 + tint * 0.3
-        }) 45%, rgba(${190 - tint * 30},${110 - tint * 20},255,${0.3 + tint * 0.35}) 100%)`,
+        background: `linear-gradient(150deg, rgba(245,243,255,0.35) 0%, rgba(167,139,250,${
+          0.25 + tint * 0.2
+        }) 45%, rgba(117,71,232,${0.35 + tint * 0.35}) 100%)`,
+        border: "2px solid rgba(245,243,255,0.5)",
       }}
     >
       <div
@@ -175,8 +179,7 @@ export const GlassTile: React.FC<{
           position: "absolute",
           inset: size * 0.08,
           borderRadius: size * 0.22,
-          background:
-            "radial-gradient(120% 80% at 30% 20%, rgba(255,255,255,0.55), rgba(255,255,255,0) 60%)",
+          background: "radial-gradient(120% 80% at 30% 20%, rgba(245,243,255,0.4), rgba(245,243,255,0) 60%)",
         }}
       />
     </div>
@@ -204,9 +207,9 @@ export const Bubble: React.FC<{ size: number; x: number; y: number; phase?: numb
         borderRadius: "50%",
         filter: blur ? `blur(${blur}px)` : undefined,
         background:
-          "radial-gradient(circle at 32% 28%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.25) 22%, rgba(196,140,255,0.35) 60%, rgba(140,90,250,0.55) 100%)",
-        border: "1.5px solid rgba(255,255,255,0.8)",
-        boxShadow: "0 20px 50px rgba(120,70,230,0.25), inset -8px -10px 20px rgba(130,80,240,0.3)",
+          "radial-gradient(circle at 32% 28%, rgba(245,243,255,0.9) 0%, rgba(245,243,255,0.2) 20%, rgba(167,139,250,0.25) 55%, rgba(117,71,232,0.6) 100%)",
+        border: "1.5px solid rgba(245,243,255,0.45)",
+        boxShadow: "0 0 40px rgba(117,71,232,0.45), inset -8px -10px 20px rgba(8,123,255,0.25)",
       }}
     />
   );
@@ -220,7 +223,7 @@ export const LogoText: React.FC<{ size: number; style?: React.CSSProperties }> =
       fontWeight: 800,
       fontSize: size,
       letterSpacing: "0.1em",
-      background: `linear-gradient(90deg, #9B4DFF 0%, ${C.purple} 50%, #C86BFA 100%)`,
+      background: logoGradient,
       WebkitBackgroundClip: "text",
       backgroundClip: "text",
       color: "transparent",
@@ -231,7 +234,7 @@ export const LogoText: React.FC<{ size: number; style?: React.CSSProperties }> =
   </span>
 );
 
-/** The glass pill from the post: RYVO left, ESTÚDIO CRIATIVO right. */
+/** Glass pill: RYVO left, ESTÚDIO CRIATIVO right. */
 export const BrandBar: React.FC<{ opacity?: number }> = ({ opacity = 1 }) => (
   <div
     style={{
@@ -247,25 +250,17 @@ export const BrandBar: React.FC<{ opacity?: number }> = ({ opacity = 1 }) => (
       opacity,
       ...glass(0.15, 64),
       background:
-        "linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.45) 30%, rgba(215,180,255,0.35) 70%, rgba(200,150,255,0.45) 100%)",
+        "linear-gradient(90deg, rgba(245,243,255,0.16) 0%, rgba(245,243,255,0.06) 35%, rgba(117,71,232,0.22) 75%, rgba(117,71,232,0.35) 100%)",
     }}
   >
     <LogoText size={40} />
-    <span
-      style={{
-        fontFamily: FONT,
-        fontSize: 26,
-        letterSpacing: "0.12em",
-        color: "#8A5BD8",
-        fontWeight: 500,
-      }}
-    >
+    <span style={{ fontFamily: FONT, fontSize: 26, letterSpacing: "0.12em", color: P.lavender, fontWeight: 500 }}>
       ESTÚDIO CRIATIVO
     </span>
   </div>
 );
 
-/** Two-weight headline: thin indigo line + heavy italic gradient line. */
+/** Two-weight headline: thin ice line + heavy italic gradient line. */
 export const Headline: React.FC<{
   light: string;
   bold: string;
@@ -278,15 +273,7 @@ export const Headline: React.FC<{
   <div style={{ fontFamily: FONT, textAlign: align }}>
     {light.split("\n").map((l, i) => (
       <Reveal key={l} delay={delay + i * 0.08}>
-        <div
-          style={{
-            fontSize: lightSize,
-            fontWeight: 300,
-            color: C.indigo,
-            letterSpacing: "-0.045em",
-            lineHeight: 0.98,
-          }}
-        >
+        <div style={{ fontSize: lightSize, fontWeight: 300, color: C.text, letterSpacing: "-0.045em", lineHeight: 0.98 }}>
           {l}
         </div>
       </Reveal>
@@ -328,13 +315,12 @@ export const Eyebrow: React.FC<{ n: string; label: string; delay: number }> = ({
         fontSize: 26,
         fontWeight: 600,
         letterSpacing: "0.16em",
-        color: "#7C55D9",
+        color: P.lavender,
         ...glass(0.1, 40),
-        boxShadow: "inset 0 2px 0 rgba(255,255,255,0.95), 0 12px 30px rgba(100,70,210,0.14)",
       }}
     >
-      <span style={{ color: C.blue }}>{n}</span>
-      <span style={{ width: 2, height: 24, background: "rgba(124,85,217,0.35)" }} />
+      <span style={{ color: P.blue }}>{n}</span>
+      <span style={{ width: 2, height: 24, background: "rgba(167,139,250,0.35)" }} />
       {label}
     </div>
   </Reveal>
@@ -350,9 +336,8 @@ export const Chips: React.FC<{ items: string[]; delay: number }> = ({ items, del
             fontFamily: FONT,
             fontSize: 30,
             fontWeight: 500,
-            color: "#6E3FC8",
+            color: P.ice,
             ...glass(0.35, 40),
-            boxShadow: "inset 0 2px 0 rgba(255,255,255,0.95), 0 14px 30px rgba(110,70,220,0.16)",
           }}
         >
           {it}
@@ -362,7 +347,7 @@ export const Chips: React.FC<{ items: string[]; delay: number }> = ({ items, del
   </div>
 );
 
-/** Supporting line with the blue accent bar (as in the post). */
+/** Supporting line with the blue accent bar. */
 export const Support: React.FC<{ children: React.ReactNode; delay: number; width?: number }> = ({
   children,
   delay,
@@ -375,21 +360,14 @@ export const Support: React.FC<{ children: React.ReactNode; delay: number; width
         style={{
           width: 5,
           borderRadius: 3,
-          background: `linear-gradient(180deg, rgba(255,255,255,0) 0%, ${C.blue} 100%)`,
+          background: `linear-gradient(180deg, rgba(8,123,255,0) 0%, ${P.blue} 100%)`,
+          boxShadow: `0 0 14px ${P.blue}`,
           transform: `scaleY(${p})`,
           transformOrigin: "top",
         }}
       />
       <Reveal delay={delay + 0.1}>
-        <div
-          style={{
-            fontFamily: FONT,
-            fontSize: 36,
-            lineHeight: 1.45,
-            color: C.body,
-            fontWeight: 400,
-          }}
-        >
+        <div style={{ fontFamily: FONT, fontSize: 36, lineHeight: 1.45, color: C.textSoft, fontWeight: 400 }}>
           {children}
         </div>
       </Reveal>
@@ -398,5 +376,5 @@ export const Support: React.FC<{ children: React.ReactNode; delay: number; width
 };
 
 export const B: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <b style={{ fontWeight: 800, fontStyle: "italic", color: C.violet }}>{children}</b>
+  <b style={{ fontWeight: 800, fontStyle: "italic", color: P.lavender }}>{children}</b>
 );
