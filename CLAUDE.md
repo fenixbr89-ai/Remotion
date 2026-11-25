@@ -52,6 +52,9 @@ para relembrar o visual.
 - **Não usar linhas/raios de luz saindo do logo** (ele não gostou). Use só brilho suave.
 - **Ritmo um pouco mais calmo que as referências:** planos de ~2,3–3,2s, whip de ~10 quadros,
   texto a ~2,9 palavras/s, e **a marca do cliente aparece devagar** (revelação de ~1,7s).
+- Legendas: ele **não gostou** da entrada subindo de trás de uma máscara (v4) nem da revelação
+  esquerda→direita no lugar (v5). Gostou da **varredura roxa na palavra-chave**. Entrada ideal
+  ainda em aberto.
 - Locução: o Kayke gera os áudios por cena (cena01.mp3…) numa IA de voz e manda depois.
 
 ## Como renderizar aqui
@@ -75,3 +78,7 @@ para relembrar o visual.
   Branco gelo #F5F3FF (textos).
 - Marca: só o símbolo R (`public/ryvo-r.png`). Instagram @ryvocreative. WhatsApp (62) 99523-7527.
 - Roteiros: `entrega/ROTEIRO-RYVO-cliente.txt` (cliente) e `entrega/ROTEIRO-RYVO-adaptado.md` (interno).
+
+### Status (RYVO)
+- Enviado ao cliente para avaliação: `entrega/claro/RYVO-Claro-v3.mp4` (legenda com desfoque).
+- Aguardando a resposta do cliente antes de seguir.
