@@ -1,21 +1,60 @@
 import React from "react";
 import { AbsoluteFill, Sequence, interpolate, useCurrentFrame } from "remotion";
-import { Background, BrandBar, LogoMark, SceneWrap } from "./components";
-import { FONT, ThemeName, sceneFrames } from "./theme";
+import { Background } from "./components";
+import { Cam, Dir, Shot } from "./camera";
+import { FONT, FPS, ThemeName } from "./theme";
 import { ThemeProvider, useTheme } from "./ThemeContext";
-import { Scene1Reveal } from "./scenes/Scene1Reveal";
-import { Scene2Motion } from "./scenes/Scene2Motion";
-import { Scene3Grafico } from "./scenes/Scene3Grafico";
-import { Scene4Impressao } from "./scenes/Scene4Impressao";
-import { Scene5Final } from "./scenes/Scene5Final";
+import * as S from "./shots";
 
-const SCENE_COMPONENTS: Record<string, React.FC> = {
-  reveal: Scene1Reveal,
-  motion: Scene2Motion,
-  grafico: Scene3Grafico,
-  impressao: Scene4Impressao,
-  final: Scene5Final,
+/**
+ * Shot list in the style of the reference videos (referencias/): short shots (~2.2s),
+ * camera always moving, whip pans with directional motion blur between shots,
+ * kinetic text synced to the narration, alternating background.
+ */
+type ShotDef = {
+  id: string;
+  dur: number; // seconds
+  comp: React.FC<S.ShotProps>;
+  cam: [Cam, Cam];
+  inDir: Dir;
+  outDir: Dir;
+  alt?: boolean;
 };
+
+export const SHOTS: ShotDef[] = [
+  // CENA 01 — "Uma marca não precisa apenas aparecer. Ela precisa ser lembrada."
+  { id: "s01", dur: 2.3, comp: S.S01, cam: [{ s: 1 }, { s: 1.1, rz: -1 }], inDir: "none", outDir: "up" },
+  { id: "s02", dur: 2.0, comp: S.S02, cam: [{ s: 1.05, ry: 8 }, { s: 1.0, ry: -6 }], inDir: "up", outDir: "up" },
+  { id: "s03", dur: 2.3, comp: S.S03, cam: [{ s: 0.96 }, { s: 1.12, rz: 1 }], inDir: "up", outDir: "zoom" },
+  { id: "s04", dur: 2.2, comp: S.S04, cam: [{ s: 1.14, ry: 16, rx: -4 }, { s: 1.0, ry: -6, rx: 2 }], inDir: "zoom", outDir: "left", alt: true },
+  // CENA 02 — "Transformamos ideias em movimento, criando vídeos, animações e experiências visuais que capturam a atenção."
+  { id: "s05", dur: 2.2, comp: S.S05, cam: [{ s: 1.0 }, { s: 1.12, y: 20 }], inDir: "left", outDir: "up" },
+  { id: "s06", dur: 2.4, comp: S.S06, cam: [{ s: 0.98, ry: -10 }, { s: 1.1, ry: 6, x: -20 }], inDir: "up", outDir: "right" },
+  { id: "s07", dur: 2.4, comp: S.S07, cam: [{ s: 1.08, rx: 8 }, { s: 0.98, rx: -2 }], inDir: "right", outDir: "zoom" },
+  // CENA 03 — "Criamos identidades visuais e conteúdos digitais que fortalecem a presença e a personalidade das marcas."
+  { id: "s08", dur: 2.2, comp: S.S08, cam: [{ s: 1.0, ry: -8 }, { s: 1.1, ry: 6 }], inDir: "zoom", outDir: "left", alt: true },
+  { id: "s09", dur: 2.2, comp: S.S09, cam: [{ s: 1.08, x: 30 }, { s: 1.0, x: -30 }], inDir: "left", outDir: "up", alt: true },
+  { id: "s10", dur: 2.4, comp: S.S10, cam: [{ s: 0.97, rx: 6 }, { s: 1.1, rx: -2 }], inDir: "up", outDir: "down", alt: true },
+  // CENA 04 — "E levamos sua comunicação além das telas, com materiais gráficos e publicitários que dão vida à sua marca."
+  { id: "s11", dur: 2.2, comp: S.S11, cam: [{ s: 1.0 }, { s: 1.04 }], inDir: "down", outDir: "zoom" },
+  { id: "s12", dur: 2.4, comp: S.S12, cam: [{ s: 1.1, ry: 14 }, { s: 1.0, ry: -8 }], inDir: "zoom", outDir: "right" },
+  { id: "s13", dur: 2.0, comp: S.S13, cam: [{ s: 1.0, rx: 4 }, { s: 1.1, rx: -2 }], inDir: "right", outDir: "zoom" },
+  // CENA 05 — "RYVO. Criatividade que vai além do visual. Vamos desenvolver seu próximo projeto?"
+  { id: "s14", dur: 2.6, comp: S.S14, cam: [{ s: 0.98 }, { s: 1.1 }], inDir: "zoom", outDir: "up", alt: true },
+  { id: "s15", dur: 4.6, comp: S.S15, cam: [{ s: 1.04, y: 20 }, { s: 1.0, y: 0 }], inDir: "up", outDir: "none" },
+];
+
+export const shotFrames = () => {
+  let from = 0;
+  return SHOTS.map((s) => {
+    const frames = Math.round(s.dur * FPS);
+    const out = { ...s, from, frames };
+    from += frames;
+    return out;
+  });
+};
+
+export const totalShotFrames = () => shotFrames().reduce((a, s) => a + s.frames, 0);
 
 export const RyvoComercial: React.FC<{ tema: ThemeName }> = ({ tema }) => (
   <ThemeProvider name={tema}>
@@ -24,34 +63,37 @@ export const RyvoComercial: React.FC<{ tema: ThemeName }> = ({ tema }) => (
 );
 
 const Inner: React.FC = () => {
-  const T = useTheme();
   const frame = useCurrentFrame();
-  const scenes = sceneFrames();
-  const last = scenes[scenes.length - 1];
-  // Brand bar is hidden on the final scene (the logo is already centre stage).
-  const barOpacity = interpolate(frame, [10, 24, last.from, last.from + 10], [0, 1, 1, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
+  const T = useTheme();
+  const shots = shotFrames();
+
+  // Background alternates (brand ↔ alternate); the switch happens inside the whip of the cut.
+  let alt = 0;
+  shots.forEach((s, i) => {
+    const prev = i > 0 && shots[i - 1].alt ? 1 : 0;
+    const cur = s.alt ? 1 : 0;
+    if (frame >= s.from - 3 && frame < s.from + s.frames) {
+      alt = interpolate(frame, [s.from - 3, s.from + 3], [prev, cur], {
+        extrapolateLeft: "clamp",
+        extrapolateRight: "clamp",
+      });
+    }
   });
 
   return (
     <AbsoluteFill style={{ fontFamily: FONT }}>
       <Background />
-      {/* faint centred watermark: official R symbol */}
-      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
-        <LogoMark height={760} style={{ opacity: (T.name === "escuro" ? 0.06 : 0.07) * barOpacity, transform: "translateX(60px)" }} />
-      </AbsoluteFill>
-      {scenes.map((s, i) => {
-        const Comp = SCENE_COMPONENTS[s.id];
+      <AbsoluteFill style={{ background: T.altBg, opacity: alt }} />
+      {shots.map((s) => {
+        const Comp = s.comp;
         return (
-          <Sequence key={s.id} from={s.from} durationInFrames={s.dur} name={s.id}>
-            <SceneWrap durationInFrames={s.dur} fadeIn={i > 0} fadeOut={i < scenes.length - 1}>
-              <Comp />
-            </SceneWrap>
+          <Sequence key={s.id} from={s.from} durationInFrames={s.frames} name={s.id}>
+            <Shot id={s.id} dur={s.frames} cam={s.cam} inDir={s.inDir} outDir={s.outDir}>
+              <Comp dur={s.frames} />
+            </Shot>
           </Sequence>
         );
       })}
-      <BrandBar opacity={barOpacity} />
     </AbsoluteFill>
   );
 };

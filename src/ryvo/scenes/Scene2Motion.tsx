@@ -11,7 +11,7 @@ const PlayIcon: React.FC<{ size: number; color?: string }> = ({ size, color = "#
 );
 
 /** Floating 3D glass "editor" interface. */
-const MotionInterface: React.FC = () => {
+export const MotionInterface: React.FC = () => {
   const frame = useCurrentFrame();
   const T = useTheme();
   const glass = T.glass;

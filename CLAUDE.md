@@ -57,8 +57,16 @@ para relembrar o visual.
 - Vídeo: `npx remotion render src/index.ts <Composição> saida.mp4 --codec=h264 --crf=18 --browser-executable=...`
 - Entregas ficam em `entrega/`.
 
+## Como o estilo está implementado (reaproveite em vídeos novos)
+- `src/ryvo/camera.tsx`: `Shot` (câmera com push-in/órbita + whip pan com desfoque
+  direcional via filtro SVG, ou zoom-through), `Kinetic` (texto palavra por palavra,
+  `*palavra*` = destaque), `Foreground` (objeto desfocado passando na frente), `useKf`.
+- `src/ryvo/icons.tsx`: `Tile3D` (ícone em tile 3D brilhante) e ícones SVG.
+- `src/ryvo/RyvoComercial.tsx`: lista de planos (`SHOTS`) com duração, câmera, direção da
+  transição e fundo alternado. `src/ryvo/shots.tsx`: o conteúdo de cada plano.
+
 ## Projeto atual: RYVO (estúdio criativo)
-- Código em `src/ryvo/`. Composições: `RyvoEscuro` e `RyvoClaro`.
+- Código em `src/ryvo/`. Composições: `RyvoEscuro` e `RyvoClaro` (~36s, 15 planos).
 - Paleta oficial: Preto profundo #080812 (base) · Violeta elétrico #7547E8 (identidade) ·
   Lavanda luminosa #A78BFA (luzes/gradientes) · Azul elétrico #087BFF (detalhes tecnológicos) ·
   Branco gelo #F5F3FF (textos).

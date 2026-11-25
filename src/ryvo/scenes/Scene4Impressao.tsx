@@ -3,7 +3,7 @@ import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { Bubble, Chips, Eyebrow, GlassTile, Headline, LogoMark, useProgress } from "../components";
 import { FONT } from "../theme";
 
-const Card: React.FC<{ front?: boolean }> = ({ front }) => (
+export const Card: React.FC<{ front?: boolean }> = ({ front }) => (
   <div
     style={{
       width: 420,
@@ -36,7 +36,7 @@ const Card: React.FC<{ front?: boolean }> = ({ front }) => (
   </div>
 );
 
-const Visual: React.FC = () => {
+export const ImpressaoVisual: React.FC = () => {
   const frame = useCurrentFrame();
   const t = frame / 30;
   const poster = useProgress(0.2, 1.2);
@@ -141,7 +141,7 @@ export const Scene4Impressao: React.FC = () => (
     <GlassTile size={150} x={880} y={780} rx={25} ry={-35} rz={-12} tint={0.6} floatPhase={1} />
     <GlassTile size={110} x={30} y={1380} rx={-15} ry={30} rz={30} tint={0.4} blur={3} floatPhase={3} />
     <Bubble size={56} x={960} y={1300} phase={0.5} />
-    <Visual />
+    <ImpressaoVisual />
     <div style={{ position: "absolute", left: 90, top: 230 }}>
       <Eyebrow n="03" label="IMPRESSOS" delay={0.1} />
       <div style={{ height: 34 }} />

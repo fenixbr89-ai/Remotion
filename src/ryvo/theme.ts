@@ -78,6 +78,7 @@ export type Theme = {
   ring: string;
   glass: (tint?: number, radius?: number) => import("react").CSSProperties;
   brandBarBg: string;
+  altBg: string;
 };
 
 const darkGlass = (tint = 0, radius = 48) => ({
@@ -129,6 +130,7 @@ export const THEMES: Record<ThemeName, Theme> = {
     spiral: "glass-spiral-dark.png",
     ring: "glass-ring-dark.png",
     glass: darkGlass,
+    altBg: "radial-gradient(130% 90% at 50% 35%, #3A22A0 0%, #1E1260 45%, #0D0828 100%)",
     brandBarBg:
       "linear-gradient(90deg, rgba(245,243,255,0.16) 0%, rgba(245,243,255,0.06) 35%, rgba(117,71,232,0.22) 75%, rgba(117,71,232,0.35) 100%)",
   },
@@ -154,6 +156,7 @@ export const THEMES: Record<ThemeName, Theme> = {
     spiral: "glass-spiral-light.png",
     ring: "glass-ring-light.png",
     glass: lightGlass,
+    altBg: "radial-gradient(130% 90% at 50% 35%, #FFFFFF 0%, #ECE6FF 45%, #D7CBFF 100%)",
     brandBarBg:
       "linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.5) 35%, rgba(167,139,250,0.3) 75%, rgba(117,71,232,0.3) 100%)",
   },

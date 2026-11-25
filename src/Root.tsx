@@ -1,6 +1,6 @@
 import { Composition } from "remotion";
-import { RyvoComercial } from "./ryvo/RyvoComercial";
-import { FPS, H, W, totalFrames } from "./ryvo/theme";
+import { RyvoComercial, totalShotFrames } from "./ryvo/RyvoComercial";
+import { FPS, H, W } from "./ryvo/theme";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="RyvoEscuro"
         component={RyvoComercial}
-        durationInFrames={totalFrames()}
+        durationInFrames={totalShotFrames()}
         fps={FPS}
         width={W}
         height={H}
@@ -17,7 +17,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="RyvoClaro"
         component={RyvoComercial}
-        durationInFrames={totalFrames()}
+        durationInFrames={totalShotFrames()}
         fps={FPS}
         width={W}
         height={H}
