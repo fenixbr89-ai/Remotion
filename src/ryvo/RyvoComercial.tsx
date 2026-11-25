@@ -3,7 +3,7 @@ import { AbsoluteFill, Sequence, interpolate, useCurrentFrame } from "remotion";
 import { Background } from "./components";
 import { Cam, Dir, Shot } from "./camera";
 import { FONT, FPS, ThemeName } from "./theme";
-import { ThemeProvider, useTheme } from "./ThemeContext";
+import { CaptionProvider, CaptionStyle, ThemeProvider, useTheme } from "./ThemeContext";
 import * as S from "./shots";
 
 /**
@@ -56,9 +56,11 @@ export const shotFrames = () => {
 
 export const totalShotFrames = () => shotFrames().reduce((a, s) => a + s.frames, 0);
 
-export const RyvoComercial: React.FC<{ tema: ThemeName }> = ({ tema }) => (
+export const RyvoComercial: React.FC<{ tema: ThemeName; legenda?: CaptionStyle }> = ({ tema, legenda = "desfoque" }) => (
   <ThemeProvider name={tema}>
-    <Inner />
+    <CaptionProvider value={legenda}>
+      <Inner />
+    </CaptionProvider>
   </ThemeProvider>
 );
 

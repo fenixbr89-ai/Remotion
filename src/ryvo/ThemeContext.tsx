@@ -8,3 +8,9 @@ export const ThemeProvider: React.FC<{ name: ThemeName; children: React.ReactNod
 );
 
 export const useTheme = () => useContext(Ctx);
+
+/** Caption animation style: "desfoque" (blur + scale) or "mascara" (rise from a mask + colour sweep). */
+export type CaptionStyle = "desfoque" | "mascara";
+const CapCtx = createContext<CaptionStyle>("desfoque");
+export const CaptionProvider = CapCtx.Provider;
+export const useCaptionStyle = () => useContext(CapCtx);

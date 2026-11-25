@@ -23,6 +23,16 @@ export const RemotionRoot: React.FC = () => {
         height={H}
         defaultProps={{ tema: "claro" as const }}
       />
+      {/* Teste: legendas com outra animação (sobem de trás de uma máscara) */}
+      <Composition
+        id="RyvoEscuroLegendaNova"
+        component={RyvoComercial}
+        durationInFrames={totalShotFrames()}
+        fps={FPS}
+        width={W}
+        height={H}
+        defaultProps={{ tema: "escuro" as const, legenda: "mascara" as const }}
+      />
     </>
   );
 };

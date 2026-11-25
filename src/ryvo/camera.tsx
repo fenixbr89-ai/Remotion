@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { useTheme } from "./ThemeContext";
+import { useCaptionStyle, useTheme } from "./ThemeContext";
 
 export type Cam = { x?: number; y?: number; s?: number; rx?: number; ry?: number; rz?: number };
 export type Dir = "up" | "down" | "left" | "right" | "zoom" | "none";
@@ -148,6 +148,7 @@ export const Kinetic: React.FC<{
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const T = useTheme();
+  const mode = useCaptionStyle();
   const words = text.split(" ");
   return (
     <div
@@ -169,6 +170,51 @@ export const Kinetic: React.FC<{
         const hl = w.startsWith("*");
         const clean = w.replace(/\*/g, "");
         const t0 = (start + i / wps) * fps;
+        if (mode === "mascara") {
+          // Word rises from behind an invisible baseline mask; keywords get a colour sweep.
+          const r = interpolate(frame, [t0, t0 + 0.55 * fps], [0, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+            easing: Easing.bezier(0.22, 1, 0.36, 1),
+          });
+          const sweep = interpolate(frame, [t0 + 0.35 * fps, t0 + 0.85 * fps], [0, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+            easing: Easing.bezier(0.65, 0, 0.35, 1),
+          });
+          return (
+            <span
+              key={i}
+              style={{
+                display: "inline-block",
+                overflow: "hidden",
+                paddingBottom: "0.14em",
+                marginBottom: "-0.14em",
+                paddingRight: "0.04em",
+                verticalAlign: "top",
+              }}
+            >
+              <span
+                style={{
+                  display: "inline-block",
+                  transform: `translateY(${(1 - r) * 115}%) rotate(${(1 - r) * 4}deg)`,
+                  transformOrigin: "0% 100%",
+                  fontWeight: hl ? 800 : 500,
+                  color: hl ? "transparent" : T.text,
+                  backgroundImage: hl
+                    ? `linear-gradient(90deg, ${T.accentText} 0%, ${T.accentText} 50%, ${T.text} 50%, ${T.text} 100%)`
+                    : undefined,
+                  backgroundSize: hl ? "200% 100%" : undefined,
+                  backgroundPosition: hl ? `${(1 - sweep) * 100}% 0` : undefined,
+                  WebkitBackgroundClip: hl ? "text" : undefined,
+                  backgroundClip: hl ? "text" : undefined,
+                }}
+              >
+                {clean}
+              </span>
+            </span>
+          );
+        }
         const k = interpolate(frame, [t0, t0 + 0.5 * fps], [0, 1], {
           extrapolateLeft: "clamp",
           extrapolateRight: "clamp",
