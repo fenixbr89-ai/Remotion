@@ -3,10 +3,10 @@ import { AbsoluteFill, Easing, interpolate, spring, useCurrentFrame } from "remo
 import { cl, kf, MBlur, punch, shakeXY, Slam, Type } from "../Wayfluency/motion";
 import { F, FPS, K, SANS, SERIF } from "./theme";
 
-const SAFE = 0.8;
+export const SAFE = 0.8;
 
 /* ───────── shared building blocks ───────── */
-const Bg: React.FC<{ dark?: boolean; children: React.ReactNode; glow?: [number, number] }> = ({ dark, children, glow = [30, 25] }) => {
+export const Bg: React.FC<{ dark?: boolean; children: React.ReactNode; glow?: [number, number] }> = ({ dark, children, glow = [30, 25] }) => {
   const f = useCurrentFrame();
   const gx = glow[0] + Math.sin(f / 40) * 12;
   const gy = glow[1] + Math.cos(f / 55) * 8;
@@ -46,7 +46,7 @@ const Bg: React.FC<{ dark?: boolean; children: React.ReactNode; glow?: [number, 
 };
 
 type CamV = { x?: number; y?: number; s?: number; r?: number };
-const Cam: React.FC<{ fn: (fr: number) => CamV; children: React.ReactNode }> = ({ fn, children }) => {
+export const Cam: React.FC<{ fn: (fr: number) => CamV; children: React.ReactNode }> = ({ fn, children }) => {
   const f = useCurrentFrame();
   const c = { x: 0, y: 0, s: 1, r: 0, ...fn(f) };
   const p = { x: 0, y: 0, s: 1, ...fn(f - 1) };
@@ -64,12 +64,12 @@ const Cam: React.FC<{ fn: (fr: number) => CamV; children: React.ReactNode }> = (
   );
 };
 
-const Row: React.FC<{ y: number; children: React.ReactNode; style?: React.CSSProperties; x?: number }> = ({ y, children, style, x = 0 }) => (
+export const Row: React.FC<{ y: number; children: React.ReactNode; style?: React.CSSProperties; x?: number }> = ({ y, children, style, x = 0 }) => (
   <div style={{ position: "absolute", top: y, left: x, width: 1080, display: "flex", justifyContent: "center", alignItems: "baseline", gap: 20, ...style }}>{children}</div>
 );
 
 /** Leaves upward with blur at `at` (for swapping captions). */
-const Out: React.FC<{ at?: number; children: React.ReactNode }> = ({ at, children }) => {
+export const Out: React.FC<{ at?: number; children: React.ReactNode }> = ({ at, children }) => {
   const f = useCurrentFrame();
   if (at === undefined) return <>{children}</>;
   const p = interpolate(f, [F(at), F(at) + 6], [0, 1], { ...cl, easing: Easing.in(Easing.cubic) });
@@ -81,31 +81,31 @@ const Out: React.FC<{ at?: number; children: React.ReactNode }> = ({ at, childre
   );
 };
 
-const Small: React.FC<{ y: number; text: string; at: number; dur?: number; dark?: boolean }> = ({ y, text, at, dur, dark }) => (
+export const Small: React.FC<{ y: number; text: string; at: number; dur?: number; dark?: boolean }> = ({ y, text, at, dur, dark }) => (
   <Row y={y} style={{ fontSize: 54, fontWeight: 500, color: dark ? "#9A9A9A" : "#8A8A8A" }}>
     <Type text={text} at={at} dur={dur} />
   </Row>
 );
 
-const sansBig: React.CSSProperties = { fontWeight: 800, fontSize: 116, lineHeight: 1 };
-const serifBig = (c?: string): React.CSSProperties => ({ fontFamily: SERIF, fontStyle: "italic", fontWeight: 400, fontSize: 148, lineHeight: 1, letterSpacing: "-0.01em", color: c });
+export const sansBig: React.CSSProperties = { fontWeight: 800, fontSize: 116, lineHeight: 1 };
+export const serifBig = (c?: string): React.CSSProperties => ({ fontFamily: SERIF, fontStyle: "italic", fontWeight: 400, fontSize: 148, lineHeight: 1, letterSpacing: "-0.01em", color: c });
 
-const Flash: React.FC<{ at: number; max?: number; color?: string }> = ({ at, max = 0.5, color = "#fff" }) => {
+export const Flash: React.FC<{ at: number; max?: number; color?: string }> = ({ at, max = 0.5, color = "#fff" }) => {
   const f = useCurrentFrame();
   const o = interpolate(f, [F(at), F(at) + 2, F(at) + 8], [0, max, 0], cl);
   return <div style={{ position: "absolute", inset: -400, background: color, opacity: o, pointerEvents: "none" }} />;
 };
 
-const float = (f: number, seed: number, a = 7) => ({ ry: Math.sin(f / 28 + seed) * a, rx: Math.cos(f / 33 + seed) * a * 0.6, y: Math.sin(f / 21 + seed * 2) * 10 });
+export const float = (f: number, seed: number, a = 7) => ({ ry: Math.sin(f / 28 + seed) * a, rx: Math.cos(f / 33 + seed) * a * 0.6, y: Math.sin(f / 21 + seed * 2) * 10 });
 
-const Phone: React.FC<{ children: React.ReactNode; w?: number; style?: React.CSSProperties }> = ({ children, w = 440, style }) => (
+export const Phone: React.FC<{ children: React.ReactNode; w?: number; style?: React.CSSProperties }> = ({ children, w = 440, style }) => (
   <div style={{ width: w, height: w * 2.05, borderRadius: w * 0.16, background: "#050505", padding: w * 0.035, boxShadow: "0 40px 90px rgba(0,0,0,.35), inset 0 0 0 3px #2a2a2a", position: "relative", ...style }}>
     <div style={{ position: "absolute", top: w * 0.06, left: "50%", width: w * 0.26, height: w * 0.07, borderRadius: 99, background: "#000", transform: "translateX(-50%)", zIndex: 3 }} />
     <div style={{ width: "100%", height: "100%", borderRadius: w * 0.13, overflow: "hidden", position: "relative", background: "#111" }}>{children}</div>
   </div>
 );
 
-const Check: React.FC<{ at: number; size?: number }> = ({ at, size = 64 }) => {
+export const Check: React.FC<{ at: number; size?: number }> = ({ at, size = 64 }) => {
   const f = useCurrentFrame();
   const s = spring({ frame: f - F(at), fps: FPS, config: { damping: 9, stiffness: 220 } });
   return (
@@ -117,7 +117,7 @@ const Check: React.FC<{ at: number; size?: number }> = ({ at, size = 64 }) => {
   );
 };
 
-const Store: React.FC<{ size?: number; dark?: boolean }> = ({ size = 120 }) => (
+export const Store: React.FC<{ size?: number; dark?: boolean }> = ({ size = 120 }) => (
   <svg width={size} height={size} viewBox="0 0 60 60">
     <rect x="6" y="18" width="48" height="36" fill="#2b2b2b" />
     <rect x="22" y="32" width="16" height="22" fill="#0a0a0a" />

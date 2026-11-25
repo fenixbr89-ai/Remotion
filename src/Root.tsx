@@ -4,6 +4,7 @@ import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
 import { Wayfluency } from "./Wayfluency/Wayfluency";
 import { MotionAd } from "./MotionAd/MotionAd";
+import { Motion50, M50_TOTAL } from "./Motion50/Motion50";
 import { TOTAL as MA_TOTAL } from "./MotionAd/theme";
 import { F, TOTAL_SEC } from "./Wayfluency/theme";
 
@@ -12,6 +13,14 @@ import { F, TOTAL_SEC } from "./Wayfluency/theme";
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      <Composition
+        id="Motion50"
+        component={Motion50}
+        durationInFrames={F(M50_TOTAL)}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
       <Composition
         id="MotionAd"
         component={MotionAd}
