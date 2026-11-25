@@ -1,0 +1,362 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+:root{--p:#5E1F82;--pd:#2A0B45;--pdd:#16052A;--m:#B5097F;--o:#F89C0E;--lav:#F4F0F9;--ink:#2A0B45;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:540px;height:960px;overflow:hidden;font-family:"Inter Display","Inter",sans-serif;}
+.scene{position:absolute;inset:0;overflow:hidden;display:none}
+.scene.on{display:block}
+.dark{background:radial-gradient(ellipse 70% 45% at 50% 52%,#7a2aa8 0%,#4a1470 38%,#22083c 70%,#140426 100%);color:#fff}
+.dark.mag{background:radial-gradient(ellipse 65% 40% at 50% 55%,#a2177f 0%,#5a1680 40%,#22083c 72%,#140426 100%)}
+.light{background:radial-gradient(ellipse 80% 55% at 50% 50%,#ffffff 0%,#f4eff9 55%,#e6ddf0 100%);color:var(--ink)}
+.logo{position:absolute;top:34px;left:50%;transform:translateX(-50%);height:26px}
+.t-sm{font-weight:500;font-size:22px;letter-spacing:-.3px;opacity:.92;text-align:center}
+.t-big{font-weight:800;font-size:58px;letter-spacing:-2px;line-height:1;text-align:center}
+.dark .hl{color:var(--o)}
+.light .hl{position:relative;z-index:0;color:#fff;padding:0 8px}
+.light .hl::before{content:"";position:absolute;left:0;right:0;top:12%;bottom:4%;background:linear-gradient(90deg,var(--p),var(--m));border-radius:10px;z-index:-1;transform:rotate(-1.5deg)}
+.txt{position:absolute;left:0;right:0}
+.stage{position:absolute;inset:0;perspective:1100px}
+.p3{transform-style:preserve-3d}
+/* 3D icon */
+.ic{position:absolute;border-radius:28%;display:flex;align-items:center;justify-content:center;
+ background:linear-gradient(150deg,#9a48cf 0%,#6a24934d 0%,#7b30ad 0%,#5E1F82 50%,#3c0f5c 100%);
+ box-shadow:inset 0 4px 8px rgba(255,255,255,.45),inset 0 -10px 18px rgba(0,0,0,.35),0 24px 50px rgba(120,30,160,.55),0 0 60px rgba(181,9,127,.35)}
+.ic::after{content:"";position:absolute;left:8%;right:8%;top:5%;height:40%;border-radius:40% 40% 50% 50%;background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,0))}
+.ic svg{width:48%;height:48%;position:relative;z-index:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
+.ic.or{background:linear-gradient(150deg,#ffc35a 0%,#F89C0E 50%,#c46a00 100%);box-shadow:inset 0 4px 8px rgba(255,255,255,.55),inset 0 -10px 18px rgba(120,50,0,.35),0 24px 50px rgba(248,156,14,.5)}
+.ic.mg{background:linear-gradient(150deg,#e04aa8 0%,#B5097F 50%,#6e0450 100%)}
+.ic.wh{background:linear-gradient(150deg,#ffffff 0%,#f3eef8 60%,#ddd0ea 100%);box-shadow:inset 0 4px 8px #fff,inset 0 -10px 18px rgba(94,31,130,.18),0 30px 60px rgba(94,31,130,.35)}
+.blur1{filter:blur(5px);opacity:.85}.blur2{filter:blur(10px);opacity:.75}
+.glass{position:absolute;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.35);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 30px 60px rgba(10,0,30,.45);backdrop-filter:blur(14px);color:#fff}
+.wcard{position:absolute;border-radius:22px;background:linear-gradient(160deg,#ffffff,#f7f3fb);border:1px solid #fff;box-shadow:0 30px 60px rgba(94,31,130,.22),0 4px 10px rgba(94,31,130,.08);color:var(--ink)}
+.handle{font-weight:600;font-size:15px}
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<linearGradient id="gMO" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5097F"/><stop offset="1" stop-color="#F89C0E"/></linearGradient>
+<linearGradient id="gMO2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B5097F"/><stop offset=".6" stop-color="#e2507a"/><stop offset="1" stop-color="#F89C0E"/></linearGradient>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="#fff"/></symbol>
+<symbol id="i-wifi" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M2.5 9a14 14 0 0 1 19 0"/><path d="M5.5 12.5a9.5 9.5 0 0 1 13 0"/><path d="M8.8 16a5 5 0 0 1 6.4 0"/><circle cx="12" cy="19.4" r="1.3" fill="#fff" stroke="none"/></symbol>
+<symbol id="i-wifi-weak" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M2.5 9a14 14 0 0 1 19 0" stroke="rgba(255,255,255,.25)"/><path d="M5.5 12.5a9.5 9.5 0 0 1 13 0" stroke="rgba(255,255,255,.25)"/><path d="M8.8 16a5 5 0 0 1 6.4 0" stroke="#fff"/><circle cx="12" cy="19.4" r="1.3" fill="#fff"/></symbol>
+<symbol id="i-tv" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="12.5" rx="2.5"/><path d="M8 21h8"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.8"/><path d="M10.5 18.2h3"/></symbol>
+<symbol id="i-laptop" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="5" width="15" height="10" rx="1.8"/><path d="M2.5 19h19"/></symbol>
+<symbol id="i-game" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10a4.5 4.5 0 0 1 4.4 5.4l-.8 4a2.6 2.6 0 0 1-4.5 1.2L14.4 16H9.6l-1.7 1.6a2.6 2.6 0 0 1-4.5-1.2l-.8-4A4.5 4.5 0 0 1 7 7z"/><path d="M8 10.2v3M6.5 11.7h3"/><circle cx="15.8" cy="11" r=".9" fill="#fff"/><circle cx="17.4" cy="12.8" r=".9" fill="#fff"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9L2.4 17.6A2 2 0 0 0 4.1 20.6h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" fill="#F89C0E"/><path d="M12 9v4.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16.6" r="1.2" fill="#fff"/></symbol>
+<symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0V4z" fill="rgba(255,255,255,.25)"/><path d="M7 6H4.5a3 3 0 0 0 3 4M17 6h2.5a3 3 0 0 1-3 4"/><path d="M12 14v3.5M8.5 20.5h7M9.5 17.5h5"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z" fill="#fff"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2.5L4.5 13.5h6l-1 8 9-11h-6z" fill="#fff"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3.5c5 0 9 3.4 9 7.8s-4 7.8-9 7.8c-1.2 0-2.3-.2-3.3-.5L4 20.5l1.3-3.9C3.8 15.2 3 13.3 3 11.3 3 6.9 7 3.5 12 3.5z"/></symbol>
+<symbol id="i-tel" viewBox="0 0 24 24"><path d="M6.6 3.2l2.7-.6a1.3 1.3 0 0 1 1.5.8l1.2 3a1.3 1.3 0 0 1-.4 1.5l-1.6 1.3a12 12 0 0 0 4.8 4.8l1.3-1.6a1.3 1.3 0 0 1 1.5-.4l3 1.2a1.3 1.3 0 0 1 .8 1.5l-.6 2.7a1.3 1.3 0 0 1-1.3 1C10.9 18.6 5.4 13.1 5.6 4.5a1.3 1.3 0 0 1 1-1.3z" fill="#fff"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.5h8l4.5 4.5v14.5H6z"/><path d="M9 12h6M9 16h6"/></symbol>
+<symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M3.5 16a8.5 8.5 0 1 1 17 0"/><path d="M12 16l4.5-5"/></symbol>
+<symbol id="i-head" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="13" width="4" height="6" rx="1.5" fill="#fff"/><rect x="17" y="13" width="4" height="6" rx="1.5" fill="#fff"/></symbol>
+<symbol id="i-cam" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"><rect x="2.5" y="6.5" width="13" height="11" rx="2.5"/><path d="M15.5 10.5l6-3.5v10l-6-3.5z"/></symbol>
+</defs></svg>
+
+<!-- ===== CENA 1 ===== -->
+<section class="scene dark" id="s1">
+  <img class="logo" src="assets/logo-h-white.png">
+  <div class="stage">
+    <div class="ic blur2" style="width:190px;height:190px;left:-60px;top:640px;transform:rotate(-18deg)"><svg><use href="#i-wifi"/></svg></div>
+    <div class="ic mg blur1" style="width:110px;height:110px;right:-20px;top:150px;transform:rotate(16deg)"><svg><use href="#i-game"/></svg></div>
+    <div class="ic or blur2" style="width:70px;height:70px;right:70px;top:760px;transform:rotate(10deg)"><svg><use href="#i-tv"/></svg></div>
+    <div class="p3" style="position:absolute;left:50%;top:300px;width:240px;height:240px;margin-left:-120px;transform:rotateY(-16deg) rotateX(10deg)">
+      <svg viewBox="0 0 240 240" style="position:absolute;inset:0;filter:drop-shadow(0 0 14px rgba(248,156,14,.6))">
+        <circle cx="120" cy="120" r="108" stroke="rgba(255,255,255,.12)" stroke-width="10" fill="none"/>
+        <circle cx="120" cy="120" r="108" stroke="url(#gMO)" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="230 999" transform="rotate(-90 120 120)"/>
+      </svg>
+      <div class="ic" style="width:140px;height:140px;left:50px;top:50px;transform:translateZ(40px)"><svg><use href="#i-play"/></svg></div>
+    </div>
+  </div>
+  <div class="txt" style="top:590px">
+    <div class="t-sm">a sua série</div>
+    <div class="t-big" style="margin-top:6px"><span class="hl">travou</span> de novo?</div>
+  </div>
+</section>
+
+<!-- ===== CENA 2 ===== -->
+<section class="scene dark" id="s2">
+  <img class="logo" src="assets/logo-h-white.png">
+  <div class="stage">
+    <div class="ic blur2" style="width:230px;height:230px;left:150px;top:-90px;opacity:.5"><svg><use href="#i-play"/></svg></div>
+    <div class="ic mg blur2" style="width:150px;height:150px;left:-50px;top:720px;transform:rotate(-14deg)"><svg><use href="#i-wifi-weak"/></svg></div>
+    <div class="glass p3" style="left:56px;top:330px;width:430px;height:300px;padding:28px;transform:rotateY(24deg) rotateX(10deg) rotateZ(-3deg)">
+      <div style="display:flex;align-items:center;gap:12px">
+        <svg style="width:34px;height:34px"><use href="#i-alert"/></svg>
+        <div style="font-weight:700;font-size:24px">conexão instável</div>
+      </div>
+      <div style="font-size:16px;opacity:.75;margin-top:12px;line-height:1.35">o vídeo está carregando…<br>aguarde alguns instantes</div>
+      <div style="margin-top:28px;height:12px;border-radius:8px;background:rgba(255,255,255,.15);overflow:hidden">
+        <div style="width:99%;height:100%;border-radius:8px;background:linear-gradient(90deg,#B5097F,#F89C0E);box-shadow:0 0 14px #F89C0E"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:14px;opacity:.8"><span>carregando</span><span style="font-weight:700">99%</span></div>
+      <div style="margin-top:26px;height:46px;border-radius:14px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px">tentar novamente</div>
+    </div>
+    <div class="ic or" style="width:84px;height:84px;left:400px;top:280px;transform:rotate(12deg)"><svg><use href="#i-alert"/></svg></div>
+  </div>
+  <div class="txt" style="top:700px">
+    <div class="t-sm">e sempre na</div>
+    <div class="t-big" style="font-size:50px;margin-top:4px">melhor <span class="hl">parte.</span></div>
+  </div>
+</section>
+
+<!-- ===== CENA 3 ===== -->
+<section class="scene dark mag" id="s3">
+  <img class="logo" src="assets/logo-h-white.png">
+  <div class="txt" style="top:150px">
+    <div class="t-sm">e quando a casa toda</div>
+    <div class="t-big" style="margin-top:6px">conecta <span class="hl">junto…</span></div>
+  </div>
+  <div class="stage">
+    <svg viewBox="0 0 540 960" style="position:absolute;inset:0">
+      <g stroke="rgba(255,255,255,.28)" stroke-width="2" stroke-dasharray="5 7" fill="none">
+        <path d="M270 560 L120 430"/><path d="M270 560 L420 430"/><path d="M270 560 L110 720"/><path d="M270 560 L430 720"/>
+      </g>
+    </svg>
+    <div class="ic" style="width:150px;height:150px;left:195px;top:485px;transform:rotateX(12deg)"><svg><use href="#i-wifi-weak"/></svg></div>
+    <div style="position:absolute;left:330px;top:470px;width:38px;height:38px;border-radius:50%;background:#F89C0E;color:#fff;font-weight:800;font-size:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px #F89C0E">!</div>
+    <div class="glass" style="width:86px;height:86px;left:77px;top:388px;border-radius:26px;display:flex;align-items:center;justify-content:center;transform:rotate(-8deg)"><svg style="width:42px;height:42px"><use href="#i-tv"/></svg></div>
+    <div class="glass" style="width:86px;height:86px;left:377px;top:388px;border-radius:26px;display:flex;align-items:center;justify-content:center;transform:rotate(8deg)"><svg style="width:42px;height:42px"><use href="#i-phone"/></svg></div>
+    <div class="glass" style="width:86px;height:86px;left:67px;top:677px;border-radius:26px;display:flex;align-items:center;justify-content:center;transform:rotate(6deg)"><svg style="width:42px;height:42px"><use href="#i-laptop"/></svg></div>
+    <div class="glass" style="width:86px;height:86px;left:387px;top:677px;border-radius:26px;display:flex;align-items:center;justify-content:center;transform:rotate(-6deg)"><svg style="width:42px;height:42px"><use href="#i-game"/></svg></div>
+    <div class="glass" style="left:150px;top:800px;width:240px;height:52px;border-radius:26px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;font-weight:600">
+      <span style="width:10px;height:10px;border-radius:50%;background:#F89C0E;box-shadow:0 0 10px #F89C0E"></span>sinal fraco · 4 aparelhos</div>
+  </div>
+</section>
+
+<!-- ===== CENA 4 ===== -->
+<section class="scene light" id="s4">
+  <div class="stage">
+    <svg viewBox="0 0 540 960" style="position:absolute;inset:0">
+      <g stroke="url(#gMO2)" stroke-width="2.5" stroke-linecap="round" opacity=".7"><path d="M365 560 L500 560"/><path d="M358 596 L427 625"/><path d="M337 627 L433 723"/><path d="M306 648 L335 717"/><path d="M270 655 L270 790"/><path d="M234 648 L205 717"/><path d="M203 627 L107 723"/><path d="M182 596 L113 625"/><path d="M175 560 L40 560"/><path d="M182 524 L113 495"/><path d="M203 493 L107 397"/><path d="M234 472 L205 403"/><path d="M270 465 L270 330"/><path d="M306 472 L335 403"/><path d="M337 493 L433 397"/><path d="M358 524 L427 495"/></g>
+    </svg>
+    <div style="position:absolute;left:170px;top:460px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(181,9,127,.25),rgba(181,9,127,0) 70%);transform:scale(1.8)"></div>
+    <div class="ic wh" style="width:180px;height:180px;left:180px;top:470px;transform:rotateY(-10deg) rotateX(8deg)"><img src="assets/symbol.png" style="width:60%;position:relative;z-index:1"></div>
+    <div class="ic blur2" style="width:120px;height:120px;left:-30px;top:120px;transform:rotate(-20deg)"><svg><use href="#i-wifi"/></svg></div>
+    <div class="ic or blur1" style="width:80px;height:80px;left:430px;top:800px;transform:rotate(14deg)"><svg><use href="#i-bolt"/></svg></div>
+  </div>
+  <div class="txt" style="top:250px">
+    <div class="t-sm">pra isso existe a</div>
+    <div class="t-big" style="margin-top:8px;font-size:64px"><span class="hl">allrede.</span></div>
+  </div>
+</section>
+
+<!-- ===== CENA 5 ===== -->
+<section class="scene light" id="s5">
+  <img class="logo" src="assets/logo-h.png">
+  <div class="txt" style="top:150px">
+    <div class="t-sm">internet de</div>
+    <div class="t-big" style="margin-top:8px"><span class="hl">fibra óptica</span></div>
+  </div>
+  <div class="stage">
+    <div class="wcard p3" style="left:70px;top:340px;width:400px;height:330px;padding:28px;transform:rotateY(-20deg) rotateX(12deg) rotateZ(2deg)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:15px;font-weight:600;opacity:.6">status da conexão</div>
+        <div style="font-size:13px;font-weight:700;color:#fff;background:linear-gradient(90deg,#5E1F82,#B5097F);padding:6px 12px;border-radius:20px">fibra</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:18px">
+        <span style="width:14px;height:14px;border-radius:50%;background:#22c55e;box-shadow:0 0 12px #22c55e"></span>
+        <div style="font-weight:800;font-size:38px;letter-spacing:-1px">estável</div>
+      </div>
+      <svg viewBox="0 0 340 120" style="width:100%;margin-top:14px">
+        <defs><linearGradient id="s5a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B5097F" stop-opacity=".25"/><stop offset="1" stop-color="#B5097F" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0 70 C40 66 60 58 90 60 S150 40 190 42 S260 30 340 26 L340 120 L0 120Z" fill="url(#s5a)"/>
+        <path d="M0 70 C40 66 60 58 90 60 S150 40 190 42 S260 30 340 26" stroke="url(#gMO2)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle cx="340" cy="26" r="7" fill="#F89C0E"/>
+      </svg>
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <div style="flex:1;background:#f1eaf8;border-radius:14px;padding:10px 12px"><div style="font-size:12px;opacity:.6">latência</div><div style="font-weight:800;font-size:20px">baixa</div></div>
+        <div style="flex:1;background:#f1eaf8;border-radius:14px;padding:10px 12px"><div style="font-size:12px;opacity:.6">sinal</div><div style="font-weight:800;font-size:20px">forte</div></div>
+      </div>
+    </div>
+    <div class="ic" style="width:96px;height:96px;left:400px;top:300px;transform:rotate(10deg)"><svg><use href="#i-wifi"/></svg></div>
+    <div class="ic mg blur2" style="width:130px;height:130px;left:-40px;top:730px;transform:rotate(-12deg)"><svg><use href="#i-bolt"/></svg></div>
+  </div>
+</section>
+
+<!-- ===== CENA 6 ===== -->
+<section class="scene dark" id="s6">
+  <img class="logo" src="assets/logo-h-white.png">
+  <div class="txt" style="top:150px">
+    <div class="t-sm">planos de até</div>
+  </div>
+  <div class="stage">
+    <div class="ic or blur2" style="width:150px;height:150px;left:420px;top:90px;transform:rotate(16deg)"><svg><use href="#i-bolt"/></svg></div>
+    <div class="ic blur2" style="width:120px;height:120px;left:-40px;top:780px;transform:rotate(-16deg)"><svg><use href="#i-gauge"/></svg></div>
+    <div class="glass p3" style="left:60px;top:240px;width:420px;height:470px;border-radius:34px;transform:rotateY(18deg) rotateX(8deg)">
+      <svg viewBox="0 0 420 300" style="position:absolute;left:0;top:30px;width:100%">
+        <path d="M70 250 A140 140 0 0 1 350 250" stroke="rgba(255,255,255,.15)" stroke-width="22" fill="none" stroke-linecap="round"/>
+        <path d="M70 250 A140 140 0 0 1 350 250" stroke="url(#gMO2)" stroke-width="22" fill="none" stroke-linecap="round" style="filter:drop-shadow(0 0 12px rgba(248,156,14,.7))"/>
+        <g stroke="rgba(255,255,255,.5)" stroke-width="3" stroke-linecap="round">
+          <path d="M100 250 h10"/><path d="M310 250 h10"/><path d="M210 140 v10"/><path d="M132 172 l7 7"/><path d="M288 172 l-7 7"/>
+        </g>
+        <path d="M210 250 L320 238" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="210" cy="250" r="14" fill="#fff"/>
+      </svg>
+      <div style="position:absolute;left:0;right:0;top:300px;text-align:center">
+        <div style="font-weight:800;font-size:108px;letter-spacing:-5px;line-height:1;text-shadow:0 8px 30px rgba(248,156,14,.45)">1000</div>
+        <div style="font-weight:800;font-size:34px;letter-spacing:6px;color:var(--o);margin-top:2px">MEGA</div>
+      </div>
+    </div>
+  </div>
+  <div class="txt" style="top:780px">
+    <div class="t-sm" style="font-size:20px;opacity:.8">velocidade pra tudo que você faz</div>
+  </div>
+</section>
+
+<!-- ===== CENA 7 ===== -->
+<section class="scene light" id="s7">
+  <img class="logo" src="assets/logo-h.png">
+  <div class="txt" style="top:150px">
+    <div class="t-sm">pra todo mundo</div>
+    <div class="t-big" style="margin-top:8px;font-size:52px"><span class="hl">ao mesmo tempo</span></div>
+  </div>
+  <div class="stage">
+    <div class="p3" style="position:absolute;left:70px;top:330px;width:400px;transform:rotateY(-16deg) rotateX(6deg)">
+      <div class="wcard" style="position:relative;height:84px;display:flex;align-items:center;gap:16px;padding:0 18px;margin-bottom:16px">
+        <div class="ic" style="position:relative;width:54px;height:54px;border-radius:16px;flex:none"><svg><use href="#i-tv"/></svg></div>
+        <div style="flex:1"><div style="font-weight:700;font-size:19px">filmes e séries</div><div style="font-size:13px;opacity:.55">em alta qualidade</div></div>
+        <div style="width:30px;height:30px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center"><svg style="width:18px;height:18px"><use href="#i-check"/></svg></div>
+      </div>
+      <div class="wcard" style="position:relative;height:84px;display:flex;align-items:center;gap:16px;padding:0 18px;margin-bottom:16px;transform:translateX(26px)">
+        <div class="ic mg" style="position:relative;width:54px;height:54px;border-radius:16px;flex:none"><svg><use href="#i-game"/></svg></div>
+        <div style="flex:1"><div style="font-weight:700;font-size:19px">jogos online</div><div style="font-size:13px;opacity:.55">sem lag na partida</div></div>
+        <div style="width:30px;height:30px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center"><svg style="width:18px;height:18px"><use href="#i-check"/></svg></div>
+      </div>
+      <div class="wcard" style="position:relative;height:84px;display:flex;align-items:center;gap:16px;padding:0 18px;margin-bottom:16px">
+        <div class="ic or" style="position:relative;width:54px;height:54px;border-radius:16px;flex:none"><svg><use href="#i-laptop"/></svg></div>
+        <div style="flex:1"><div style="font-weight:700;font-size:19px">home office</div><div style="font-size:13px;opacity:.55">reunião sem cair</div></div>
+        <div style="width:30px;height:30px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center"><svg style="width:18px;height:18px"><use href="#i-check"/></svg></div>
+      </div>
+      <div class="wcard" style="position:relative;height:84px;display:flex;align-items:center;gap:16px;padding:0 18px;transform:translateX(26px)">
+        <div class="ic" style="position:relative;width:54px;height:54px;border-radius:16px;flex:none"><svg><use href="#i-cam"/></svg></div>
+        <div style="flex:1"><div style="font-weight:700;font-size:19px">chamadas de vídeo</div><div style="font-size:13px;opacity:.55">imagem nítida</div></div>
+        <div style="width:30px;height:30px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center"><svg style="width:18px;height:18px"><use href="#i-check"/></svg></div>
+      </div>
+    </div>
+    <div class="ic mg blur2" style="width:120px;height:120px;left:440px;top:780px;transform:rotate(14deg)"><svg><use href="#i-phone"/></svg></div>
+  </div>
+</section>
+
+<!-- ===== CENA 8 ===== -->
+<section class="scene dark" id="s8">
+  <img class="logo" src="assets/logo-h-white.png">
+  <div class="txt" style="top:120px">
+    <div class="t-sm">e tudo na palma da mão</div>
+    <div class="t-big" style="margin-top:6px;font-size:52px">app <span class="hl">Minha All</span></div>
+  </div>
+  <div class="stage" style="perspective:1300px">
+    <div class="p3" style="position:absolute;left:115px;top:300px;width:310px;height:640px;transform:rotateY(-20deg) rotateX(10deg) rotateZ(4deg)">
+      <!-- thickness -->
+      <div style="position:absolute;inset:0;border-radius:52px;background:linear-gradient(90deg,#6d6a72,#c9c6cf 40%,#5a5760);transform:translateZ(-12px) translateX(6px)"></div>
+      <div style="position:absolute;inset:0;border-radius:52px;background:linear-gradient(135deg,#dcd9e0,#8d8a94 30%,#e6e3ea 55%,#76737d);box-shadow:0 50px 90px rgba(0,0,0,.55)"></div>
+      <div style="position:absolute;inset:7px;border-radius:46px;background:#0c0414"></div>
+      <div style="position:absolute;inset:13px;border-radius:40px;overflow:hidden;background:linear-gradient(180deg,#f7f3fb,#ece4f4)">
+        <div style="position:absolute;left:50%;top:10px;width:92px;height:27px;margin-left:-46px;background:#000;border-radius:20px;z-index:3"></div>
+        <div style="height:170px;background:linear-gradient(150deg,#7b30ad,#5E1F82 50%,#3c0f5c);padding:58px 20px 0;color:#fff">
+          <img src="assets/logo-h-white.png" style="height:18px">
+          <div style="font-size:13px;opacity:.75;margin-top:16px">olá, cliente 👋</div>
+          <div style="font-weight:800;font-size:22px;margin-top:2px">sua internet está ok</div>
+        </div>
+        <div style="margin:-28px 16px 0;background:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 10px 24px rgba(94,31,130,.18);position:relative">
+          <div style="font-size:11px;opacity:.55;color:#2A0B45">seu plano</div>
+          <div style="display:flex;align-items:baseline;gap:6px;color:#2A0B45"><span style="font-weight:800;font-size:30px;letter-spacing:-1px">1000</span><span style="font-weight:700;font-size:14px;color:#B5097F">MEGA</span></div>
+          <div style="height:6px;border-radius:4px;background:linear-gradient(90deg,#B5097F,#F89C0E);margin-top:6px"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 16px;color:#2A0B45">
+          <div style="background:#fff;border-radius:16px;padding:12px;box-shadow:0 4px 12px rgba(94,31,130,.1)"><div class="ic" style="position:relative;width:34px;height:34px;border-radius:11px"><svg><use href="#i-doc"/></svg></div><div style="font-weight:700;font-size:12px;margin-top:8px">2ª via da fatura</div></div>
+          <div style="background:#fff;border-radius:16px;padding:12px;box-shadow:0 4px 12px rgba(94,31,130,.1)"><div class="ic mg" style="position:relative;width:34px;height:34px;border-radius:11px"><svg><use href="#i-head"/></svg></div><div style="font-weight:700;font-size:12px;margin-top:8px">suporte</div></div>
+          <div style="background:#fff;border-radius:16px;padding:12px;box-shadow:0 4px 12px rgba(94,31,130,.1)"><div class="ic or" style="position:relative;width:34px;height:34px;border-radius:11px"><svg><use href="#i-gauge"/></svg></div><div style="font-weight:700;font-size:12px;margin-top:8px">teste de velocidade</div></div>
+          <div style="background:#fff;border-radius:16px;padding:12px;box-shadow:0 4px 12px rgba(94,31,130,.1)"><div class="ic" style="position:relative;width:34px;height:34px;border-radius:11px"><svg><use href="#i-wifi"/></svg></div><div style="font-weight:700;font-size:12px;margin-top:8px">meu wi-fi</div></div>
+        </div>
+      </div>
+    </div>
+    <!-- pop-out card in front -->
+    <div class="wcard" style="left:250px;top:770px;width:250px;padding:14px 16px;display:flex;align-items:center;gap:12px;transform:rotate(-4deg);box-shadow:0 30px 60px rgba(0,0,0,.45)">
+      <div style="width:40px;height:40px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 0 16px rgba(34,197,94,.6)"><svg style="width:22px;height:22px"><use href="#i-check"/></svg></div>
+      <div><div style="font-weight:800;font-size:16px">fatura paga</div><div style="font-size:12px;opacity:.55">pelo app, em segundos</div></div>
+    </div>
+    <div class="ic mg blur2" style="width:130px;height:130px;left:-40px;top:700px;transform:rotate(-14deg)"><svg><use href="#i-phone"/></svg></div>
+  </div>
+</section>
+
+<!-- ===== CENA 9 ===== -->
+<section class="scene light" id="s9">
+  <img class="logo" src="assets/logo-h.png">
+  <div class="stage">
+    <div style="position:absolute;left:120px;top:300px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(248,156,14,.35),rgba(248,156,14,0) 70%)"></div>
+    <div class="ic or" style="width:190px;height:190px;left:175px;top:350px;transform:rotateY(14deg) rotateX(8deg)"><svg><use href="#i-trophy"/></svg></div>
+    <div class="ic mg" style="width:64px;height:64px;left:110px;top:330px;transform:rotate(-14deg)"><svg><use href="#i-star"/></svg></div>
+    <div class="ic" style="width:52px;height:52px;left:385px;top:540px;transform:rotate(12deg)"><svg><use href="#i-star"/></svg></div>
+    <div class="ic or blur2" style="width:110px;height:110px;left:420px;top:150px;transform:rotate(18deg)"><svg><use href="#i-star"/></svg></div>
+    <div class="ic blur2" style="width:140px;height:140px;left:-40px;top:790px;transform:rotate(-12deg)"><svg><use href="#i-star"/></svg></div>
+  </div>
+  <div class="txt" style="top:620px">
+    <div class="t-sm">o provedor</div>
+    <div class="t-big" style="margin-top:8px;font-size:54px;line-height:1.08">número 1<br><span class="hl">do Brasil</span></div>
+  </div>
+</section>
+
+<!-- ===== CENA 10 ===== -->
+<section class="scene dark mag" id="s10">
+  <img class="logo" src="assets/logo-h-white.png">
+  <div class="txt" style="top:150px">
+    <div class="t-sm">reconhecida por</div>
+    <div class="t-big" style="margin-top:6px">quem <span class="hl">usa</span></div>
+  </div>
+  <div class="stage">
+    <div class="glass p3" style="left:40px;top:330px;width:300px;height:200px;padding:22px;transform:rotateY(22deg) rotateX(6deg) rotateZ(-4deg)">
+      <div class="ic or" style="position:relative;width:52px;height:52px;border-radius:16px"><svg><use href="#i-star"/></svg></div>
+      <div style="font-weight:800;font-size:36px;letter-spacing:-1px;margin-top:14px">RA1000</div>
+      <div style="font-size:15px;opacity:.75">selo de excelência no<br>atendimento ao cliente</div>
+    </div>
+    <div class="glass p3" style="left:200px;top:540px;width:300px;height:200px;padding:22px;transform:rotateY(-22deg) rotateX(6deg) rotateZ(4deg)">
+      <div class="ic" style="position:relative;width:52px;height:52px;border-radius:16px"><svg><use href="#i-trophy"/></svg></div>
+      <div style="font-weight:800;font-size:26px;letter-spacing:-.6px;margin-top:14px;line-height:1.05">Melhores<br>Empresas 2026</div>
+      <div style="font-size:15px;opacity:.75;margin-top:4px">prêmio conquistado</div>
+    </div>
+    <div class="ic or blur2" style="width:120px;height:120px;left:420px;top:240px;transform:rotate(16deg)"><svg><use href="#i-star"/></svg></div>
+    <div class="ic blur2" style="width:140px;height:140px;left:-50px;top:760px;transform:rotate(-12deg)"><svg><use href="#i-check"/></svg></div>
+  </div>
+</section>
+
+<!-- ===== CENA 11 ===== -->
+<section class="scene light" id="s11">
+  <img class="logo" src="assets/logo-h.png">
+  <div class="stage">
+    <img src="assets/symbol.png" style="position:absolute;left:-60px;top:160px;width:340px;filter:blur(14px);opacity:.35;transform:rotate(-14deg)">
+    <img src="assets/symbol.png" style="position:absolute;left:330px;top:640px;width:260px;filter:blur(10px);opacity:.35;transform:rotate(16deg)">
+  </div>
+  <div class="txt" style="top:380px">
+    <div class="t-sm" style="font-size:26px">viva uma</div>
+    <div class="t-big" style="margin-top:12px;font-size:60px;line-height:1.08">experiência<br><span class="hl">completa</span></div>
+  </div>
+</section>
+
+<!-- ===== CENA 12 CTA ===== -->
+<section class="scene light" id="s12">
+  <div class="stage">
+    <div class="ic wh" style="width:120px;height:120px;left:210px;top:170px"><img src="assets/symbol.png" style="width:60%;position:relative;z-index:1"></div>
+  </div>
+  <div class="txt" style="top:320px;text-align:center">
+    <img src="assets/wordmark.png" style="height:58px">
+    <div class="handle" style="margin-top:12px;color:#5E1F82;opacity:.8">@allredetelecom</div>
+    <div class="t-sm" style="margin-top:34px;font-size:22px">chame no <b>whatsapp</b> agora</div>
+    <div style="margin:18px auto 0;width:400px;height:76px;border-radius:40px;background:linear-gradient(135deg,#7b30ad,#5E1F82 55%,#B5097F);color:#fff;display:flex;align-items:center;justify-content:center;gap:12px;font-weight:800;font-size:24px;box-shadow:0 20px 40px rgba(94,31,130,.4),inset 0 2px 0 rgba(255,255,255,.3)">
+      <svg style="width:30px;height:30px"><use href="#i-chat"/></svg>Chamar no WhatsApp</div>
+    <div class="wcard" style="position:relative;margin:28px auto 0;width:400px;height:96px;display:flex;align-items:center;gap:16px;padding:0 20px;text-align:left">
+      <div class="ic" style="position:relative;width:58px;height:58px;border-radius:18px;flex:none"><svg><use href="#i-tel"/></svg></div>
+      <div><div style="font-size:12px;font-weight:700;letter-spacing:2px;opacity:.55">CENTRAL ALLREDE</div><div style="font-weight:800;font-size:30px;letter-spacing:-.5px">0800 033 0307</div></div>
+    </div>
+  </div>
+</section>
+
+<script>
+const n=new URLSearchParams(location.search).get('s')||'1';
+document.getElementById('s'+n).classList.add('on');
+</script>
+</body></html>
