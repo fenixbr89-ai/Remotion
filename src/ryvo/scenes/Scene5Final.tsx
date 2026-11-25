@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { useTheme } from "../ThemeContext";
-import { Bubble, Headline, LogoMark, LogoText, Reveal, useProgress } from "../components";
+import { Bubble, Headline, LogoMark, Reveal, useProgress } from "../components";
 import { FONT } from "../theme";
 
 const WhatsIcon: React.FC<{ size: number }> = ({ size }) => (
@@ -42,16 +42,15 @@ export const Scene5Final: React.FC = () => {
 
       <div style={{ position: "absolute", left: 0, right: 0, top: 250, display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ opacity: logo, filter: `blur(${(1 - logo) * 16}px)`, transform: `scale(${0.9 + logo * 0.1})`, textAlign: "center" }}>
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 26 }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 34 }}>
             <LogoMark
-              height={150}
+              height={230}
               style={{
                 transform: `translateX(${(1 - logo) * -60}px) rotate(${(1 - logo) * -8}deg)`,
                 filter: `drop-shadow(0 0 ${30 + Math.sin(t * 2) * 10}px rgba(117,71,232,0.55))`,
               }}
             />
           </div>
-          <LogoText size={110} />
           <div style={{ fontSize: 28, letterSpacing: "0.42em", color: T.accentText, fontWeight: 500, marginTop: 10, paddingLeft: "0.42em" }}>
             ESTÚDIO CRIATIVO
           </div>

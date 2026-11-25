@@ -8,7 +8,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { FONT, LOGO_FONT, P } from "./theme";
+import { FONT, P } from "./theme";
 import { useTheme } from "./ThemeContext";
 
 const ease = Easing.bezier(0.16, 1, 0.3, 1);
@@ -209,28 +209,6 @@ export const Bubble: React.FC<{ size: number; x: number; y: number; phase?: numb
   );
 };
 
-export const LogoText: React.FC<{ size: number; style?: React.CSSProperties }> = ({ size, style }) => {
-  const T = useTheme();
-  return (
-  <span
-    style={{
-      fontFamily: LOGO_FONT,
-      fontStretch: "125%",
-      fontWeight: 800,
-      fontSize: size,
-      letterSpacing: "0.1em",
-      background: T.logoGradient,
-      WebkitBackgroundClip: "text",
-      backgroundClip: "text",
-      color: "transparent",
-      ...style,
-    }}
-  >
-    RYVO
-  </span>
-  );
-};
-
 /** Official RYVO "R" symbol (PNG with transparency, aspect 1348:1060). */
 export const LogoMark: React.FC<{ height: number; white?: boolean; style?: React.CSSProperties }> = ({
   height,
@@ -263,10 +241,7 @@ export const BrandBar: React.FC<{ opacity?: number }> = ({ opacity = 1 }) => {
       background: T.brandBarBg,
     }}
   >
-    <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-      <LogoMark height={50} />
-      <LogoText size={40} />
-    </div>
+    <LogoMark height={60} />
     <span style={{ fontFamily: FONT, fontSize: 26, letterSpacing: "0.12em", color: T.accentText, fontWeight: 500 }}>
       ESTÚDIO CRIATIVO
     </span>

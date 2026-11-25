@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame } from "remotion";
-import { Bubble, Chips, Eyebrow, GlassTile, Headline, LogoMark, LogoText, useProgress } from "../components";
-import { FONT, LOGO_FONT } from "../theme";
+import { Bubble, Chips, Eyebrow, GlassTile, Headline, LogoMark, useProgress } from "../components";
+import { FONT } from "../theme";
 
 const Card: React.FC<{ front?: boolean }> = ({ front }) => (
   <div
@@ -21,17 +21,12 @@ const Card: React.FC<{ front?: boolean }> = ({ front }) => (
   >
     {front ? (
       <>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <LogoMark height={44} white />
-          <span style={{ fontFamily: LOGO_FONT, fontStretch: "125%", fontWeight: 800, fontSize: 40, letterSpacing: "0.1em", color: "#fff" }}>
-            RYVO
-          </span>
-        </div>
+        <LogoMark height={64} white />
         <span style={{ fontFamily: FONT, fontSize: 16, letterSpacing: "0.2em", color: "rgba(255,255,255,0.85)" }}>ESTÚDIO CRIATIVO</span>
       </>
     ) : (
       <>
-        <LogoText size={26} style={{ background: "linear-gradient(90deg, #7547E8, #087BFF)", WebkitBackgroundClip: "text", backgroundClip: "text" }} />
+        <LogoMark height={40} />
         <div>
           <div style={{ height: 9, width: 180, borderRadius: 5, background: "rgba(117,71,232,0.45)" }} />
           <div style={{ height: 9, width: 130, borderRadius: 5, marginTop: 10, background: "rgba(117,71,232,0.25)" }} />
@@ -89,7 +84,7 @@ const Visual: React.FC = () => {
           />
         ))}
         <div style={{ position: "absolute", left: 36, bottom: 30 }}>
-          <LogoText size={24} />
+          <LogoMark height={34} />
         </div>
       </div>
 
@@ -133,12 +128,6 @@ const Visual: React.FC = () => {
           alignItems: "center",
           justifyContent: "center",
           boxShadow: "0 20px 40px rgba(8,123,255,0.45), inset 0 2px 0 rgba(255,255,255,0.5)",
-          fontFamily: LOGO_FONT,
-          fontStretch: "125%",
-          fontWeight: 800,
-          fontSize: 30,
-          color: "#fff",
-          letterSpacing: "0.08em",
         }}
       >
         <LogoMark height={64} white />

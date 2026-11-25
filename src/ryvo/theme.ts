@@ -1,12 +1,11 @@
 import "@fontsource-variable/inter";
 import "@fontsource-variable/inter/wght-italic.css";
-import "@fontsource-variable/archivo/wdth.css";
 
 export const FPS = 30;
 export const W = 1080;
 export const H = 1920;
 
-// Tipografia: no máximo 2 famílias — Inter (todos os textos) e Archivo Expanded (só o nome RYVO).
+// Tipografia: uma família só (Inter). A marca aparece apenas pelo símbolo R.
 
 // Paleta oficial RYVO
 export const P = {
@@ -27,7 +26,6 @@ export const C = {
 };
 
 export const FONT = "'Inter Variable', Inter, sans-serif";
-export const LOGO_FONT = "'Archivo Variable', Archivo, sans-serif";
 
 export const headlineGradient = `linear-gradient(90deg, ${P.ice} 0%, ${P.lavender} 45%, ${P.violet} 100%)`;
 export const logoGradient = `linear-gradient(90deg, ${P.ice} 0%, ${P.lavender} 100%)`;

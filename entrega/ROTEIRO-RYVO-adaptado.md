@@ -2,7 +2,7 @@
 
 Formato: vertical 1080x1920 (Reels/Stories), 30fps.
 Estilo: glassmorphism escuro com a paleta oficial RYVO: Preto profundo #080812 (base), Violeta elétrico #7547E8 (identidade), Lavanda luminosa #A78BFA (luzes e gradientes), Azul elétrico #087BFF (detalhes tecnológicos) e Branco gelo #F5F3FF (textos). Peças de vidro 3D do Drive ajustadas para o fundo escuro.
-Barra de vidro "RYVO | ESTÚDIO CRIATIVO" fixa embaixo nas cenas 1 a 4 (como no post).
+Barra de vidro com o símbolo R + "ESTÚDIO CRIATIVO" fixa embaixo nas cenas 1 a 4 (como no post).
 
 A locução está igual à do cliente. As mudanças foram só no texto da tela (marcadas com ✎).
 
@@ -44,9 +44,9 @@ A locução está igual à do cliente. As mudanças foram só no texto da tela (
 **Locução:** "E levamos sua comunicação além das telas, com materiais gráficos e publicitários que dão vida à sua marca."
 
 ## CENA 05 — Encerramento / Conversão (~8,0s)
-**Visual:** o anel de pétalas de vidro sobe por trás, a logo RYVO aparece grande no centro e o botão do WhatsApp entra com brilho e pulso.
+**Visual:** o anel de pétalas de vidro sobe por trás, o símbolo R aparece grande no centro e o botão do WhatsApp entra com brilho e pulso.
 **Texto na tela:**
-- RYVO — ESTÚDIO CRIATIVO
+- Símbolo R + ESTÚDIO CRIATIVO
 - Sua próxima ideia **começa aqui.**
 - Botão: Vamos conversar?
 - Solicite seu orçamento pelo **WhatsApp**
@@ -72,5 +72,4 @@ A locução está igual à do cliente. As mudanças foram só no texto da tela (
 
 ## Pendências
 - Confirmar o WhatsApp e mandar o @ do Instagram, se for para aparecer no final.
-- Mandar a logo RYVO em vetor (SVG/PDF) para substituir a versão recriada.
 - Confirmar a pronúncia de "RYVO".
