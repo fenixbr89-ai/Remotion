@@ -82,3 +82,8 @@ para relembrar o visual.
 ### Status (RYVO)
 - Enviado ao cliente para avaliação: `entrega/claro/RYVO-Claro-v3.mp4` (legenda com desfoque).
 - Aguardando a resposta do cliente antes de seguir.
+- Texto da narração enviado: `entrega/NARRACAO-RYVO.txt`.
+- **Correção pendente (fazer quando chegar a narração):** no plano s02 ("não precisa apenas
+  aparecer.") a palavra "aparecer." sai cortada na borda da tela; o travelling tem que terminar
+  com a palavra inteira visível.
+- Quando os áudios chegarem: ajustar cada plano à fala e exportar com som.

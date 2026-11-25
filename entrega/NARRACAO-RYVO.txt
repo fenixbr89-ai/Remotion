@@ -1,0 +1,12 @@
+RYVO — Texto da narração (para a IA de voz)
+
+VOZ: masculina ou feminina, PT-BR, jovem adulta, segura, moderna e sofisticada. Tom publicitário premium, natural, sem exagero.
+AJUSTES: velocidade 0.95 a 1.0 • estabilidade ~50% • mesma voz e mesmas configurações em todas as cenas.
+ARQUIVOS: um MP3 por cena (cena01.mp3 … cena05.mp3), sem música, sem silêncio no início e no fim.
+PRONÚNCIA: "RYVO" sempre do mesmo jeito em todo o vídeo.
+
+cena01: Uma marca não precisa apenas aparecer. Ela precisa ser lembrada.
+cena02: Transformamos ideias em movimento, criando vídeos, animações e experiências visuais que capturam a atenção.
+cena03: Criamos identidades visuais e conteúdos digitais que fortalecem a presença e a personalidade das marcas.
+cena04: E levamos sua comunicação além das telas, com materiais gráficos e publicitários que dão vida à sua marca.
+cena05: RYVO. Criatividade que vai além do visual. Vamos desenvolver seu próximo projeto?
