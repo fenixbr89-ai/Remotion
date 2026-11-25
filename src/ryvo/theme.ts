@@ -6,6 +6,8 @@ export const FPS = 30;
 export const W = 1080;
 export const H = 1920;
 
+// Tipografia: no máximo 2 famílias — Inter (todos os textos) e Archivo Expanded (só o nome RYVO).
+
 // Paleta oficial RYVO
 export const P = {
   black: "#080812", // Preto profundo · base principal

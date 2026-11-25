@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { Bubble, Chips, Eyebrow, GlassTile, Headline, LogoMark, LogoText, useProgress } from "../components";
-import { FONT } from "../theme";
+import { FONT, LOGO_FONT } from "../theme";
 
 const Card: React.FC<{ front?: boolean }> = ({ front }) => (
   <div
@@ -23,7 +23,7 @@ const Card: React.FC<{ front?: boolean }> = ({ front }) => (
       <>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <LogoMark height={44} white />
-          <span style={{ fontFamily: "'Archivo Variable'", fontStretch: "125%", fontWeight: 800, fontSize: 40, letterSpacing: "0.1em", color: "#fff" }}>
+          <span style={{ fontFamily: LOGO_FONT, fontStretch: "125%", fontWeight: 800, fontSize: 40, letterSpacing: "0.1em", color: "#fff" }}>
             RYVO
           </span>
         </div>
@@ -133,7 +133,7 @@ const Visual: React.FC = () => {
           alignItems: "center",
           justifyContent: "center",
           boxShadow: "0 20px 40px rgba(8,123,255,0.45), inset 0 2px 0 rgba(255,255,255,0.5)",
-          fontFamily: "'Archivo Variable'",
+          fontFamily: LOGO_FONT,
           fontStretch: "125%",
           fontWeight: 800,
           fontSize: 30,

@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Sequence, interpolate, useCurrentFrame } from "remotion";
 import { Background, BrandBar, LogoMark, SceneWrap } from "./components";
-import { ThemeName, sceneFrames } from "./theme";
+import { FONT, ThemeName, sceneFrames } from "./theme";
 import { ThemeProvider, useTheme } from "./ThemeContext";
 import { Scene1Reveal } from "./scenes/Scene1Reveal";
 import { Scene2Motion } from "./scenes/Scene2Motion";
@@ -35,7 +35,7 @@ const Inner: React.FC = () => {
   });
 
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ fontFamily: FONT }}>
       <Background />
       {/* faint centred watermark: official R symbol */}
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
