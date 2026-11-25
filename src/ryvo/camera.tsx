@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { useCaptionStyle, useTheme } from "./ThemeContext";
+import { SYNC } from "./sync";
 
 export type Cam = { x?: number; y?: number; s?: number; rx?: number; ry?: number; rz?: number };
 export type Dir = "up" | "down" | "left" | "right" | "zoom" | "none";
@@ -150,6 +151,7 @@ export const Kinetic: React.FC<{
   const T = useTheme();
   const mode = useCaptionStyle();
   const words = text.split(" ");
+  const at = SYNC[text];
   return (
     <div
       style={{
@@ -169,7 +171,8 @@ export const Kinetic: React.FC<{
       {words.map((w, i) => {
         const hl = w.startsWith("*");
         const clean = w.replace(/\*/g, "");
-        const t0 = (start + i / wps) * fps;
+        // word timing comes from the narration when available (src/ryvo/sync.ts)
+        const t0 = (at && at[i] !== undefined ? at[i] : start + i / wps) * fps;
         if (mode === "mascara") {
           // Word is "written" in place: a soft-edged mask wipes it in from left to right
           // (no movement). Keywords then get a lavender colour sweep.

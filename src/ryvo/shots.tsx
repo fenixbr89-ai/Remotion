@@ -77,11 +77,11 @@ export const S01: React.FC<ShotProps> = () => {
   const T = useTheme();
   const z = useKf([
     [0, 2.4],
-    [1.9, 1],
+    [1.35, 1],
   ]);
   const blur = useKf([
     [0, 26],
-    [1.6, 0],
+    [1.1, 0],
   ]);
   const rot = useKf([
     [0, -30],
@@ -111,16 +111,19 @@ export const S01: React.FC<ShotProps> = () => {
 
 /** "não precisa apenas aparecer." — camera tracks along the line as it is written. */
 export const S02: React.FC<ShotProps> = ({ dur }) => {
-  const x = useKf([
-    [0, 120],
-    [2.2, -980],
+  // camera tracks along the line and ends with the last word fully on screen
+  const p = useKf([
+    [0, 0],
+    [1.9, 1],
   ]);
   return (
     <AbsoluteFill>
       <GlassTile size={220} x={760} y={430} rx={20} ry={-30} rz={15} tint={0.6} blur={4} floatPhase={1} />
       <GlassTile size={160} x={80} y={1300} rx={-20} ry={30} rz={-20} tint={0.4} blur={6} floatPhase={2} />
-      <div style={{ position: "absolute", top: 860, left: 0, transform: `translateX(${x}px)` }}>
-        <Kinetic text="não precisa apenas *aparecer.*" nowrap size={170} start={0.1} wps={2.6} align="left" />
+      <div style={{ position: "absolute", top: 860, left: 90, right: 90 }}>
+        <div style={{ position: "absolute", left: `${p * 100}%`, transform: `translateX(${-p * 100}%)` }}>
+          <Kinetic text="não precisa apenas *aparecer.*" nowrap size={170} start={0.1} wps={2.6} align="left" />
+        </div>
       </div>
       <Foreground from={[1300, 1500]} to={[-300, 1300]} size={420} dur={dur} blur={22}>
         <GlassTile size={420} x={0} y={0} tint={0.7} />
@@ -517,16 +520,16 @@ export const S11: React.FC<ShotProps> = () => {
   const T = useTheme();
   const z = useKf([
     [0, 0.9],
-    [1.85, 1],
-    [2.5, 5.5],
+    [2.6, 1],
+    [3.07, 5.5],
   ]);
   const blur = useKf([
-    [2.05, 0],
-    [2.5, 18],
+    [2.75, 0],
+    [3.07, 18],
   ]);
   const textO = useKf([
-    [2.0, 1],
-    [2.25, 0],
+    [2.7, 1],
+    [2.9, 0],
   ]);
   return (
     <AbsoluteFill>
