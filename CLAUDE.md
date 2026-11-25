@@ -46,7 +46,7 @@ para relembrar o visual.
 - Mandar **fotos de cada cena** antes de animar, quando for um projeto novo.
 - Entregar o **roteiro limpo para o cliente** separado do roteiro interno (sem notas técnicas).
 - **No máximo 2 fontes.** Hoje usamos só a Inter.
-- Fazer versões **fundo escuro e fundo claro** quando a marca permitir.
+- Fazer versões **fundo escuro e fundo claro** quando a marca permitir (na RYVO ficou **só a clara**).
 - Usar só o símbolo/logo oficial do cliente, sem recriar logo com fonte.
 - Sem marca d'água do Kayke em vídeo de cliente.
 - **Não usar linhas/raios de luz saindo do logo** (ele não gostou). Use só brilho suave.
@@ -72,7 +72,8 @@ para relembrar o visual.
   transição e fundo alternado. `src/ryvo/shots.tsx`: o conteúdo de cada plano.
 
 ## Projeto atual: RYVO (estúdio criativo)
-- Código em `src/ryvo/`. Composições: `RyvoEscuro` e `RyvoClaro` (~36s, 15 planos).
+- Código em `src/ryvo/`. Composição: **só `RyvoClaro`** (o cliente descartou a versão escura; o tema
+  escuro continua no código mas não é usado).
 - Paleta oficial: Preto profundo #080812 (base) · Violeta elétrico #7547E8 (identidade) ·
   Lavanda luminosa #A78BFA (luzes/gradientes) · Azul elétrico #087BFF (detalhes tecnológicos) ·
   Branco gelo #F5F3FF (textos).
@@ -86,3 +87,10 @@ para relembrar o visual.
   Whisper não baixa modelo aqui porque o Hugging Face é bloqueado na rede).
 - Versão final com som: `entrega/*/RYVO-*-final-com-som.mp4` (39,9s, -14 LUFS).
 - "aparecer." cortado no plano s02: corrigido.
+- **Rodada atual:** o Kayke vai regravar a voz com o texto novo (`entrega/NARRACAO-RYVO.txt`, v2),
+  que inclui TODAS as frases da tela: "Sua marca merece mais.", "Motion design.", "Design gráfico.",
+  "Impressos.", "Sua próxima ideia começa aqui. Vamos conversar? Solicite seu orçamento pelo WhatsApp."
+- **Pendente quando a voz nova chegar:** (1) a abertura está rápida demais — dar tempo para ler
+  "Uma marca" (plano s01 mais longo, texto entrando antes do whip); (2) sincronizar tudo de novo
+  com o áudio novo (refazer `src/ryvo/sync.ts`); (3) legendas só com o que é falado;
+  (4) renderizar só a versão clara.
