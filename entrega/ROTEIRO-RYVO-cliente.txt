@@ -1,27 +1,43 @@
 RYVO — Vídeo Motion | Roteiro
-Formato vertical (Reels/Stories) • duração aproximada de 33 segundos
+Formato vertical (Reels/Stories) • duração aproximada de 36 segundos
+Estilo: câmera sempre em movimento, cortes rápidos e texto aparecendo junto com a locução.
 
 CENA 01 — Abertura
-Visual: uma espiral de vidro roxa entra girando enquanto o título aparece.
-Texto na tela: Sua marca merece mais.
 Locução: "Uma marca não precisa apenas aparecer. Ela precisa ser lembrada."
+Visual:
+• Uma espiral de vidro passa pela câmera e se revela, com o texto "Uma marca".
+• A câmera acompanha a frase "não precisa apenas aparecer." enquanto ela é escrita.
+• O símbolo R voa em direção à tela com raios de luz: "Ela precisa ser lembrada."
+• Título: Sua marca merece mais.
 
 CENA 02 — Motion Design
-Visual: uma interface 3D de edição de vídeo, em vidro, flutuando no ambiente.
-Texto na tela: MOTION DESIGN — Vídeos • Animações • Publicidade
 Locução: "Transformamos ideias em movimento, criando vídeos, animações e experiências visuais que capturam a atenção."
+Visual:
+• Um ícone de lâmpada gira e vira um botão de play (ideia → movimento).
+• Uma interface 3D de edição de vídeo entra girando em perspectiva.
+• Ícones de vídeo, animação e publicidade orbitam ao redor de um olho.
+Texto na tela: MOTION DESIGN — Vídeos • Animações • Publicidade
 
 CENA 03 — Design Gráfico
-Visual: uma prancha de identidade visual (tipografia e paleta de cores) e um celular com um post da marca.
-Texto na tela: DESIGN GRÁFICO — Identidade Visual • Social Media • Conteúdo Digital
 Locução: "Criamos identidades visuais e conteúdos digitais que fortalecem a presença e a personalidade das marcas."
+Visual:
+• Uma prancha de identidade visual entra em 3D, e as cores da paleta vão aparecendo.
+• Um celular com um post da marca e notificações chegando (curtidas, seguidores, alcance).
+• Um painel de crescimento com o número subindo e o gráfico se desenhando.
+Texto na tela: DESIGN GRÁFICO — Identidade Visual • Social Media • Conteúdo Digital
 
 CENA 04 — Design para Impressão
-Visual: um cartaz, cartões de visita e um adesivo da RYVO entrando em 3D.
-Texto na tela: DESIGN PARA IMPRESSÃO — Materiais gráficos • Publicidade • Comunicação visual
 Locução: "E levamos sua comunicação além das telas, com materiais gráficos e publicitários que dão vida à sua marca."
+Visual:
+• A câmera mergulha na tela de um celular e sai no mundo físico.
+• Um cartaz, cartões de visita e um adesivo entram voando em 3D.
+• O cartão de visita gira e mostra a frente e o verso.
+Texto na tela: IMPRESSOS — Materiais gráficos • Publicidade • Comunicação visual
 
 CENA 05 — Encerramento
-Visual: o símbolo R da RYVO no centro, peças de vidro ao fundo e o botão do WhatsApp.
-Texto na tela: Sua próxima ideia começa aqui. • símbolo R + ESTÚDIO CRIATIVO • Vamos conversar? • Solicite seu orçamento pelo WhatsApp • (62) 99523-7527 • @ryvocreative
 Locução: "RYVO. Criatividade que vai além do visual. Vamos desenvolver seu próximo projeto?"
+Visual:
+• O símbolo R atravessa a tela com raios de luz: "Criatividade que vai além do visual."
+• Final: símbolo R + ESTÚDIO CRIATIVO. Sua próxima ideia começa aqui.
+• Um cursor clica no botão "Vamos conversar?".
+• Solicite seu orçamento pelo WhatsApp • (62) 99523-7527 • @ryvocreative
