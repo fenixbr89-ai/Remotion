@@ -5,6 +5,7 @@ import { Bubble, Chips, GlassTile, Headline, LogoMark, Reveal, useProgress } fro
 import { Icon, Tile3D } from "./icons";
 import { useTheme } from "./ThemeContext";
 import { FONT, P } from "./theme";
+import { FINAL, HEAD, SYNC } from "./sync";
 import { MotionInterface } from "./scenes/Scene2Motion";
 import { Card, ImpressaoVisual } from "./scenes/Scene4Impressao";
 
@@ -77,11 +78,11 @@ export const S01: React.FC<ShotProps> = () => {
   const T = useTheme();
   const z = useKf([
     [0, 2.4],
-    [1.35, 1],
+    [1.6, 1],
   ]);
   const blur = useKf([
     [0, 26],
-    [1.1, 0],
+    [1.3, 0],
   ]);
   const rot = useKf([
     [0, -30],
@@ -102,8 +103,8 @@ export const S01: React.FC<ShotProps> = () => {
       >
         <Img src={staticFile(T.spiral)} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
       </div>
-      <Center y={1270}>
-        <Kinetic text="Uma *marca*" start={0.9} size={150} wps={2.2} />
+      <Center y={1230}>
+        <Kinetic text="Uma marca não precisa apenas *aparecer.*" size={104} width={940} />
       </Center>
     </AbsoluteFill>
   );
@@ -154,7 +155,7 @@ export const S03: React.FC<ShotProps> = () => {
         </div>
       </Center>
       <Center y={1180}>
-        <Kinetic text="Ela precisa ser *lembrada.*" start={1.1} size={104} width={900} wps={2.6} />
+        <Kinetic text="Ela precisa ser *lembrada.*" size={104} width={900} />
       </Center>
       <Bubble size={70} x={200} y={480} phase={1} />
       <Bubble size={46} x={840} y={1000} phase={2} />
@@ -169,7 +170,7 @@ export const S04: React.FC<ShotProps> = ({ dur }) => (
     <GlassTile size={180} x={60} y={1330} rx={-15} ry={30} rz={-24} tint={0.5} floatPhase={2} />
     <Bubble size={90} x={150} y={420} phase={1} />
     <Center y={700}>
-      <Headline light="Sua marca" bold={"merece\nmais."} delay={0.1} lightSize={150} boldSize={220} align="center" />
+      <Headline light="Sua marca" bold={"merece\nmais."} delay={HEAD.light} boldDelay={HEAD.bold} lightSize={150} boldSize={220} align="center" />
     </Center>
     <Foreground from={[-200, 300]} to={[1300, 200]} size={360} dur={dur} blur={24}>
       <GlassTile size={360} x={0} y={0} tint={0.8} />
@@ -181,15 +182,18 @@ export const S04: React.FC<ShotProps> = ({ dur }) => (
 
 /** "Transformamos ideias em movimento," — idea tile flips into a play tile. */
 export const S05: React.FC<ShotProps> = () => {
+  const tMov = SYNC["Transformamos *ideias* em *movimento,*"][3];
   const flip = useKf([
-    [0.9, 0],
-    [1.5, 180],
+    [tMov - 0.3, 0],
+    [tMov + 0.3, 180],
   ]);
   const enter = useProgress(0, 0.6);
   const time = useTime();
   return (
     <AbsoluteFill>
-      <Label n="01" text="MOTION DESIGN" />
+      <Center y={250}>
+        <Kinetic text="Motion *design.*" size={124} width={940} />
+      </Center>
       <Center y={480}>
         <div
           style={{
@@ -214,7 +218,7 @@ export const S05: React.FC<ShotProps> = () => {
         </div>
       </Center>
       <Center y={1110}>
-        <Kinetic text="Transformamos *ideias* em *movimento,*" start={0.1} size={96} width={940} />
+        <Kinetic text="Transformamos *ideias* em *movimento,*" size={96} width={940} />
       </Center>
       <Bubble size={64} x={170} y={560} phase={0} />
       <Bubble size={40} x={880} y={900} phase={2} />
@@ -227,7 +231,7 @@ export const S06: React.FC<ShotProps> = ({ dur }) => (
   <AbsoluteFill>
     <Label n="01" text="MOTION DESIGN" />
     <Center y={330}>
-      <Kinetic text="criando *vídeos,* *animações*" start={0.1} size={96} width={940} />
+      <Kinetic text="criando *vídeos,* *animações*" size={96} width={940} />
     </Center>
     <div style={{ position: "absolute", inset: 0, transform: "translateY(-150px)" }}>
       <MotionInterface />
@@ -253,7 +257,7 @@ export const S07: React.FC<ShotProps> = () => {
     <AbsoluteFill>
       <Label n="01" text="MOTION DESIGN" />
       <Center y={330}>
-        <Kinetic text="e experiências visuais que capturam a *atenção.*" start={0.05} size={84} width={940} wps={3.6} />
+        <Kinetic text="e experiências visuais que capturam a *atenção.*" size={84} width={940} />
       </Center>
       <div style={{ position: "absolute", left: 540, top: 1010 }}>
         {icons.map(([n, v], i) => {
@@ -301,9 +305,11 @@ export const S08: React.FC<ShotProps> = () => {
   const swatches = [P.black, P.violet, P.lavender, P.blue, P.ice];
   return (
     <AbsoluteFill>
-      <Label n="02" text="DESIGN GRÁFICO" />
-      <Center y={330}>
-        <Kinetic text="Criamos *identidades* *visuais*" start={0.1} size={96} width={940} />
+      <Center y={220}>
+        <Kinetic text="Design *gráfico.*" size={110} width={940} />
+      </Center>
+      <Center y={380}>
+        <Kinetic text="Criamos *identidades* *visuais*" size={84} width={940} />
       </Center>
       <Center y={640}>
         <div
@@ -370,14 +376,14 @@ export const S09: React.FC<ShotProps> = () => {
   return (
     <AbsoluteFill>
       <Label n="02" text="DESIGN GRÁFICO" />
-      <Center y={330}>
-        <Kinetic text="e *conteúdos* *digitais*" start={0.1} size={96} width={940} />
+      <Center y={300}>
+        <Kinetic text="e *conteúdos* *digitais* que fortalecem a *presença*" size={84} width={940} />
       </Center>
       <div
         style={{
           position: "absolute",
           left: 130,
-          top: 560,
+          top: 650,
           width: 470,
           height: 900,
           padding: 26,
@@ -439,7 +445,7 @@ export const S09: React.FC<ShotProps> = () => {
             style={{
               position: "absolute",
               left: 520,
-              top: 760 + i * 150,
+              top: 850 + i * 150,
               display: "flex",
               alignItems: "center",
               gap: 18,
@@ -478,7 +484,7 @@ export const S10: React.FC<ShotProps> = () => {
     <AbsoluteFill>
       <Label n="02" text="DESIGN GRÁFICO" />
       <Center y={330}>
-        <Kinetic text="que fortalecem a *presença* e a *personalidade* das marcas." start={0.05} size={80} width={960} wps={3.9} />
+        <Kinetic text="e a *personalidade* das marcas." size={96} width={940} />
       </Center>
       <Center y={720}>
         <div
@@ -516,26 +522,29 @@ export const S10: React.FC<ShotProps> = () => {
 // ───────────────────────── CENA 4 — Impressão ─────────────────────────
 
 /** "E levamos sua comunicação além das telas," — camera dives through a phone screen. */
-export const S11: React.FC<ShotProps> = () => {
+export const S11: React.FC<ShotProps> = ({ dur }) => {
   const T = useTheme();
+  const d = dur / 30;
   const z = useKf([
     [0, 0.9],
-    [2.6, 1],
-    [3.07, 5.5],
+    [d - 0.35, 1],
+    [d, 5.5],
   ]);
   const blur = useKf([
-    [2.75, 0],
-    [3.07, 18],
+    [d - 0.22, 0],
+    [d, 18],
   ]);
   const textO = useKf([
-    [2.7, 1],
-    [2.9, 0],
+    [d - 0.15, 1],
+    [d, 0],
   ]);
   return (
     <AbsoluteFill>
-      <Label n="03" text="IMPRESSOS" />
-      <Center y={330} style={{ opacity: textO }}>
-        <Kinetic text="E levamos sua comunicação *além* *das* *telas,*" start={0.05} size={88} width={940} wps={3.8} />
+      <Center y={220} style={{ opacity: textO }}>
+        <Kinetic text="*Impressos.*" size={110} width={940} />
+      </Center>
+      <Center y={380} style={{ opacity: textO }}>
+        <Kinetic text="E levamos sua comunicação *além* *das* *telas,*" size={80} width={940} />
       </Center>
       <Center y={720}>
         <div
@@ -573,7 +582,7 @@ export const S12: React.FC<ShotProps> = ({ dur }) => (
   <AbsoluteFill>
     <Label n="03" text="IMPRESSOS" />
     <Center y={330}>
-      <Kinetic text="com *materiais* *gráficos* e *publicitários*" start={0.05} size={92} width={940} wps={3.2} />
+      <Kinetic text="com *materiais* *gráficos* e *publicitários*" size={92} width={940} />
     </Center>
     <div style={{ position: "absolute", inset: 0, transform: "translateY(-110px) scale(1.06)" }}>
       <ImpressaoVisual />
@@ -598,7 +607,7 @@ export const S13: React.FC<ShotProps> = () => {
     <AbsoluteFill>
       <Label n="03" text="IMPRESSOS" />
       <Center y={330}>
-        <Kinetic text="que dão *vida* à sua marca." start={0.05} size={96} width={940} />
+        <Kinetic text="que dão *vida* à sua marca." size={96} width={940} />
       </Center>
       <Center y={760}>
         <div
@@ -650,7 +659,7 @@ export const S14: React.FC<ShotProps> = () => {
         </div>
       </Center>
       <Center y={1080}>
-        <Kinetic text="Criatividade que vai *além* *do* *visual.*" start={1.6} size={100} width={900} wps={3.2} />
+        <Kinetic text="Criatividade que vai *além* *do* *visual.*" size={100} width={900} />
       </Center>
     </AbsoluteFill>
   );
@@ -662,28 +671,29 @@ export const S15: React.FC<ShotProps> = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const ring = useProgress(0, 1.4);
-  const btn = useProgress(0.9, 0.6);
+  const btn = useProgress(FINAL.button - 0.1, 0.5);
+  const ck = FINAL.click;
   const time = useTime();
   // cursor path → click at 2.1s
   const cx = useKf([
-    [1.3, 980],
-    [2.0, 640],
+    [ck - 0.75, 980],
+    [ck - 0.05, 640],
   ]);
   const cy = useKf([
-    [1.3, 1500],
-    [2.0, 1060],
+    [ck - 0.75, 1500],
+    [ck - 0.05, 1060],
   ]);
   const cursorO = useKf([
-    [1.2, 0],
-    [1.4, 1],
-    [3.0, 1],
-    [3.3, 0],
+    [ck - 0.85, 0],
+    [ck - 0.65, 1],
+    [ck + 0.9, 1],
+    [ck + 1.2, 0],
   ]);
-  const click = interpolate(frame, [2.05 * fps, 2.15 * fps, 2.35 * fps], [0, 1, 0], {
+  const click = interpolate(frame, [(ck - 0.05) * fps, (ck + 0.05) * fps, (ck + 0.25) * fps], [0, 1, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const ripple = interpolate(frame, [2.1 * fps, 2.8 * fps], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const ripple = interpolate(frame, [ck * fps, (ck + 0.7) * fps], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
     <AbsoluteFill style={{ fontFamily: FONT }}>
       <div
@@ -711,7 +721,7 @@ export const S15: React.FC<ShotProps> = () => {
           </div>
         </Reveal>
         <div style={{ height: 50 }} />
-        <Headline light={"Sua próxima ideia"} bold={"começa aqui."} delay={0.25} lightSize={100} boldSize={128} align="center" />
+        <Headline light={"Sua próxima ideia"} bold={"começa aqui."} delay={FINAL.light} boldDelay={FINAL.bold} lightSize={100} boldSize={128} align="center" />
         <div style={{ height: 56 }} />
         <div
           style={{
@@ -744,13 +754,13 @@ export const S15: React.FC<ShotProps> = () => {
           <span style={{ fontSize: 46, fontWeight: 700, color: "#fff", letterSpacing: "-0.02em" }}>Vamos conversar?</span>
         </div>
         <div style={{ height: 30 }} />
-        <Reveal delay={2.4}>
+        <Reveal delay={FINAL.pill}>
           <div style={{ ...T.glass(0.15, 40), padding: "16px 34px", fontSize: 31, color: T.text, fontWeight: 500 }}>
             Solicite seu orçamento pelo <b style={{ fontWeight: 800 }}>WhatsApp</b>
           </div>
         </Reveal>
         <div style={{ height: 18 }} />
-        <Reveal delay={2.6}>
+        <Reveal delay={FINAL.pill + 0.5}>
           <div style={{ display: "flex", alignItems: "center", gap: 22, fontSize: 34, fontWeight: 800, color: T.text }}>
             <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <Icon name="whatsapp" size={34} color={T.accentText} />

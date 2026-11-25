@@ -258,7 +258,9 @@ export const Headline: React.FC<{
   boldSize?: number;
   boldItalic?: boolean;
   align?: "left" | "center";
-}> = ({ light, bold, delay, lightSize = 132, boldSize = 150, boldItalic = true, align = "left" }) => {
+  /** when the bold line appears (s); default: 0.16s after the light line */
+  boldDelay?: number;
+}> = ({ light, bold, delay, lightSize = 132, boldSize = 150, boldItalic = true, align = "left", boldDelay }) => {
   const T = useTheme();
   return (
   <div style={{ fontFamily: FONT, textAlign: align }}>
@@ -270,7 +272,7 @@ export const Headline: React.FC<{
       </Reveal>
     ))}
     {bold.split("\n").map((l, i) => (
-      <Reveal key={l} delay={delay + 0.16 + i * 0.08}>
+      <Reveal key={l} delay={(boldDelay ?? delay + 0.16) + i * 0.08}>
         <div
           style={{
             fontSize: boldSize,
