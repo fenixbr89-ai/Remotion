@@ -1,7 +1,7 @@
 import React from "react";
 import { Audio, Sequence, interpolate, staticFile } from "remotion";
 import { FPS } from "./theme";
-import { FINAL, HEAD, SYNC } from "./sync";
+import { FINAL } from "./sync";
 
 /**
  * Efeitos sonoros (pasta do Drive do Kayke, copiados em public/sfx/).
@@ -40,36 +40,37 @@ export const buildSfx = (shots: ShotTiming[]): Fx[] => {
     }
   });
 
-  // R de vidro chegando ("Ela precisa ser lembrada" e "RYVO")
-  fx.push({ file: "glass.mp3", at: st("s03") + 0.05, vol: 0.55 });
-  fx.push({ file: "glass.mp3", at: st("s14") + 0.05, vol: 0.5 });
-  // título "merece mais."
-  fx.push({ file: "pluck.mp3", at: st("s04") + HEAD.bold, vol: 0.35 });
-  // lâmpada vira play em "movimento"
-  fx.push({ file: "flip.mp3", at: st("s05") + SYNC["Transformamos *ideias* em *movimento,*"][3] - 0.2, vol: 0.5 });
+  // Regra do Kayke: efeito só em troca de cena (acima) e quando algo ENTRA na tela.
+  // Nada de efeito enquanto a cena só está acontecendo (contador, órbita, flip, mergulho...).
+  const pops = (at: number, n: number, step: number, vol = 0.35) => {
+    for (let i = 0; i < n; i++) fx.push({ file: "pop.mp3", at: at + i * step, vol });
+  };
+  const CHIP = 0.1; // intervalo entre as etiquetas (Chips)
+
+  // R de vidro entrando ("Ela precisa ser lembrada" e "RYVO")
+  fx.push({ file: "glass.mp3", at: st("s03") + 0.05, vol: 0.5 });
+  fx.push({ file: "glass.mp3", at: st("s14") + 0.05, vol: 0.45 });
   // interface de edição entrando
-  fx.push({ file: "digital.mp3", at: st("s06") + 0.05, trim: 0.5, vol: 0.35 });
-  // ícones orbitando
-  fx.push({ file: "interaction.mp3", at: st("s07") + 0.25, dur: 0.5, vol: 0.28 });
-  // cores da paleta aparecendo (5 pops)
-  for (let i = 0; i < 5; i++) fx.push({ file: "pop.mp3", at: st("s08") + (22 + i * 4) / FPS, vol: 0.35 });
+  fx.push({ file: "swish.mp3", at: st("s06") + 0.1, vol: 0.35 });
+  // etiquetas Vídeos • Animações • Publicidade
+  pops(st("s07") + 0.9, 3, CHIP);
+  // cores da paleta aparecendo (5 pops — o que ele gostou)
+  pops(st("s08") + 22 / FPS, 5, 4 / FPS);
   // notificações chegando (3)
-  for (let i = 0; i < 3; i++) fx.push({ file: "notif.mp3", at: st("s09") + (18 + i * 9) / FPS, vol: 0.5 });
-  // contador subindo + confirmação
-  fx.push({ file: "loading.mp3", at: st("s10") + 12 / FPS, trim: 0.24, dur: 1.5, fadeOut: 0.3, vol: 0.3 });
-  fx.push({ file: "positive.mp3", at: st("s10") + 55 / FPS, dur: 0.3, vol: 0.4 });
-  // mergulho na tela do celular: riser com pico no corte
-  fx.push({ file: "riser.wav", at: st("s12") - 1.85, trim: 0.3, vol: 0.28 });
-  // cartaz e cartões voando
+  for (let i = 0; i < 3; i++) fx.push({ file: "notif.mp3", at: st("s09") + (18 + i * 9) / FPS, vol: 0.45 });
+  // painel de crescimento entrando + etiquetas
+  fx.push({ file: "swish.mp3", at: st("s10") + 0.05, vol: 0.3 });
+  pops(st("s10") + 0.9, 3, CHIP);
+  // cartaz e cartões entrando
   fx.push({ file: "swish.mp3", at: st("s12") + 0.3, vol: 0.4 });
-  // cartão girando
-  fx.push({ file: "flip2.mp3", at: st("s13") + 0.1, vol: 0.4 });
-  // final: botão, clique do cursor, sucesso, contatos
+  // cartão de visita entrando girando + etiquetas
+  fx.push({ file: "flip2.mp3", at: st("s13") + 0.1, vol: 0.35 });
+  pops(st("s13") + 0.6, 3, CHIP);
+  // final: botão entrando, clique do cursor, faixa do WhatsApp + contatos entrando
   const s15 = st("s15");
   fx.push({ file: "notif-soft.mp3", at: s15 + FINAL.button - 0.05, vol: 0.4 });
-  fx.push({ file: "click.mp3", at: s15 + FINAL.click - 0.04, vol: 0.55 });
-  fx.push({ file: "success.mp3", at: s15 + FINAL.click + 0.08, dur: 0.75, fadeOut: 0.2, vol: 0.45 });
-  fx.push({ file: "notif.mp3", at: s15 + FINAL.pill, vol: 0.35 });
+  fx.push({ file: "click.mp3", at: s15 + FINAL.click - 0.04, vol: 0.5 });
+  pops(s15 + FINAL.pill, 2, 0.5, 0.3);
   return fx;
 };
 

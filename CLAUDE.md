@@ -55,6 +55,10 @@ para relembrar o visual.
 - Legendas: ele **não gostou** da entrada subindo de trás de uma máscara (v4) nem da revelação
   esquerda→direita no lugar (v5). Gostou da **varredura roxa na palavra-chave**. Entrada ideal
   ainda em aberto.
+- **Efeitos sonoros:** só nas **trocas de cena** (whoosh no corte) e quando **algo entra na tela**.
+  Nada durante a ação contínua (contador subindo, órbita, flip, mergulho, sucesso). Ele gostou dos
+  **pops em sequência quando várias coisinhas entram juntas** (cores da paleta). Biblioteca: Drive
+  dele, copiada em `public/sfx/`; regras em `src/ryvo/sfx.tsx`.
 - Locução: o Kayke gera os áudios por cena (cena01.mp3…) numa IA de voz e manda depois.
 
 ## Como renderizar aqui
