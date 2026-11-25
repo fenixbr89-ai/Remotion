@@ -666,14 +666,14 @@ export const S15: React.FC<ShotProps> = () => {
   const btn = useProgress(FINAL.button - 0.1, 0.5);
   const ck = FINAL.click;
   const time = useTime();
-  // cursor path → click at 2.1s
+  // cursor path → lands on the "Vamos conversar?" button and clicks right after the line is spoken
   const cx = useKf([
-    [ck - 0.75, 980],
-    [ck - 0.05, 640],
+    [ck - 0.75, 960],
+    [ck - 0.05, 585],
   ]);
   const cy = useKf([
-    [ck - 0.75, 1500],
-    [ck - 0.05, 1060],
+    [ck - 0.75, 1320],
+    [ck - 0.05, 830],
   ]);
   const cursorO = useKf([
     [ck - 0.85, 0],
