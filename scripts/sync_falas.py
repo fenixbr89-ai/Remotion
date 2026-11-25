@@ -141,7 +141,7 @@ for i, k in enumerate(ids):
 
 # legendas (exatamente o que é falado) → falas
 CAPS = {
-    "Uma *marca*": ("s01", "01a"),
+    # "Uma *marca*" (s01) entra junto com a voz pelo próprio plano (start 0.4s), para dar tempo de ler
     "não precisa apenas *aparecer.*": ("s02", "01b"),
     "Ela precisa ser *lembrada.*": ("s03", "02"),
     "Transformamos *ideias* em *movimento,*": ("s05", "05"),

@@ -2,7 +2,6 @@
 // Tempo das palavras: reconhecimento de voz alinhado ao texto. Velocidade inalterada.
 // SYNC: início de cada palavra (s, relativo ao início do plano).
 export const SYNC: Record<string, number[]> = {
-  "Uma *marca*": [0.61, 0.76],
   "não precisa apenas *aparecer.*": [0.06, 0.21, 0.84, 1.38],
   "Ela precisa ser *lembrada.*": [0.08, 0.2, 1.01, 1.22],
   "Transformamos *ideias* em *movimento,*": [0.09, 0.88, 1.65, 1.83],
