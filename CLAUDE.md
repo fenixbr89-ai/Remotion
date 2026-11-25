@@ -85,6 +85,9 @@ para relembrar o visual.
 - Sincronia gerada por `scripts/sync_narracao.py` → `src/ryvo/sync.ts` (trechos de fala por
   detecção de pausas, pausas longas cortadas para ~0,15–0,45s, **sem mudar velocidade** de áudio
   ou vídeo; tempo das palavras estimado por sílabas — Whisper não baixa modelo aqui).
-- Entrega atual: `entrega/claro/RYVO-Claro-narracao-v2.mp4` (40,2s, ~-14 LUFS).
+- **O cliente aprovou o visual da v3 clara** (`entrega/claro/RYVO-Claro-v3.mp4`). Não mudar o estilo:
+  etiquetas pequenas das seções (01 MOTION DESIGN…), travelling do "aparecer.", mesmos planos e
+  câmeras. A versão `RYVO-Claro-narracao-v2.mp4` mudou o visual (títulos grandes) e foi rejeitada.
+- Entrega atual: `entrega/claro/RYVO-Claro-v3-com-narracao.mp4` (visual da v3 + narração v2, ~40,8s).
 - Regra do Kayke: nunca acelerar/desacelerar áudio ou vídeo para sincronizar; cortar pausas e
   refazer os planos em cima da fala. Legenda na tela = exatamente o que é falado.
