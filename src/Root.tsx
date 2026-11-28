@@ -1,4 +1,5 @@
 import { Composition, Folder } from "remotion";
+import { JaimeIntro } from "./JaimeIntro";
 import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
@@ -50,7 +51,15 @@ export const RemotionRoot: React.FC = () => {
           titleColor: "#000000",
         }}
       />
-
+      <Composition
+        id="JaimeIntro"
+        component={JaimeIntro}
+        durationInFrames={360}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{ name: "Jaime" }}
+      />
     </>
   );
 };
